@@ -9,6 +9,7 @@ MeeSpot
 configure-stamp
 build-stamp
 debian/*
+libQtSpotify/spotify_key.h
 
 # General
 callgrind.out.*
