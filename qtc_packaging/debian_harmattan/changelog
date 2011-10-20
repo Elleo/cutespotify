@@ -1,0 +1,12 @@
+meespot (1.1.0) unstable; urgency=low
+
+  * Now based on libspotify 9.
+  * Support for offline mode.
+
+ -- Yoann Lopes <yoann.lopes@gmail.com>  Sat, 15 Oct 2011 16:18:12 +0200
+
+meespot (1.0.0) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Yoann Lopes <yoann.lopes@gmail.com>  Tue, 4 Oct 2011 12:42:43 +0200

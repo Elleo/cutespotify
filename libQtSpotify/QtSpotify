@@ -1,0 +1,20 @@
+#ifndef QTSPOTIFY_MODULE_H
+#define QTSPOTIFY_MODULE_H
+
+#include "qspotifyalbum.h"
+#include "qspotifyalbumbrowse.h"
+#include "qspotifyartist.h"
+#include "qspotifyartistbrowse.h"
+#include "qspotifyimageprovider.h"
+#include "qspotifyobject.h"
+#include "qspotifyplaylist.h"
+#include "qspotifyplaylistcontainer.h"
+#include "qspotifyplayqueue.h"
+#include "qspotifysearch.h"
+#include "qspotifysession.h"
+#include "qspotifytoplist.h"
+#include "qspotifytrack.h"
+#include "qspotifytracklist.h"
+#include "qspotifyuser.h"
+
+#endif // QTSPOTIFY_MODULE_H
