@@ -50,6 +50,7 @@ install: build
 
 	# Add here commands to install the package into debian/meespot.
 	$(MAKE)  INSTALL_ROOT="$(CURDIR)"/debian/meespot install
+	chmod +x $(CURDIR)/debian/meespot/opt/MeeSpot/lib/libspotify.so.9
 
 
 # Build architecture-independent files here.
