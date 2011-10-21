@@ -79,7 +79,7 @@ bool QSpotifyArtist::updateData()
         if (link) {
             char buffer[200];
             int uriSize = sp_link_as_string(link, &buffer[0], 200);
-            m_pictureId = QString::fromLatin1(&buffer[0], uriSize);
+            m_pictureId = QString::fromUtf8(&buffer[0], uriSize);
             sp_link_release(link);
             updated = true;
         }

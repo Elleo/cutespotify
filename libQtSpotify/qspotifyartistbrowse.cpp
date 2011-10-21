@@ -172,7 +172,7 @@ void QSpotifyArtistBrowse::processData()
             sp_link *link = sp_link_create_from_artistbrowse_portrait(m_sp_artistbrowse, 0);
             char buffer[200];
             int uriSize = sp_link_as_string(link, &buffer[0], 200);
-            m_pictureId = QString::fromLatin1(&buffer[0], uriSize);
+            m_pictureId = QString::fromUtf8(&buffer[0], uriSize);
             sp_link_release(link);
         }
 

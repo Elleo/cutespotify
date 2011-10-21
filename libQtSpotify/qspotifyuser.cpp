@@ -111,7 +111,7 @@ QSpotifyPlaylistContainer *QSpotifyUser::playlistContainer() const
             pc = sp_session_playlistcontainer(QSpotifySession::instance()->m_sp_session);
             sp_playlistcontainer_add_ref(pc);
         } else {
-            pc = sp_session_publishedcontainer_for_user_create(QSpotifySession::instance()->m_sp_session, m_canonicalName.toLatin1().constData());
+            pc = sp_session_publishedcontainer_for_user_create(QSpotifySession::instance()->m_sp_session, m_canonicalName.toUtf8().constData());
         }
         m_playlistContainer = new QSpotifyPlaylistContainer(pc);
         connect(m_playlistContainer, SIGNAL(playlistContainerDataChanged()), this, SIGNAL(playlistsChanged()));
@@ -126,7 +126,7 @@ QSpotifyPlaylist *QSpotifyUser::starredList() const
         if (QSpotifySession::instance()->user() == this) {
             sl = sp_session_starred_create(QSpotifySession::instance()->m_sp_session);
         } else {
-            sl = sp_session_starred_for_user_create(QSpotifySession::instance()->m_sp_session, m_canonicalName.toLatin1().constData());
+            sl = sp_session_starred_for_user_create(QSpotifySession::instance()->m_sp_session, m_canonicalName.toUtf8().constData());
         }
         m_starredList = new QSpotifyPlaylist(QSpotifyPlaylist::Starred, sl, false);
         connect(m_starredList, SIGNAL(playlistDataChanged()), this, SIGNAL(playlistsChanged()));

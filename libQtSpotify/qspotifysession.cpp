@@ -746,7 +746,7 @@ void QSpotifySession::login(const QString &username, const QString &password)
     if (password.isEmpty())
         sp_session_relogin(m_sp_session);
     else
-        sp_session_login(m_sp_session, username.toLatin1().constData(), password.toLatin1().constData(), true);
+        sp_session_login(m_sp_session, username.toUtf8().constData(), password.toUtf8().constData(), true);
 }
 
 void QSpotifySession::logout(bool keepLoginInfo)
@@ -930,7 +930,7 @@ QString QSpotifySession::getStoredLoginInformation() const
     char buffer[200];
     int size = sp_session_remembered_user(m_sp_session, &buffer[0], 200);
     if (size > 0) {
-        username = QString::fromLatin1(&buffer[0], size);
+        username = QString::fromUtf8(&buffer[0], size);
     }
     return username;
 }
@@ -957,7 +957,7 @@ static void callback_image_loaded(sp_image *image, void *)
 
 void QSpotifySession::sendImageRequest(const QString &id)
 {
-    sp_link *link = sp_link_create_from_string(id.toLatin1().constData());
+    sp_link *link = sp_link_create_from_string(id.toUtf8().constData());
     sp_image *image = sp_image_create_from_link(m_sp_session, link);
     sp_link_release(link);
 
