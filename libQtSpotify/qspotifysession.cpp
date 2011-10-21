@@ -58,6 +58,7 @@
 #include <QtCore/QDebug>
 #include <QtGui/QDesktopServices>
 #include <QtNetwork/QNetworkConfigurationManager>
+#include <QtSystemInfo/QSystemStorageInfo>
 
 #define BUFFER_SIZE 409600
 #define AUDIOSTREAM_UPDATE_INTERVAL 20
@@ -281,7 +282,6 @@ void QSpotifyAudioThreadWorker::startStreaming(int channels, int sampleRate)
 
         m_audioOutput = new QAudioOutput(af);
         m_audioOutput->setBufferSize(BUFFER_SIZE);
-        qDebug() << m_audioOutput->bufferSize();
         m_iodevice = m_audioOutput->start();
         m_audioOutput->suspend();
         m_audioTimerID = startTimer(AUDIOSTREAM_UPDATE_INTERVAL);
@@ -491,7 +491,11 @@ void QSpotifySession::init()
         fprintf(stderr, "failed to create session: %s\n",
                 sp_error_message(error));
     } else {
-        QSettings settings;
+	QtMobility::QSystemStorageInfo storageInfo;
+	qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
+	sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
+
+	QSettings settings;
 
         // Remove stored login information from older version of MeeSpot
         if (settings.contains("username")) {

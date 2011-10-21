@@ -1,7 +1,7 @@
 
 QT += network
 CONFIG       += mobility
-MOBILITY += multimedia
+MOBILITY += multimedia systeminfo
 
 INCLUDEPATH += $$PWD
 
