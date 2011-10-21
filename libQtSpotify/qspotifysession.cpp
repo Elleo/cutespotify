@@ -757,8 +757,10 @@ void QSpotifySession::logout(bool keepLoginInfo)
     stop();
     m_playQueue->clear();
 
-    if (!keepLoginInfo)
+    if (!keepLoginInfo) {
+	setOfflineMode(false);
         sp_session_forget_me(m_sp_session);
+    }
 
     m_explicitLogout = true;
 
