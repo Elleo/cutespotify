@@ -60,18 +60,12 @@ MyMenu {
         id: banner
     }
 
-    SelectionDialog {
+    MySelectionDialog {
         id: selectionDialog
-
-        property alias dialogModel: playlistsModel
-
-        ListModel {
-            id: playlistsModel
-        }
-
+ 
         titleText: "Playlists"
         parent: trackMenu.parent
-        model: playlistsModel
+        model: ListModel { }
         onAccepted: {
             var playlistItem = model.get(selectionDialog.selectedIndex);
             if (playlistItem.object) {
@@ -143,19 +137,16 @@ MyMenu {
     }
 
     onPlaylistsChanged: {
-        selectionDialog.dialogModel.clear();
+        selectionDialog.model.clear();
 
         if (playlists === null)
             return;
 
         for (var i in trackMenu.playlists) {
             if (trackMenu.playlists[i].type == SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(trackMenu.playlists[i]))
-                selectionDialog.dialogModel.append({"name": trackMenu.playlists[i].name, "object": trackMenu.playlists[i] })
+                selectionDialog.model.append({"name": trackMenu.playlists[i].name, "object": trackMenu.playlists[i] })
         }
-        selectionDialog.dialogModel.append({"name": "New playlist" });
-
-        selectionDialog.model = 0;
-        selectionDialog.model = selectionDialog.dialogModel;
+        selectionDialog.model.append({"name": "New playlist" });
     }
 
     onStatusChanged: {
