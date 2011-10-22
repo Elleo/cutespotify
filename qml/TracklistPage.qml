@@ -67,6 +67,7 @@ Page {
             highlighted: modelData.isCurrentPlayingTrack
             starred: modelData.isStarred
             available: modelData.isAvailable
+            enabled: !spotifySession.offlineMode || available
             onClicked: {
                 modelData.play()
             }
@@ -84,6 +85,7 @@ Page {
             highlighted: modelData.isCurrentPlayingTrack
             starred: modelData.isStarred
             available: modelData.isAvailable
+            enabled: !spotifySession.offlineMode || available
             onClicked: {
                 modelData.play()
             }
@@ -106,14 +108,6 @@ Page {
 
         Component.onCompleted: {
             tracks.delegate = playlist.type == SpotifyPlaylist.Inbox ? inboxDelegate : trackDelegate
-//            if (playlist.isCurrentPlaylist()) {
-//                for (var i in playlist.tracks) {
-//                    if (playlist.tracks[i].isCurrentPlayingTrack) {
-//                        positionViewAtIndex(i, ListView.Center)
-//                        return;
-//                    }
-//                }
-//            }
         }
     }
 

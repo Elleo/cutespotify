@@ -84,6 +84,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onTrackReady();
+    void onOfflineModeChanged();
 
 private:
 

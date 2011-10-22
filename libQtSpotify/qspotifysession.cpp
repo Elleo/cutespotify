@@ -526,6 +526,8 @@ void QSpotifySession::init()
 
         bool repeat = settings.value("repeat", false).toBool();
         setRepeat(repeat);
+        
+        connect(this, SIGNAL(offlineModeChanged()), m_playQueue, SLOT(onOfflineModeChanged()));
     }
 }
 

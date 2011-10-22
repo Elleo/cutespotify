@@ -200,7 +200,7 @@ Item {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     height: subText.height
-                    visible: listItem.offlineStatus == SpotifyPlaylist.Yes || listItem.offlineStatus == SpotifyPlaylist.No
+                    visible: listItem.offlineStatus == SpotifyPlaylist.Yes || listItem.offlineStatus == SpotifyPlaylist.No || spotifySession.offlineMode
 
                     Label {
                         id: subText
@@ -248,7 +248,7 @@ Item {
                     anchors.left: offlineStatusIcon.right
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    visible: listItem.offlineStatus == SpotifyPlaylist.Waiting
+                    visible: listItem.offlineStatus == SpotifyPlaylist.Waiting && !spotifySession.offlineMode
                     font.family: listItem.subtitleFont
                     font.pixelSize: listItem.subtitleSize
                     font.weight: Font.Light

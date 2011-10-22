@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -63,6 +63,7 @@ QSpotifyTrack::QSpotifyTrack(sp_track *track, QSpotifyPlaylist *playlist)
     , m_numArtists(0)
     , m_popularity(0)
     , m_seen(true)
+    , m_offlineStatus(No)
     , m_isCurrentPlayingTrack(false)
 {
     sp_track_add_ref(track);
@@ -71,6 +72,7 @@ QSpotifyTrack::QSpotifyTrack(sp_track *track, QSpotifyPlaylist *playlist)
 
     connect(QSpotifySession::instance(), SIGNAL(currentTrackChanged()), this, SLOT(onSessionCurrentTrackChanged()));
     connect(this, SIGNAL(dataChanged()), this, SIGNAL(trackDataChanged()));
+    connect(QSpotifySession::instance(), SIGNAL(offlineModeChanged()), this, SLOT(onSessionOfflineModeChanged()));
 
     metadataUpdated();
 }
@@ -87,6 +89,7 @@ QSpotifyTrack::QSpotifyTrack(sp_track *track, QSpotifyTrackList *tracklist)
     , m_numArtists(0)
     , m_popularity(0)
     , m_seen(true)
+    , m_offlineStatus(No)
     , m_isCurrentPlayingTrack(false)
 {
     sp_track_add_ref(track);
@@ -130,6 +133,7 @@ bool QSpotifyTrack::updateData()
         bool isAvailable = sp_track_is_available(QSpotifySession::instance()->m_sp_session, m_sp_track);
         int numArtists = sp_track_num_artists(m_sp_track);
         int popularity = sp_track_popularity(m_sp_track);
+        OfflineStatus offlineSt = OfflineStatus(sp_track_offline_get_status(m_sp_track));
         if (m_playlist && m_playlist->type() == QSpotifyPlaylist::Inbox) {
             int tindex = m_trackList->m_tracks.indexOf(this);
 
@@ -173,6 +177,7 @@ bool QSpotifyTrack::updateData()
         }
         if (m_isAvailable != isAvailable) {
             m_isAvailable = isAvailable;
+            emit isAvailableChanged();
             updated = true;
         }
         if (m_numArtists != numArtists) {
@@ -181,6 +186,11 @@ bool QSpotifyTrack::updateData()
         }
         if (m_popularity != popularity) {
             m_popularity = popularity;
+            updated = true;
+        }
+        if (m_offlineStatus != offlineSt) {
+            m_offlineStatus = offlineSt;
+            emit offlineStatusChanged();
             updated = true;
         }
 
@@ -312,5 +322,16 @@ void QSpotifyTrack::setSeen(bool s)
 
 bool QSpotifyTrack::isAvailableOffline() const
 {
-    return m_playlist && m_playlist->offlineStatus() == QSpotifyPlaylist::Yes;
+    return m_offlineStatus == Yes;
+}
+
+bool QSpotifyTrack::isAvailable() const
+{
+    return m_isAvailable && (!QSpotifySession::instance()->offlineMode() || m_offlineStatus == Yes);
+}
+
+void QSpotifyTrack::onSessionOfflineModeChanged()
+{
+    if (m_offlineStatus != Yes)
+        emit isAvailableChanged();
 }

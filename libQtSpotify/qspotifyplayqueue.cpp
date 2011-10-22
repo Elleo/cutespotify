@@ -289,3 +289,10 @@ void QSpotifyPlayQueue::tracksUpdated()
 {
     emit tracksChanged();
 }
+
+void QSpotifyPlayQueue::onOfflineModeChanged()
+{
+    if (m_shuffle && m_implicitTracks)
+	m_implicitTracks->setShuffle(true);
+    emit tracksChanged();
+}

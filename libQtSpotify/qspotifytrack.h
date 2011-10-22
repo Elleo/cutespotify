@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -64,7 +64,7 @@ class QSpotifyTrack : public QSpotifyObject
     Q_PROPERTY(int durationMs READ duration NOTIFY trackDataChanged)
     Q_PROPERTY(Error error READ error NOTIFY trackDataChanged)
     Q_PROPERTY(int discIndex READ discIndex NOTIFY trackDataChanged)
-    Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY trackDataChanged)
+    Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY isAvailableChanged)
     Q_PROPERTY(bool isStarred READ isStarred WRITE setIsStarred NOTIFY isStarredChanged)
     Q_PROPERTY(int popularity READ popularity NOTIFY trackDataChanged)
     Q_PROPERTY(bool isCurrentPlayingTrack READ isCurrentPlayingTrack NOTIFY isCurrentPlayingTrackChanged)
@@ -73,12 +73,21 @@ class QSpotifyTrack : public QSpotifyObject
     Q_PROPERTY(QDateTime creationDate READ creationDate NOTIFY trackDataChanged)
     Q_PROPERTY(QSpotifyAlbum *albumObject READ albumObject NOTIFY trackDataChanged)
     Q_PROPERTY(QSpotifyArtist *artistObject READ artistObject NOTIFY trackDataChanged)
+    Q_PROPERTY(OfflineStatus offlineStatus READ offlineStatus NOTIFY offlineStatusChanged)
     Q_ENUMS(Error)
+    Q_ENUMS(OfflineStatus)
 public:
     enum Error {
         Ok = SP_ERROR_OK,
         IsLoading = SP_ERROR_IS_LOADING,
         OtherPermanent = SP_ERROR_OTHER_PERMANENT
+    };
+
+    enum OfflineStatus {
+        No = 0,
+        Waiting = 1,
+        Downloading = 2,
+        Yes = 3
     };
 
     ~QSpotifyTrack();
@@ -94,7 +103,7 @@ public:
     QString durationString() const { return m_durationString; }
     Error error() const { return m_error; }
     int discIndex() const { return m_discIndex; }
-    bool isAvailable() const { return m_isAvailable; }
+    bool isAvailable() const;
     bool isStarred() const;
     void setIsStarred(bool v);
     QString name() const { return m_name; }
@@ -105,6 +114,7 @@ public:
     void setSeen(bool s);
     QString creator() const { return m_creator; }
     QDateTime creationDate() const { return m_creationDate; }
+    OfflineStatus offlineStatus() const { return m_offlineStatus; }
 
     bool isCurrentPlayingTrack() const { return m_isCurrentPlayingTrack; }
 
@@ -128,6 +138,8 @@ Q_SIGNALS:
     void trackDataChanged();
     void isStarredChanged();
     void seenChanged();
+    void isAvailableChanged();
+    void offlineStatusChanged();
 
 protected:
     bool updateData();
@@ -136,6 +148,7 @@ private Q_SLOTS:
     void onSessionCurrentTrackChanged();
     void onStarredListTracksAdded(QVector<sp_track *>);
     void onStarredListTracksRemoved(QVector<sp_track *>);
+    void onSessionOfflineModeChanged();
 
 private:
     QSpotifyTrack(sp_track *track, QSpotifyPlaylist *playlist);
@@ -161,6 +174,7 @@ private:
     bool m_seen;
     QString m_creator;
     QDateTime m_creationDate;
+    OfflineStatus m_offlineStatus;
 
     bool m_isCurrentPlayingTrack;
 

@@ -109,6 +109,7 @@ MyMenu {
         MyMenuItem {
             text: "Add to queue";
             onClicked: { track.enqueue() }
+            visible: track && track.isAvailable
         }
         MyMenuItem {
             id: starItem

@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -73,6 +73,7 @@ class QSpotifyPlaylist : public QSpotifyObject
     Q_PROPERTY(int offlineDownloadProgress READ offlineDownloadProgress NOTIFY playlistDataChanged)
     Q_PROPERTY(bool availableOffline READ availableOffline WRITE setAvailableOffline NOTIFY availableOfflineChanged)
     Q_PROPERTY(int unseenCount READ unseenCount NOTIFY seenCountChanged)
+    Q_PROPERTY(bool hasOfflineTracks READ hasOfflineTracks NOTIFY hasOfflineTracksChanged)
     Q_ENUMS(Type)
     Q_ENUMS(OfflineStatus)
 public:
@@ -108,6 +109,7 @@ public:
     QList<QSpotifyTrack *> tracks() const { return m_trackList->m_tracks; }
     QList<QObject *> tracksAsQObject() const;
     int unseenCount() const;
+    bool hasOfflineTracks() const { return m_offlineTracks.count() > 0; }
 
     bool contains(sp_track *t) const { return m_tracksSet.contains(t); }
 
@@ -134,14 +136,20 @@ Q_SIGNALS:
     void tracksRemoved(QVector<sp_track *>);
     void availableOfflineChanged();
     void seenCountChanged();
+    void hasOfflineTracksChanged();
 
 protected:
     bool updateData();
     bool event(QEvent *);
 
+private Q_SLOTS:
+    void onTrackChanged();
+
 private:
     QSpotifyPlaylist(Type type, sp_playlist *playlist, bool incrRefCount = true);
     void addTrack(sp_track *track, int pos = -1);
+    void registerTrackType(QSpotifyTrack *t);
+    void unregisterTrackType(QSpotifyTrack *t);
 
     sp_playlist *m_sp_playlist;
     sp_playlist_callbacks *m_callbacks;
@@ -157,7 +165,12 @@ private:
     int m_offlineDownloadProgress;
     bool m_availableOffline;
 
+    QSet<QSpotifyTrack *> m_offlineTracks;
+    QSet<QSpotifyTrack *> m_availableTracks;
+
     QString m_uri;
+    
+    bool m_skipUpdateTracks;
 
     friend class QSpotifyPlaylistContainer;
     friend class QSpotifyUser;

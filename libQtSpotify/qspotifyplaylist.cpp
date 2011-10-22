@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -169,6 +169,7 @@ QSpotifyPlaylist::QSpotifyPlaylist(Type type, sp_playlist *playlist, bool incrRe
     , m_collaborative(false)
     , m_offlineDownloadProgress(0)
     , m_availableOffline(false)
+    , m_skipUpdateTracks(false)
 {
     m_trackList = new QSpotifyTrackList(type == Starred || type == Inbox);
 
@@ -235,7 +236,7 @@ bool QSpotifyPlaylist::updateData()
         updated = true;
     }
 
-    if (m_trackList->m_tracks.isEmpty()) {
+    if (m_trackList->m_tracks.isEmpty() && !m_skipUpdateTracks) {
         int count = sp_playlist_num_tracks(m_sp_playlist);
         for (int i = 0; i < count; ++i)
             addTrack(sp_playlist_track(m_sp_playlist, i));
@@ -244,7 +245,10 @@ bool QSpotifyPlaylist::updateData()
 
     OfflineStatus os = OfflineStatus(sp_playlist_get_offline_status(QSpotifySession::instance()->spsession(), m_sp_playlist));
     if (m_offlineStatus != os) {
-        m_offlineStatus = os;
+        if (os == Waiting && m_offlineTracks.count() == m_availableTracks.count())
+            m_offlineStatus = Yes;
+        else
+            m_offlineStatus = os;
 
         if (m_offlineStatus != No) {
             m_availableOffline = true;
@@ -268,12 +272,17 @@ bool QSpotifyPlaylist::updateData()
 void QSpotifyPlaylist::addTrack(sp_track *track, int pos)
 {
     QSpotifyTrack *qtrack = new QSpotifyTrack(track, this);
+
+    registerTrackType(qtrack);
+
     if (pos == -1)
         m_trackList->m_tracks.append(qtrack);
     else
         m_trackList->m_tracks.insert(pos, qtrack);
     m_tracksSet.insert(track);
     connect(qtrack, SIGNAL(trackDataChanged()), this, SIGNAL(playlistDataChanged()));
+    connect(qtrack, SIGNAL(offlineStatusChanged()), this, SLOT(onTrackChanged()));
+    connect(qtrack, SIGNAL(isAvailableChanged()), this, SLOT(onTrackChanged()));
     if (m_type != Starred) {
         connect(QSpotifySession::instance()->user()->starredList(), SIGNAL(tracksAdded(QVector<sp_track*>)), qtrack, SLOT(onStarredListTracksAdded(QVector<sp_track*>)));
         connect(QSpotifySession::instance()->user()->starredList(), SIGNAL(tracksRemoved(QVector<sp_track*>)), qtrack, SLOT(onStarredListTracksRemoved(QVector<sp_track*>)));
@@ -287,7 +296,9 @@ void QSpotifyPlaylist::addTrack(sp_track *track, int pos)
 bool QSpotifyPlaylist::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
+	m_skipUpdateTracks = true;
         metadataUpdated();
+        m_skipUpdateTracks = false;
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 1) {
@@ -307,17 +318,15 @@ bool QSpotifyPlaylist::event(QEvent *e)
         // TracksAdded event
         QSpotifyTracksAddedEvent *ev = static_cast<QSpotifyTracksAddedEvent *>(e);
         QVector<sp_track*> tracks = ev->tracks();
-        if (m_trackList->m_tracks.count() + tracks.count() == sp_playlist_num_tracks(m_sp_playlist)) {
-            int pos = ev->position();
-            for (int i = 0; i < tracks.count(); ++i)
-                addTrack(tracks.at(i), pos++);
-            emit dataChanged();
-            if (m_type == Starred || m_type == Inbox)
-                emit tracksAdded(tracks);
-            m_trackList->setShuffle(m_trackList->isShuffle());
-            if (QSpotifySession::instance()->playQueue()->isCurrentTrackList(m_trackList))
-                QSpotifySession::instance()->playQueue()->tracksUpdated();
-        }
+        int pos = ev->position();
+	for (int i = 0; i < tracks.count(); ++i)
+	    addTrack(tracks.at(i), pos++);
+	emit dataChanged();
+	if (m_type == Starred || m_type == Inbox)
+	    emit tracksAdded(tracks);
+	m_trackList->setShuffle(m_trackList->isShuffle());
+	if (QSpotifySession::instance()->playQueue()->isCurrentTrackList(m_trackList))
+	    QSpotifySession::instance()->playQueue()->tracksUpdated();
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 4) {
@@ -330,6 +339,9 @@ bool QSpotifyPlaylist::event(QEvent *e)
             if (pos < 0 || pos >= m_trackList->m_tracks.count())
                 continue;
             QSpotifyTrack *tr = m_trackList->m_tracks[pos];
+            unregisterTrackType(tr);
+            disconnect(tr, SIGNAL(offlineStatusChanged()), this, SLOT(onTrackChanged()));
+            disconnect(tr, SIGNAL(isAvailableChanged()), this, SLOT(onTrackChanged()));
             tracksSignal.append(tr->m_sp_track);
             m_tracksSet.remove(tr->m_sp_track);
             tr->release();
@@ -523,4 +535,37 @@ int QSpotifyPlaylist::unseenCount() const
             ++c;
     }
     return c;
+}
+
+void QSpotifyPlaylist::onTrackChanged()
+{
+    if (!sender())
+        return;
+
+    QSpotifyTrack *tr = dynamic_cast<QSpotifyTrack *>(sender());
+    if (!tr)
+        return;
+
+    registerTrackType(tr);
+}
+
+void QSpotifyPlaylist::registerTrackType(QSpotifyTrack *t)
+{
+    int oldCount = m_offlineTracks.count();
+    if (t->offlineStatus() == QSpotifyTrack::Yes)
+        m_offlineTracks.insert(t);
+    else
+        m_offlineTracks.remove(t);
+    if ((oldCount == 0 && m_offlineTracks.count() > 0) || (oldCount == 1 && m_offlineTracks.count() == 0))
+        emit hasOfflineTracksChanged();
+
+    if (t->m_isAvailable) {
+        m_availableTracks.insert(t);
+    }
+}
+
+void QSpotifyPlaylist::unregisterTrackType(QSpotifyTrack *t)
+{
+    m_offlineTracks.remove(t);
+    m_availableTracks.remove(t);
 }
