@@ -77,7 +77,10 @@ Page {
         id: playlists
         anchors.fill: parent
 
+        cacheBuffer: 3000
         model: spotifySession.user ? spotifySession.user.playlists : 0
+
+        Component.onCompleted: positionViewAtBeginning()
 
         delegate: PlaylistDelegate {
             title: (modelData.type == SpotifyPlaylist.Playlist ? modelData.name
@@ -106,7 +109,7 @@ Page {
                 if (modelData.type == SpotifyPlaylist.Playlist)
                     staticIcon = "image://theme/icon-m-music-video-all-songs";
                 else if (modelData.type == SpotifyPlaylist.Starred)
-                    staticIcon = theme.inverted ? "image://theme/icon-m-common-favorite-mark-inverse" : "image://theme/icon-m-common-favorite-mark";
+                    staticIcon = "image://theme/icon-m-common-favorite-mark-inverse";
                 else if (modelData.type == SpotifyPlaylist.Inbox)
                     staticIcon = "image://theme/icon-m-toolbar-directory-move-to-white-selected";
             }

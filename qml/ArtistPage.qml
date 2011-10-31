@@ -114,6 +114,9 @@ Page {
             anchors.fill: parent
             anchors.rightMargin: UI.MARGIN_XLARGE
             anchors.leftMargin: UI.MARGIN_XLARGE
+            cacheBuffer: 3000
+
+            Component.onCompleted: positionViewAtBeginning()
 
             Component {
                 id: trackComponent

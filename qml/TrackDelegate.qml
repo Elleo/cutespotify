@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -52,7 +52,7 @@ Item {
     property alias name: mainText.text
     property alias artistAndAlbum: subText.text
     property alias duration: timing.text
-    property alias coverId: coverImage.spotifyId
+    property string coverId: ""
     property bool highlighted: false
     property bool starred: false
     property bool available: true
@@ -118,35 +118,50 @@ Item {
         color: "#22FFFFFF"
     }
 
-    Label {
+    Loader {
         id: indexText
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         width: listItem.showIndex ? 48 : 0
-        text: (index + 1) + ".   "
-        font.family: UI.FONT_FAMILY_LIGHT
-        font.pixelSize: UI.FONT_SMALL
-        horizontalAlignment: Text.AlignRight
-        visible: listItem.showIndex
+        sourceComponent: listItem.showIndex ? indexTextComponent : null
     }
 
-    Rectangle {
+    Component {
+        id: indexTextComponent
+        Label {
+            text: (index + 1) + ".   "
+            font.family: UI.FONT_FAMILY_LIGHT
+            font.pixelSize: UI.FONT_SMALL
+            horizontalAlignment: Text.AlignRight
+            visible: listItem.showIndex
+        }
+    }
+
+    Loader {
         id: coverContainer
-        width: coverImage.spotifyId.length > 0 ? 64 : 0; height: width
+        width: listItem.coverId.length > 0 ? 64 : 0; height: width
         anchors.left: indexText.right
         anchors.verticalCenter: parent.verticalCenter
-        color: "#202020"
-        opacity: listItem.available ? 1.0 : 0.2
+        sourceComponent: listItem.coverId.length > 0 ? coverContainerComponent : null
+    }
 
-        SpotifyImage {
-            id: coverImage
-            anchors.fill: parent
+    Component {
+        id: coverContainerComponent
+        Rectangle {
+            color: "#202020"
+            opacity: listItem.available ? 1.0 : 0.2
+
+            SpotifyImage {
+                id: coverImage
+                anchors.fill: parent
+                spotifyId: listItem.coverId
+            }
         }
     }
 
     Column {
         anchors.left: coverContainer.right
-        anchors.leftMargin: coverImage.spotifyId.length > 0 ? UI.MARGIN_XLARGE : 0
+        anchors.leftMargin: listItem.coverId.length > 0 ? UI.MARGIN_XLARGE : 0
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         opacity: listItem.available ? 1.0 : 0.3

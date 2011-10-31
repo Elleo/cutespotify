@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -151,28 +151,35 @@ Item {
                     elide: Text.ElideRight
                 }
 
-                BorderImage {
+                Loader {
                     id: unseenBox
-                    source: "images/icon-m-common-green.png"
                     anchors.verticalCenter: parent.verticalCenter
                     x: mainText.paintedWidth + UI.MARGIN_XLARGE
-                    visible: listItem.unseens > 0
-                    width: unseenText.width > 14 ? unseenText.width + 14 : 28
-                    border.left: 10
-                    border.right: 10
-                    border.top: 10
-                    border.bottom: 10
+                    sourceComponent: listItem.unseens > 0  ? unseensComponent : null
+                }
 
-                    Label {
-                        id: unseenText
-                        anchors.centerIn: parent
-                        font.family: listItem.titleFont
-                        font.pixelSize: listItem.subtitleSize
-                        font.bold: true
-                        color: listItem.titleColor
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        text: listItem.unseens
+                Component {
+                    id: unseensComponent
+                    BorderImage {
+                        source: "images/icon-m-common-green.png"
+                        visible: listItem.unseens > 0
+                        width: unseenText.width > 14 ? unseenText.width + 14 : 28
+                        border.left: 10
+                        border.right: 10
+                        border.top: 10
+                        border.bottom: 10
+
+                        Label {
+                            id: unseenText
+                            anchors.centerIn: parent
+                            font.family: listItem.titleFont
+                            font.pixelSize: listItem.subtitleSize
+                            font.bold: true
+                            color: listItem.titleColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            text: listItem.unseens
+                        }
                     }
                 }
             }
@@ -226,34 +233,48 @@ Item {
                     }
                 }
 
-                ProgressBar {
+                Loader {
                     id: downloadBar
                     anchors.left: offlineStatusIcon.right
                     anchors.right: parent.right
                     anchors.rightMargin: UI.MARGIN_XLARGE
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 3
-                    platformStyle: ProgressBarStyle {
-                        knownTexture: "qrc:/qml/images/meegotouch-progressindicator-bar-known-texture.png"
-                        barMask: "image://theme/meegotouch-progressindicator-bar-mask"
-                    }
-                    visible: listItem.offlineStatus == SpotifyPlaylist.Downloading
-                    minimumValue: 0
-                    maximumValue: 100
-                    value: listItem.downloadProgress
+                    sourceComponent: listItem.offlineStatus == SpotifyPlaylist.Downloading ? downloadBarComponent : null
                 }
 
-                Label {
+                Component {
+                    id: downloadBarComponent
+                    ProgressBar {
+                        platformStyle: ProgressBarStyle {
+                            knownTexture: "qrc:/qml/images/meegotouch-progressindicator-bar-known-texture.png"
+                            barMask: "image://theme/meegotouch-progressindicator-bar-mask"
+                        }
+                        visible: listItem.offlineStatus == SpotifyPlaylist.Downloading
+                        minimumValue: 0
+                        maximumValue: 100
+                        value: listItem.downloadProgress
+                    }
+                }
+
+                Loader {
                     id: waitingText
                     anchors.left: offlineStatusIcon.right
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    visible: listItem.offlineStatus == SpotifyPlaylist.Waiting && !spotifySession.offlineMode
-                    font.family: listItem.subtitleFont
-                    font.pixelSize: listItem.subtitleSize
-                    font.weight: Font.Light
-                    color: listItem.subtitleColor
-                    text: "Waiting for sync"
+                    sourceComponent: listItem.offlineStatus == SpotifyPlaylist.Waiting && !spotifySession.offlineMode ? waitingTextComponent : null
+                }
+
+                Component {
+                    id: waitingTextComponent
+                    Label {
+                        visible: listItem.offlineStatus == SpotifyPlaylist.Waiting && !spotifySession.offlineMode
+                        font.family: listItem.subtitleFont
+                        font.pixelSize: listItem.subtitleSize
+                        font.weight: Font.Light
+                        color: listItem.subtitleColor
+                        text: "Waiting for sync"
+                    }
                 }
             }
         }

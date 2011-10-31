@@ -98,6 +98,7 @@ Page {
         id: tracks
         anchors.fill: parent
 
+	cacheBuffer: 3000
         highlightMoveDuration: 1
         model: playlist.tracks
         header: ViewHeader {
@@ -108,6 +109,7 @@ Page {
 
         Component.onCompleted: {
             tracks.delegate = playlist.type == SpotifyPlaylist.Inbox ? inboxDelegate : trackDelegate
+            positionViewAtBeginning();
         }
     }
 

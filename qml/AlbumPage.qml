@@ -101,6 +101,7 @@ Page {
         id: tracks
         anchors.fill: parent
 
+	cacheBuffer: 3000
         model: browse.tracks
         header: AlbumHeader {
             albumName: album ? album.name : ""
@@ -115,6 +116,8 @@ Page {
         onCountChanged: {
             delegate = browse.hasMultipleArtists ? compilationDelegate : albumDelegate
         }
+
+        Component.onCompleted: positionViewAtBeginning()
     }
 
     ScrollDecorator { flickableItem: tracks }
