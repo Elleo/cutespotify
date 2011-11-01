@@ -195,6 +195,7 @@ QSpotifyPlaylist::QSpotifyPlaylist(Type type, sp_playlist *playlist, bool incrRe
     connect(this, SIGNAL(dataChanged()), this, SIGNAL(playlistDataChanged()));
     connect(this, SIGNAL(isLoadedChanged()), this, SIGNAL(thisIsLoadedChanged()));
     connect(this, SIGNAL(playlistDataChanged()), this , SIGNAL(seenCountChanged()));
+    connect(this, SIGNAL(playlistDataChanged()), this, SIGNAL(tracksChanged()));
 
     metadataUpdated();
 }
@@ -296,7 +297,7 @@ void QSpotifyPlaylist::addTrack(sp_track *track, int pos)
 bool QSpotifyPlaylist::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
-	m_skipUpdateTracks = true;
+        m_skipUpdateTracks = true;
         metadataUpdated();
         m_skipUpdateTracks = false;
         e->accept();
@@ -319,14 +320,14 @@ bool QSpotifyPlaylist::event(QEvent *e)
         QSpotifyTracksAddedEvent *ev = static_cast<QSpotifyTracksAddedEvent *>(e);
         QVector<sp_track*> tracks = ev->tracks();
         int pos = ev->position();
-	for (int i = 0; i < tracks.count(); ++i)
-	    addTrack(tracks.at(i), pos++);
-	emit dataChanged();
-	if (m_type == Starred || m_type == Inbox)
-	    emit tracksAdded(tracks);
-	m_trackList->setShuffle(m_trackList->isShuffle());
-	if (QSpotifySession::instance()->playQueue()->isCurrentTrackList(m_trackList))
-	    QSpotifySession::instance()->playQueue()->tracksUpdated();
+        for (int i = 0; i < tracks.count(); ++i)
+            addTrack(tracks.at(i), pos++);
+        emit dataChanged();
+        if (m_type == Starred || m_type == Inbox)
+            emit tracksAdded(tracks);
+        m_trackList->setShuffle(m_trackList->isShuffle());
+        if (QSpotifySession::instance()->playQueue()->isCurrentTrackList(m_trackList))
+            QSpotifySession::instance()->playQueue()->tracksUpdated();
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 4) {
@@ -441,6 +442,22 @@ int QSpotifyPlaylist::trackCount() const
     return c;
 }
 
+static bool stringContainsWord(const QString &string, const QString &word)
+{
+    if (word.isEmpty())
+        return true;
+
+    int index = string.indexOf(word, 0, Qt::CaseInsensitive);
+
+    if (index == -1)
+        return false;
+
+    if (index == 0 || string.at(index - 1) == QLatin1Char(' '))
+        return true;
+
+    return false;
+}
+
 QList<QObject*> QSpotifyPlaylist::tracksAsQObject() const
 {
     QList<QObject*> list;
@@ -448,14 +465,23 @@ QList<QObject*> QSpotifyPlaylist::tracksAsQObject() const
         // Reverse order for StarredList to get the most recents first
         for (int i = m_trackList->m_tracks.count() - 1; i >= 0 ; --i) {
             QSpotifyTrack *t = m_trackList->m_tracks[i];
-            if (t->error() == QSpotifyTrack::Ok)
+            if (t->error() == QSpotifyTrack::Ok && (m_trackFilter.isEmpty()
+                                                    || stringContainsWord(t->name(), m_trackFilter)
+                                                    || stringContainsWord(t->artists(), m_trackFilter)
+                                                    || stringContainsWord(t->album(), m_trackFilter)
+                                                    || stringContainsWord(t->creator(), m_trackFilter))) {
                 list.append((QObject*)(t));
+            }
         }
     } else {
         for (int i = 0; i < m_trackList->m_tracks.count(); ++i) {
             QSpotifyTrack *t = m_trackList->m_tracks[i];
-            if (t->error() == QSpotifyTrack::Ok)
+            if (t->error() == QSpotifyTrack::Ok && (m_trackFilter.isEmpty()
+                                                    || stringContainsWord(t->name(), m_trackFilter)
+                                                    || stringContainsWord(t->artists(), m_trackFilter)
+                                                    || stringContainsWord(t->album(), m_trackFilter))) {
                 list.append((QObject*)(t));
+            }
         }
     }
     return list;
@@ -569,3 +595,15 @@ void QSpotifyPlaylist::unregisterTrackType(QSpotifyTrack *t)
     m_offlineTracks.remove(t);
     m_availableTracks.remove(t);
 }
+
+void QSpotifyPlaylist::setTrackFilter(const QString &filter)
+{
+    if (m_trackFilter == filter)
+        return;
+
+    m_trackFilter = filter;
+    emit trackFilterChanged();
+    emit tracksChanged();
+}
+
+

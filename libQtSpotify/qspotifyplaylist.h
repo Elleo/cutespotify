@@ -63,7 +63,7 @@ class QSpotifyPlaylist : public QSpotifyObject
     Q_PROPERTY(QString name READ name NOTIFY playlistDataChanged)
     Q_PROPERTY(int trackCount READ trackCount NOTIFY playlistDataChanged)
     Q_PROPERTY(int totalDuration READ totalDuration NOTIFY playlistDataChanged)
-    Q_PROPERTY(QList<QObject *> tracks READ tracksAsQObject NOTIFY playlistDataChanged)
+    Q_PROPERTY(QList<QObject *> tracks READ tracksAsQObject NOTIFY tracksChanged)
     Q_PROPERTY(bool isLoaded READ isLoaded NOTIFY thisIsLoadedChanged)
     Q_PROPERTY(Type type READ type NOTIFY playlistDataChanged)
     Q_PROPERTY(OfflineStatus offlineStatus READ offlineStatus NOTIFY playlistDataChanged)
@@ -74,6 +74,7 @@ class QSpotifyPlaylist : public QSpotifyObject
     Q_PROPERTY(bool availableOffline READ availableOffline WRITE setAvailableOffline NOTIFY availableOfflineChanged)
     Q_PROPERTY(int unseenCount READ unseenCount NOTIFY seenCountChanged)
     Q_PROPERTY(bool hasOfflineTracks READ hasOfflineTracks NOTIFY hasOfflineTracksChanged)
+    Q_PROPERTY(QString trackFilter READ trackFilter WRITE setTrackFilter NOTIFY trackFilterChanged)
     Q_ENUMS(Type)
     Q_ENUMS(OfflineStatus)
 public:
@@ -106,10 +107,12 @@ public:
     bool availableOffline() const { return m_availableOffline; }
     void setAvailableOffline(bool offline);
     QString listSection() const;
-    QList<QSpotifyTrack *> tracks() const { return m_trackList->m_tracks; }
+    QList<QSpotifyTrack *> tracks() const { return m_trackList->tracks(); }
     QList<QObject *> tracksAsQObject() const;
     int unseenCount() const;
     bool hasOfflineTracks() const { return m_offlineTracks.count() > 0; }
+    QString trackFilter() const { return m_trackFilter; }
+    void setTrackFilter(const QString &filter);
 
     bool contains(sp_track *t) const { return m_tracksSet.contains(t); }
 
@@ -137,6 +140,8 @@ Q_SIGNALS:
     void availableOfflineChanged();
     void seenCountChanged();
     void hasOfflineTracksChanged();
+    void trackFilterChanged();
+    void tracksChanged();
 
 protected:
     bool updateData();
@@ -169,8 +174,10 @@ private:
     QSet<QSpotifyTrack *> m_availableTracks;
 
     QString m_uri;
-    
+
     bool m_skipUpdateTracks;
+
+    QString m_trackFilter;
 
     friend class QSpotifyPlaylistContainer;
     friend class QSpotifyUser;

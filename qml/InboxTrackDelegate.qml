@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -71,7 +71,9 @@ Item {
 
     property real backgroundOpacity: 0.0
 
-    height: UI.LIST_ITEM_HEIGHT + thirdText.height
+    property real defaultHeight: UI.LIST_ITEM_HEIGHT + thirdText.height
+
+    height: defaultHeight
     width: parent.width
 
     SequentialAnimation {
@@ -144,6 +146,7 @@ Item {
             anchors.right: parent.right
             Label {
                 id: mainText
+                height: 34
                 anchors.left: parent.left
                 anchors.right: iconItem.left
                 anchors.rightMargin: UI.MARGIN_XLARGE
@@ -152,6 +155,7 @@ Item {
                 font.pixelSize: listItem.titleSize
                 color: highlighted ? listItem.highlightColor : listItem.titleColor
                 elide: Text.ElideRight
+                clip: true
                 Behavior on color { ColorAnimation { duration: 200 } }
             }
             Image {
@@ -172,6 +176,7 @@ Item {
             anchors.right: parent.right
             Label {
                 id: subText
+                height: 29
                 anchors.left: parent.left
                 anchors.right: timing.left
                 anchors.rightMargin: UI.MARGIN_XLARGE
@@ -180,6 +185,7 @@ Item {
                 font.weight: Font.Light
                 color: highlighted ? listItem.highlightColor : listItem.subtitleColor
                 elide: Text.ElideRight
+                clip: true
                 visible: text != ""
                 Behavior on color { ColorAnimation { duration: 200 } }
             }

@@ -71,7 +71,9 @@ Item {
 
     property real backgroundOpacity: 0.0
 
-    height: UI.LIST_ITEM_HEIGHT
+    property real defaultHeight: UI.LIST_ITEM_HEIGHT
+
+    height: defaultHeight
     width: parent.width
 
     SequentialAnimation {
@@ -172,6 +174,7 @@ Item {
             anchors.right: parent.right
             Label {
                 id: mainText
+                height: 34
                 anchors.left: parent.left
                 anchors.right: iconItem.left
                 anchors.rightMargin: UI.MARGIN_XLARGE
@@ -180,6 +183,7 @@ Item {
                 font.pixelSize: listItem.titleSize
                 color: highlighted ? listItem.highlightColor : listItem.titleColor
                 elide: Text.ElideRight
+                clip: true
                 Behavior on color { ColorAnimation { duration: 200 } }
             }
             Image {
@@ -200,6 +204,7 @@ Item {
             anchors.right: parent.right
             Label {
                 id: subText
+                height: 29
                 anchors.left: parent.left
                 anchors.right: timing.left
                 anchors.rightMargin: UI.MARGIN_XLARGE
@@ -208,6 +213,7 @@ Item {
                 font.weight: Font.Light
                 color: highlighted ? listItem.highlightColor : listItem.subtitleColor
                 elide: Text.ElideRight
+                clip: true
                 visible: text != ""
                 Behavior on color { ColorAnimation { duration: 200 } }
             }

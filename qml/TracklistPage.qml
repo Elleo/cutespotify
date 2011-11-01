@@ -43,6 +43,7 @@ import QtQuick 1.1
 import com.meego 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
+import "Utilities.js" as Util
 
 Page {
     id: tracklistPage
@@ -50,6 +51,8 @@ Page {
     orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
+
+    Component.onCompleted: playlist.trackFilter = ""
 
     TrackMenu {
         id: menu
@@ -61,8 +64,10 @@ Page {
     Component {
         id: trackDelegate
         TrackDelegate {
-            name: modelData.name
-            artistAndAlbum: modelData.artists + " | " + modelData.album
+            name: searchField.text.length > 0 ? Util.highlightWord(modelData.name, searchField.text) : modelData.name
+            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists)
+                            + " | "
+                            + (searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album)
             duration: modelData.duration
             highlighted: modelData.isCurrentPlayingTrack
             starred: modelData.isStarred
@@ -78,9 +83,12 @@ Page {
     Component {
         id: inboxDelegate
         InboxTrackDelegate {
-            name: modelData.name
-            artistAndAlbum: modelData.artists + " | " + modelData.album
-            creatorAndDate: modelData.creator + " | " + Qt.formatDateTime(modelData.creationDate)
+            name: searchField.text.length > 0 ? Util.highlightWord(modelData.name, searchField.text) : modelData.name
+            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists)
+                            + " | "
+                            + (searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album)
+            creatorAndDate: (searchField.text.length > 0 ? Util.highlightWord(modelData.creator, searchField.text) : modelData.creator)
+                            + " | " + Qt.formatDateTime(modelData.creationDate)
             duration: modelData.duration
             highlighted: modelData.isCurrentPlayingTrack
             starred: modelData.isStarred
@@ -96,7 +104,19 @@ Page {
 
     ListView {
         id: tracks
-        anchors.fill: parent
+
+        property bool showSearchField: false
+        property bool _movementFromBeginning: false
+
+        Timer {
+            id: searchFieldTimer
+            onTriggered: tracks.showSearchField = false
+            interval: 5000
+        }
+
+        width: parent.width
+        anchors.top: searchFieldContainer.bottom
+        anchors.bottom: parent.bottom
 
         cacheBuffer: 3000
         highlightMoveDuration: 1
@@ -105,6 +125,21 @@ Page {
             text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
                                                              : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
                                                                                                          : "Inbox"))
+        }
+
+        onMovementStarted: {
+            tracks.focus = true;
+            if (atYBeginning)
+                _movementFromBeginning = true;
+        }
+
+        onContentYChanged: {
+            if (contentY < 0 && _movementFromBeginning) {
+                showSearchField = true;
+                searchFieldTimer.start()
+            } else {
+                _movementFromBeginning = false;
+            }
         }
 
         Component.onCompleted: {
@@ -118,6 +153,88 @@ Page {
         onPlaylistDestroyed: {
             playlistsTab.pop(null);
         }
+    }
+
+    Rectangle {
+        id: searchFieldContainer
+        anchors.top: parent.top
+        width: parent.width
+        height: 0
+        color: "black"
+        clip: true
+
+        Column {
+            id: searchColumn
+            y: UI.MARGIN_XLARGE
+            width: parent.width
+            spacing: UI.MARGIN_XLARGE
+            opacity: 0
+
+            AdvancedTextField {
+                id: searchField
+                placeholderText: "Search"
+                width: parent.width
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+                platformSipAttributes: SipAttributes {
+                    actionKeyLabel: "Close"
+                    actionKeyEnabled: true
+                }
+                Keys.onReturnPressed: { tracks.focus = true }
+
+                onTextChanged: playlist.trackFilter = Util.trim(text)
+
+                onActiveFocusChanged: {
+                    if (activeFocus)
+                        searchFieldTimer.stop();
+                    else if (text.length === 0)
+                        searchFieldTimer.start();
+                }
+            }
+
+            Separator { width: parent.width }
+        }
+
+        states: State {
+            name: "visible"
+            when: searchField.text.length > 0 || searchField.activeFocus || tracks.showSearchField
+            PropertyChanges {
+                target: searchFieldContainer
+                height: searchColumn.height + UI.MARGIN_XLARGE
+            }
+            PropertyChanges {
+                target: searchColumn
+                opacity: 1
+            }
+        }
+
+        transitions: [
+            Transition {
+                from: "visible"; to: ""
+                SequentialAnimation {
+                    NumberAnimation {
+                        properties: "opacity"
+                        duration: 250
+                    }
+                    NumberAnimation {
+                        properties: "height"
+                        duration: 350
+                    }
+                }
+            },
+            Transition {
+                from: ""; to: "visible"
+                SequentialAnimation {
+                    NumberAnimation {
+                        properties: "height"
+                        duration: 100
+                    }
+                    NumberAnimation {
+                        properties: "opacity"
+                        duration: 200
+                    }
+                }
+            }
+        ]
     }
 
     Scrollbar { listView: tracks }
