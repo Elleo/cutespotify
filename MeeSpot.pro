@@ -21,8 +21,11 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # CONFIG += mobility
 # MOBILITY +=
 
+CONFIG += qmsystem2
+
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
+    src/hardwarekeyshandler.cpp
 
 OTHER_FILES += \
     qml/MainPage.qml \
@@ -97,6 +100,11 @@ include(libQtSpotify/libQtSpotify.pri)
 CONFIG += qdeclarative-boostable
 QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
 QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath,/opt/MeeSpot/lib
+
+HEADERS += \
+    src/hardwarekeyshandler.h
+
+
 
 
 

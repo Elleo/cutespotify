@@ -38,34 +38,28 @@
 **
 ****************************************************************************/
 
+#ifndef HARDWAREKEYSHANDLER_H
+#define HARDWAREKEYSHANDLER_H
 
-#include <QtGui/QApplication>
-#include <QtDeclarative>
-#include <MDeclarativeCache>
+#include <QObject>
+#include <qmkeys.h>
 
-#include "src/hardwarekeyshandler.h"
-#include <QtSpotify>
-#include <qspotify_qmlplugin.h>
-
-Q_DECL_EXPORT int main(int argc, char *argv[])
+class HardwareKeysHandler : public QObject
 {
-    QApplication::setOrganizationName("MeeSpot");
-    QApplication::setOrganizationDomain("qt.nokia.com");
-    QApplication::setApplicationName("MeeSpot");
+    Q_OBJECT
+public:
+    HardwareKeysHandler();
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/user/MyDocs/.meespotconf"));
+private Q_SLOTS:
+    void onKeyEvent(MeeGo::QmKeys::Key key, MeeGo::QmKeys::State state);
 
-    QApplication *app = MDeclarativeCache::qApplication(argc, argv);
-    QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+private:
+    MeeGo::QmKeys m_keys;
 
-    registerQmlTypes();
-    view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
-    view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
+    bool m_longPlayPause;
+    bool m_longPlay;
+    bool m_longPause;
+    bool m_longStop;
+};
 
-    HardwareKeysHandler keyHandler;
-
-    view->setSource(QUrl("qrc:/qml/main.qml"));
-    view->showFullScreen();
-
-    return app->exec();
-}
+#endif // HARDWAREKEYSHANDLER_H

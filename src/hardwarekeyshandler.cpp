@@ -38,34 +38,55 @@
 **
 ****************************************************************************/
 
+#include "hardwarekeyshandler.h"
 
-#include <QtGui/QApplication>
-#include <QtDeclarative>
-#include <MDeclarativeCache>
+#include <qspotifysession.h>
 
-#include "src/hardwarekeyshandler.h"
-#include <QtSpotify>
-#include <qspotify_qmlplugin.h>
-
-Q_DECL_EXPORT int main(int argc, char *argv[])
+HardwareKeysHandler::HardwareKeysHandler()
+    : QObject()
+    , m_longPlayPause(false)
+    , m_longPlay(false)
+    , m_longPause(false)
+    , m_longStop(false)
 {
-    QApplication::setOrganizationName("MeeSpot");
-    QApplication::setOrganizationDomain("qt.nokia.com");
-    QApplication::setApplicationName("MeeSpot");
+    connect(&m_keys, SIGNAL(keyEvent(MeeGo::QmKeys::Key,MeeGo::QmKeys::State)), this, SLOT(onKeyEvent(MeeGo::QmKeys::Key,MeeGo::QmKeys::State)));
+}
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/user/MyDocs/.meespotconf"));
+void HardwareKeysHandler::onKeyEvent(MeeGo::QmKeys::Key key, MeeGo::QmKeys::State state)
+{
+    QSpotifySession *spotify = QSpotifySession::instance();
 
-    QApplication *app = MDeclarativeCache::qApplication(argc, argv);
-    QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
-
-    registerQmlTypes();
-    view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
-    view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
-
-    HardwareKeysHandler keyHandler;
-
-    view->setSource(QUrl("qrc:/qml/main.qml"));
-    view->showFullScreen();
-
-    return app->exec();
+    if (key == MeeGo::QmKeys::PlayPause) {
+        if (state == MeeGo::QmKeys::KeyDown && !m_longPlayPause) {
+            spotify->isPlaying() ? spotify->pause() : spotify->resume();
+            m_longPlayPause = true;
+        } else if (state == MeeGo::QmKeys::KeyUp) {
+            m_longPlayPause = false;
+        }
+    } else if (key == MeeGo::QmKeys::Play) {
+        if (state == MeeGo::QmKeys::KeyDown && !m_longPlay) {
+            spotify->resume();
+            m_longPlay = true;
+        } else if (state == MeeGo::QmKeys::KeyUp) {
+            m_longPlay = false;
+        }
+    } else if (key == MeeGo::QmKeys::Pause) {
+        if (state == MeeGo::QmKeys::KeyDown && !m_longPause) {
+            spotify->pause();
+            m_longPause = true;
+        } else if (state == MeeGo::QmKeys::KeyUp) {
+            m_longPause = false;
+        }
+    } else if (key == MeeGo::QmKeys::Stop) {
+        if (state == MeeGo::QmKeys::KeyDown && !m_longStop) {
+            spotify->stop();
+            m_longStop = true;
+        } else if (state == MeeGo::QmKeys::KeyUp) {
+            m_longStop = false;
+        }
+    } else if (key == MeeGo::QmKeys::NextSong && state == MeeGo::QmKeys::KeyUp) {
+        spotify->playNext();
+    } else if (key == MeeGo::QmKeys::PreviousSong && state == MeeGo::QmKeys::KeyUp) {
+        spotify->playPrevious();
+    }
 }
