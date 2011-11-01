@@ -78,7 +78,8 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/postrm \
     qml/ToplistPage.qml \
     qml/MySelectionDialog.qml \
-    qml/MyCommonDialog.qml
+    qml/MyCommonDialog.qml \
+    qml/Scrollbar.qml
 
 RESOURCES += \
     res.qrc
@@ -96,6 +97,7 @@ include(libQtSpotify/libQtSpotify.pri)
 CONFIG += qdeclarative-boostable
 QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
 QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath,/opt/MeeSpot/lib
+
 
 
 

@@ -193,5 +193,5 @@ Page {
         }
     }
 
-    ScrollDecorator { flickableItem: playlists }
+    Scrollbar { listView: playlists }
 }

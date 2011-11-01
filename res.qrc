@@ -65,5 +65,6 @@
         <file>qml/ToplistPage.qml</file>
         <file>qml/MySelectionDialog.qml</file>
         <file>qml/MyCommonDialog.qml</file>
+        <file>qml/Scrollbar.qml</file>
     </qresource>
 </RCC>

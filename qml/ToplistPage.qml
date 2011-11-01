@@ -298,7 +298,7 @@ Page {
             }
         }
 
-        ScrollDecorator { flickableItem: results }
+        Scrollbar { listView: results }
     }
 
     BusyIndicator {
