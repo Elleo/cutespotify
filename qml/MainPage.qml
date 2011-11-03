@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -121,20 +121,54 @@ Page {
                 tab: playlistsTab
                 iconSource: theme.inverted ? "image://theme/icon-m-toolbar-list-white"
                                           : "image://theme/icon-m-toolbar-list"
+
+                property bool isCurrentTab: false
+
+                onPressedChanged: {
+                    if (pressed)
+                        isCurrentTab = (tabGroup.currentTab == playlistsTab);
+                }
+
+                onClicked: {
+                    if (isCurrentTab && playlistsTab.depth > 1)
+                        playlistsTab.pop(null);
+                }
             }
             TabButton {
                 tab: searchTab
                 iconSource: theme.inverted ? "image://theme/icon-m-toolbar-search-white"
                                            : "image://theme/icon-m-toolbar-search"
-                onClicked: { mainPage.checkSearchPage() }
+
+                property bool isCurrentTab: false
+
+                onPressedChanged: {
+                    if (pressed)
+                        isCurrentTab = (tabGroup.currentTab == searchTab);
+                }
+
+                onClicked: {
+                    mainPage.checkSearchPage();
+                    if (isCurrentTab && searchTab.depth > 1)
+                        searchTab.pop(null);
+                }
             }
             TabButton {
                 tab: toplistTab
                 iconSource: theme.inverted ? "image://theme/icon-m-toolbar-home-white"
                                            : "image://theme/icon-m-toolbar-home"
+
+                property bool isCurrentTab: false
+
+                onPressedChanged: {
+                    if (pressed)
+                        isCurrentTab = (tabGroup.currentTab == toplistTab);
+                }
+
                 onClicked: {
                     if (toplistTab.depth === 0)
                         toplistTab.push(Qt.resolvedUrl("ToplistPage.qml"))
+                    else if (isCurrentTab && toplistTab.depth > 1)
+                        toplistTab.pop(null);
                 }
             }
             TabButton {
