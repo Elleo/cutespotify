@@ -232,6 +232,39 @@ Page {
             }
         }
 
+        Label {
+            id: errorMessage
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 80
+            visible: results.count === 0 && search.query.length > 0 && !search.busy
+            font.pixelSize: UI.FONT_LARGE
+            font.family: UI.FONT_FAMILY_LIGHT
+            font.weight: Font.Light
+            wrapMode: Text.WordWrap
+            width: parent.width - UI.MARGIN_XLARGE * 2
+            horizontalAlignment: Text.AlignHCenter
+
+            text: search.didYouMean.length > 0 ? "Did you mean"
+                                               : (selector.selectedIndex === 0 ? "No tracks found" :
+                                                  selector.selectedIndex == 1 ? "No albums found" :
+                                                  "No artists found")
+        }
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: errorMessage.bottom
+            visible: results.count === 0 && search.query.length > 0 && !search.busy && search.didYouMean.length > 0
+            font.pixelSize: UI.FONT_LARGE
+            font.family: UI.FONT_FAMILY_LIGHT
+            font.weight: Font.Light
+            wrapMode: Text.WordWrap
+            width: parent.width - UI.MARGIN_XLARGE * 2
+            horizontalAlignment: Text.AlignHCenter
+
+            text: "<style type=text/css> a { text-decoration: underline; color:" + UI.SPOTIFY_COLOR + "} </style><a href='didyoumean'>" + search.didYouMean + "</a> ?"
+
+            onLinkActivated: searchField.text = search.didYouMean
+        }
+
         Scrollbar { listView: results }
     }
 }

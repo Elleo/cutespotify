@@ -247,13 +247,17 @@ Page {
             }
         }
 
-         Scrollbar { listView: artistView }
-    }
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 100
+            visible: selector.selectedIndex == 2 && artistView.count === 0 && !browse.busy
+            text: "No biography available"
+            font.pixelSize: UI.FONT_LARGE
+            font.family: UI.FONT_FAMILY_LIGHT
+            font.weight: Font.Light
+        }
 
-    Label {
-        anchors.centerIn: parent
-        visible: selector.selectedIndex == 2 && artistView.count === 0 && !browse.busy
-        text: "No biography available"
+        Scrollbar { listView: artistView }
     }
 
     BusyIndicator {
