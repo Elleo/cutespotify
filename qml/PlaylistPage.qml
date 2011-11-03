@@ -99,8 +99,13 @@ Page {
             opacity: !spotifySession.offlineMode || modelData.availableOffline ? 1.0 : 0.3
 
             onClicked: {
-                if (modelData.trackCount > 0)
-                    pageStack.push(Qt.resolvedUrl("TracklistPage.qml"), { playlist: modelData })
+                if (modelData.trackCount > 0) {
+                    var component = Qt.createComponent("TracklistPage.qml");
+                    if (component.status == Component.Ready) {
+                        var playlistPage = component.createObject(pageStack, { playlist: modelData });
+                        pageStack.push(playlistPage);
+                    }
+                }
             }
             onPressAndHold: { menu.playlist = modelData; menu.open(); }
 

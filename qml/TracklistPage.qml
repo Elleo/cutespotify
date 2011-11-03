@@ -102,11 +102,18 @@ Page {
         }
     }
 
+    onPlaylistChanged: {
+        tracks.delegate = playlist.type == SpotifyPlaylist.Inbox ? inboxDelegate : trackDelegate
+        tracks.positionViewAtBeginning();
+    }
+
     ListView {
         id: tracks
 
         property bool showSearchField: false
         property bool _movementFromBeginning: false
+
+        Component.onCompleted: tracks.positionViewAtBeginning();
 
         Timer {
             id: searchFieldTimer
@@ -140,11 +147,6 @@ Page {
             } else {
                 _movementFromBeginning = false;
             }
-        }
-
-        Component.onCompleted: {
-            tracks.delegate = playlist.type == SpotifyPlaylist.Inbox ? inboxDelegate : trackDelegate
-            positionViewAtBeginning();
         }
     }
 
