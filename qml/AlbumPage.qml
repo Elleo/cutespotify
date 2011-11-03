@@ -56,6 +56,8 @@ Page {
 
     SpotifyAlbumBrowse {
         id: browse
+
+        property int trackCount: browse.tracks.length;
     }
 
     TrackMenu {
@@ -68,6 +70,29 @@ Page {
         id: albumMenu
         playVisible: false
         artistVisible: !browse.hasMultipleArtists
+    }
+
+    Column {
+        id: header
+        width: parent.width
+        anchors.top: parent.top
+
+        Selector {
+            id: selector
+            title: album ? album.name : ""
+            titleFontFamily: UI.FONT_FAMILY_LIGHT
+            titleFontWeight: Font.Light
+            titleFontSize: UI.FONT_LARGE
+            selectedIndex: 0
+            model: ListModel {
+                ListElement { name: "Tracks" }
+                ListElement { name: "Review" }
+            }
+        }
+
+        Separator {
+            width: parent.width
+        }
     }
 
     Component {
@@ -97,28 +122,80 @@ Page {
         }
     }
 
-    ListView {
-        id: tracks
-        anchors.fill: parent
-
-        cacheBuffer: 3000
-        model: browse.tracks
-        header: AlbumHeader {
-            albumName: album ? album.name : ""
-            artistName: album ? album.artist : ""
-            trackCount: tracks.count > 0 ? (tracks.count + (tracks.count > 1 ? " songs" : " song")) : ""
-            timing: browse.totalDuration > 0 ? spotifySession.formatDuration(browse.totalDuration) : ""
-            year: tracks.count > 0 && album.year > 0 ? album.year : ""
-            coverId: album.coverId
-            onMoreClicked: { albumMenu.albumBrowse = browse; albumMenu.open() }
+    Component {
+        id: reviewComponent
+        Label {
+            width: parent ? parent.width : 0
+            height: paintedHeight + UI.MARGIN_XLARGE * 2
+            text: "<style type=text/css> a { text-decoration: none; color:" + color + "} </style>" + modelData
+            textFormat: Text.RichText
+            wrapMode: Text.WordWrap
+            font.pixelSize: UI.FONT_LSMALL
+            verticalAlignment: Text.AlignVCenter
         }
-
-        onCountChanged: {
-            delegate = browse.hasMultipleArtists ? compilationDelegate : albumDelegate
-        }
-
-        Component.onCompleted: positionViewAtBeginning()
     }
 
-    Scrollbar { listView: tracks }
+    Item {
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.top: header.bottom
+        anchors.bottom: parent.bottom
+        anchors.topMargin: UI.MARGIN_XLARGE
+        anchors.rightMargin: -UI.MARGIN_XLARGE
+        anchors.leftMargin: -UI.MARGIN_XLARGE
+        clip: true
+
+        ListView {
+            id: tracks
+            anchors.fill: parent
+            anchors.rightMargin: UI.MARGIN_XLARGE
+            anchors.leftMargin: UI.MARGIN_XLARGE
+
+            cacheBuffer: 3000
+            model: browse.tracks
+            header: AlbumHeader {
+                artistName: album ? album.artist : ""
+                trackCount: browse.trackCount > 0 ? (browse.trackCount + (browse.trackCount > 1 ? " songs" : " song")) : ""
+                timing: browse.totalDuration > 0 ? spotifySession.formatDuration(browse.totalDuration) : ""
+                year: browse.trackCount > 0 && album.year > 0 ? album.year : ""
+                coverId: album.coverId
+                onMoreClicked: { albumMenu.albumBrowse = browse; albumMenu.open() }
+            }
+
+            Component.onCompleted: positionViewAtBeginning()
+
+            Connections {
+                target: selector
+                onSelectedIndexChanged: tracks.updateResults()
+            }
+
+            Connections {
+                target: browse
+                onTracksChanged: tracks.updateResults()
+            }
+
+            function updateResults() {
+                tracks.model = 0
+                tracks.delegate = null
+                if (selector.selectedIndex === 0) {
+                    tracks.model = browse.tracks
+                    tracks.delegate = browse.hasMultipleArtists ? compilationDelegate : albumDelegate
+                } else if (selector.selectedIndex == 1) {
+                    tracks.delegate = reviewComponent
+                    tracks.model = browse.review
+                }
+                tracks.positionViewAtBeginning()
+            }
+        }
+
+        Scrollbar { listView: tracks }
+    }
+
+    BusyIndicator {
+        id: busy
+        running: browse.busy
+        visible: running
+        anchors.centerIn: parent
+        platformStyle: BusyIndicatorStyle { size: "medium" }
+    }
 }

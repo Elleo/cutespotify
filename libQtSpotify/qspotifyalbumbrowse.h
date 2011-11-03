@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -43,6 +43,7 @@
 #define QSPOTIFYALBUMBROWSE_H
 
 #include <QtCore/QObject>
+#include <QStringList>
 
 struct sp_albumbrowse;
 class QSpotifyAlbum;
@@ -56,6 +57,8 @@ class QSpotifyAlbumBrowse : public QObject
     Q_PROPERTY(int totalDuration READ totalDuration NOTIFY tracksChanged)
     Q_PROPERTY(bool isStarred READ isStarred WRITE setStarred NOTIFY isStarredChanged)
     Q_PROPERTY(bool hasMultipleArtists READ hasMultipleArtists NOTIFY albumChanged)
+    Q_PROPERTY(QStringList review READ review NOTIFY tracksChanged)
+    Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
 public:
     QSpotifyAlbumBrowse(QObject *parent = 0);
     ~QSpotifyAlbumBrowse();
@@ -66,6 +69,10 @@ public:
     QList<QObject *> tracks() const;
     int totalDuration() const;
     bool hasMultipleArtists() const { return m_hasMultipleArtists; }
+
+    QStringList review() const { return m_review; }
+
+    bool busy() const { return m_busy; }
 
     bool event(QEvent *);
 
@@ -79,6 +86,7 @@ Q_SIGNALS:
     void albumChanged();
     void tracksChanged();
     void isStarredChanged();
+    void busyChanged();
 
 private:
     void clearData();
@@ -89,7 +97,11 @@ private:
     QSpotifyAlbum *m_album;
     QSpotifyTrackList *m_albumTracks;
 
+    QStringList m_review;
+
     bool m_hasMultipleArtists;
+
+    bool m_busy;
 
     friend class QSpotifyPlaylist;
     friend class QSpotifyUser;

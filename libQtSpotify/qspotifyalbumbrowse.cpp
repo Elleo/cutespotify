@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -69,6 +69,7 @@ QSpotifyAlbumBrowse::QSpotifyAlbumBrowse(QObject *parent)
     , m_album(0)
     , m_albumTracks(0)
     , m_hasMultipleArtists(false)
+    , m_busy(false)
 {
 }
 
@@ -98,6 +99,9 @@ void QSpotifyAlbumBrowse::setAlbum(QSpotifyAlbum *album)
     if (!m_album)
         return;
 
+    m_busy = true;
+    emit busyChanged();
+
     QMutexLocker lock(&g_mutex);
     m_sp_albumbrowse = sp_albumbrowse_create(QSpotifySession::instance()->spsession(), m_album->spalbum(), callback_albumbrowse_complete, 0);
     g_albumBrowseObjects.insert(m_sp_albumbrowse, this);
@@ -126,6 +130,7 @@ void QSpotifyAlbumBrowse::clearData()
         m_albumTracks = 0;
     }
     m_hasMultipleArtists = false;
+    m_review.clear();
 }
 
 void QSpotifyAlbumBrowse::processData()
@@ -146,6 +151,13 @@ void QSpotifyAlbumBrowse::processData()
             if (qtrack->artists() != m_album->artist())
                 m_hasMultipleArtists = true;
         }
+
+        m_review = QString::fromUtf8(sp_albumbrowse_review(m_sp_albumbrowse)).split(QLatin1Char('\n'), QString::SkipEmptyParts);
+        if (m_review.isEmpty())
+            m_review << QLatin1String("No review available");
+
+        m_busy = false;
+        emit busyChanged();
 
         emit tracksChanged();
     }

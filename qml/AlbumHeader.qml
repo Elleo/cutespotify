@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -46,7 +46,6 @@ import "UIConstants.js" as UI
 Column {
     id: albumHeader
     signal moreClicked
-    property alias albumName: title.text
     property alias artistName: artistText.text
     property alias trackCount: trackCountText.text
     property alias timing: timingText.text
@@ -55,45 +54,6 @@ Column {
 
     width: parent ? parent.width : 0
     spacing: UI.MARGIN_XLARGE
-
-    Item {
-        width: parent.width
-        height: UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
-
-        Label {
-            anchors.left: parent.left
-            anchors.right: moreIcon.left
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.verticalCenter: parent.verticalCenter
-            id: title
-            color: theme.inverted ? UI.COLOR_INVERTED_FOREGROUND : UI.COLOR_FOREGROUND
-            font.pixelSize: UI.FONT_LARGE
-            font.family: UI.FONT_FAMILY_LIGHT
-            elide: Text.ElideRight
-            opacity: moreButton.pressed ? 0.4 : 1.0
-        }
-
-        Image {
-            id: moreIcon
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            source: "image://theme/icon-s-music-video-description"
-            opacity: moreButton.pressed ? 0.4 : 1.0
-
-            MouseArea {
-                id: moreButton
-                anchors.fill: parent
-                anchors.margins: -15
-                onClicked: { albumHeader.moreClicked(); }
-            }
-        }
-
-        Separator {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-        }
-    }
 
     Item {
         width: parent.width
@@ -114,13 +74,13 @@ Column {
 
             Label {
                 id: artistText
-                height: 50
+                height: 35
                 width: parent.width
                 font.family: UI.FONT_FAMILY_BOLD
                 font.weight: Font.Bold
                 font.pixelSize: UI.FONT_LSMALL
                 elide: Text.ElideRight
-                verticalAlignment: Text.AlignVCenter
+                verticalAlignment: Text.AlignTop
             }
 
             Label {
@@ -143,6 +103,24 @@ Column {
                 font.family: UI.FONT_FAMILY
                 font.pixelSize: UI.FONT_SMALL
                 elide: Text.ElideRight
+            }
+        }
+
+        Image {
+            id: moreIcon
+            source: "image://theme/icon-s-music-video-description"
+            opacity: moreButton.pressed ? 0.4 : 1.0
+            visible: trackCount.length > 0
+            anchors.left: cover.right
+            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.bottom: cover.bottom
+            anchors.bottomMargin: 4
+
+            MouseArea {
+                id: moreButton
+                anchors.fill: parent
+                anchors.margins: -15
+                onClicked: { albumHeader.moreClicked(); }
             }
         }
     }
