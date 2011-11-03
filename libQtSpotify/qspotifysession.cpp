@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -491,11 +491,11 @@ void QSpotifySession::init()
         fprintf(stderr, "failed to create session: %s\n",
                 sp_error_message(error));
     } else {
-	QtMobility::QSystemStorageInfo storageInfo;
-	qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
-	sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
+        QtMobility::QSystemStorageInfo storageInfo;
+        qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
+        sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
 
-	QSettings settings;
+        QSettings settings;
 
         // Remove stored login information from older version of MeeSpot
         if (settings.contains("username")) {
@@ -526,7 +526,7 @@ void QSpotifySession::init()
 
         bool repeat = settings.value("repeat", false).toBool();
         setRepeat(repeat);
-        
+
         connect(this, SIGNAL(offlineModeChanged()), m_playQueue, SLOT(onOfflineModeChanged()));
     }
 }
@@ -760,7 +760,7 @@ void QSpotifySession::logout(bool keepLoginInfo)
     m_playQueue->clear();
 
     if (!keepLoginInfo) {
-	setOfflineMode(false);
+        setOfflineMode(false);
         sp_session_forget_me(m_sp_session);
     }
 
@@ -922,7 +922,7 @@ QString QSpotifySession::formatDuration(qint64 d) const
     QString r;
     if (h > 0)
         r += QString::number(h) + QLatin1String(":");
-    r += QLatin1String(m > 9 ? "" : "0") + QString::number(m) + QLatin1String(":");
+    r += QLatin1String(m > 9 || h == 0 ? "" : "0") + QString::number(m) + QLatin1String(":");
     r += QLatin1String(s > 9 ? "" : "0") + QString::number(s);
 
     return r;
