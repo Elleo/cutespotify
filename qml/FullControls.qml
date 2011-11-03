@@ -422,11 +422,30 @@ Column {
 
         Item {
             width: parent.width
-            height: favIcon.height
+            height: 40
 
             Image {
-                id: favIcon
+                id: addIcon
                 anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                opacity: enabled ? (addArea.pressed ? 0.4 : 1.0) : 0.2
+                source: "image://theme/icon-m-toolbar-add-white";
+                enabled: !spotifySession.offlineMode
+
+                MouseArea {
+                    id: addArea
+                    anchors.fill: parent
+                    anchors.margins: -15
+                    onClicked: {
+                        mainPage.playlistSelection.track = spotifySession.currentTrack;
+                        mainPage.playlistSelection.selectedIndex = -1;
+                        mainPage.playlistSelection.open();
+                    }
+                }
+            }
+            Image {
+                id: favIcon
+                x: 136
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
                 source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? "image://theme/icon-m-toolbar-favorite-mark-white"
@@ -442,7 +461,7 @@ Column {
                 }
             }
             Image {
-                anchors.horizontalCenter: parent.horizontalCenter
+                x: 272
                 anchors.verticalCenter: parent.verticalCenter
                 source: spotifySession.shuffle ? "images/icon-m-toolbar-shuffle-white-selected.png" : "image://theme/icon-m-toolbar-shuffle-white";
                 opacity: shuffleArea.pressed ? 0.4 : 1.0

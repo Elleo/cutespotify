@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -52,35 +52,7 @@ MyMenu {
     property bool albumVisible: true
     property bool markSeenVisible: false
 
-    property variant playlists: spotifySession.user ? spotifySession.user.playlists : null
-
     layoutContentHeight: layout.height
-
-    NotificationBanner {
-        id: banner
-    }
-
-    MySelectionDialog {
-        id: selectionDialog
- 
-        titleText: "Playlists"
-        parent: trackMenu.parent
-        model: ListModel { }
-        onAccepted: {
-            var playlistItem = model.get(selectionDialog.selectedIndex);
-            if (playlistItem.object) {
-                banner.text = "Track added to " + playlistItem.name;
-                playlistItem.object.add(track);
-            } else {
-                if (spotifySession.user.createPlaylistFromTrack(track)) {
-                    banner.text = "Track added to new playlist";
-                } else {
-                    banner.text = "Could not add track to new playlist";
-                }
-            }
-            banner.show();
-        }
-    }
 
     QueryDialog {
         id: confirmDeleteDialog
@@ -127,26 +99,17 @@ MyMenu {
         MyMenuItem {
             text: "Add to playlist";
             visible: !spotifySession.offlineMode
-            onClicked: { selectionDialog.selectedIndex = -1; selectionDialog.open(); }
+            onClicked: {
+                mainPage.playlistSelection.track = trackMenu.track;
+                mainPage.playlistSelection.selectedIndex = -1;
+                mainPage.playlistSelection.open();
+            }
         }
         MyMenuItem {
             text: "Delete";
             visible: trackMenu.deleteVisible && !spotifySession.offlineMode;
             onClicked: { confirmDeleteDialog.open(); }
         }
-    }
-
-    onPlaylistsChanged: {
-        selectionDialog.model.clear();
-
-        if (playlists === null)
-            return;
-
-        for (var i in trackMenu.playlists) {
-            if (trackMenu.playlists[i].type == SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(trackMenu.playlists[i]))
-                selectionDialog.model.append({"name": trackMenu.playlists[i].name, "object": trackMenu.playlists[i] })
-        }
-        selectionDialog.model.append({"name": "New playlist" });
     }
 
     onStatusChanged: {

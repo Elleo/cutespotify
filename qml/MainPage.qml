@@ -51,9 +51,47 @@ Page {
 
     property alias tabs: tabGroup
     property alias searchTabAlias: searchTab
+    property alias playlistSelection: playlistSelectionDialog
 
     NotificationBanner {
         id: errorBanner
+    }
+
+    MySelectionDialog {
+        id: playlistSelectionDialog
+
+        property variant track: null
+
+        titleText: "Playlists"
+        onAccepted: {
+            var playlistItem = model.get(playlistSelectionDialog.selectedIndex);
+            if (playlistItem.object) {
+                errorBanner.text = "Track added to " + playlistItem.name;
+                playlistItem.object.add(track);
+            } else {
+                if (spotifySession.user.createPlaylistFromTrack(track)) {
+                    errorBanner.text = "Track added to new playlist";
+                } else {
+                    errorBanner.text = "Could not add track to new playlist";
+                }
+            }
+            errorBanner.show();
+        }
+    }
+
+    property variant playlists: spotifySession.user ? spotifySession.user.playlists : null
+    onPlaylistsChanged: {
+        playlistSelectionDialog.model.clear();
+
+        if (playlists === null)
+            return;
+
+        for (var i in mainPage.playlists) {
+            if (mainPage.playlists[i].type == SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(mainPage.playlists[i]))
+                playlistSelectionDialog.model.append({"name": mainPage.playlists[i].name, "object": mainPage.playlists[i] })
+        }
+
+        playlistSelectionDialog.model.append({"name": "New playlist" });
     }
 
     Connections {
