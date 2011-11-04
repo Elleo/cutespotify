@@ -1,3 +1,12 @@
+meespot (1.2.0) unstable; urgency=low
+  * Added last.fm scrobbling.
+  * Fast-scrolling of lists.
+  * Search filter for playlists.
+  * Support for headset controls.
+  * Bug fixes and performance improvements.
+
+ -- Yoann Lopes <yoann.lopes@gmail.com>  Sat, 05 Nov 2011 00:21:51 +0100
+
 meespot (1.1.1) unstable; urgency=low
   * Bug fixes.
 
