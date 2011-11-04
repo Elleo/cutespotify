@@ -110,6 +110,14 @@ Page {
         }
     }
 
+    Connections {
+        target: lastfm
+        onErrorChanged: {
+            errorBanner.text = "Last.fm: " + lastfm.error;
+            errorBanner.show();
+        }
+    }
+
     TabGroup {
         id: tabGroup
         enabled: !currentTab.busy

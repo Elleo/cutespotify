@@ -38,39 +38,59 @@
 **
 ****************************************************************************/
 
+#ifndef LASTFMSCROBBLER_H
+#define LASTFMSCROBBLER_H
 
-#include <QtGui/QApplication>
-#include <QtDeclarative>
-#include <MDeclarativeCache>
+#include <QObject>
+#include <Audioscrobbler.h>
+#include <Track.h>
 
-#include "src/hardwarekeyshandler.h"
-#include "src/lastfmscrobbler.h"
-#include <QtSpotify>
-#include <qspotify_qmlplugin.h>
-
-Q_DECL_EXPORT int main(int argc, char *argv[])
+class LastFmScrobbler : public QObject
 {
-    QApplication::setOrganizationName("MeeSpot");
-    QApplication::setOrganizationDomain("qt.nokia.com");
-    QApplication::setApplicationName("MeeSpot");
-    QApplication::setApplicationVersion("1.1.1");
+    Q_OBJECT
+    Q_PROPERTY(QString user READ user NOTIFY userChanged)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+public:
+    LastFmScrobbler();
+    ~LastFmScrobbler();
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/user/MyDocs/.meespotconf"));
+    Q_INVOKABLE void authenticate(const QString &username, const QString &password);
 
-    QApplication *app = MDeclarativeCache::qApplication(argc, argv);
-    QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+    QString user() const { return m_user; }
+    Q_INVOKABLE void forgetUser();
 
-    registerQmlTypes();
-    view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
-    view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
+    bool enabled() const { return m_enabled; }
+    void setEnabled(bool e);
 
-    HardwareKeysHandler keyHandler;
+    QString error() const { return m_errorMessage; }
 
-    LastFmScrobbler scrobbler;
-    view->rootContext()->setContextProperty(QLatin1String("lastfm"), &scrobbler);
+Q_SIGNALS:
+    void userChanged();
+    void enabledChanged();
+    void errorChanged();
 
-    view->setSource(QUrl("qrc:/qml/main.qml"));
-    view->showFullScreen();
+private Q_SLOTS:
+    void onAuthentificateResponse();
+    void onCurrentTrackChanged();
+    void onCurrentTrackPositionChanged();
+    void onOfflineModeChanged();
 
-    return app->exec();
-}
+private:
+    void saveUser();
+    void restoreUser();
+
+    QString m_user;
+    QString m_sessionKey;
+
+    bool m_enabled;
+
+    lastfm::Audioscrobbler *m_audioScrobbler;
+    lastfm::MutableTrack *m_currentTrack;
+    bool m_currentTrackCached;
+
+    QString m_errorMessage;
+
+};
+
+#endif // LASTFMSCROBBLER_H

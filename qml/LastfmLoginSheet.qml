@@ -44,12 +44,11 @@ import com.meego 1.0
 import "UIConstants.js" as UI
 
 MySheet {
-    id: renameSheet
+    id: lastfmSheet
 
     property alias title: label.text
-    property alias playlistName: field.text
 
-    acceptButtonText: "Save"
+    acceptButtonText: "Log in"
     rejectButtonText: "Cancel"
     platformStyle: SheetStyle {
         headerBackground: "images/meegotouch-sheet-header-inverted-background.png"
@@ -73,25 +72,81 @@ MySheet {
         }
 
         TextField {
-            id: field
+            id: username
+            placeholderText: "Username"
             width: parent.width
-            inputMethodHints: Qt.ImhNoPredictiveText
             platformStyle: TextFieldStyle {
                 backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
             }
             platformSipAttributes: SipAttributes {
-                actionKeyLabel: "Save"
+                actionKeyLabel: (username.text.length > 0 && password.text.length > 0) ? "Log in" : "Next"
                 actionKeyEnabled: true
             }
-            Keys.onReturnPressed: { label.focus = true; renameSheet.accept(); }
+            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+            Keys.onReturnPressed: {
+                if (username.text.length > 0 && password.text.length > 0)
+                    accept();
+                else
+                    password.forceActiveFocus();
+            }
+            onTextChanged: {
+                if (username.text.length > 0 && password.text.length > 0)
+                    acceptButton.enabled = true;
+                else
+                    acceptButton.enabled = false;
+            }
         }
+
+        TextField {
+            id: password
+            placeholderText: "Password"
+            echoMode: TextInput.Password
+            width: parent.width
+            platformStyle: TextFieldStyle {
+                backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
+            }
+            platformSipAttributes: SipAttributes {
+                actionKeyLabel: (username.text.length > 0 && password.text.length > 0) ? "Log in" : "Next"
+                actionKeyEnabled: true
+            }
+            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+            Keys.onReturnPressed: {
+                if (username.text.length > 0 && password.text.length > 0)
+                    accept();
+                else
+                    username.forceActiveFocus();
+            }
+            onTextChanged: {
+                if (username.text.length > 0 && password.text.length > 0)
+                    acceptButton.enabled = true;
+                else
+                    acceptButton.enabled = false;
+            }
+        }
+    }
+
+    onAccepted: {
+        authenticate();
+    }
+
+    function authenticate()
+    {
+        if (username.text.length > 0 && password.text.length > 0)
+            lastfm.authenticate(username.text, password.text);
     }
 
     Timer {
         id: timer
         interval: 50
-        onTriggered: field.forceActiveFocus();
+        onTriggered: username.forceActiveFocus();
     }
 
-    onStatusChanged: if (status == DialogStatus.Open) timer.start()
+    onStatusChanged: {
+        if (status == DialogStatus.Opening) {
+            username.text = "";
+            password.text = "";
+        } else if (status == DialogStatus.Open) {
+            timer.start();
+        }
+    }
 }

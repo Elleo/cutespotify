@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -87,13 +87,20 @@ Page {
                         }
 
                         Switch {
+                            id: offlineSwitch
                             platformStyle: SwitchStyle {
                                  switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on-inverted"
                             }
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            checked: spotifySession.offlineMode
                             onCheckedChanged: spotifySession.setOfflineMode(checked)
+
+                            Component.onCompleted: checked = spotifySession.offlineMode;
+
+                            Connections {
+                                target: spotifySession
+                                onOfflineModeChanged: offlineSwitch.checked = spotifySession.offlineMode
+                            }
                         }
                     }
 
@@ -170,6 +177,97 @@ Page {
 
                 Item {
                     width: parent.width
+                    height: UI.LIST_ITEM_HEIGHT
+
+                    LastfmLoginSheet {
+                        id: lastfmLogin
+                        title: "Scrobble to last.fm"
+                    }
+
+                    Rectangle {
+                        id: background
+                        anchors.fill: parent
+                        // Fill page porders
+                        anchors.leftMargin: -UI.MARGIN_XLARGE
+                        anchors.rightMargin: -UI.MARGIN_XLARGE
+                        opacity: lastfmMouseArea.pressed ? 1.0 : 0.0
+                        color: "#22FFFFFF"
+                        Behavior on opacity { NumberAnimation { duration: 50 } }
+                    }
+
+                    Column {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.right: lastfmSwitch.left
+
+                        Label {
+                            id: titleText
+                            width: parent.width
+                            font.family: UI.FONT_FAMILY_BOLD
+                            font.weight: Font.Bold
+                            font.pixelSize: UI.LIST_TILE_SIZE
+                            elide: Text.ElideRight
+                            color: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
+                            text: "Scrobble to last.fm"
+                        }
+                        Label {
+                            id: selectedValue
+                            width: parent.width
+                            font.family: UI.FONT_FAMILY_LIGHT
+                            font.pixelSize: UI.LIST_SUBTILE_SIZE
+                            font.weight: Font.Light
+                            elide: Text.ElideRight
+                            color: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+                            text: lastfm.user
+                            visible: text.length > 0
+                        }
+                    }
+
+                    MouseArea {
+                        id: lastfmMouseArea
+                        anchors.fill: parent
+                        onClicked: {
+                            lastfmLogin.open()
+                        }
+                    }
+
+                    Switch {
+                        id: lastfmSwitch
+                        platformStyle: SwitchStyle {
+                            switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on-inverted"
+                        }
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        onCheckedChanged: {
+                            if (checked && lastfm.user.length === 0) {
+                                lastfmLogin.open();
+                                checked = false;
+                            } else {
+                                lastfm.enabled = checked
+                            }
+                        }
+
+                        Component.onCompleted: checked = lastfm.enabled;
+
+                        Connections {
+                            target: lastfm
+                            onEnabledChanged: lastfmSwitch.checked = lastfm.enabled
+                        }
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: UI.MARGIN_XLARGE * 2
+
+                    Separator {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width
+                    }
+                }
+
+                Item {
+                    width: parent.width
                     height: UI.MARGIN_XLARGE
                 }
 
@@ -213,6 +311,7 @@ Page {
 
                     onClicked: {
                         spotifySession.logout(false);
+                        lastfm.forgetUser();
                     }
                 }
 

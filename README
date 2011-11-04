@@ -12,7 +12,9 @@ libspotify/
         libspotify.so
         libspotify.so.9
 
-You also need your own libpotify API key to be able to compile and run the program
+----
+
+You also need your own libspotify API key to be able to compile and run the program
 (see https://developer.spotify.com/en/libspotify/application-key/)
 Create a file spotify_key.h inside libQtSpotify and copy the provided key inside it
 using the following format:
@@ -24,6 +26,23 @@ using the following format:
     const size_t g_appkey_size = sizeof(g_appkey);
 
     #endif // SPOTIFY_KEY_H
+
+----
+
+In addition to the libspotify API key, you also need to get a last.fm API key
+(see http://www.last.fm/api/account)
+Create a file lastfm_key.h inside liblastfm and copy the provided API key and shared
+secret inside it using the following format:
+
+     #ifndef LASTFM_KEY_H
+     #define LASTFM_KEY_H
+
+     const char *g_lastfmAPIKey = "<api_key>";
+     const char *g_lastfmSecret = "<shared_secret>";
+
+     #endif // LASTFM_KEY_H
+
+----
 
 To compile the project, use the Qt SDK (version 1.1 or higher) with the Harmattan component
 installed from the Qt SDK maintenance tool.

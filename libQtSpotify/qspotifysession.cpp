@@ -435,6 +435,7 @@ QSpotifySession::QSpotifySession()
     , m_currentTrack(0)
     , m_isPlaying(false)
     , m_currentTrackPosition(0)
+    , m_currentTrackPlayedDuration(0)
     , m_shuffle(false)
     , m_repeat(false)
 {
@@ -595,6 +596,7 @@ bool QSpotifySession::event(QEvent *e)
         // Track progressed
         QSpotifyTrackProgressEvent *ev = static_cast<QSpotifyTrackProgressEvent *>(e);
         m_currentTrackPosition += ev->delta();
+        m_currentTrackPlayedDuration += ev->delta();
         emit currentTrackPositionChanged();
         e->accept();
         return true;
@@ -815,6 +817,7 @@ void QSpotifySession::play(QSpotifyTrack *track)
     }
     m_currentTrack = track;
     m_currentTrackPosition = 0;
+    m_currentTrackPlayedDuration = 0;
     emit currentTrackChanged();
     emit currentTrackPositionChanged();
 
@@ -861,6 +864,7 @@ void QSpotifySession::stop(bool dontEmitSignals)
     m_isPlaying = false;
     m_currentTrack = 0;
     m_currentTrackPosition = 0;
+    m_currentTrackPlayedDuration = 0;
 
     if (!dontEmitSignals) {
          emit isPlayingChanged();

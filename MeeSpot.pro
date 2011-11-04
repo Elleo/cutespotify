@@ -25,7 +25,8 @@ CONFIG += qmsystem2
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    src/hardwarekeyshandler.cpp
+    src/hardwarekeyshandler.cpp \
+    src/lastfmscrobbler.cpp
 
 OTHER_FILES += \
     qml/MainPage.qml \
@@ -82,7 +83,8 @@ OTHER_FILES += \
     qml/ToplistPage.qml \
     qml/MySelectionDialog.qml \
     qml/MyCommonDialog.qml \
-    qml/Scrollbar.qml
+    qml/Scrollbar.qml \
+    qml/LastfmLoginSheet.qml
 
 RESOURCES += \
     res.qrc
@@ -95,6 +97,7 @@ INCLUDEPATH += /usr/include/applauncherd
 LIBS += -lmdeclarativecache
 
 include(libQtSpotify/libQtSpotify.pri)
+include(liblastfm/liblastfm.pri)
 
 # enable booster
 CONFIG += qdeclarative-boostable
@@ -102,7 +105,11 @@ QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
 QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath,/opt/MeeSpot/lib
 
 HEADERS += \
-    src/hardwarekeyshandler.h
+    src/hardwarekeyshandler.h \
+    src/lastfmscrobbler.h
+
+
+
 
 
 
