@@ -62,7 +62,7 @@ class QSpotifyTrack : public QSpotifyObject
     Q_PROPERTY(int discNumber READ discNumber NOTIFY trackDataChanged)
     Q_PROPERTY(QString duration READ durationString NOTIFY trackDataChanged)
     Q_PROPERTY(int durationMs READ duration NOTIFY trackDataChanged)
-    Q_PROPERTY(Error error READ error NOTIFY trackDataChanged)
+    Q_PROPERTY(TrackError error READ error NOTIFY trackDataChanged)
     Q_PROPERTY(int discIndex READ discIndex NOTIFY trackDataChanged)
     Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY isAvailableChanged)
     Q_PROPERTY(bool isStarred READ isStarred WRITE setIsStarred NOTIFY isStarredChanged)
@@ -74,20 +74,24 @@ class QSpotifyTrack : public QSpotifyObject
     Q_PROPERTY(QSpotifyAlbum *albumObject READ albumObject NOTIFY trackDataChanged)
     Q_PROPERTY(QSpotifyArtist *artistObject READ artistObject NOTIFY trackDataChanged)
     Q_PROPERTY(OfflineStatus offlineStatus READ offlineStatus NOTIFY offlineStatusChanged)
-    Q_ENUMS(Error)
+    Q_ENUMS(TrackError)
     Q_ENUMS(OfflineStatus)
 public:
-    enum Error {
+    enum TrackError {
         Ok = SP_ERROR_OK,
         IsLoading = SP_ERROR_IS_LOADING,
         OtherPermanent = SP_ERROR_OTHER_PERMANENT
     };
 
     enum OfflineStatus {
-        No = 0,
-        Waiting = 1,
-        Downloading = 2,
-        Yes = 3
+        No = SP_TRACK_OFFLINE_NO,
+        Waiting = SP_TRACK_OFFLINE_WAITING,
+        Downloading = SP_TRACK_OFFLINE_DOWNLOADING,
+        Yes = SP_TRACK_OFFLINE_DONE,
+        Error = SP_TRACK_OFFLINE_ERROR,
+        DoneExpired = SP_TRACK_OFFLINE_DONE_EXPIRED,
+        LimitExceeded = SP_TRACK_OFFLINE_LIMIT_EXCEEDED,
+        DoneResync = SP_TRACK_OFFLINE_DONE_RESYNC
     };
 
     ~QSpotifyTrack();
@@ -101,7 +105,7 @@ public:
     int discNumber() const { return m_discNumber; }
     int duration() const { return m_duration; }
     QString durationString() const { return m_durationString; }
-    Error error() const { return m_error; }
+    TrackError error() const { return m_error; }
     int discIndex() const { return m_discIndex; }
     bool isAvailable() const;
     bool isStarred() const;
@@ -165,7 +169,7 @@ private:
     int m_discNumber;
     int m_duration;
     QString m_durationString;
-    Error m_error;
+    TrackError m_error;
     int m_discIndex;
     bool m_isAvailable;
     QString m_name;

@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -55,8 +55,6 @@ class QSpotifyUser : public QSpotifyObject
     Q_OBJECT
     Q_PROPERTY(QString canonicalName READ canonicalName NOTIFY userDataChanged)
     Q_PROPERTY(QString displayName READ displayName NOTIFY userDataChanged)
-    Q_PROPERTY(QString fullName READ fullName NOTIFY userDataChanged)
-    Q_PROPERTY(QString picture READ picture NOTIFY userDataChanged)
     Q_PROPERTY(QList<QObject *> playlists READ playlistsAsQObject NOTIFY playlistsChanged)
 public:
     ~QSpotifyUser();
@@ -65,8 +63,6 @@ public:
 
     QString canonicalName() const { return m_canonicalName; }
     QString displayName() const { return m_displayName; }
-    QString fullName() const { return m_fullName; }
-    QString picture() const { return m_picture; }
 
     QSpotifyPlaylistContainer *playlistContainer() const;
     QSpotifyPlaylist *starredList() const;
@@ -96,8 +92,6 @@ private:
 
     QString m_canonicalName;
     QString m_displayName;
-    QString m_fullName;
-    QString m_picture;
 
     mutable QSpotifyPlaylistContainer *m_playlistContainer;
     mutable QSpotifyPlaylist *m_starredList;

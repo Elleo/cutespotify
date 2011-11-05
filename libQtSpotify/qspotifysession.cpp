@@ -157,6 +157,23 @@ private:
     sp_image *m_image;
 };
 
+class QSpotifyOfflineErrorEvent : public QEvent
+{
+public:
+    QSpotifyOfflineErrorEvent(sp_error error, const QString &message)
+        : QEvent(Type(QEvent::User + 16))
+        , m_error(error)
+        , m_message(message)
+    { }
+
+    sp_error error() const { return m_error; }
+    QString message() const { return m_message; }
+
+private:
+    sp_error m_error;
+    QString m_message;
+};
+
 
 class QSpotifyAudioThreadWorker : public QObject
 {
@@ -415,6 +432,12 @@ static void callback_log_message(sp_session *, const char *data)
     fprintf(stderr, data);
 }
 
+static void callback_offline_error(sp_session *, sp_error error)
+{
+    if (error != SP_ERROR_OK)
+        QCoreApplication::postEvent(QSpotifySession::instance(), new QSpotifyOfflineErrorEvent(error, QString::fromUtf8(sp_error_message(error))));
+}
+
 QSpotifySession::QSpotifySession()
     : QObject(0)
     , m_timerID(0)
@@ -479,6 +502,7 @@ void QSpotifySession::init()
     m_sp_callbacks.stop_playback = 0;
     m_sp_callbacks.get_audio_buffer_stats = 0;
     m_sp_callbacks.offline_status_updated = 0;
+    m_sp_callbacks.offline_error = callback_offline_error;
 
     m_sp_config.api_version = SPOTIFY_API_VERSION;
     m_sp_config.cache_location = "/home/user/MyDocs/.meespot";
@@ -624,6 +648,13 @@ bool QSpotifySession::event(QEvent *e)
     } else if (e->type() == QEvent::User + 15) {
         // LoggedOut
         onLoggedOut();
+        e->accept();
+        return true;
+    } else if (e->type() == QEvent::User + 16) {
+        // Offline error
+        QSpotifyOfflineErrorEvent *ev = static_cast<QSpotifyOfflineErrorEvent *>(e);
+        m_offlineErrorMessage = ev->message();
+        emit offlineErrorMessageChanged();
         e->accept();
         return true;
     }

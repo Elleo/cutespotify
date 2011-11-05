@@ -102,7 +102,7 @@ symbian {
     export(desktopfile.files)
     export(desktopfile.path)
     export(target.path)
-    libspotify.files = $$PWD/libspotify/lib/libspotify.so.9
+    libspotify.files = $$PWD/libspotify/lib/libspotify.so.10
     libspotify.path = /opt/MeeSpot/lib
     export(libspotify.files)
     export(libspotify.path)

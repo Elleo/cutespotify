@@ -68,7 +68,7 @@ QSpotifyTrack::QSpotifyTrack(sp_track *track, QSpotifyPlaylist *playlist)
 {
     sp_track_add_ref(track);
     m_sp_track = track;
-    m_error = Error(sp_track_error(m_sp_track));
+    m_error = TrackError(sp_track_error(m_sp_track));
 
     connect(QSpotifySession::instance(), SIGNAL(currentTrackChanged()), this, SLOT(onSessionCurrentTrackChanged()));
     connect(this, SIGNAL(dataChanged()), this, SIGNAL(trackDataChanged()));
@@ -94,7 +94,7 @@ QSpotifyTrack::QSpotifyTrack(sp_track *track, QSpotifyTrackList *tracklist)
 {
     sp_track_add_ref(track);
     m_sp_track = track;
-    m_error = Error(sp_track_error(m_sp_track));
+    m_error = TrackError(sp_track_error(m_sp_track));
 
     connect(QSpotifySession::instance(), SIGNAL(currentTrackChanged()), this, SLOT(onSessionCurrentTrackChanged()));
     connect(this, SIGNAL(dataChanged()), this, SIGNAL(trackDataChanged()));
@@ -119,7 +119,7 @@ bool QSpotifyTrack::updateData()
 {
     bool updated = false;
 
-    Error error = Error(sp_track_error(m_sp_track));
+    TrackError error = TrackError(sp_track_error(m_sp_track));
     if (m_error != error) {
         m_error = error;
         updated = true;
@@ -130,7 +130,7 @@ bool QSpotifyTrack::updateData()
         int discNumber = sp_track_disc(m_sp_track);
         int duration = sp_track_duration(m_sp_track);
         int discIndex = sp_track_index(m_sp_track);
-        bool isAvailable = sp_track_is_available(QSpotifySession::instance()->m_sp_session, m_sp_track);
+        bool isAvailable = sp_track_get_availability(QSpotifySession::instance()->m_sp_session, m_sp_track) == SP_TRACK_AVAILABILITY_AVAILABLE;
         int numArtists = sp_track_num_artists(m_sp_track);
         int popularity = sp_track_popularity(m_sp_track);
         OfflineStatus offlineSt = OfflineStatus(sp_track_offline_get_status(m_sp_track));
@@ -322,16 +322,16 @@ void QSpotifyTrack::setSeen(bool s)
 
 bool QSpotifyTrack::isAvailableOffline() const
 {
-    return m_offlineStatus == Yes;
+    return m_offlineStatus == Yes || m_offlineStatus == DoneResync;
 }
 
 bool QSpotifyTrack::isAvailable() const
 {
-    return m_isAvailable && (!QSpotifySession::instance()->offlineMode() || m_offlineStatus == Yes);
+    return m_isAvailable && (!QSpotifySession::instance()->offlineMode() || isAvailableOffline());
 }
 
 void QSpotifyTrack::onSessionOfflineModeChanged()
 {
-    if (m_offlineStatus != Yes)
+    if (!isAvailableOffline())
         emit isAvailableChanged();
 }

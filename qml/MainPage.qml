@@ -102,6 +102,10 @@ Page {
                 errorBanner.show();
             }
         }
+        onOfflineErrorMessageChanged: {
+            errorBanner.text = spotifySession.offlineErrorMessage;
+            errorBanner.show();
+        }
         onPlayTokenLost: {
             if (spotifySession.isPlaying) {
                 errorBanner.text = "Playback has been paused because your account is used somewhere else";

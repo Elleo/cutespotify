@@ -62,6 +62,7 @@ class QSpotifySession : public QObject
     Q_PROPERTY(ConnectionStatus connectionStatus READ connectionStatus NOTIFY connectionStatusChanged)
     Q_PROPERTY(ConnectionError connectionError READ connectionError NOTIFY connectionErrorChanged)
     Q_PROPERTY(QString connectionErrorMessage READ connectionErrorMessage NOTIFY connectionErrorChanged)
+    Q_PROPERTY(QString offlineErrorMessage READ offlineErrorMessage NOTIFY offlineErrorMessageChanged)
     Q_PROPERTY(bool pendingConnectionRequest READ pendingConnectionRequest NOTIFY pendingConnectionRequestChanged)
     Q_PROPERTY(QSpotifyUser *user READ user NOTIFY userChanged)
     Q_PROPERTY(QSpotifyTrack *currentTrack READ currentTrack NOTIFY currentTrackChanged)
@@ -79,6 +80,7 @@ class QSpotifySession : public QObject
     Q_PROPERTY(bool syncOverMobile READ syncOverMobile WRITE setSyncOverMobile NOTIFY syncOverMobileChanged)
     Q_ENUMS(ConnectionStatus)
     Q_ENUMS(ConnectionError)
+    Q_ENUMS(OfflineError)
     Q_ENUMS(StreamingQuality)
 public:
     enum ConnectionStatus {
@@ -98,6 +100,15 @@ public:
         UserNeedsPremium = SP_ERROR_USER_NEEDS_PREMIUM,
         OtherTransient = SP_ERROR_OTHER_TRANSIENT,
         OtherPermanent = SP_ERROR_OTHER_PERMANENT
+    };
+
+    enum OfflineError {
+        TooManyTracks = SP_ERROR_OFFLINE_TOO_MANY_TRACKS,
+        DiskCache = SP_ERROR_OFFLINE_DISK_CACHE,
+        Expired = SP_ERROR_OFFLINE_EXPIRED,
+        NotAllowed = SP_ERROR_OFFLINE_NOT_ALLOWED,
+        LicenseLost = SP_ERROR_OFFLINE_LICENSE_LOST,
+        LicenseError = SP_ERROR_OFFLINE_LICENSE_ERROR
     };
 
     enum StreamingQuality {
@@ -134,6 +145,7 @@ public:
     void setConnectionError(ConnectionError error, const QString &message);
 
     QString connectionErrorMessage() const { return m_connectionErrorMessage; }
+    QString offlineErrorMessage() const { return m_offlineErrorMessage; }
 
     bool pendingConnectionRequest() const { return m_pending_connectionRequest; }
 
@@ -202,6 +214,7 @@ Q_SIGNALS:
     void offlineModeChanged();
     void syncOverMobileChanged();
     void isLoggedInChanged();
+    void offlineErrorMessageChanged();
 
 protected:
     bool event(QEvent *);
@@ -243,6 +256,7 @@ private:
     ConnectionError m_connectionError;
     ConnectionRules m_connectionRules;
     QString m_connectionErrorMessage;
+    QString m_offlineErrorMessage;
     StreamingQuality m_streamingQuality;
     StreamingQuality m_syncQuality;
     bool m_syncOverMobile;
