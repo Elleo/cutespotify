@@ -248,6 +248,8 @@ bool QSpotifyPlaylist::updateData()
     if (m_offlineStatus != os) {
         if (os == Waiting && m_offlineTracks.count() == m_availableTracks.count())
             m_offlineStatus = Yes;
+        else if (os == Yes && m_offlineTracks.count() < m_availableTracks.count())
+            m_offlineStatus = Waiting;
         else
             m_offlineStatus = os;
 
