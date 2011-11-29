@@ -252,21 +252,23 @@ bool QSpotifyAudioThreadWorker::event(QEvent *e)
         return true;
     } else if (e->type() == QEvent::User + 9) {
         // Reset buffers
-        QMutexLocker lock(&g_mutex);
-        killTimer(m_audioTimerID);
-        m_audioOutput->suspend();
-        m_audioOutput->stop();
-        g_buffer.close();
-        g_buffer.setData(QByteArray());
-        g_buffer.open(QIODevice::ReadWrite);
-        g_readPos = 0;
-        g_writePos = 0;
-        m_audioOutput->reset();
-        m_iodevice = m_audioOutput->start();
-        m_audioOutput->suspend();
-        m_audioTimerID = startTimer(AUDIOSTREAM_UPDATE_INTERVAL);
-        m_timeCounter = 0;
-        m_previousElapsedTime = 0;
+        if (m_audioOutput) {
+            QMutexLocker lock(&g_mutex);
+            killTimer(m_audioTimerID);
+            m_audioOutput->suspend();
+            m_audioOutput->stop();
+            g_buffer.close();
+            g_buffer.setData(QByteArray());
+            g_buffer.open(QIODevice::ReadWrite);
+            g_readPos = 0;
+            g_writePos = 0;
+            m_audioOutput->reset();
+            m_iodevice = m_audioOutput->start();
+            m_audioOutput->suspend();
+            m_audioTimerID = startTimer(AUDIOSTREAM_UPDATE_INTERVAL);
+            m_timeCounter = 0;
+            m_previousElapsedTime = 0;
+        }
         e->accept();
         return true;
     } else if (e->type() == QEvent::Timer) {
