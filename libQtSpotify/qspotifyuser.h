@@ -81,6 +81,7 @@ public:
 Q_SIGNALS:
     void userDataChanged();
     void playlistsChanged();
+    void playlistsNameChanged();
 
 protected:
     bool updateData();

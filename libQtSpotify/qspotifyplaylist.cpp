@@ -315,6 +315,7 @@ bool QSpotifyPlaylist::event(QEvent *e)
         // Playlist renamed
         m_name = QString::fromUtf8(sp_playlist_name(m_sp_playlist));
         emit dataChanged();
+        emit nameChanged();
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 3) {

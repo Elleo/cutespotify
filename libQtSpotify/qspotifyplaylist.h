@@ -142,6 +142,7 @@ Q_SIGNALS:
     void hasOfflineTracksChanged();
     void trackFilterChanged();
     void tracksChanged();
+    void nameChanged();
 
 protected:
     bool updateData();

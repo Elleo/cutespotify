@@ -105,6 +105,7 @@ QSpotifyPlaylistContainer *QSpotifyUser::playlistContainer() const
         }
         m_playlistContainer = new QSpotifyPlaylistContainer(pc);
         connect(m_playlistContainer, SIGNAL(playlistContainerDataChanged()), this, SIGNAL(playlistsChanged()));
+        connect(m_playlistContainer, SIGNAL(playlistsNameChanged()), this, SIGNAL(playlistsNameChanged()));
     }
     return m_playlistContainer;
 }

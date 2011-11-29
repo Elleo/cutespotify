@@ -80,7 +80,14 @@ Page {
     }
 
     property variant playlists: spotifySession.user ? spotifySession.user.playlists : null
-    onPlaylistsChanged: {
+    Connections {
+        target: spotifySession.user
+        onPlaylistsNameChanged: updatePlaylistDialog()
+    }
+
+    onPlaylistsChanged: updatePlaylistDialog()
+
+    function updatePlaylistDialog() {
         playlistSelectionDialog.model.clear();
 
         if (playlists === null)
