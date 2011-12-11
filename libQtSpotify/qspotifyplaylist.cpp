@@ -367,8 +367,11 @@ bool QSpotifyPlaylist::event(QEvent *e)
         int newpos = ev->newPosition();
         QVector<QSpotifyTrack*> tracks;
         for (int i = 0; i < positions.count(); ++i) {
-            tracks.append(m_trackList->m_tracks[positions.at(i)]);
-            m_trackList->m_tracks.replace(positions.at(i), 0);
+            int pos = positions.at(i);
+            if (pos < 0 || pos >= m_trackList->m_tracks.count())
+                continue;
+            tracks.append(m_trackList->m_tracks[pos]);
+            m_trackList->m_tracks.replace(pos, 0);
         }
         for (int i = 0; i < tracks.count(); ++i)
             m_trackList->m_tracks.insert(newpos++, tracks.at(i));
