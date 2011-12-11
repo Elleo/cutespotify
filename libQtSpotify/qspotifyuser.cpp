@@ -106,6 +106,7 @@ QSpotifyPlaylistContainer *QSpotifyUser::playlistContainer() const
         m_playlistContainer = new QSpotifyPlaylistContainer(pc);
         connect(m_playlistContainer, SIGNAL(playlistContainerDataChanged()), this, SIGNAL(playlistsChanged()));
         connect(m_playlistContainer, SIGNAL(playlistsNameChanged()), this, SIGNAL(playlistsNameChanged()));
+        connect(QSpotifySession::instance(), SIGNAL(offlineModeChanged()), this, SIGNAL(playlistsChanged()));
     }
     return m_playlistContainer;
 }
@@ -143,13 +144,19 @@ QList<QObject*> QSpotifyUser::playlistsAsQObject() const
 {
     QList<QSpotifyPlaylist*> pls = playlists();
     QList<QObject*> list;
+    QList<QObject*> unavailableList;
     list.append((QObject*)inbox());
     list.append((QObject*)starredList());
     for (int i = 0; i < pls.count(); ++i) {
-        if (pls.at(i)->isLoaded() && sp_playlistcontainer_playlist_type(m_playlistContainer->m_container, i) == SP_PLAYLIST_TYPE_PLAYLIST)
-            list.append((QObject*)(pls[i]));
+        QSpotifyPlaylist *playlist = pls.at(i);
+        if (playlist->isLoaded() && sp_playlistcontainer_playlist_type(m_playlistContainer->m_container, i) == SP_PLAYLIST_TYPE_PLAYLIST) {
+            if (!QSpotifySession::instance()->offlineMode() || playlist->availableOffline())
+                list.append((QObject*)(playlist));
+            else
+                unavailableList.append((QObject*)(playlist));
+        }
     }
-    return list;
+    return list + unavailableList;
 }
 
 QList<QSpotifyPlaylist *> QSpotifyUser::playlists() const
