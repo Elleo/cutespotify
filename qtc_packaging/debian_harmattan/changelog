@@ -1,3 +1,8 @@
+meespot (1.2.1) unstable; urgency=low
+  * Bug fixes and minor improvements.
+
+ -- Yoann Lopes <yoann.lopes@gmail.com>  Mon, 12 Dec 2011 05:39:17 +0100
+
 meespot (1.2.0) unstable; urgency=low
   * Added last.fm scrobbling.
   * Fast-scrolling of lists.

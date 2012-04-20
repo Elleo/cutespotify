@@ -53,7 +53,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setOrganizationName("MeeSpot");
     QApplication::setOrganizationDomain("qt.nokia.com");
     QApplication::setApplicationName("MeeSpot");
-    QApplication::setApplicationVersion("1.2.0");
+    QApplication::setApplicationVersion("1.2.1");
 
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/user/MyDocs/.meespotconf"));
 

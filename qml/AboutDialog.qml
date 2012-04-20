@@ -114,7 +114,7 @@ Dialog {
         }
 
         Label {
-            text: "Version 1.2.0"
+            text: "Version 1.2.1"
             font.pixelSize: UI.FONT_LSMALL
         }
 
