@@ -41,7 +41,7 @@
 
 import QtQuick 1.1
 import "UIConstants.js" as UI
-import com.meego 1.0
+import com.nokia.meego 1.0
 
 Item {
     id: root
