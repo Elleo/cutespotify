@@ -123,20 +123,24 @@ Page {
                 Selector {
                     title: "Stream"
                     model: ListModel {
-                        ListElement { name: "Low bandwidth"; value: SpotifySession.LowQuality }
-                        ListElement { name: "High bandwidth"; value: SpotifySession.HighQuality }
+                        ListElement { name: "Low quality (96kbps)"; value: SpotifySession.LowQuality }
+                        ListElement { name: "Normal quality (160kbps)"; value: SpotifySession.HighQuality }
+                        ListElement { name: "High quality (320kbps)"; value: SpotifySession.UltraQuality }
                     }
-                    selectedIndex: spotifySession.streamingQuality == SpotifySession.LowQuality ? 0 : 1
+                    selectedIndex: spotifySession.streamingQuality == SpotifySession.LowQuality ? 0
+                                                                                                : spotifySession.streamingQuality == SpotifySession.HighQuality ? 1 : 2
                     onSelectedIndexChanged: spotifySession.streamingQuality = model.get(selectedIndex).value
                 }
 
                 Selector {
                     title: "Offline Sync"
                     model: ListModel {
-                        ListElement { name: "Low Quality"; value: SpotifySession.LowQuality }
-                        ListElement { name: "High Quality"; value: SpotifySession.HighQuality }
+                        ListElement { name: "Low quality (96kbps)"; value: SpotifySession.LowQuality }
+                        ListElement { name: "Normal quality (160kbps)"; value: SpotifySession.HighQuality }
+                        ListElement { name: "High quality (320kbps)"; value: SpotifySession.UltraQuality }
                     }
-                    selectedIndex: spotifySession.syncQuality == SpotifySession.LowQuality ? 0 : 1
+                    selectedIndex: spotifySession.syncQuality == SpotifySession.LowQuality ? 0
+                                                                                           : spotifySession.syncQuality == SpotifySession.HighQuality ? 1 : 2
                     onSelectedIndexChanged: spotifySession.syncQuality = model.get(selectedIndex).value
                 }
 

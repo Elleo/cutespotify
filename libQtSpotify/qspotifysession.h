@@ -114,7 +114,8 @@ public:
     enum StreamingQuality {
         Unknown = -1,
         LowQuality = SP_BITRATE_96k,
-        HighQuality = SP_BITRATE_160k
+        HighQuality = SP_BITRATE_160k,
+        UltraQuality = SP_BITRATE_320k
     };
 
     enum ConnectionRule {

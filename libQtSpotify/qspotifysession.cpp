@@ -701,7 +701,7 @@ void QSpotifySession::setSyncQuality(StreamingQuality q)
     m_syncQuality = q;
     QSettings s;
     s.setValue("syncQuality", int(q));
-    sp_session_preferred_offline_bitrate(m_sp_session, sp_bitrate(q), false);
+    sp_session_preferred_offline_bitrate(m_sp_session, sp_bitrate(q), true);
 
     emit syncQualityChanged();
 }
