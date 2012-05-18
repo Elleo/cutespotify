@@ -79,7 +79,7 @@ Column {
     SelectionDialog {
         id: infoDialog
         parent: player.parent
-        titleText: "Choose"
+        titleText: "Browse"
         model: ListModel {
             ListElement { name: "Album" }
             ListElement { name: "Artist" }
