@@ -463,6 +463,7 @@ QSpotifySession::QSpotifySession()
     , m_currentTrackPlayedDuration(0)
     , m_shuffle(false)
     , m_repeat(false)
+    , m_repeatOne(false)
 {
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(cleanUp()));
 
@@ -555,6 +556,9 @@ void QSpotifySession::init()
         bool repeat = settings.value("repeat", false).toBool();
         setRepeat(repeat);
 
+        bool repeatOne = settings.value("repeatOne", false).toBool();
+        setRepeatOne(repeatOne);
+
         connect(this, SIGNAL(offlineModeChanged()), m_playQueue, SLOT(onOfflineModeChanged()));
     }
 }
@@ -612,7 +616,7 @@ bool QSpotifySession::event(QEvent *e)
         return true;
     } else if (e->type() == QEvent::User + 4) {
         // End of track event
-        playNext();
+        playNext(m_repeatOne);
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 5) {
@@ -844,6 +848,17 @@ void QSpotifySession::setRepeat(bool r)
     emit repeatChanged();
 }
 
+void QSpotifySession::setRepeatOne(bool r)
+{
+    if (m_repeatOne == r)
+        return;
+
+    QSettings s;
+    s.setValue("repeatOne", r);
+    m_repeatOne = r;
+    emit repeatOneChanged();
+}
+
 void QSpotifySession::play(QSpotifyTrack *track)
 {
     if (track->error() != QSpotifyTrack::Ok || !track->isAvailable() || m_currentTrack == track)
@@ -936,9 +951,9 @@ void QSpotifySession::seek(int offset)
     QCoreApplication::postEvent(g_audioWorker, new QEvent(QEvent::Type(QEvent::User + 9)));
 }
 
-void QSpotifySession::playNext()
+void QSpotifySession::playNext(bool repeat)
 {
-    m_playQueue->playNext();
+    m_playQueue->playNext(repeat);
 }
 
 void QSpotifySession::playPrevious()

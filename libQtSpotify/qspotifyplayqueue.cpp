@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -127,33 +127,38 @@ bool QSpotifyPlayQueue::isExplicitTrack(int index)
     return index > m_currentTrackIndex && index <= m_currentTrackIndex + m_explicitTracks.count();
 }
 
-void QSpotifyPlayQueue::playNext()
+void QSpotifyPlayQueue::playNext(bool repeat)
 {
-    if (m_currentExplicitTrack) {
-        m_currentExplicitTrack->release();
-        m_currentExplicitTrack = 0;
-    }
+    if (repeat) {
+        QSpotifySession::instance()->stop(true);
+        QSpotifySession::instance()->play(m_currentExplicitTrack ? m_currentExplicitTrack : m_implicitTracks->m_currentTrack);
+    } else {
+        if (m_currentExplicitTrack) {
+            m_currentExplicitTrack->release();
+            m_currentExplicitTrack = 0;
+        }
 
-    if (m_explicitTracks.isEmpty()) {
-        if (m_implicitTracks) {
-            if (!m_implicitTracks->next()) {
-                if (m_repeat) {
-                    m_implicitTracks->play();
-                } else {
-                    QSpotifySession::instance()->stop();
-                    m_implicitTracks->release();
-                    m_implicitTracks = 0;
+        if (m_explicitTracks.isEmpty()) {
+            if (m_implicitTracks) {
+                if (!m_implicitTracks->next()) {
+                    if (m_repeat) {
+                        m_implicitTracks->play();
+                    } else {
+                        QSpotifySession::instance()->stop();
+                        m_implicitTracks->release();
+                        m_implicitTracks = 0;
+                    }
                 }
+            } else {
+                QSpotifySession::instance()->stop();
             }
         } else {
-            QSpotifySession::instance()->stop();
+            m_currentExplicitTrack = m_explicitTracks.dequeue();
+            if (m_currentExplicitTrack->isLoaded())
+                onTrackReady();
+            else
+                connect(m_currentExplicitTrack, SIGNAL(isLoadedChanged()), this, SLOT(onTrackReady()));
         }
-    } else {
-        m_currentExplicitTrack = m_explicitTracks.dequeue();
-        if (m_currentExplicitTrack->isLoaded())
-            onTrackReady();
-        else
-            connect(m_currentExplicitTrack, SIGNAL(isLoadedChanged()), this, SLOT(onTrackReady()));
     }
 
     emit tracksChanged();
@@ -293,6 +298,6 @@ void QSpotifyPlayQueue::tracksUpdated()
 void QSpotifyPlayQueue::onOfflineModeChanged()
 {
     if (m_shuffle && m_implicitTracks)
-	m_implicitTracks->setShuffle(true);
+        m_implicitTracks->setShuffle(true);
     emit tracksChanged();
 }

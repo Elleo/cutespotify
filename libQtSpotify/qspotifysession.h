@@ -72,6 +72,7 @@ class QSpotifySession : public QObject
     Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY isPlayingChanged)
     Q_PROPERTY(bool shuffle READ shuffle WRITE setShuffle NOTIFY shuffleChanged)
     Q_PROPERTY(bool repeat READ repeat WRITE setRepeat NOTIFY repeatChanged)
+    Q_PROPERTY(bool repeatOne READ repeatOne WRITE setRepeatOne NOTIFY repeatOneChanged)
     Q_PROPERTY(bool isOnline READ isOnline NOTIFY isOnlineChanged)
     Q_PROPERTY(bool isLoggedIn READ isLoggedIn NOTIFY isLoggedInChanged)
     Q_PROPERTY(bool offlineMode READ offlineMode NOTIFY offlineModeChanged)
@@ -182,6 +183,9 @@ public:
     bool repeat() const { return m_repeat; }
     void setRepeat(bool r);
 
+    bool repeatOne() const { return m_repeatOne; }
+    void setRepeatOne(bool r);
+
     sp_session *spsession() const { return m_sp_session; }
 
     QSpotifyPlayQueue *playQueue() const { return m_playQueue; }
@@ -194,7 +198,7 @@ public Q_SLOTS:
     void resume();
     void stop(bool dontEmitSignals = false);
     void seek(int offset);
-    void playNext();
+    void playNext(bool repeat = false);
     void playPrevious();
     void enqueue(QSpotifyTrack *track);
 
@@ -213,6 +217,7 @@ Q_SIGNALS:
     void currentTrackPositionChanged();
     void shuffleChanged();
     void repeatChanged();
+    void repeatOneChanged();
     void isOnlineChanged();
     void playTokenLost();
     void connectionRulesChanged();
@@ -284,6 +289,7 @@ private:
     int m_currentTrackPlayedDuration;
     bool m_shuffle;
     bool m_repeat;
+    bool m_repeatOne;
 
     bool m_invertedTheme;
 

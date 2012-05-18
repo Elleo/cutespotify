@@ -475,13 +475,23 @@ Column {
             Image {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                source: spotifySession.repeat ? "images/icon-m-toolbar-repeat-white-selected.png" : ("image://theme/icon-m-toolbar-repeat" + (theme.inverted ? "-white" : ""));
+                source: spotifySession.repeat ? "images/icon-m-toolbar-repeat-white-selected.png"
+                                              : spotifySession.repeatOne ? "images/icon-m-toolbar-repeat-one-white-selected.png" : ("image://theme/icon-m-toolbar-repeat" + (theme.inverted ? "-white" : ""));
                 opacity: repeatArea.pressed ? 0.4 : 1.0
                 MouseArea {
                     id: repeatArea
                     anchors.fill: parent
                     anchors.margins: -15
-                    onClicked: spotifySession.repeat = !spotifySession.repeat
+                    onClicked: {
+                        if (spotifySession.repeat) {
+                            spotifySession.repeat = false;
+                            spotifySession.repeatOne = true;
+                        } else if (spotifySession.repeatOne) {
+                            spotifySession.repeatOne = false;
+                        } else {
+                            spotifySession.repeat = true;
+                        }
+                    }
                 }
             }
         }
