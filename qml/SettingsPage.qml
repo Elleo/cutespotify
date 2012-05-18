@@ -127,8 +127,8 @@ Page {
                         ListElement { name: "Normal quality (160kbps)"; value: SpotifySession.HighQuality }
                         ListElement { name: "High quality (320kbps)"; value: SpotifySession.UltraQuality }
                     }
-                    selectedIndex: spotifySession.streamingQuality == SpotifySession.LowQuality ? 0
-                                                                                                : spotifySession.streamingQuality == SpotifySession.HighQuality ? 1 : 2
+                    selectedIndex: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
+                                                                                                : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
                     onSelectedIndexChanged: spotifySession.streamingQuality = model.get(selectedIndex).value
                 }
 
@@ -139,8 +139,8 @@ Page {
                         ListElement { name: "Normal quality (160kbps)"; value: SpotifySession.HighQuality }
                         ListElement { name: "High quality (320kbps)"; value: SpotifySession.UltraQuality }
                     }
-                    selectedIndex: spotifySession.syncQuality == SpotifySession.LowQuality ? 0
-                                                                                           : spotifySession.syncQuality == SpotifySession.HighQuality ? 1 : 2
+                    selectedIndex: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
+                                                                                           : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
                     onSelectedIndexChanged: spotifySession.syncQuality = model.get(selectedIndex).value
                 }
 

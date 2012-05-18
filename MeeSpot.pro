@@ -84,7 +84,8 @@ OTHER_FILES += \
     qml/MySelectionDialog.qml \
     qml/MyCommonDialog.qml \
     qml/Scrollbar.qml \
-    qml/LastfmLoginSheet.qml
+    qml/LastfmLoginSheet.qml \
+    qml/FolderPage.qml
 
 RESOURCES += \
     res.qrc
@@ -107,6 +108,9 @@ QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath,/opt/MeeSpot/lib
 HEADERS += \
     src/hardwarekeyshandler.h \
     src/lastfmscrobbler.h
+
+
+
 
 
 

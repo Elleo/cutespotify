@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -65,12 +65,19 @@ MyMenu {
 
     QueryDialog {
         id: confirmDeleteDialog
+        property bool deleteFolderContent: false
         parent: playlistMenu.parent
-        titleText: userOwnsPlaylist ? "Delete playlist?" : "Unsubscribe from playlist?"
         message: playlist ? playlist.name : ""
         acceptButtonText: "Yes"
         rejectButtonText: "No"
-        onAccepted: { playlist.removeFromContainer() }
+        onAccepted: {
+            if (deleteFolderContent)
+                playlist.deleteFolderContent();
+            else
+                playlist.removeFromContainer()
+            deleteFolderContent = false;
+        }
+        onRejected: deleteFolderContent = false;
     }
 
     MyMenuLayout {
@@ -84,7 +91,7 @@ MyMenu {
         MyMenuItem {
             text: "Add to queue";
             onClicked: { playlist.enqueue() }
-            visible: (playlist && playlist.trackCount > 0) ? true : false
+            visible: (playlist && (playlist.trackCount > 0 || playlist.type === SpotifyPlaylist.Folder)) ? true : false
         }
         MyMenuItem {
             text: "Rename"
@@ -100,12 +107,43 @@ MyMenu {
         }
         MyMenuItem {
             id: offlineItem
+            visible: (playlist && playlist.type !== SpotifyPlaylist.Folder) ? true : false
             onClicked: { playlist.availableOffline = !playlist.availableOffline }
         }
         MyMenuItem {
+            id: setFolderOfflineItem
+            visible: ((playlist && playlist.type === SpotifyPlaylist.Folder) ? true : false) && !spotifySession.offlineMode
+            text: "Set offline mode for content"
+            onClicked: { playlist.availableOffline = true }
+        }
+        MyMenuItem {
+            id: unsetFolderOfflineItem
+            visible: (playlist && playlist.type === SpotifyPlaylist.Folder) ? true : false
+            text: "Unset offline mode for content"
+            onClicked: { playlist.availableOffline = false }
+        }
+        MyMenuItem {
             id: deleteItem
-            onClicked: { confirmDeleteDialog.open(); }
-            visible: ((playlist && playlist.type == SpotifyPlaylist.Playlist) ? true : false)
+            onClicked: {
+                if (playlist.type === SpotifyPlaylist.Folder) {
+                    confirmDeleteDialog.titleText = "Delete folder?";
+                } else {
+                    confirmDeleteDialog.titleText = userOwnsPlaylist ? "Delete playlist?" : "Unsubscribe from playlist?";
+                }
+                confirmDeleteDialog.open();
+            }
+            visible: ((playlist && (playlist.type == SpotifyPlaylist.Playlist || playlist.type == SpotifyPlaylist.Folder)) ? true : false)
+                     && !spotifySession.offlineMode
+        }
+        MyMenuItem {
+            id: deleteFolderContentItem
+            text: "Delete folder and content"
+            onClicked: {
+                confirmDeleteDialog.deleteFolderContent = true;
+                confirmDeleteDialog.titleText = "Delete folder and its content?";
+                confirmDeleteDialog.open();
+            }
+            visible: ((playlist && playlist.type == SpotifyPlaylist.Folder) ? true : false)
                      && !spotifySession.offlineMode
         }
     }
@@ -113,8 +151,12 @@ MyMenu {
     onStatusChanged: {
         if (status == DialogStatus.Opening && playlist) {
             collabItem.text = (playlist.collaborative ? "Unset" : "Set") +  " collaborative";
-            deleteItem.text = userOwnsPlaylist ? "Delete" : "Unsubscribe";
             offlineItem.text = (playlist.availableOffline ? "Unset" : "Set") + " offline mode"
+            if (playlist.type === SpotifyPlaylist.Folder) {
+                deleteItem.text = "Delete";
+            } else {
+                deleteItem.text = userOwnsPlaylist ? "Delete" : "Unsubscribe";
+            }
         }
     }
 }

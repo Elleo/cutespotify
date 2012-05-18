@@ -170,8 +170,11 @@ QSpotifyPlaylist::QSpotifyPlaylist(Type type, sp_playlist *playlist, bool incrRe
     , m_offlineDownloadProgress(0)
     , m_availableOffline(false)
     , m_skipUpdateTracks(false)
+    , m_updateEventPosted(false)
 {
-    m_trackList = new QSpotifyTrackList(type == Starred || type == Inbox);
+    m_trackList = 0;
+    if (type != Folder && type != None)
+        m_trackList = new QSpotifyTrackList(type == Starred || type == Inbox);
 
     if (incrRefCount)
         sp_playlist_add_ref(playlist);
@@ -205,7 +208,8 @@ QSpotifyPlaylist::~QSpotifyPlaylist()
     emit playlistDestroyed();
     g_playlistObjects.remove(m_sp_playlist);
     sp_playlist_remove_callbacks(m_sp_playlist, m_callbacks, 0);
-    m_trackList->release();
+    if (m_trackList)
+        m_trackList->release();
     sp_playlist_release(m_sp_playlist);
     delete m_callbacks;
 }
@@ -219,10 +223,12 @@ bool QSpotifyPlaylist::updateData()
 {
     bool updated = false;
 
-    QString name = QString::fromUtf8(sp_playlist_name(m_sp_playlist));
-    if (m_name != name) {
-        m_name = name;
-        updated = true;
+    if (m_type != Folder) {
+        QString name = QString::fromUtf8(sp_playlist_name(m_sp_playlist));
+        if (m_name != name) {
+            m_name = name;
+            updated = true;
+        }
     }
 
     QString owner = QString::fromUtf8(sp_user_canonical_name(sp_playlist_owner(m_sp_playlist)));
@@ -237,7 +243,7 @@ bool QSpotifyPlaylist::updateData()
         updated = true;
     }
 
-    if (m_trackList->m_tracks.isEmpty() && !m_skipUpdateTracks) {
+    if (m_trackList && m_trackList->m_tracks.isEmpty() && !m_skipUpdateTracks) {
         int count = sp_playlist_num_tracks(m_sp_playlist);
         for (int i = 0; i < count; ++i)
             addTrack(sp_playlist_track(m_sp_playlist, i));
@@ -306,15 +312,17 @@ bool QSpotifyPlaylist::event(QEvent *e)
         return true;
     } else if (e->type() == QEvent::User + 1) {
         // TracksMetadata updated
-        for (int i = 0; i < m_trackList->m_tracks.count(); ++i) {
-            m_trackList->m_tracks.at(i)->metadataUpdated();
+        if (m_trackList) {
+            for (int i = 0; i < m_trackList->m_tracks.count(); ++i) {
+                m_trackList->m_tracks.at(i)->metadataUpdated();
+            }
         }
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 2) {
         // Playlist renamed
         m_name = QString::fromUtf8(sp_playlist_name(m_sp_playlist));
-        emit dataChanged();
+        postUpdateEvent();
         emit nameChanged();
         e->accept();
         return true;
@@ -325,7 +333,7 @@ bool QSpotifyPlaylist::event(QEvent *e)
         int pos = ev->position();
         for (int i = 0; i < tracks.count(); ++i)
             addTrack(tracks.at(i), pos++);
-        emit dataChanged();
+        postUpdateEvent();
         if (m_type == Starred || m_type == Inbox)
             emit tracksAdded(tracks);
         m_trackList->setShuffle(m_trackList->isShuffle());
@@ -352,7 +360,7 @@ bool QSpotifyPlaylist::event(QEvent *e)
             m_trackList->m_tracks.replace(pos, 0);
         }
         m_trackList->m_tracks.removeAll(0);
-        emit dataChanged();
+        postUpdateEvent();
         if (m_type == Starred)
             emit tracksRemoved(tracksSignal);
         if (QSpotifySession::instance()->playQueue()->isCurrentTrackList(m_trackList))
@@ -376,7 +384,7 @@ bool QSpotifyPlaylist::event(QEvent *e)
         for (int i = 0; i < tracks.count(); ++i)
             m_trackList->m_tracks.insert(newpos++, tracks.at(i));
         m_trackList->m_tracks.removeAll(0);
-        emit dataChanged();
+        postUpdateEvent();
         if (QSpotifySession::instance()->playQueue()->isCurrentTrackList(m_trackList))
             QSpotifySession::instance()->playQueue()->tracksUpdated();
         e->accept();
@@ -389,8 +397,21 @@ bool QSpotifyPlaylist::event(QEvent *e)
         }
         e->accept();
         return true;
+    } else if (e->type() == QEvent::User + 7) {
+        emit dataChanged();
+        m_updateEventPosted = false;
+        e->accept();
+        return true;
     }
     return QSpotifyObject::event(e);
+}
+
+void QSpotifyPlaylist::postUpdateEvent()
+{
+    if (!m_updateEventPosted) {
+        QCoreApplication::postEvent(this, new QEvent(QEvent::Type(QEvent::User + 7)));
+        m_updateEventPosted = true;
+    }
 }
 
 void QSpotifyPlaylist::add(QSpotifyTrack *track)
@@ -441,9 +462,11 @@ void QSpotifyPlaylist::rename(const QString &name)
 int QSpotifyPlaylist::trackCount() const
 {
     int c = 0;
-    for (int i = 0; i < m_trackList->m_tracks.count(); ++i) {
-        if (m_trackList->m_tracks.at(i)->error() == QSpotifyTrack::Ok)
-            ++c;
+    if (m_trackList) {
+        for (int i = 0; i < m_trackList->m_tracks.count(); ++i) {
+            if (m_trackList->m_tracks.at(i)->error() == QSpotifyTrack::Ok)
+                ++c;
+        }
     }
     return c;
 }
@@ -479,7 +502,7 @@ QList<QObject*> QSpotifyPlaylist::tracksAsQObject() const
                 list.append((QObject*)(t));
             }
         }
-    } else {
+    } else if (m_type == Playlist) {
         for (int i = 0; i < m_trackList->m_tracks.count(); ++i) {
             QSpotifyTrack *t = m_trackList->m_tracks[i];
             if (t->error() == QSpotifyTrack::Ok && (m_trackFilter.isEmpty()
@@ -495,12 +518,15 @@ QList<QObject*> QSpotifyPlaylist::tracksAsQObject() const
 
 int QSpotifyPlaylist::totalDuration() const
 {
+    if (!m_trackList)
+        return 0;
+
     return m_trackList->totalDuration();
 }
 
 QString QSpotifyPlaylist::listSection() const
 {
-    if (m_type == Playlist)
+    if (m_type == Playlist || m_type == Folder)
         return QLatin1String("p");
     else
         return QLatin1String("s");
@@ -509,6 +535,11 @@ QString QSpotifyPlaylist::listSection() const
 void QSpotifyPlaylist::removeFromContainer()
 {
     QSpotifySession::instance()->user()->removePlaylist(this);
+}
+
+void QSpotifyPlaylist::deleteFolderContent()
+{
+    QSpotifySession::instance()->user()->deleteFolderAndContent(this);
 }
 
 bool QSpotifyPlaylist::isCurrentPlaylist() const
@@ -523,11 +554,16 @@ void QSpotifyPlaylist::setCollaborative(bool c)
 
 void QSpotifyPlaylist::setAvailableOffline(bool offline)
 {
-    if (m_availableOffline == offline)
-        return;
+    if (m_type == Folder) {
+        for (int i = 0; i < m_availablePlaylists.count(); ++i)
+            dynamic_cast<QSpotifyPlaylist *>(m_availablePlaylists.at(i))->setAvailableOffline(offline);
+    } else {
+        if (m_availableOffline == offline)
+            return;
 
-    m_availableOffline = offline;
-    sp_playlist_set_offline_mode(QSpotifySession::instance()->spsession(), m_sp_playlist, offline);
+        m_availableOffline = offline;
+        sp_playlist_set_offline_mode(QSpotifySession::instance()->spsession(), m_sp_playlist, offline);
+    }
     emit availableOfflineChanged();
 }
 
@@ -543,15 +579,20 @@ void QSpotifyPlaylist::play()
 
 void QSpotifyPlaylist::enqueue()
 {
-    int c = m_trackList->m_tracks.count();
-    if (m_type == Starred || m_type == Inbox) {
-        // Reverse order for StarredList to get the most recents first
-        QList<QSpotifyTrack *> tracks;
-        for (int i = c - 1; i >= 0 ; --i)
-           tracks.append(m_trackList->m_tracks.at(i));
-        QSpotifySession::instance()->playQueue()->enqueueTracks(tracks);
+    if (m_type == Folder) {
+        for (int i = 0; i < m_availablePlaylists.count(); ++i)
+            dynamic_cast<QSpotifyPlaylist *>(m_availablePlaylists.at(i))->enqueue();
     } else {
-        QSpotifySession::instance()->playQueue()->enqueueTracks(m_trackList->m_tracks);
+        int c = m_trackList->m_tracks.count();
+        if (m_type == Starred || m_type == Inbox) {
+            // Reverse order for StarredList to get the most recents first
+            QList<QSpotifyTrack *> tracks;
+            for (int i = c - 1; i >= 0 ; --i)
+                tracks.append(m_trackList->m_tracks.at(i));
+            QSpotifySession::instance()->playQueue()->enqueueTracks(tracks);
+        } else {
+            QSpotifySession::instance()->playQueue()->enqueueTracks(m_trackList->m_tracks);
+        }
     }
 }
 

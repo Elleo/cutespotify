@@ -41,10 +41,12 @@
 
 #include "qspotifyplaylistcontainer.h"
 #include "qspotifyplaylist.h"
+#include "qspotifysession.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 #include <QtCore/QHash>
+#include <QtCore/QStack>
 #include <libspotify/api.h>
 
 static QHash<sp_playlistcontainer*, QSpotifyPlaylistContainer*> g_containerObjects;
@@ -119,6 +121,7 @@ static void callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *, int
 
 QSpotifyPlaylistContainer::QSpotifyPlaylistContainer(sp_playlistcontainer *container)
     : QSpotifyObject(true)
+    , m_updateEventPosted(false)
 {
     m_container = container;
     g_containerObjects.insert(container, this);
@@ -128,7 +131,7 @@ QSpotifyPlaylistContainer::QSpotifyPlaylistContainer(sp_playlistcontainer *conta
     m_callbacks->playlist_moved = callback_playlist_moved;
     m_callbacks->playlist_removed = callback_playlist_removed;
     sp_playlistcontainer_add_callbacks(m_container, m_callbacks, 0);
-    connect(this, SIGNAL(dataChanged()), this, SIGNAL(playlistContainerDataChanged()));
+    connect(QSpotifySession::instance(), SIGNAL(offlineModeChanged()), this, SLOT(updatePlaylists()));
 
     metadataUpdated();
 }
@@ -153,22 +156,80 @@ bool QSpotifyPlaylistContainer::updateData()
 
     if (m_playlists.isEmpty()) {
         int count = sp_playlistcontainer_num_playlists(m_container);
-        for (int i = 0; i < count; ++i)
-            addPlaylist(sp_playlistcontainer_playlist(m_container, i));
+        for (int i = 0; i < count; ++i) {
+            addPlaylist(sp_playlistcontainer_playlist(m_container, i), i);
+            if(sp_playlistcontainer_playlist_type(m_container, i) == SP_PLAYLIST_TYPE_PLACEHOLDER)
+                sp_playlistcontainer_remove_playlist(m_container, i);
+        }
         updated = true;
+        updatePlaylists();
     }
 
     return updated;
 }
 
+void QSpotifyPlaylistContainer::updatePlaylists()
+{
+    m_formattedAvailablePlaylists.clear();
+    m_formattedUnavailablePlaylists.clear();
+    m_playlistsFlat.clear();
+    QStack<QSpotifyPlaylist *> folders;
+    for (int i = 0; i < m_playlists.count(); ++i) {
+        QSpotifyPlaylist *playlist = m_playlists.at(i);
+        if (playlist->type() == QSpotifyPlaylist::Playlist) {
+            m_playlistsFlat.append((QObject*)playlist);
+            if (!QSpotifySession::instance()->offlineMode() || playlist->availableOffline()) {
+                if (folders.isEmpty())
+                    m_formattedAvailablePlaylists.append((QObject*)(playlist));
+                else
+                    folders.top()->m_availablePlaylists.append((QObject*)(playlist));
+            } else {
+                if (folders.isEmpty())
+                    m_formattedUnavailablePlaylists.append((QObject*)(playlist));
+                else
+                    folders.top()->m_unavailablePlaylists.append((QObject*)(playlist));
+            }
+        } else if (playlist->type() == QSpotifyPlaylist::Folder) {
+            playlist->clearPlaylists();
+            folders.push(playlist);
+        } else if (playlist->type() == QSpotifyPlaylist::FolderEnd) {
+            if (folders.isEmpty())
+                continue;
+            QSpotifyPlaylist *folder = folders.pop();
+            if (folders.isEmpty())
+                m_formattedAvailablePlaylists.append((QObject *)(folder));
+            else
+                folders.top()->m_availablePlaylists.append(folder);
+            emit folder->playlistsChanged();
+        }
+    }
+
+    emit playlistContainerDataChanged();
+}
+
 void QSpotifyPlaylistContainer::addPlaylist(sp_playlist *playlist, int pos)
 {
-    QSpotifyPlaylist *pl = new QSpotifyPlaylist(QSpotifyPlaylist::Playlist, playlist);
+    if (playlist != sp_playlistcontainer_playlist(m_container, pos)) {
+        int count = sp_playlistcontainer_num_playlists(m_container);
+        for (int i = 0; i < count; ++i) {
+            if (playlist == sp_playlistcontainer_playlist(m_container, i)) {
+                pos = i;
+                break;
+            }
+        }
+    }
+
+    sp_playlist_type type = sp_playlistcontainer_playlist_type(m_container, pos);
+    QSpotifyPlaylist *pl = new QSpotifyPlaylist(QSpotifyPlaylist::Type(type), playlist);
     if (pos == -1)
         m_playlists.append(pl);
     else
         m_playlists.insert(pos, pl);
-    connect(pl, SIGNAL(playlistDataChanged()), this, SIGNAL(playlistContainerDataChanged()));
+    if (type == SP_PLAYLIST_TYPE_START_FOLDER) {
+        char buffer[200];
+        sp_playlistcontainer_playlist_folder_name(m_container, pos, buffer, 200);
+        pl->m_name = QString::fromUtf8(buffer);
+    }
     connect(pl, SIGNAL(nameChanged()), this, SIGNAL(playlistsNameChanged()));
 }
 
@@ -183,6 +244,7 @@ bool QSpotifyPlaylistContainer::event(QEvent *e)
         QSpotifyPlaylistAddedEvent *ev = static_cast<QSpotifyPlaylistAddedEvent *>(e);
         addPlaylist(ev->playlist(), ev->position());
         emit dataChanged();
+        postUpdateEvent();
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 2) {
@@ -194,6 +256,7 @@ bool QSpotifyPlaylistContainer::event(QEvent *e)
             delete pl;
             emit dataChanged();
         }
+        postUpdateEvent();
         e->accept();
         return true;
     } else if (e->type() == QEvent::User + 3) {
@@ -206,8 +269,22 @@ bool QSpotifyPlaylistContainer::event(QEvent *e)
             m_playlists.insert(newpos > i ? newpos - 1 : newpos, pl);
             emit dataChanged();
         }
+        postUpdateEvent();
+        e->accept();
+        return true;
+    } else if (e->type() == QEvent::User + 4) {
+        updatePlaylists();
+        m_updateEventPosted = false;
         e->accept();
         return true;
     }
     return QSpotifyObject::event(e);
+}
+
+void QSpotifyPlaylistContainer::postUpdateEvent()
+{
+    if (!m_updateEventPosted) {
+        QCoreApplication::postEvent(this, new QEvent(QEvent::Type(QEvent::User + 4)));
+        m_updateEventPosted = true;
+    }
 }

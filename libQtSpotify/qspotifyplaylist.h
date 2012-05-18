@@ -75,11 +75,16 @@ class QSpotifyPlaylist : public QSpotifyObject
     Q_PROPERTY(int unseenCount READ unseenCount NOTIFY seenCountChanged)
     Q_PROPERTY(bool hasOfflineTracks READ hasOfflineTracks NOTIFY hasOfflineTracksChanged)
     Q_PROPERTY(QString trackFilter READ trackFilter WRITE setTrackFilter NOTIFY trackFilterChanged)
+    Q_PROPERTY(QList<QObject *> playlists READ playlists NOTIFY playlistsChanged)
+    Q_PROPERTY(int playlistCount READ playlistCount NOTIFY playlistsChanged)
     Q_ENUMS(Type)
     Q_ENUMS(OfflineStatus)
 public:
     enum Type {
-        Playlist,
+        Playlist = SP_PLAYLIST_TYPE_PLAYLIST,
+        Folder = SP_PLAYLIST_TYPE_START_FOLDER,
+        FolderEnd = SP_PLAYLIST_TYPE_END_FOLDER,
+        None = SP_PLAYLIST_TYPE_PLACEHOLDER,
         Starred,
         Inbox
     };
@@ -113,6 +118,13 @@ public:
     bool hasOfflineTracks() const { return m_offlineTracks.count() > 0; }
     QString trackFilter() const { return m_trackFilter; }
     void setTrackFilter(const QString &filter);
+    QList<QObject *> playlists() const { return m_availablePlaylists + m_unavailablePlaylists; }
+    int playlistCount() const { return m_availablePlaylists.count() + m_unavailablePlaylists.count(); }
+
+    void clearPlaylists() {
+        m_availablePlaylists.clear();
+        m_unavailablePlaylists.clear();
+    }
 
     bool contains(sp_track *t) const { return m_tracksSet.contains(t); }
 
@@ -124,6 +136,7 @@ public:
     Q_INVOKABLE void rename(const QString &name);
 
     Q_INVOKABLE void removeFromContainer();
+    Q_INVOKABLE void deleteFolderContent();
 
     Q_INVOKABLE bool isCurrentPlaylist() const;
 
@@ -143,6 +156,7 @@ Q_SIGNALS:
     void trackFilterChanged();
     void tracksChanged();
     void nameChanged();
+    void playlistsChanged();
 
 protected:
     bool updateData();
@@ -156,6 +170,8 @@ private:
     void addTrack(sp_track *track, int pos = -1);
     void registerTrackType(QSpotifyTrack *t);
     void unregisterTrackType(QSpotifyTrack *t);
+
+    void postUpdateEvent();
 
     sp_playlist *m_sp_playlist;
     sp_playlist_callbacks *m_callbacks;
@@ -174,11 +190,16 @@ private:
     QSet<QSpotifyTrack *> m_offlineTracks;
     QSet<QSpotifyTrack *> m_availableTracks;
 
+    QList<QObject *> m_availablePlaylists;
+    QList<QObject *> m_unavailablePlaylists;
+
     QString m_uri;
 
     bool m_skipUpdateTracks;
 
     QString m_trackFilter;
+
+    bool m_updateEventPosted;
 
     friend class QSpotifyPlaylistContainer;
     friend class QSpotifyUser;

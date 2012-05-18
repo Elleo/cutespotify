@@ -56,6 +56,7 @@ class QSpotifyUser : public QSpotifyObject
     Q_PROPERTY(QString canonicalName READ canonicalName NOTIFY userDataChanged)
     Q_PROPERTY(QString displayName READ displayName NOTIFY userDataChanged)
     Q_PROPERTY(QList<QObject *> playlists READ playlistsAsQObject NOTIFY playlistsChanged)
+    Q_PROPERTY(QList<QObject *> playlistsFlat READ playlistsFlat NOTIFY playlistsChanged)
 public:
     ~QSpotifyUser();
 
@@ -70,13 +71,17 @@ public:
 
     QList<QSpotifyPlaylist *> playlists() const;
     QList<QObject *> playlistsAsQObject() const;
+    QList<QObject *> playlistsFlat() const;
 
     Q_INVOKABLE bool createPlaylist(const QString &name);
+    Q_INVOKABLE bool createPlaylistInFolder(const QString &name, QSpotifyPlaylist *folder);
     Q_INVOKABLE bool createPlaylistFromTrack(QSpotifyTrack *track);
     Q_INVOKABLE bool createPlaylistFromAlbum(QSpotifyAlbumBrowse *album);
     Q_INVOKABLE void removePlaylist(QSpotifyPlaylist *playlist);
     Q_INVOKABLE bool ownsPlaylist(QSpotifyPlaylist *playlist);
     Q_INVOKABLE bool canModifyPlaylist(QSpotifyPlaylist *playlist);
+
+    void deleteFolderAndContent(QSpotifyPlaylist *playlist);
 
 Q_SIGNALS:
     void userDataChanged();

@@ -59,6 +59,10 @@ public:
     bool isLoaded();
 
     QList<QSpotifyPlaylist *> playlists() const { return m_playlists; }
+    QList<QObject *> formattedPlaylists() const { return m_formattedAvailablePlaylists + m_formattedUnavailablePlaylists; }
+    QList<QObject *> playlistsFlat() const { return m_playlistsFlat; }
+
+    sp_playlistcontainer *spcontainer() { return m_container; }
 
 Q_SIGNALS:
     void playlistContainerDataChanged();
@@ -69,16 +73,27 @@ protected:
 
     bool event(QEvent *);
 
+private Q_SLOTS:
+    void updatePlaylists();
+
 private:
     QSpotifyPlaylistContainer(sp_playlistcontainer *container);
     void addPlaylist(sp_playlist *, int pos = -1);
+
+    void postUpdateEvent();
 
     sp_playlistcontainer *m_container;
     sp_playlistcontainer_callbacks *m_callbacks;
 
     QList<QSpotifyPlaylist *> m_playlists;
+    QList<QObject *> m_formattedAvailablePlaylists;
+    QList<QObject *> m_formattedUnavailablePlaylists;
+    QList<QObject *> m_playlistsFlat;
+
+    bool m_updateEventPosted;
 
     friend class QSpotifyUser;
+    friend class QSpotifyPlaylist;
 };
 
 #endif // QSPOTIFYPLAYLISTCONTAINER_H

@@ -83,27 +83,40 @@ Page {
         Component.onCompleted: positionViewAtBeginning()
 
         delegate: PlaylistDelegate {
-            title: (modelData.type == SpotifyPlaylist.Playlist ? modelData.name
-                                                               : (modelData.type == SpotifyPlaylist.Starred ? "Starred"
-                                                                                                            : "Inbox"))
-            subtitle: modelData.trackCount + " song" + (modelData.trackCount > 1 ? "s" : "")
-                      + ((spotifySession.user ? spotifySession.user.ownsPlaylist(modelData) : false) ? "" : " | by " + modelData.owner)
-            extraText: spotifySession.formatDuration(modelData.totalDuration)
-            visible: modelData.isLoaded
+            title: !modelData.isLoaded ? "Loading..." : (modelData.type === SpotifyPlaylist.Playlist || modelData.type === SpotifyPlaylist.Folder ? modelData.name
+                                                                                                                                                 : (modelData.type === SpotifyPlaylist.Starred ? "Starred"
+                                                                                                                                                                                               : "Inbox"))
+            subtitle: if (!modelData.isLoaded) {
+                         "";
+                      } else {
+                          if (modelData.type === SpotifyPlaylist.Folder) {
+                              modelData.playlistCount + " playlist" + (modelData.playlistCount > 1 ? "s" : "")
+                          } else {
+                              modelData.trackCount + " song" + (modelData.trackCount > 1 ? "s" : "")
+                                      + ((spotifySession.user ? spotifySession.user.ownsPlaylist(modelData) : false) ? "" : " | by " + modelData.owner)
+                          }
+                      }
+            extraText: modelData.type === SpotifyPlaylist.Folder || !modelData.isLoaded ? "" : spotifySession.formatDuration(modelData.totalDuration)
             icon: modelData.collaborative ? "images/icon-m-collaborative-playlist.png" : staticIcon
             offlineStatus: modelData.offlineStatus
             availableOffline: modelData.availableOffline
             downloadProgress: modelData.offlineDownloadProgress
             unseens: modelData.unseenCount
             enabled: opacity == 1.0
-            opacity: !spotifySession.offlineMode || modelData.availableOffline ? 1.0 : 0.3
+            opacity: (!spotifySession.offlineMode || modelData.availableOffline || modelData.type === SpotifyPlaylist.Folder) && modelData.isLoaded ? 1.0 : 0.3
 
             onClicked: {
                 if (modelData.trackCount > 0) {
                     var component = Qt.createComponent("TracklistPage.qml");
-                    if (component.status == Component.Ready) {
+                    if (component.status === Component.Ready) {
                         var playlistPage = component.createObject(pageStack, { playlist: modelData });
                         pageStack.push(playlistPage);
+                    }
+                } else if (modelData.type === SpotifyPlaylist.Folder) {
+                    var component2 = Qt.createComponent("FolderPage.qml");
+                    if (component2.status === Component.Ready) {
+                        var folderPage = component2.createObject(pageStack, { folder: modelData });
+                        pageStack.push(folderPage);
                     }
                 }
             }
@@ -111,12 +124,14 @@ Page {
 
             property string staticIcon
             Component.onCompleted: {
-                if (modelData.type == SpotifyPlaylist.Playlist)
+                if (modelData.type === SpotifyPlaylist.Playlist)
                     staticIcon = "image://theme/icon-m-music-video-all-songs";
-                else if (modelData.type == SpotifyPlaylist.Starred)
+                else if (modelData.type === SpotifyPlaylist.Starred)
                     staticIcon = "image://theme/icon-m-common-favorite-mark-inverse";
-                else if (modelData.type == SpotifyPlaylist.Inbox)
+                else if (modelData.type === SpotifyPlaylist.Inbox)
                     staticIcon = "image://theme/icon-m-toolbar-directory-move-to-white-selected";
+                else if (modelData.type === SpotifyPlaylist.Folder)
+                    staticIcon = "image://theme/icon-m-toolbar-directory-selected"
             }
         }
 
@@ -194,7 +209,7 @@ Page {
         section.delegate: Separator {
             anchors.left: parent.left
             anchors.right: parent.right
-            visible: section == "p"
+            visible: section === "p"
         }
     }
 

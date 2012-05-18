@@ -79,7 +79,7 @@ Page {
         }
     }
 
-    property variant playlists: spotifySession.user ? spotifySession.user.playlists : null
+    property variant playlists: spotifySession.user ? spotifySession.user.playlistsFlat : null
     Connections {
         target: spotifySession.user
         onPlaylistsNameChanged: updatePlaylistDialog()
@@ -93,18 +93,18 @@ Page {
         if (playlists === null)
             return;
 
+        playlistSelectionDialog.model.append({"name": "New playlist" });
+
         for (var i in mainPage.playlists) {
-            if (mainPage.playlists[i].type == SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(mainPage.playlists[i]))
+            if (mainPage.playlists[i].type === SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(mainPage.playlists[i]))
                 playlistSelectionDialog.model.append({"name": mainPage.playlists[i].name, "object": mainPage.playlists[i] })
         }
-
-        playlistSelectionDialog.model.append({"name": "New playlist" });
     }
 
     Connections {
         target: spotifySession
         onConnectionErrorChanged: {
-            if (spotifySession.connectionError != SpotifySession.Ok) {
+            if (spotifySession.connectionError !== SpotifySession.Ok) {
                 errorBanner.text = spotifySession.connectionErrorMessage;
                 errorBanner.show();
             }
@@ -132,7 +132,7 @@ Page {
     TabGroup {
         id: tabGroup
         enabled: !currentTab.busy
-        y: player.hidden ? 0 : screen.currentOrientation == Screen.Portrait ? UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
+        y: player.hidden ? 0 : screen.currentOrientation === Screen.Portrait ? UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
                                                                             : UI.HEADER_DEFAULT_HEIGHT_LANDSCAPE
         height: parent.height - y
         Behavior on y { NumberAnimation { easing.type: Easing.OutQuart; duration: 500 } }
@@ -200,7 +200,7 @@ Page {
 
                 onPressedChanged: {
                     if (pressed)
-                        isCurrentTab = (tabGroup.currentTab == searchTab);
+                        isCurrentTab = (tabGroup.currentTab === searchTab);
                 }
 
                 onClicked: {
@@ -218,7 +218,7 @@ Page {
 
                 onPressedChanged: {
                     if (pressed)
-                        isCurrentTab = (tabGroup.currentTab == toplistTab);
+                        isCurrentTab = (tabGroup.currentTab === toplistTab);
                 }
 
                 onClicked: {
