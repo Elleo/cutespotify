@@ -83,6 +83,7 @@ Page {
         Component.onCompleted: positionViewAtBeginning()
 
         delegate: PlaylistDelegate {
+            id: playlistDelegate
             title: !modelData.isLoaded ? "Loading..." : (modelData.type === SpotifyPlaylist.Playlist || modelData.type === SpotifyPlaylist.Folder ? modelData.name
                                                                                                                                                  : (modelData.type === SpotifyPlaylist.Starred ? "Starred"
                                                                                                                                                                                                : "Inbox"))
@@ -123,16 +124,24 @@ Page {
             onPressAndHold: { menu.playlist = modelData; menu.open(); }
 
             property string staticIcon
-            Component.onCompleted: {
+
+            function updateIcon() {
                 if (modelData.type === SpotifyPlaylist.Playlist)
-                    staticIcon = "image://theme/icon-m-music-video-all-songs";
+                    staticIcon = theme.inverted ? "image://theme/icon-m-music-video-all-songs" : "images/icon-m-music-video-all-songs-black.png";
                 else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-common-favorite-mark-inverse";
+                    staticIcon = "image://theme/icon-m-common-favorite-mark" + (theme.inverted ? "-inverse" : "");
                 else if (modelData.type === SpotifyPlaylist.Inbox)
-                    staticIcon = "image://theme/icon-m-toolbar-directory-move-to-white-selected";
+                    staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-move-to-white-selected" : "images/icon-m-toolbar-directory-move-to-black.png";
                 else if (modelData.type === SpotifyPlaylist.Folder)
-                    staticIcon = "image://theme/icon-m-toolbar-directory-selected"
+                    staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-selected" : "images/icon-m-toolbar-directory-black.png"
             }
+
+            Connections {
+                target: theme
+                onInvertedChanged: playlistDelegate.updateIcon()
+            }
+
+            Component.onCompleted: updateIcon()
         }
 
         header: ViewHeader {
@@ -158,7 +167,7 @@ Page {
                 anchors.leftMargin: -UI.MARGIN_XLARGE
                 anchors.rightMargin: -UI.MARGIN_XLARGE
                 opacity: mouseArea.pressed ? 1.0 : 0.0
-                color: "#22FFFFFF"
+                color: theme.inverted ? "#22FFFFFF" : "#15000000"
             }
 
             Row {

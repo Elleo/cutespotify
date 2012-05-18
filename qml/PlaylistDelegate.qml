@@ -79,10 +79,10 @@ Item {
         PauseAnimation { duration: 200 }
         ParallelAnimation {
             NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: subText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: waitingText; property: "color"; to: "black"; duration: 300 }
+            ColorAnimation { target: mainText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: subText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: timing; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: waitingText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
             NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
             NumberAnimation { target: unseenBox; property: "opacity"; to: 0.2; duration: 300 }
             NumberAnimation { target: offlineStatusIcon; property: "opacity"; to: 0.2; duration: 300 }
@@ -104,6 +104,16 @@ Item {
         }
     }
 
+    Connections {
+        target: theme
+        onInvertedChanged: {
+            mainText.color = listItem.titleColor
+            subText.color = listItem.subtitleColor
+            timing.color = listItem.subtitleColor
+            waitingText.color = listItem.subtitleColor
+        }
+    }
+
     Rectangle {
         id: background
         anchors.fill: parent
@@ -111,7 +121,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: "#22FFFFFF"
+        color: theme.inverted ? "#22FFFFFF" : "#15000000"
     }
 
     Row {
@@ -174,8 +184,7 @@ Item {
                             anchors.centerIn: parent
                             font.family: listItem.titleFont
                             font.pixelSize: listItem.subtitleSize
-                            font.bold: true
-                            color: listItem.titleColor
+                            color: UI.LIST_TITLE_COLOR_INVERTED
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: listItem.unseens

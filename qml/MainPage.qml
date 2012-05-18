@@ -177,7 +177,7 @@ Page {
             TabButton {
                 tab: playlistsTab
                 iconSource: theme.inverted ? "image://theme/icon-m-toolbar-list-white"
-                                          : "image://theme/icon-m-toolbar-list"
+                                           : "image://theme/icon-m-toolbar-list"
 
                 property bool isCurrentTab: false
 

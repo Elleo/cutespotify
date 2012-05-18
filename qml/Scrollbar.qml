@@ -57,13 +57,13 @@ Item {
     Image {
         id: fastscrollbar
         anchors.fill: parent
-        source: "image://theme/meegotouch-fast-scroll-rail-inverted"
+        source: "image://theme/meegotouch-fast-scroll-rail" + (theme.inverted ? "-inverted" : "")
         opacity: 0
         visible: listView.count >= 25
 
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
-            source: "image://theme/meegotouch-fast-scroll-handle-inverted"
+            source: "image://theme/meegotouch-fast-scroll-handle" + (theme.inverted ? "-inverted" : "")
             y: Math.max(0, Math.min(parent.height - height, (listView.contentY / (listView.contentHeight - listView.height / 2)) * parent.height))
         }
 

@@ -162,7 +162,7 @@ Page {
         anchors.top: parent.top
         width: parent.width
         height: 0
-        color: "black"
+        color: theme.inverted ? UI.COLOR_INVERTED_BACKGROUND : UI.COLOR_BACKGROUND
         clip: true
 
         Column {

@@ -78,6 +78,7 @@ class QSpotifySession : public QObject
     Q_PROPERTY(StreamingQuality streamingQuality READ streamingQuality WRITE setStreamingQuality NOTIFY streamingQualityChanged)
     Q_PROPERTY(StreamingQuality syncQuality READ syncQuality WRITE setSyncQuality NOTIFY syncQualityChanged)
     Q_PROPERTY(bool syncOverMobile READ syncOverMobile WRITE setSyncOverMobile NOTIFY syncOverMobileChanged)
+    Q_PROPERTY(bool invertedTheme READ invertedTheme WRITE setInvertedTheme NOTIFY invertedThemeChanged)
     Q_ENUMS(ConnectionStatus)
     Q_ENUMS(ConnectionError)
     Q_ENUMS(OfflineError)
@@ -166,6 +167,9 @@ public:
     bool syncOverMobile() const { return m_syncOverMobile; }
     Q_INVOKABLE void setSyncOverMobile(bool s);
 
+    bool invertedTheme() const { return m_invertedTheme; }
+    void setInvertedTheme(bool inverted);
+
     bool isOnline() const;
 
     void play(QSpotifyTrack *track);
@@ -216,6 +220,7 @@ Q_SIGNALS:
     void syncOverMobileChanged();
     void isLoggedInChanged();
     void offlineErrorMessageChanged();
+    void invertedThemeChanged();
 
 protected:
     bool event(QEvent *);
@@ -279,6 +284,8 @@ private:
     int m_currentTrackPlayedDuration;
     bool m_shuffle;
     bool m_repeat;
+
+    bool m_invertedTheme;
 
     QSpotifyAudioThread *m_audioThread;
 

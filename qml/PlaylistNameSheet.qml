@@ -52,7 +52,7 @@ MySheet {
     acceptButtonText: "Save"
     rejectButtonText: "Cancel"
     platformStyle: SheetStyle {
-        headerBackground: "images/meegotouch-sheet-header-inverted-background.png"
+        headerBackground: theme.inverted ? "images/meegotouch-sheet-header-inverted-background.png" : "image://theme/meegotouch-sheet-header-background"
     }
 
     content: Column {
@@ -74,7 +74,10 @@ MySheet {
 
         TextField {
             id: field
-            width: parent.width
+            anchors.left: parent.left
+            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.right: parent.right
+            anchors.rightMargin: UI.MARGIN_XLARGE
             inputMethodHints: Qt.ImhNoPredictiveText
             platformStyle: TextFieldStyle {
                 backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"

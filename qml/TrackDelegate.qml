@@ -85,9 +85,9 @@ Item {
         PauseAnimation { duration: 200 }
         ParallelAnimation {
             NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: subText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: "black"; duration: 300 }
+            ColorAnimation { target: mainText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: subText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: timing; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
             NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
             NumberAnimation { target: coverContainer; property: "opacity"; to: 0.2; duration: 300 }
         }
@@ -110,6 +110,15 @@ Item {
         timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
     }
 
+    Connections {
+        target: theme
+        onInvertedChanged: {
+            mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
+            subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
+            timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
+        }
+    }
+
     Rectangle {
         id: background
         anchors.fill: parent
@@ -117,7 +126,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : backgroundOpacity
-        color: "#22FFFFFF"
+        color: theme.inverted ? "#22FFFFFF" : "#15000000"
     }
 
     Loader {
@@ -150,7 +159,7 @@ Item {
     Component {
         id: coverContainerComponent
         Rectangle {
-            color: "#202020"
+            color: theme.inverted ? "#202020" : "#C9C9C9"
             opacity: listItem.available ? 1.0 : 0.2
 
             SpotifyImage {
@@ -194,7 +203,7 @@ Item {
                 width: 34; height: width
                 smooth: true
                 visible: listItem.starred
-                source: "image://theme/icon-m-toolbar-favorite-mark-white"
+                source: "image://theme/icon-m-toolbar-favorite-mark" + (theme.inverted ? "-white" : "")
             }
         }
 

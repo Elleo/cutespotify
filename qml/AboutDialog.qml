@@ -84,6 +84,7 @@ Dialog {
                     x: genericDialog.platformStyle.titleBarIndent
                     font.family: UI.FONT_FAMILY
                     font.pixelSize: UI.FONT_XLARGE
+                    color: UI.COLOR_INVERTED_FOREGROUND
                     text: genericDialog.titleText
                 }
 
@@ -116,16 +117,19 @@ Dialog {
         Label {
             text: "Version 1.2.1"
             font.pixelSize: UI.FONT_LSMALL
+            color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Label {
             text: "Copyright \u00a9 2011 Yoann Lopes"
             font.pixelSize: UI.FONT_LSMALL
+            color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Label {
             text: "Contact: yoann.lopes@gmail.com"
             font.pixelSize: UI.FONT_LSMALL
+            color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Item {

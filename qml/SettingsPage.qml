@@ -89,7 +89,7 @@ Page {
                         Switch {
                             id: offlineSwitch
                             platformStyle: SwitchStyle {
-                                 switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on-inverted"
+                                 switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on" + (theme.inverted ? "-inverted" : "")
                             }
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
@@ -160,7 +160,7 @@ Page {
 
                     Switch {
                         platformStyle: SwitchStyle {
-                            switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on-inverted"
+                            switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on" + (theme.inverted ? "-inverted" : "")
                         }
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -195,7 +195,7 @@ Page {
                         anchors.leftMargin: -UI.MARGIN_XLARGE
                         anchors.rightMargin: -UI.MARGIN_XLARGE
                         opacity: lastfmMouseArea.pressed ? 1.0 : 0.0
-                        color: "#22FFFFFF"
+                        color: theme.inverted ? "#22FFFFFF" : "#15000000"
                         Behavior on opacity { NumberAnimation { duration: 50 } }
                     }
 
@@ -238,7 +238,7 @@ Page {
                     Switch {
                         id: lastfmSwitch
                         platformStyle: SwitchStyle {
-                            switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on-inverted"
+                            switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on" + (theme.inverted ? "-inverted" : "")
                         }
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -270,6 +270,29 @@ Page {
                     }
                 }
 
+                Selector {
+                    title: "Theme"
+                    model: ListModel {
+                        ListElement { name: "Dark"; value: true }
+                        ListElement { name: "Light"; value: false }
+                    }
+                    selectedIndex: theme.inverted ? 0 : 1
+                    onSelectedIndexChanged: {
+                        theme.inverted = model.get(selectedIndex).value
+                        spotifySession.invertedTheme = theme.inverted;
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: UI.MARGIN_XLARGE * 2
+
+                    Separator {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width
+                    }
+                }
+
                 Item {
                     width: parent.width
                     height: UI.MARGIN_XLARGE
@@ -279,10 +302,10 @@ Page {
                     id: buttonAbout
                     text: "About"
                     platformStyle: ButtonStyle {
-                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-pressed" + (position ? "-" + position : "")
-                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-disabled" + (position ? "-" + position : "")
-                        checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-selected" + (position ? "-" + position : "")
-                        checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-disabled-selected" + (position ? "-" + position : "")
+                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-pressed" + (position ? "-" + position : "")
+                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled" + (position ? "-" + position : "")
+                        checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-selected" + (position ? "-" + position : "")
+                        checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled-selected" + (position ? "-" + position : "")
                     }
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -302,10 +325,10 @@ Page {
                 Button {
                     id: button
                     platformStyle: ButtonStyle {
-                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-pressed" + (position ? "-" + position : "")
-                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-disabled" + (position ? "-" + position : "")
-                        checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-selected" + (position ? "-" + position : "")
-                        checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-disabled-selected" + (position ? "-" + position : "")
+                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-pressed" + (position ? "-" + position : "")
+                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled" + (position ? "-" + position : "")
+                        checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-selected" + (position ? "-" + position : "")
+                        checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled-selected" + (position ? "-" + position : "")
                     }
                     text: "Log out " + (spotifySession.user ? spotifySession.user.canonicalName : "")
                     anchors.left: parent.left

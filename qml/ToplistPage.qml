@@ -71,7 +71,9 @@ Page {
     Rectangle {
         anchors.fill: parent
         visible: spotifySession.offlineMode
-        color: "#DD000000"
+        anchors.rightMargin: -UI.MARGIN_XLARGE
+        anchors.leftMargin: -UI.MARGIN_XLARGE
+        color: theme.inverted ? "#DD000000" : "#DDFFFFFF"
         z: 500
 
         Label {
@@ -145,7 +147,7 @@ Page {
                     anchors.bottom: parent.bottom
                     width: parent.width
                     height: newAlbumName.height + 2
-                    color: "#BA202020"
+                    color: theme.inverted ? "#BA202020" : "#BAD7D7D7"
 
                     Column {
                         id: newAlbumName

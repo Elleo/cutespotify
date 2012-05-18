@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -66,19 +66,14 @@ Column {
             height: parent.height
             width: height
             anchors.left: parent.left
-            color: "#202020"
+            color: theme.inverted ? "#202020" : "#C9C9C9"
             visible: albumCount.length > 0 || singleCount.length > 0 || compilationCount.length > 0
             SpotifyImage {
                 id: coverImage
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
+                defaultImage: theme.inverted ? "images/icon-l-contact-avatar-placeholder-big.png" : "images/icon-l-contact-avatar-placeholder-black-big.png"
                 clip: true
-            }
-            Image {
-                visible: coverImage.source == ""
-                anchors.fill: parent
-                smooth: true
-                source: "image://theme/icon-l-contact-avatar-placeholder"
             }
         }
 

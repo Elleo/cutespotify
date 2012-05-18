@@ -195,7 +195,7 @@ MyPopup {
 
         BorderImage {
            id: backgroundImage
-           source: "images/meegotouch-menu-background-inverted.png"
+           source: theme.inverted ? "images/meegotouch-menu-background-inverted.png" : "image://theme/meegotouch-menu-background"
            anchors.fill : parent
            border { left: 22; top: 22;
                     right: 22; bottom: 22 }

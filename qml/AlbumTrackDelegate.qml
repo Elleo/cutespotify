@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -77,8 +77,8 @@ Item {
         PauseAnimation { duration: 200 }
         ParallelAnimation {
             NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: "black"; duration: 300 }
+            ColorAnimation { target: mainText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: timing; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
             NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
         }
         PauseAnimation { duration: 100 }
@@ -89,6 +89,14 @@ Item {
                 mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
                 timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
             }
+        }
+    }
+
+    Connections {
+        target: theme
+        onInvertedChanged: {
+            mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
+            timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
         }
     }
 
@@ -104,7 +112,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: "#22FFFFFF"
+        color: theme.inverted ? "#22FFFFFF" : "#15000000"
     }
 
     Item {
@@ -136,7 +144,7 @@ Item {
             width: 34; height: width
             smooth: true
             visible: listItem.starred
-            source: "image://theme/icon-m-toolbar-favorite-mark-white"
+            source: "image://theme/icon-m-toolbar-favorite-mark" + (theme.inverted ? "-white" : "")
         }
 
         Label {

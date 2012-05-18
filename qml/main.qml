@@ -68,7 +68,7 @@ PageStackWindow {
     }
 
     Component.onCompleted: {
-        theme.inverted = true;
+        theme.inverted = spotifySession.invertedTheme;
         themeColor = "color2"
         if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
             openConnection();

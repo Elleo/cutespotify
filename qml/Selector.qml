@@ -71,7 +71,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: "#22FFFFFF"
+        color: theme.inverted ? "#22FFFFFF" : "#15000000"
         Behavior on opacity { NumberAnimation { duration: 50 } }
     }
 

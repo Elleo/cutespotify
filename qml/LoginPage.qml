@@ -5,22 +5,22 @@
 ** Contact: Yoann Lopes (yoann.lopes@nokia.com)
 **
 ** This file is part of the MeeSpot project.
-** 
+**
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
 ** are met:
-** 
+**
 ** Redistributions of source code must retain the above copyright notice,
 ** this list of conditions and the following disclaimer.
-** 
+**
 ** Redistributions in binary form must reproduce the above copyright
 ** notice, this list of conditions and the following disclaimer in the
 ** documentation and/or other materials provided with the distribution.
-** 
+**
 ** Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its
 ** contributors may be used to endorse or promote products derived from
 ** this software without specific prior written permission.
-** 
+**
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -127,9 +127,9 @@ Page {
                 id: termsCheck
                 anchors.verticalCenter: parent.verticalCenter
                 platformStyle: CheckBoxStyle {
-                    backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-inverted-background-selected"
-                    backgroundPressed: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-inverted-background-pressed"
-                    backgroundDisabled: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-inverted-background-disabled"
+                    backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-selected"
+                    backgroundPressed: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-pressed"
+                    backgroundDisabled: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-disabled"
                 }
             }
             Label {
@@ -152,10 +152,10 @@ Page {
             id: button
             text: "Log in"
             platformStyle: ButtonStyle {
-                 pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-pressed" + (position ? "-" + position : "")
-                 disabledBackground: "image://theme/" + (position ? appWindow.themeColor + "-" : "") + "meegotouch-button-inverted-background-disabled" + (position ? "-" + position : "")
-                 checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-selected" + (position ? "-" + position : "")
-                 checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-inverted-background-disabled-selected" + (position ? "-" + position : "")
+                 pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-pressed" + (position ? "-" + position : "")
+                 disabledBackground: "image://theme/" + (position ? appWindow.themeColor + "-" : "") + "meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled" + (position ? "-" + position : "")
+                 checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-selected" + (position ? "-" + position : "")
+                 checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled-selected" + (position ? "-" + position : "")
             }
 
             anchors.left: parent.left

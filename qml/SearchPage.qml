@@ -67,7 +67,9 @@ Page {
     Rectangle {
         anchors.fill: parent
         visible: spotifySession.offlineMode
-        color: "#DD000000"
+        anchors.rightMargin: -UI.MARGIN_XLARGE
+        anchors.leftMargin: -UI.MARGIN_XLARGE
+        color: theme.inverted ? "#DD000000" : "#DDFFFFFF"
         z: 500
 
         Label {

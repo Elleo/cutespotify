@@ -531,6 +531,7 @@ void QSpotifySession::init()
         }
 
         m_offlineMode = settings.value("offlineMode", false).toBool();
+        m_invertedTheme = settings.value("invertedTheme", true).toBool();
 
         checkNetworkAccess();
 
@@ -704,6 +705,18 @@ void QSpotifySession::setSyncQuality(StreamingQuality q)
     sp_session_preferred_offline_bitrate(m_sp_session, sp_bitrate(q), true);
 
     emit syncQualityChanged();
+}
+
+void QSpotifySession::setInvertedTheme(bool inverted)
+{
+    if (m_invertedTheme == inverted)
+        return;
+
+    m_invertedTheme = inverted;
+    QSettings s;
+    s.setValue("invertedTheme", inverted);
+
+    emit invertedThemeChanged();
 }
 
 void QSpotifySession::onLoggedIn()

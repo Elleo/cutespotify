@@ -65,8 +65,8 @@ Style {
 
     property string position: ""
 
-    property url background: "images/meegotouch-list-inverted-background" + (position ? "-" + position : "") + ".png"
-    property url pressedBackground: "images/meegotouch-list-inverted-background-pressed" + (position ? "-" + position : "") + ".png"
+    property url background: theme.inverted ? ("images/meegotouch-list-inverted-background" + (position ? "-" + position : "") + ".png") : ("image://theme/meegotouch-list-background" + (position ? "-" + position : ""))
+    property url pressedBackground: theme.inverted ? ("images/meegotouch-list-inverted-background-pressed" + (position ? "-" + position : "") + ".png") : ("image://theme/meegotouch-list-background-pressed" + (position ? "-" + position : ""))
 //    TODO: Add disabled state once the graphics are available
 //    property url disabledBackground: "image://theme/meegotouch-list" + __invertedString + "-background-disabled" + (position ? "-" + position : "")
 }

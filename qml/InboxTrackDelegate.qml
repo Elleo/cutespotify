@@ -85,10 +85,10 @@ Item {
         PauseAnimation { duration: 200 }
         ParallelAnimation {
             NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: subText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: thirdText; property: "color"; to: "black"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: "black"; duration: 300 }
+            ColorAnimation { target: mainText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: subText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: thirdText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: timing; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
             ColorAnimation { target: seenMarker; property: "color"; to: "black"; duration: 300 }
             NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
         }
@@ -106,6 +106,16 @@ Item {
         }
     }
 
+    Connections {
+        target: theme
+        onInvertedChanged: {
+            mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
+            subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
+            thirdText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
+            timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
+        }
+    }
+
     onHighlightedChanged: {
         mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
         subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
@@ -120,7 +130,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : backgroundOpacity
-        color: "#22FFFFFF"
+        color: theme.inverted ? "#22FFFFFF" : "#15000000"
     }
 
     Rectangle {
@@ -166,7 +176,7 @@ Item {
                 width: 34; height: width
                 smooth: true
                 visible: listItem.starred
-                source: "image://theme/icon-m-toolbar-favorite-mark-white"
+                source: "image://theme/icon-m-toolbar-favorite-mark" + (theme.inverted ? "-white" : "")
             }
         }
 

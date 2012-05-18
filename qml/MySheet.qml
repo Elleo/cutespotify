@@ -213,9 +213,9 @@ Item {
                     anchors.rightMargin: root.platformStyle.acceptButtonRightMargin
                     anchors.verticalCenter: parent.verticalCenter
                     platformStyle: SheetButtonAccentStyle {
-                        background: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-inverted-background"
-                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-inverted-background-pressed"
-                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-inverted-background-disabled"
+                        background: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background"
+                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background-pressed"
+                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background-disabled"
                     }
                     visible: text != ""
                     onClicked: close()
