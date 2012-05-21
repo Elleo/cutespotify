@@ -115,13 +115,13 @@ Dialog {
         }
 
         Label {
-            text: "Version 1.2.1"
+            text: "Version 1.3.0"
             font.pixelSize: UI.FONT_LSMALL
             color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Label {
-            text: "Copyright \u00a9 2011 Yoann Lopes"
+            text: "Copyright \u00a9 2011-2012 Yoann Lopes"
             font.pixelSize: UI.FONT_LSMALL
             color: UI.COLOR_INVERTED_FOREGROUND
         }

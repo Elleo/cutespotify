@@ -1,3 +1,11 @@
+meespot (1.3.0) unstable; urgency=low
+  * Support for high quality streaming (320kbps).
+  * Folder support.
+  * Switchable theme (dark or light).
+  * 'Repeat One' playback feature.
+
+ -- Yoann Lopes <yoann.lopes@gmail.com>  Fri, 18 May 2012 18:43:32 +0100
+
 meespot (1.2.1) unstable; urgency=low
   * Bug fixes and minor improvements.
 
