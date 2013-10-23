@@ -42,9 +42,9 @@
 #ifndef QSPOTIFYIMAGEPROVIDER_H
 #define QSPOTIFYIMAGEPROVIDER_H
 
-#include <QtDeclarative/QDeclarativeImageProvider>
+#include <QQuickImageProvider>
 
-class QSpotifyImageProvider : public QDeclarativeImageProvider
+class QSpotifyImageProvider : public QQuickImageProvider
 {
 public:
     QSpotifyImageProvider();

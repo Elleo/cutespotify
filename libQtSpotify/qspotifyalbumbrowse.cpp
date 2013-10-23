@@ -51,6 +51,9 @@
 
 #include <QtCore/QHash>
 #include <libspotify/api.h>
+#include <QEvent>
+#include <QMutex>
+#include <QCoreApplication>
 
 static QHash<sp_albumbrowse*, QSpotifyAlbumBrowse*> g_albumBrowseObjects;
 static QMutex g_mutex;

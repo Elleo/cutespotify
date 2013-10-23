@@ -3,7 +3,7 @@
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
-QT+= declarative
+QT+= qml quick widgets multimedia concurrent
 symbian:TARGET.UID3 = 0xE119349A
 
 # Smart Installer package's UID
@@ -25,8 +25,8 @@ CONFIG += qmsystem2
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    src/hardwarekeyshandler.cpp \
     src/lastfmscrobbler.cpp
+#    src/hardwarekeyshandler.cpp \
 
 OTHER_FILES += \
     qml/MainPage.qml \
@@ -94,20 +94,15 @@ RESOURCES += \
 include(deployment.pri)
 qtcAddDeployment()
 
-INCLUDEPATH += /usr/include/applauncherd
-LIBS += -lmdeclarativecache
-
 include(libQtSpotify/libQtSpotify.pri)
 include(liblastfm/liblastfm.pri)
 
-# enable booster
-CONFIG += qdeclarative-boostable
 QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
 QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath,/opt/MeeSpot/lib
 
 HEADERS += \
-    src/hardwarekeyshandler.h \
     src/lastfmscrobbler.h
+#    src/hardwarekeyshandler.h
 
 
 

@@ -51,6 +51,10 @@
 
 #include <libspotify/api.h>
 
+#include <QMutex>
+#include <QEvent>
+#include <QCoreApplication>
+
 static QHash<sp_toplistbrowse *, QSpotifyToplist *> g_toplistObjects;
 static QMutex g_mutex;
 

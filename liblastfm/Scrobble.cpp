@@ -28,7 +28,7 @@ Scrobble::sourceString() const
 {
     switch (d->source)
     {
-        case LastFmRadio: return "L" + d->extras["trackauth"].toAscii();
+        case LastFmRadio: return "L" + d->extras["trackauth"].toLatin1();
         case Player: return "P" + d->extras["playerId"].toUtf8();
         case MediaDevice: return "P" + d->extras["mediaDeviceId"].toUtf8();
         case NonPersonalisedBroadcast: return "R";

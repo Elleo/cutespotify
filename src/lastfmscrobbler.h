@@ -42,6 +42,7 @@
 #define LASTFMSCROBBLER_H
 
 #include <QObject>
+#include <QSettings>
 #include <Audioscrobbler.h>
 #include <Track.h>
 

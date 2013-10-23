@@ -26,6 +26,8 @@
 #include <QLocale>
 #include <QStringList>
 #include <QUrl>
+#include <QUrlQuery>
+
 static QNetworkAccessManager* nam = 0;
 
 
@@ -100,14 +102,16 @@ lastfm::ws::get( QMap<QString, QString> params )
 {
     autograph( params );
     QUrl url = ::url();
-    // Qt setQueryItems doesn't encode a bunch of stuff, so we do it manually
     QMapIterator<QString, QString> i( params );
+    QUrlQuery query;
     while (i.hasNext()) {
         i.next();
-        QByteArray const key = QUrl::toPercentEncoding( i.key() );
-        QByteArray const value = QUrl::toPercentEncoding( i.value() );
-        url.addEncodedQueryItem( key, value );
+        //QByteArray const key = QUrl::toPercentEncoding( i.key() );
+        //QByteArray const value = QUrl::toPercentEncoding( i.value() );
+        //url.addEncodedQueryItem( key, value );
+        query.addQueryItem(i.key(), i.value());
     }
+    url.setQuery(query);
 
     qDebug() << url;
 

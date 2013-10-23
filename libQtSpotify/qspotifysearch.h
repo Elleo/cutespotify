@@ -67,12 +67,14 @@ public:
     QList<QObject *> tracks() const;
     QList<QObject *> albums() const { return m_albumResults; }
     QList<QObject *> artists() const { return m_artistResults; }
+    QList<QObject *> playlists() const { return m_playlistsResults; }
 
     QString didYouMean() const { return m_didYouMean; }
 
     void setTracksLimit(int l) { m_tracksLimit = l; }
     void setAlbumsLimit(int l) { m_albumsLimit = l; }
     void setArtistsLimit(int l) { m_artistsLimit = l; }
+    void setPlaylistLimit(int l) { m_artistsLimit = l; }
 
     QSpotifyTrackList *trackResults() const { return m_trackResults; }
 
@@ -97,12 +99,14 @@ private:
     QSpotifyTrackList *m_trackResults;
     QList<QObject *> m_albumResults;
     QList<QObject *> m_artistResults;
+    QList<QObject *> m_playlistsResults;
     QString m_didYouMean;
     bool m_busy;
 
     int m_tracksLimit;
     int m_albumsLimit;
     int m_artistsLimit;
+    int m_playlistsLimit;
 
 };
 

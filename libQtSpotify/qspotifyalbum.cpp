@@ -82,9 +82,9 @@ bool QSpotifyAlbum::updateData()
     Type type = Type(sp_album_type(m_sp_album));
 
     // Get cover
-    const byte *album_cover_id = sp_album_cover(m_sp_album);
+    const byte *album_cover_id = sp_album_cover(m_sp_album, SP_IMAGE_SIZE_NORMAL);
     if (album_cover_id != 0 && m_coverId.isEmpty()) {
-        sp_link *link = sp_link_create_from_album_cover(m_sp_album);
+        sp_link *link = sp_link_create_from_album_cover(m_sp_album, SP_IMAGE_SIZE_NORMAL);
         if (link) {
             char buffer[200];
             int uriSize = sp_link_as_string(link, &buffer[0], 200);

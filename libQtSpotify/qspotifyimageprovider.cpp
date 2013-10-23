@@ -46,7 +46,7 @@
 #include <QtConcurrentRun>
 
 QSpotifyImageProvider::QSpotifyImageProvider()
-    : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+    : QQuickImageProvider(QQuickImageProvider::Image)
 {
 }
 

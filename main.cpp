@@ -39,32 +39,34 @@
 ****************************************************************************/
 
 
-#include <QtGui/QApplication>
-#include <QtDeclarative>
-#include <MDeclarativeCache>
+#include <QApplication>
+#include <QSettings>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQuickView>
 
-#include "src/hardwarekeyshandler.h"
+//#include "src/hardwarekeyshandler.h"
 #include "src/lastfmscrobbler.h"
 #include <QtSpotify>
 #include <qspotify_qmlplugin.h>
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QApplication::setOrganizationName("MeeSpot");
-    QApplication::setOrganizationDomain("qt.nokia.com");
-    QApplication::setApplicationName("MeeSpot");
+    QApplication::setOrganizationName("uSpot");
+    QApplication::setOrganizationDomain("com.mikeasoft.uspot");
+    QApplication::setApplicationName("uSpot");
     QApplication::setApplicationVersion("1.3.0");
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/user/MyDocs/.meespotconf"));
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/phablet/.meespotconf"));
 
-    QApplication *app = MDeclarativeCache::qApplication(argc, argv);
-    QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+    QApplication *app = new QApplication(argc, argv);
+    QQuickView *view = new QQuickView();
 
     registerQmlTypes();
     view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
     view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
 
-    HardwareKeysHandler keyHandler;
+    //HardwareKeysHandler keyHandler;
 
     LastFmScrobbler scrobbler;
     view->rootContext()->setContextProperty(QLatin1String("lastfm"), &scrobbler);

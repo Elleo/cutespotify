@@ -75,7 +75,7 @@ bool QSpotifyArtist::updateData()
     }
 
     if (m_pictureId.isEmpty()) {
-        sp_link *link = sp_link_create_from_artist_portrait(m_sp_artist);
+        sp_link *link = sp_link_create_from_artist_portrait(m_sp_artist, SP_IMAGE_SIZE_NORMAL);
         if (link) {
             char buffer[200];
             int uriSize = sp_link_as_string(link, &buffer[0], 200);

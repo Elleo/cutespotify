@@ -36,7 +36,7 @@ namespace lastfm
 
         QByteArray ratingCharacter() const
         {
-            return d->extras["rating"].toAscii();
+            return d->extras["rating"].toLatin1();
         }
 
         bool isLoved() const { return ratingCharacter() == QChar('L'); }

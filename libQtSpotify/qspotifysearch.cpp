@@ -51,6 +51,10 @@
 
 #include <libspotify/api.h>
 
+#include <QMutex>
+#include <QEvent>
+#include <QCoreApplication>
+
 static QHash<sp_search *, QSpotifySearch *> g_searchObjects;
 static QMutex g_mutex;
 
@@ -70,6 +74,7 @@ QSpotifySearch::QSpotifySearch(QObject *parent)
     , m_tracksLimit(100)
     , m_albumsLimit(50)
     , m_artistsLimit(50)
+    , m_playlistsLimit(50)
 {
 }
 
@@ -113,7 +118,7 @@ void QSpotifySearch::search()
 
     if (!m_query.isEmpty()) {
         QMutexLocker lock(&g_mutex);
-        m_sp_search = sp_search_create(QSpotifySession::instance()->m_sp_session, m_query.toUtf8().constData(), 0, m_tracksLimit, 0, m_albumsLimit, 0, m_artistsLimit, callback_search_complete, 0);
+        m_sp_search = sp_search_create(QSpotifySession::instance()->m_sp_session, m_query.toUtf8().constData(), 0, m_tracksLimit, 0, m_albumsLimit, 0, m_artistsLimit, 0, m_playlistsLimit, SP_SEARCH_STANDARD, callback_search_complete, 0);
         g_searchObjects.insert(m_sp_search, this);
     } else {
         populateResults();

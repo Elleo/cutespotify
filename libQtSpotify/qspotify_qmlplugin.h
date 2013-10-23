@@ -43,7 +43,9 @@
 #define QSPOTIFY_QMLPLUGIN_H
 
 #include <QtSpotify>
-#include <QtDeclarative/qdeclarative.h>
+#include <QtQuick/QQuickView>
+#include <QtQml/QQmlEngine>
+#include <qqml.h>
 
 void registerQmlTypes()
 {

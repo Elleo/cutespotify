@@ -51,14 +51,17 @@
 #include <QtCore/QHash>
 #include <QtCore/QEvent>
 #include <QtCore/QCoreApplication>
-#include <QtMultimediaKit/QAudioOutput>
+#include <QAudioOutput>
 #include <QtCore/QIODevice>
 #include <QtCore/QBuffer>
 #include <QtCore/QMutexLocker>
 #include <QtCore/QDebug>
 #include <QtGui/QDesktopServices>
 #include <QtNetwork/QNetworkConfigurationManager>
-#include <QtSystemInfo/QSystemStorageInfo>
+//#include <QSystemStorageInfo>
+#include <QSettings>
+#include <QThread>
+#include <QWaitCondition>
 
 #define BUFFER_SIZE 409600
 #define AUDIOSTREAM_UPDATE_INTERVAL 20
@@ -431,7 +434,7 @@ static void callback_play_token_lost(sp_session *)
 
 static void callback_log_message(sp_session *, const char *data)
 {
-    fprintf(stderr, data);
+    fprintf(stderr, "%s\n", data);
 }
 
 static void callback_offline_error(sp_session *, sp_error error)
@@ -477,14 +480,14 @@ QSpotifySession::QSpotifySession()
     m_audioThread->start(QThread::HighestPriority);
 
     // Resource management stuff
-    m_resourceSet = new ResourcePolicy::ResourceSet(QLatin1String("player"), 0, false, true);
-    m_audioResource = new ResourcePolicy::AudioResource(QLatin1String("player"));
-    m_audioResource->setProcessID(QCoreApplication::applicationPid());
-    m_audioResource->setStreamTag(QLatin1String("media.name"), QLatin1String("*"));
-    m_audioResource->setOptional(false);
-    m_resourceSet->addResourceObject(m_audioResource);
-    connect(m_resourceSet, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)), this, SLOT(resourceAcquiredHandler(QList<ResourcePolicy::ResourceType>)));
-    connect(m_resourceSet, SIGNAL(lostResources()), this, SLOT(resourceLostHandler()));
+    //m_resourceSet = new ResourcePolicy::ResourceSet(QLatin1String("player"), 0, false, true);
+    //m_audioResource = new ResourcePolicy::AudioResource(QLatin1String("player"));
+    //m_audioResource->setProcessID(QCoreApplication::applicationPid());
+    //m_audioResource->setStreamTag(QLatin1String("media.name"), QLatin1String("*"));
+    //m_audioResource->setOptional(false);
+    //m_resourceSet->addResourceObject(m_audioResource);
+    //connect(m_resourceSet, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)), this, SLOT(resourceAcquiredHandler(QList<ResourcePolicy::ResourceType>)));
+    //connect(m_resourceSet, SIGNAL(lostResources()), this, SLOT(resourceLostHandler()));
 }
 
 void QSpotifySession::init()
@@ -519,8 +522,9 @@ void QSpotifySession::init()
         fprintf(stderr, "failed to create session: %s\n",
                 sp_error_message(error));
     } else {
-        QtMobility::QSystemStorageInfo storageInfo;
-        qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
+//        QtMobility::QSystemStorageInfo storageInfo;
+//        qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
+        qlonglong totalSpace = 1000000000; // TODO: Fix
         sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
 
         QSettings settings;
@@ -586,7 +590,7 @@ void QSpotifySession::cleanUp()
     delete m_user;
     logout(true);
     sp_session_release(m_sp_session);
-    delete m_resourceSet;
+//    delete m_resourceSet;
     delete m_networkConfManager;
 }
 
@@ -800,7 +804,7 @@ void QSpotifySession::login(const QString &username, const QString &password)
     if (password.isEmpty())
         sp_session_relogin(m_sp_session);
     else
-        sp_session_login(m_sp_session, username.toUtf8().constData(), password.toUtf8().constData(), true);
+        sp_session_login(m_sp_session, username.toUtf8().constData(), password.toUtf8().constData(), true, NULL);
 }
 
 void QSpotifySession::logout(bool keepLoginInfo)
@@ -882,7 +886,8 @@ void QSpotifySession::play(QSpotifyTrack *track)
     emit currentTrackChanged();
     emit currentTrackPositionChanged();
 
-    m_resourceSet->acquire();
+    beginPlayBack();
+//    m_resourceSet->acquire();
 }
 
 void QSpotifySession::beginPlayBack()
@@ -905,7 +910,7 @@ void QSpotifySession::pause()
 
     QCoreApplication::postEvent(g_audioWorker, new QEvent(QEvent::Type(QEvent::User + 7)));
 
-    m_resourceSet->release();
+//    m_resourceSet->release();
 }
 
 void QSpotifySession::resume()
@@ -913,7 +918,8 @@ void QSpotifySession::resume()
     if (m_isPlaying || !m_currentTrack)
         return;
 
-    m_resourceSet->acquire();
+    beginPlayBack();
+//    m_resourceSet->acquire();
 }
 
 void QSpotifySession::stop(bool dontEmitSignals)
@@ -935,7 +941,7 @@ void QSpotifySession::stop(bool dontEmitSignals)
 
     QCoreApplication::postEvent(g_audioWorker, new QEvent(QEvent::Type(QEvent::User + 8)));
 
-    m_resourceSet->release();
+//    m_resourceSet->release();
 }
 
 void QSpotifySession::seek(int offset)
@@ -966,15 +972,15 @@ void QSpotifySession::enqueue(QSpotifyTrack *track)
     m_playQueue->enqueueTrack(track);
 }
 
-void QSpotifySession::resourceAcquiredHandler(const QList<ResourcePolicy::ResourceType> &)
+/*void QSpotifySession::resourceAcquiredHandler(const QList<ResourcePolicy::ResourceType> &)
 {
     beginPlayBack();
-}
+}*/
 
-void QSpotifySession::resourceLostHandler()
+/*void QSpotifySession::resourceLostHandler()
 {
     pause();
-}
+}*/
 
 QString QSpotifySession::formatDuration(qint64 d) const
 {
@@ -1080,7 +1086,7 @@ void QSpotifySession::checkNetworkAccess()
         bool roaming = false;
         QList<QNetworkConfiguration> confs = m_networkConfManager->allConfigurations(QNetworkConfiguration::Active);
         for (int i = 0; i < confs.count(); ++i) {
-            QString bearer = confs.at(i).bearerName();
+            QString bearer = QLatin1String("WLAN"); //confs.at(i).bearerName(); // TODO: Fix
             if (bearer == QLatin1String("WLAN")) {
                 wifi = true;
                 break;
