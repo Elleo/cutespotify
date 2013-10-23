@@ -41,8 +41,8 @@
 
 // MenuItem is a component that is used in menus.
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import "UIConstants.js" as UI
 
 Item {
@@ -54,14 +54,14 @@ Item {
     property alias pressed: mouseArea.pressed
 
     // platformStyle API
-    property Style platformStyle: MyMenuItemStyle{
+/*    property Style platformStyle: MyMenuItemStyle{
         position: root.parent.visibleChildren == 1 ? ""
       : root.parent.firstVisible == root ? "vertical-top"
       : root.parent.lastVisible == root ? "vertical-bottom"
       : "vertical-center"
     }
     property alias style: root.platformStyle // Deprecated
-
+*/
     width: parent ? parent.width: 0
     height: ( root.platformStyle.height == 0 ) ?
             root.platformStyle.topMargin + menuText.paintedHeight + root.platformStyle.bottomMargin :

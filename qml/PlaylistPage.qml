@@ -39,14 +39,13 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
 Page {
     id: playlistPage
-    orientationLock: PageOrientation.LockPortrait
     pageStack: parent
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
@@ -222,5 +221,5 @@ Page {
         }
     }
 
-    Scrollbar { listView: playlists }
+    //Scrollbar { listView: playlists }
 }

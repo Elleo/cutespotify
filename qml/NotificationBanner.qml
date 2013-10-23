@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0;
+import Ubuntu.Components 0.1;
 
 /*
    Class: InfoBanner
@@ -169,11 +169,8 @@ Item {
         }
 
         function getBannerWidth() {
-            if ( screen.currentOrientation==Screen.Portrait || screen.currentOrientation==Screen.PortraitInverted ) {
-                // In portrait mode, the width of the banner is equal to the width of parent minus left
-                // and right margins in-between banner and parent.
                 return parent.width-root.x*2;
-            } else {
+/*            } else {
                 if (image.visible) {
                     // If an icon image is specified...
                     if ((image.width+text.paintedWidth+46) <= parent.width*0.54 && text.lineCount <= 1) {
@@ -196,6 +193,7 @@ Item {
                     }
                 }
             }
+*/
         }
 
         function getTopMargin() {

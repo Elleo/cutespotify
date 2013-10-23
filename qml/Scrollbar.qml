@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import "UIConstants.js" as UI
 
 Item {

@@ -39,8 +39,9 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
+import Ubuntu.Components.Popups 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 import "Utilities.js" as Utilities
@@ -62,24 +63,34 @@ MyMenu {
         title: "Rename playlist"
         onAccepted: playlist.rename(Utilities.trim(renameSheet.playlistName))
     }
-
-    QueryDialog {
+/*
+    Component {
         id: confirmDeleteDialog
-        property bool deleteFolderContent: false
-        parent: playlistMenu.parent
-        message: playlist ? playlist.name : ""
-        acceptButtonText: "Yes"
-        rejectButtonText: "No"
-        onAccepted: {
-            if (deleteFolderContent)
-                playlist.deleteFolderContent();
-            else
-                playlist.removeFromContainer()
-            deleteFolderContent = false;
+        Dialog {
+            id: deleteInnerDialog;
+            property bool deleteFolderContent: false
+            text: playlist ? playlist.name : ""
+            Button {
+                text: "Yes";
+                onClicked: {
+                    if (deleteFolderContent)
+                        playlist.deleteFolderContent();
+                    else
+                        playlist.removeFromContainer()
+                    deleteFolderContent = false;
+                    PopupUtils.close(deleteInnerDialog)
+                }
+            }
+            Button {
+                text: "No";
+                onClicked: {
+                    deleteFolderContent = false;
+                    PopupUtils.close(deleteInnerDialog)
+                }
+            }
         }
-        onRejected: deleteFolderContent = false;
     }
-
+*/
     MyMenuLayout {
         id: layout
 

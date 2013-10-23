@@ -39,25 +39,24 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
 Page {
     id: mainPage
     tools: player.state == "open" ? null : mainTools
-    orientationLock: PageOrientation.LockPortrait
 
     property alias tabs: tabGroup
     property alias searchTabAlias: searchTab
-    property alias playlistSelection: playlistSelectionDialog
+    //property alias playlistSelection: playlistSelectionDialog
 
     NotificationBanner {
         id: errorBanner
     }
 
-    MySelectionDialog {
+/*    MySelectionDialog {
         id: playlistSelectionDialog
 
         property variant track: null
@@ -78,6 +77,7 @@ Page {
             errorBanner.show();
         }
     }
+*/
 
     property variant playlists: spotifySession.user ? spotifySession.user.playlistsFlat : null
     Connections {
@@ -129,43 +129,45 @@ Page {
         }
     }
 
-    TabGroup {
+    Tabs {
         id: tabGroup
-        enabled: !currentTab.busy
+        //enabled: !currentTab.busy
         y: player.hidden ? 0 : screen.currentOrientation === Screen.Portrait ? UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
                                                                             : UI.HEADER_DEFAULT_HEIGHT_LANDSCAPE
         height: parent.height - y
         Behavior on y { NumberAnimation { easing.type: Easing.OutQuart; duration: 500 } }
 
-        currentTab: playlistsTab
-
-        PageStack {
+        Tab { 
             id: playlistsTab
-            Component.onCompleted: push(Qt.resolvedUrl("PlaylistPage.qml"))
+            page: PlaylistPage { }
         }
-        PageStack {
+        Tab {
             id: searchTab
+            page: Page { }
         }
-        PageStack {
+        Tab {
             id: toplistTab
+            page: Page { }
         }
-        PageStack {
+        Tab {
             id: settingsTab
+            page: Page { }
         }
 
-        Connections {
+        /*Connections {
             target: spotifySession
             onUserChanged: {
                 if (spotifySession.isLoggedIn)
                     tabGroup.currentTab = playlistsTab
             }
-        }
+        }*/
     }
 
     Player {
         id: player
     }
 
+/*
     property Item mainTools : ToolBarLayout {
         ToolIcon {
             iconId: enabled ? "toolbar-back" : "toolbar-back-dimmed"
@@ -236,7 +238,7 @@ Page {
             }
         }
     }
-
+*/
     function checkSearchPage() {
         if (searchTab.depth === 0) searchTab.push(Qt.resolvedUrl("SearchPage.qml"))
     }

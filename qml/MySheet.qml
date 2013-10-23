@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 
 Item {
     id: root
@@ -62,10 +62,10 @@ Item {
     signal accepted
     signal rejected
 
-    property QtObject platformStyle: SheetStyle {}
+//    property QtObject platformStyle: SheetStyle {}
 
     //Deprecated, TODO Remove this on w13
-    property alias style: root.platformStyle
+//    property alias style: root.platformStyle
 
     function reject() {
         close();
@@ -197,7 +197,7 @@ Item {
             Item {
                 id: buttonRow
                 anchors.fill: parent
-                SheetButton {
+                Button {
                     id: rejectButton
                     objectName: "rejectButton"
                     anchors.left: parent.left
@@ -206,17 +206,17 @@ Item {
                     visible: text != ""
                     onClicked: close()
                 }
-                SheetButton {
+                Button {
                     id: acceptButton
                     objectName: "acceptButton"
                     anchors.right: parent.right
                     anchors.rightMargin: root.platformStyle.acceptButtonRightMargin
                     anchors.verticalCenter: parent.verticalCenter
-                    platformStyle: SheetButtonAccentStyle {
+               /*     platformStyle: SheetButtonAccentStyle {
                         background: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background"
                         pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background-pressed"
                         disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background-disabled"
-                    }
+                    } */
                     visible: text != ""
                     onClicked: close()
                 }

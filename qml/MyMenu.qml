@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 
 MyPopup {
     id: root
@@ -59,8 +59,8 @@ MyPopup {
     property int layoutContentHeight
 
     // platformStyle API
-    property Style platformStyle: MenuStyle{}
-    property alias style: root.platformStyle // Deprecated
+//    property Style platformStyle: MenuStyle{}
+//    property alias style: root.platformStyle // Deprecated
     property alias platformTitle: titleBar.children
     property alias title: titleBar.children // Deprecated
     property alias __footer: footerBar.children
@@ -266,10 +266,10 @@ MyPopup {
                             }
                         }
                     }
-                    ScrollDecorator {
+                    /*ScrollDecorator {
                         id: scrollDecorator
                         flickableItem: flickable
-                    }
+                    }*/
                 }
 
                 Item {

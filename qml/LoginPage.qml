@@ -38,14 +38,12 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
 Page {
-    orientationLock: PageOrientation.LockPortrait
 
     NotificationBanner {
         id: errorBanner
@@ -83,13 +81,13 @@ Page {
             id: username
             placeholderText: "Username"
             width: parent.width
-            platformStyle: TextFieldStyle {
+/*            platformStyle: TextFieldStyle {
                 backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
             }
             platformSipAttributes: SipAttributes {
                 actionKeyLabel: (username.text.length > 0 && password.text.length > 0) ? "Log in" : "Next"
                 actionKeyEnabled: true
-            }
+            }*/
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             Keys.onReturnPressed: {
                 if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
@@ -103,13 +101,13 @@ Page {
             placeholderText: "Password"
             echoMode: TextInput.Password
             width: parent.width
-            platformStyle: TextFieldStyle {
+            /*platformStyle: TextFieldStyle {
                 backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
             }
             platformSipAttributes: SipAttributes {
                 actionKeyLabel: (username.text.length > 0 && password.text.length > 0 && termsCheck.checked) ? "Log in" : "Next"
                 actionKeyEnabled: true
-            }
+            }*/
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             Keys.onReturnPressed: {
                 if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
@@ -126,18 +124,18 @@ Page {
             CheckBox {
                 id: termsCheck
                 anchors.verticalCenter: parent.verticalCenter
-                platformStyle: CheckBoxStyle {
+            /*    platformStyle: CheckBoxStyle {
                     backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-selected"
                     backgroundPressed: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-pressed"
                     backgroundDisabled: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-disabled"
-                }
+                }*/
             }
             Label {
                 id: termsText
                 anchors.left: termsCheck.right
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                text: "<style type=text/css> a { text-decoration: underline; color:" + UI.SPOTIFY_COLOR + "} </style>I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
+                text: "I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
                 wrapMode: Text.WordWrap
                 font.pixelSize: UI.FONT_LSMALL
                 onLinkActivated: Qt.openUrlExternally(link)
@@ -151,12 +149,12 @@ Page {
         Button {
             id: button
             text: "Log in"
-            platformStyle: ButtonStyle {
+/*            platformStyle: ButtonStyle {
                  pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-pressed" + (position ? "-" + position : "")
                  disabledBackground: "image://theme/" + (position ? appWindow.themeColor + "-" : "") + "meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled" + (position ? "-" + position : "")
                  checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-selected" + (position ? "-" + position : "")
                  checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled-selected" + (position ? "-" + position : "")
-            }
+            }*/
 
             anchors.left: parent.left
             anchors.right: parent.right
@@ -180,7 +178,7 @@ Page {
             font.pixelSize: UI.FONT_LSMALL
             onLinkActivated: Qt.openUrlExternally(link)
             horizontalAlignment: Text.AlignHCenter
-            text: "<style type=text/css> a { text-decoration: underline; color:" + UI.SPOTIFY_COLOR + "} </style>Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
+            text: "Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
         }
     }
 
@@ -207,10 +205,10 @@ Page {
             }
         }
 
-        BusyIndicator {
+        /*BusyIndicator {
             anchors.horizontalCenter: parent.horizontalCenter
             platformStyle: BusyIndicatorStyle { size: "medium" }
             running: parent.visible
-        }
+        }*/
     }
 }

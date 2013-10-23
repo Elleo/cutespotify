@@ -39,20 +39,20 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
 import QtSpotify 1.0
 
-PageStackWindow {
+MainView {
     id: appWindow
+    width: units.gu(60);
+    height: units.gu(80);
     property string themeColor
-    style:  PageStackWindowStyle {
-        background: theme.inverted ? "image://theme/meegotouch-video-background"
-                                   : "image://theme/meegotouch-applicationpage-background"
-        backgroundFillMode: Image.Stretch
-    }
 
-    initialPage: spotifySession.isLoggedIn ? mainPage : loginPage
+    PageStack {
+        id: pageStack;
+        Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
+    }
 
     Component {
         id: mainPage
@@ -68,7 +68,6 @@ PageStackWindow {
     }
 
     Component.onCompleted: {
-        theme.inverted = spotifySession.invertedTheme;
         themeColor = "color2"
         if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
             openConnection();
@@ -92,9 +91,9 @@ PageStackWindow {
         }
         onPendingConnectionRequestChanged: {
             if (!spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
-                pageStack.replace(mainPage)
+                pageStack.push(mainPage)
             } else if (spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
-                pageStack.replace(loginPage)
+                pageStack.push(loginPage)
             }
         }
     }

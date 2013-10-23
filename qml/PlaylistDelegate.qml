@@ -38,9 +38,8 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -255,10 +254,11 @@ Item {
                 Component {
                     id: downloadBarComponent
                     ProgressBar {
-                        platformStyle: ProgressBarStyle {
+/*                        platformStyle: ProgressBarStyle {
                             knownTexture: "qrc:/qml/images/meegotouch-progressindicator-bar-known-texture.png"
                             barMask: "image://theme/meegotouch-progressindicator-bar-mask"
                         }
+*/
                         visible: listItem.offlineStatus == SpotifyPlaylist.Downloading
                         minimumValue: 0
                         maximumValue: 100

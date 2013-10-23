@@ -38,9 +38,8 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import "UIConstants.js" as UI
 import QtSpotify 1.0
 
@@ -76,7 +75,7 @@ Column {
         }
     }
 
-    SelectionDialog {
+/*    SelectionDialog {
         id: infoDialog
         parent: player.parent
         titleText: "Browse"
@@ -93,7 +92,7 @@ Column {
             }
         }
     }
-
+*/
     Flipable {
         id: flipable
         width: parent.width
@@ -131,7 +130,7 @@ Column {
                 snapMode: ListView.SnapOneItem
                 highlightRangeMode: ListView.StrictlyEnforceRange
                 cacheBuffer: width * 2
-                highlightMoveSpeed: -1
+                //highlightMoveSpeed: -1
                 highlightMoveDuration: 0
                 clip: true
                 pressDelay: 90
@@ -290,8 +289,8 @@ Column {
             Scrollbar {
                 anchors.topMargin: -UI.MARGIN_XLARGE
                 anchors.rightMargin: -UI.MARGIN_XLARGE
-                scrollDecoratorRightMargin: -UI.MARGIN_XLARGE
-                listView: queueList
+                //scrollDecoratorRightMargin: -UI.MARGIN_XLARGE
+                //listView: queueList
             }
         }
     }
@@ -360,11 +359,11 @@ Column {
                 width: parent.width
                 minimumValue: 0
                 maximumValue: spotifySession.currentTrack ? spotifySession.currentTrack.durationMs : 0
-                stepSize: 1000
-                valueIndicatorVisible: spotifySession.currentTrack ? true : false
-                valueIndicatorMargin : 40
+                //stepSize: 1000
+                //valueIndicatorVisible: spotifySession.currentTrack ? true : false
+                //valueIndicatorMargin : 40
                 enabled: spotifySession.currentTrack ? true : false
-                platformStyle: SliderStyle {
+/*                platformStyle: SliderStyle {
                     grooveItemElapsedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-slider-elapsed-" + (theme.inverted ? "inverted-" : "") + "background-horizontal"
                     handleBackground: "qrc:/qml/images/meegotouch-slider-handle-background-horizontal.png"
                     handleBackgroundPressed: "qrc:/qml/images/meegotouch-slider-handle-background-pressed-horizontal.png"
@@ -373,7 +372,7 @@ Column {
                     mouseMarginRight: -25
                     mouseMarginTop: -25
                 }
-
+*/
                 function formatValue(v) {
                     return spotifySession.formatDuration(v);
                 }
