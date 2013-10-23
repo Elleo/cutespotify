@@ -1,0 +1,14 @@
+{
+	"description": "Spotify client for Ubuntu Touch",
+	"framework": "ubuntu-sdk-13.10",
+	"hooks": {
+		"uspot": {
+			"apparmor": "uspot.json",
+			"desktop": "uspot.desktop"
+		}
+	},
+	"maintainer": "Michael Sheldon",
+	"name": "com.ubuntu.developer.elleo.uspot",
+	"title": "uSpot",
+	"version": "1.3"
+}
