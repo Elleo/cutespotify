@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Terminal=true
+Terminal=false
 Exec=./uSpot
 Name=uSpot
 Icon=./uSpot.png
