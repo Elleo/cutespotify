@@ -160,7 +160,7 @@ MyMenu {
     }
 
     onStatusChanged: {
-        if (status == DialogStatus.Opening && playlist) {
+        if (status == "Opening" && playlist) {
             collabItem.text = (playlist.collaborative ? "Unset" : "Set") +  " collaborative";
             offlineItem.text = (playlist.availableOffline ? "Unset" : "Set") + " offline mode"
             if (playlist.type === SpotifyPlaylist.Folder) {

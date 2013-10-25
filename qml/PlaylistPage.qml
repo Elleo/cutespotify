@@ -108,6 +108,7 @@ Page {
             onClicked: {
                 if (modelData.trackCount > 0) {
                     var component = Qt.createComponent("TracklistPage.qml");
+                    console.log("WAAAH");
                     if (component.status === Component.Ready) {
                         var playlistPage = component.createObject(pageStack, { playlist: modelData });
                         pageStack.push(playlistPage);
@@ -126,18 +127,13 @@ Page {
 
             function updateIcon() {
                 if (modelData.type === SpotifyPlaylist.Playlist)
-                    staticIcon = theme.inverted ? "image://theme/icon-m-music-video-all-songs" : "images/icon-m-music-video-all-songs-black.png";
+                    staticIcon = "images/icon-m-music-video-all-songs-black.png";
                 else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-common-favorite-mark" + (theme.inverted ? "-inverse" : "");
+                    staticIcon = "image://theme/icon-m-common-favorite-mark"
                 else if (modelData.type === SpotifyPlaylist.Inbox)
-                    staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-move-to-white-selected" : "images/icon-m-toolbar-directory-move-to-black.png";
+                    staticIcon = "images/icon-m-toolbar-directory-move-to-black.png";
                 else if (modelData.type === SpotifyPlaylist.Folder)
-                    staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-selected" : "images/icon-m-toolbar-directory-black.png"
-            }
-
-            Connections {
-                target: theme
-                onInvertedChanged: playlistDelegate.updateIcon()
+                    staticIcon = "images/icon-m-toolbar-directory-black.png"
             }
 
             Component.onCompleted: updateIcon()
@@ -166,7 +162,7 @@ Page {
                 anchors.leftMargin: -UI.MARGIN_XLARGE
                 anchors.rightMargin: -UI.MARGIN_XLARGE
                 opacity: mouseArea.pressed ? 1.0 : 0.0
-                color: theme.inverted ? "#22FFFFFF" : "#15000000"
+                color: "#15000000"
             }
 
             Row {
@@ -186,7 +182,7 @@ Page {
                     Image {
                         id: iconImage
                         anchors.centerIn: parent
-                        source: theme.inverted ? "image://theme/icon-m-input-add" : "image://theme/icon-m-common-add"
+                        source: "image://theme/icon-m-common-add"
                         opacity: 0.4
                     }
                 }
@@ -196,7 +192,7 @@ Page {
                     font.family: UI.FONT_FAMILY_BOLD
                     font.weight: Font.Bold
                     font.pixelSize: UI.LIST_TILE_SIZE
-                    color: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
+                    color: UI.LIST_TITLE_COLOR
                     opacity: 0.4
                     text: "New playlist"
                 }
@@ -221,5 +217,5 @@ Page {
         }
     }
 
-    //Scrollbar { listView: playlists }
+    Scrollbar { flickableItem: playlists }
 }

@@ -38,9 +38,8 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
 import "UIConstants.js" as UI
 
 Item {
@@ -54,11 +53,11 @@ Item {
 
     property int titleSize: UI.LIST_TILE_SIZE
     property string titleFont: UI.FONT_FAMILY_BOLD
-    property color titleColor: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
+    property color titleColor: UI.LIST_TITLE_COLOR
 
     property int subtitleSize: UI.LIST_SUBTILE_SIZE
     property string subtitleFont: UI.FONT_FAMILY_LIGHT
-    property color subtitleColor: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+    property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
     height: UI.LIST_ITEM_HEIGHT
     width: parent.width
@@ -70,7 +69,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: theme.inverted ? "#22FFFFFF" : "#15000000"
+        color: "#15000000"
     }
 
     Label {
@@ -90,12 +89,12 @@ Item {
         width: 64; height: width
         anchors.left: indexText.right
         anchors.verticalCenter: parent.verticalCenter
-        color: theme.inverted ? "#202020" : "#C9C9C9"
+        color: "#C9C9C9"
 
         SpotifyImage {
             id: portraitImage
             anchors.fill: parent
-            defaultImage: theme.inverted ? "images/icon-l-contact-avatar-placeholder.png" : "images/icon-l-contact-avatar-placeholder-black.png"
+            defaultImage: "images/icon-l-contact-avatar-placeholder-black.png"
         }
     }
 

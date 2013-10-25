@@ -42,6 +42,5 @@ import QtQuick 2.0
 import Ubuntu.Components 0.1
 
 Image {
-    source: theme.inverted ? "image://theme/meegotouch-groupheader-inverted-background"
-                           : "image://theme/meegotouch-groupheader-background"
+    source: "image://theme/meegotouch-groupheader-background"
 }

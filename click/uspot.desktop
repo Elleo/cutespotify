@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Terminal=false
-Exec=./uSpot
+Exec=LD_LIBRARY_PATH=./lib ./uSpot
 Name=uSpot
 Icon=./uSpot.png
 X-Ubuntu-Touch=true

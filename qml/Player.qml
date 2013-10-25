@@ -45,8 +45,8 @@ import "UIConstants.js" as UI
 Rectangle {
     id: player
     width: parent.width
-    height: screen.currentOrientation == Screen.Portrait ? 818 : 444
-    color: theme.inverted ? UI.COLOR_INVERTED_BACKGROUND : UI.COLOR_BACKGROUND
+    height: 818
+    color: UI.COLOR_BACKGROUND
     y: -height
 
     property bool openRequested: false

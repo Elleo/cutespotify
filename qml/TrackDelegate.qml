@@ -109,15 +109,6 @@ Item {
         timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
     }
 
-    Connections {
-        target: theme
-        onInvertedChanged: {
-            mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
-            subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-            timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-        }
-    }
-
     Rectangle {
         id: background
         anchors.fill: parent

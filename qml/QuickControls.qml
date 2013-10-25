@@ -45,7 +45,7 @@ import "UIConstants.js" as UI
 Rectangle {
     id: smallPlayer
     width: parent.width
-    height: screen.currentOrientation == Screen.Portrait ? UI.HEADER_DEFAULT_HEIGHT_PORTRAIT : UI.HEADER_DEFAULT_HEIGHT_LANDSCAPE
+    height: UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
     color: "black"
 
     MouseArea {
@@ -99,8 +99,8 @@ Rectangle {
             anchors.left: parent.left
             id: cover
             spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
-            width: screen.currentOrientation == Screen.Portrait ? 48 : 0; height: width
-            visible: screen.currentOrientation == Screen.Portrait
+            width: 48
+            height: width
         }
 
         Column {
@@ -128,7 +128,6 @@ Rectangle {
                 color: UI.COLOR_INVERTED_FOREGROUND
                 elide: Text.ElideRight
                 text: spotifySession.currentTrack ? spotifySession.currentTrack.artists + " | " + spotifySession.currentTrack.album : ""
-                visible: screen.currentOrientation == Screen.Portrait
             }
         }
 

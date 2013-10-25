@@ -49,7 +49,7 @@ Item {
 
     // possible states: Opening, Open, Closing, Closed
     // Opening and Closing are used during animation (when the dialog fades/moves/pops/whatever in)
-    property int status: DialogStatus.Closed
+    property string status: "Closed"
 
     // private api
     property double __dim: 0.9
@@ -62,13 +62,13 @@ Item {
     property string __faderBackground
 
     function open() {
-        if (status == DialogStatus.Closed)
-            status = DialogStatus.Opening;
+        if (status == "Closed")
+            status = "Opening";
     }
 
     function close() {
-        if (status == DialogStatus.Open)
-            status = DialogStatus.Closing;
+        if (status == "Open")
+            status = "Closing";
     }
 
     signal privateClicked
@@ -112,7 +112,6 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            enabled: root.status == DialogStatus.Opening || root.status == DialogStatus.Closing
             z: Number.MAX_VALUE
         }
     }

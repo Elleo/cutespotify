@@ -38,9 +38,9 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
+import Ubuntu.Components.Popups 0.1;
 import QtSpotify 1.0
 
 MyMenu {
@@ -54,14 +54,19 @@ MyMenu {
 
     layoutContentHeight: layout.height
 
-    QueryDialog {
+    Dialog {
         id: confirmDeleteDialog
         parent: trackMenu.parent
-        titleText: "Delete track?"
-        message: track ? track.name : ""
-        acceptButtonText: "Yes"
-        rejectButtonText: "No"
-        onAccepted: { track.removeFromPlaylist() }
+        title: "Delete track?"
+        text: track ? track.name : ""
+        Button {
+            text: "Yes"
+            onClicked: { track.removeFromPlaylist() }
+        }
+
+        Button {
+            text: "No"
+        }
     }
 
     MyMenuLayout {

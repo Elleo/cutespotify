@@ -60,11 +60,11 @@ Item {
 
     property int titleSize: UI.LIST_TILE_SIZE
     property string titleFont: UI.FONT_FAMILY_BOLD
-    property color titleColor: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
+    property color titleColor: UI.LIST_TITLE_COLOR
 
     property int subtitleSize: UI.LIST_SUBTILE_SIZE
     property string subtitleFont: UI.FONT_FAMILY_LIGHT
-    property color subtitleColor: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+    property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
     height: UI.LIST_ITEM_HEIGHT
     width: parent.width
@@ -78,10 +78,9 @@ Item {
         PauseAnimation { duration: 200 }
         ParallelAnimation {
             NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: subText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: waitingText; property: "color"; to: theme.inverted ? "black" : "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: mainText; property: "color"; to: "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: subText; property: "color"; to: "#DDDDDD"; duration: 300 }
+            ColorAnimation { target: timing; property: "color"; to: "#DDDDDD"; duration: 300 }
             NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
             NumberAnimation { target: unseenBox; property: "opacity"; to: 0.2; duration: 300 }
             NumberAnimation { target: offlineStatusIcon; property: "opacity"; to: 0.2; duration: 300 }
@@ -98,18 +97,7 @@ Item {
                 mainText.color = listItem.titleColor
                 subText.color = listItem.subtitleColor
                 timing.color = listItem.subtitleColor
-                waitingText.color = listItem.subtitleColor
             }
-        }
-    }
-
-    Connections {
-        target: theme
-        onInvertedChanged: {
-            mainText.color = listItem.titleColor
-            subText.color = listItem.subtitleColor
-            timing.color = listItem.subtitleColor
-            waitingText.color = listItem.subtitleColor
         }
     }
 
@@ -120,7 +108,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: theme.inverted ? "#22FFFFFF" : "#15000000"
+        color: "#15000000"
     }
 
     Row {

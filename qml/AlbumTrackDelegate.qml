@@ -92,14 +92,6 @@ Item {
         }
     }
 
-    Connections {
-        target: theme
-        onInvertedChanged: {
-            mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
-            timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-        }
-    }
-
     onHighlightedChanged: {
         mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
         timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor

@@ -239,5 +239,5 @@ Page {
         ]
     }
 
-    Scrollbar { listView: tracks }
+    Scrollbar { flickableItem: tracks }
 }

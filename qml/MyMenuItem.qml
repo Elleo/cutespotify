@@ -53,19 +53,7 @@ Item {
     signal clicked
     property alias pressed: mouseArea.pressed
 
-    // platformStyle API
-/*    property Style platformStyle: MyMenuItemStyle{
-        position: root.parent.visibleChildren == 1 ? ""
-      : root.parent.firstVisible == root ? "vertical-top"
-      : root.parent.lastVisible == root ? "vertical-bottom"
-      : "vertical-center"
-    }
-    property alias style: root.platformStyle // Deprecated
-*/
     width: parent ? parent.width: 0
-    height: ( root.platformStyle.height == 0 ) ?
-            root.platformStyle.topMargin + menuText.paintedHeight + root.platformStyle.bottomMargin :
-            root.platformStyle.topMargin + root.platformStyle.height + root.platformStyle.bottomMargin
 /*
     Rectangle {
        id: backgroundRec
@@ -77,9 +65,6 @@ Item {
 */
             BorderImage {
                id: backgroundImage
-               source:   // !enabled ? root.platformStyle.disabledBackground :
-                          pressed ? root.platformStyle.pressedBackground
-                        : root.platformStyle.background
                anchors.fill : root
                border { left: 22; top: 22;
                         right: 22; bottom: 22 }
@@ -89,22 +74,11 @@ Item {
         id: menuText
         text: parent.text
         elide: Text.ElideRight
-        font.family : root.platformStyle.fontFamily
-        font.pixelSize : root.platformStyle.fontPixelSize
-        font.weight: root.platformStyle.fontWeight
-        color: root.platformStyle.textColor
 
-        anchors.topMargin : root.platformStyle.topMargin
-        anchors.bottomMargin : root.platformStyle.bottomMargin
-        anchors.leftMargin : root.platformStyle.leftMargin
-        anchors.rightMargin : root.platformStyle.rightMargin
-
-        anchors.top : root.platformStyle.centered ? undefined : root.top
-        anchors.bottom : root.platformStyle.centered ? undefined : root.bottom
+        anchors.top : root.top
+        anchors.bottom : root.bottom
         anchors.left : root.left
         anchors.right : root.right
-//        anchors.centerIn : parent.centerIn
-        anchors.verticalCenter : root.platformStyle.centered ? parent.verticalCenter : undefined
   }
 
     MouseArea {

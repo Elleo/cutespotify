@@ -138,11 +138,6 @@ Page {
                     staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-selected" : "images/icon-m-toolbar-directory-black.png"
             }
 
-            Connections {
-                target: theme
-                onInvertedChanged: playlistDelegate.updateIcon()
-            }
-
             Component.onCompleted: updateIcon()
         }
 

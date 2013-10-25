@@ -120,7 +120,7 @@ Column {
 
         front: Rectangle {
             anchors.fill: parent
-            color: theme.inverted ? "#202020" : "#C9C9C9"
+            color: "#C9C9C9"
 
             ListView {
                 id: coverList
@@ -163,7 +163,7 @@ Column {
                 anchors.bottom: parent.bottom
                 width: parent.width
                 height: detailsColumn.height + UI.MARGIN_XLARGE
-                color: (moreMouseArea.pressed ? "#DD" : "#BA") + (theme.inverted ? "202020" : "D7D7D7")
+                color: (moreMouseArea.pressed ? "#DD" : "#BA") + ("#D7D7D7")
 
                 Column {
                     id: detailsColumn
@@ -179,7 +179,7 @@ Column {
                         font.family: UI.FONT_FAMILY
                         font.weight: Font.Bold
                         font.pixelSize: UI.FONT_DEFAULT
-                        color: theme.inverted ? UI.COLOR_INVERTED_FOREGROUND : UI.COLOR_FOREGROUND
+                        color: UI.COLOR_FOREGROUND
                         elide: Text.ElideRight
                         opacity: details.opacity
                         text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
@@ -200,7 +200,7 @@ Column {
                                 width: parent.width
                                 font.family: UI.FONT_FAMILY
                                 font.pixelSize: UI.FONT_LSMALL
-                                color: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+                                color: UI.LIST_SUBTITLE_COLOR
                                 elide: Text.ElideRight
                                 anchors.left: parent.left
                                 anchors.right: parent.right
@@ -210,7 +210,7 @@ Column {
                                 width: parent.width
                                 font.family: UI.FONT_FAMILY
                                 font.pixelSize: UI.FONT_LSMALL
-                                color: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+                                color: UI.LIST_SUBTITLE_COLOR
                                 elide: Text.ElideRight
                                 anchors.left: parent.left
                                 anchors.right: parent.right
@@ -221,7 +221,7 @@ Column {
                             id: moreIcon
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            source: "image://theme/icon-s-description" + (theme.inverted ? "-inverse" : "")
+                            source: "image://theme/icon-s-description" 
                             visible: !spotifySession.offlineMode
                         }
                         MouseArea {
@@ -245,7 +245,7 @@ Column {
                 anchors.right: parent.right
                 contentMargins: UI.MARGIN_XLARGE
                 text: "Play queue"
-                color: theme.inverted ? UI.COLOR_INVERTED_BACKGROUND : UI.COLOR_BACKGROUND
+                color: UI.COLOR_BACKGROUND
                 contentOpacity: queueHeaderMouse.pressed ? 0.4 : 1.0
                 z: 500
 
@@ -271,8 +271,8 @@ Column {
                     property bool isExplicit: spotifySession.playQueue.isExplicitTrack(index)
                     name: modelData.name
                     backgroundOpacity: isExplicit ? 0.6 : 0.0
-                    titleColor: isExplicit ? (theme.inverted ? "#f5e8b9" : "#c6a83f") : (theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR)
-                    subtitleColor: isExplicit ? (theme.inverted ? "#e0d3a5" : "#a79144") : (theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR)
+                    titleColor: isExplicit ? ("#c6a83f") : (UI.LIST_TITLE_COLOR)
+                    subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
                     artistAndAlbum: modelData.artists + " | " + modelData.album
                     duration: modelData.duration
                     highlighted: index == spotifySession.playQueue.currentIndex
@@ -310,7 +310,7 @@ Column {
             Image {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image://theme/icon-m-toolbar-mediacontrol-previous" + (theme.inverted ? "-white" : "")
+                source: "image://theme/icon-m-toolbar-mediacontrol-previous"
                 opacity: previous.pressed ? 0.4 : 1.0
 
                 MouseArea {
@@ -323,8 +323,8 @@ Column {
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                source: spotifySession.isPlaying ? "image://theme/icon-m-toolbar-mediacontrol-pause" + (theme.inverted ? "-white" : "")
-                                                 : "image://theme/icon-m-toolbar-mediacontrol-play" + (theme.inverted ? "-white" : "")
+                source: spotifySession.isPlaying ? "image://theme/icon-m-toolbar-mediacontrol-pause" 
+                                                 : "image://theme/icon-m-toolbar-mediacontrol-play" 
                 opacity: play.pressed ? 0.4 : 1.0
 
                 MouseArea {
@@ -337,7 +337,7 @@ Column {
             Image {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image://theme/icon-m-toolbar-mediacontrol-next" + (theme.inverted ? "-white" : "")
+                source: "image://theme/icon-m-toolbar-mediacontrol-next"
                 opacity: next.pressed ? 0.4 : 1.0
 
                 MouseArea {
@@ -364,7 +364,7 @@ Column {
                 //valueIndicatorMargin : 40
                 enabled: spotifySession.currentTrack ? true : false
 /*                platformStyle: SliderStyle {
-                    grooveItemElapsedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-slider-elapsed-" + (theme.inverted ? "inverted-" : "") + "background-horizontal"
+                    grooveItemElapsedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-slider-elapsed-"background-horizontal"
                     handleBackground: "qrc:/qml/images/meegotouch-slider-handle-background-horizontal.png"
                     handleBackgroundPressed: "qrc:/qml/images/meegotouch-slider-handle-background-pressed-horizontal.png"
                     mouseMarginBottom: -25
@@ -400,17 +400,17 @@ Column {
                     id: trackPos
                     font.family: UI.FONT_FAMILY
                     font.pixelSize: UI.FONT_LSMALL
-                    color: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+                    color: UI.LIST_SUBTITLE_COLOR
                     anchors.left: parent.left
                     anchors.leftMargin: 5
                     anchors.top: parent.top
-                    text: slider.valueIndicatorText
+                    //text: slider.valueIndicatorText
                     visible: spotifySession.currentTrack ? true : false
                 }
                 Label {
                     font.family: UI.FONT_FAMILY
                     font.pixelSize: UI.FONT_LSMALL
-                    color: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+                    color: UI.LIST_SUBTITLE_COLOR
                     anchors.right: parent.right
                     anchors.rightMargin: 5
                     anchors.top: parent.top
@@ -428,7 +428,7 @@ Column {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: enabled ? (addArea.pressed ? 0.4 : 1.0) : 0.2
-                source: "image://theme/icon-m-toolbar-add" + (theme.inverted ? "-white" : "");
+                source: "image://theme/icon-m-toolbar-add"
                 enabled: !spotifySession.offlineMode
 
                 MouseArea {
@@ -447,9 +447,9 @@ Column {
                 x: 136
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
-                source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("image://theme/icon-m-toolbar-favorite-mark" + (theme.inverted ? "-white" : ""))
-                                                                                             : ("image://theme/icon-m-toolbar-favorite-unmark" + (theme.inverted ? "-white" : "")))
-                                                    : ("image://theme/icon-m-toolbar-favorite-unmark" + (theme.inverted ? "-white" : ""));
+                source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("image://theme/icon-m-toolbar-favorite-mark")
+                                                                                             : ("image://theme/icon-m-toolbar-favorite-unmark"))
+                                                    : ("image://theme/icon-m-toolbar-favorite-unmark")
                 enabled: !spotifySession.offlineMode
 
                 MouseArea {
@@ -462,7 +462,7 @@ Column {
             Image {
                 x: 272
                 anchors.verticalCenter: parent.verticalCenter
-                source: spotifySession.shuffle ? ("images/icon-m-toolbar-shuffle" + (theme.inverted ? "-white" : "") + "-selected.png") : ("image://theme/icon-m-toolbar-shuffle" + (theme.inverted ? "-white" : ""));
+                source: spotifySession.shuffle ? ("images/icon-m-toolbar-shuffle-selected.png") : ("image://theme/icon-m-toolbar-shuffle")
                 opacity: shuffleArea.pressed ? 0.4 : 1.0
                 MouseArea {
                     id: shuffleArea
@@ -475,7 +475,7 @@ Column {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 source: spotifySession.repeat ? "images/icon-m-toolbar-repeat-white-selected.png"
-                                              : spotifySession.repeatOne ? "images/icon-m-toolbar-repeat-one-white-selected.png" : ("image://theme/icon-m-toolbar-repeat" + (theme.inverted ? "-white" : ""));
+                                              : spotifySession.repeatOne ? "images/icon-m-toolbar-repeat-one-white-selected.png" : ("image://theme/icon-m-toolbar-repeat")
                 opacity: repeatArea.pressed ? 0.4 : 1.0
                 MouseArea {
                     id: repeatArea

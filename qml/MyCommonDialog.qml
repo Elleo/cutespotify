@@ -38,25 +38,20 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0;
+import Ubuntu.Components 0.1;
+import Ubuntu.Components.Popups 0.1;
 
 Dialog {
     id: genericDialog
 
     property string titleText: ""
 
-    property Style platformStyle: SelectionDialogStyle {}
-
-    //Deprecated, TODO Remove this on w13
-    property alias style: genericDialog.platformStyle
-
     //private
     property bool __drawFooterLine: false
 
-    title: Item {
+    Item {
         id: header
-        height: genericDialog.platformStyle.titleBarHeight
 
         anchors.left: parent.left
         anchors.right: parent.right
@@ -74,7 +69,6 @@ Dialog {
                 anchors.right: closeButton.left
 
                 anchors.bottom:  parent.bottom
-                anchors.bottomMargin: genericDialog.platformStyle.titleBarLineMargin
 
                 //anchors.verticalCenter: labelField.verticalCenter
 
@@ -82,12 +76,8 @@ Dialog {
 
                 Label {
                     id: titleLabel
-                    x: genericDialog.platformStyle.titleBarIndent
                     width: parent.width - closeButton.width
                     //anchors.baseline:  parent.bottom
-                    font: genericDialog.platformStyle.titleBarFont
-                    color: genericDialog.platformStyle.commonLabelColor
-                    elide: genericDialog.platformStyle.titleElideMode
                     text: genericDialog.titleText
                 }
 
@@ -96,7 +86,6 @@ Dialog {
             Image {
                 id: closeButton
                 anchors.bottom:  parent.bottom
-                anchors.bottomMargin: genericDialog.platformStyle.titleBarLineMargin-6
                 //anchors.verticalCenter: labelField.verticalCenter
                 anchors.right: labelField.right
 
@@ -129,9 +118,9 @@ Dialog {
 
     }
 
-    content: Item {id: contentField}
+    Item {id: contentField}
 
-    buttons: Item {
+    Item {
          id: footer
 
          width: parent.width

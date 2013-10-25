@@ -38,15 +38,13 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
 Page {
     id: settingsPage
-    orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
@@ -88,9 +86,6 @@ Page {
 
                         Switch {
                             id: offlineSwitch
-                            platformStyle: SwitchStyle {
-                                 switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on" + (theme.inverted ? "-inverted" : "")
-                            }
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
                             onCheckedChanged: spotifySession.setOfflineMode(checked)
@@ -159,9 +154,6 @@ Page {
                     }
 
                     Switch {
-                        platformStyle: SwitchStyle {
-                            switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on" + (theme.inverted ? "-inverted" : "")
-                        }
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
                         checked: spotifySession.syncOverMobile
@@ -237,9 +229,6 @@ Page {
 
                     Switch {
                         id: lastfmSwitch
-                        platformStyle: SwitchStyle {
-                            switchOn: "image://theme/" + appWindow.themeColor + "-meegotouch-switch-on" + (theme.inverted ? "-inverted" : "")
-                        }
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckedChanged: {
@@ -301,12 +290,6 @@ Page {
                 Button {
                     id: buttonAbout
                     text: "About"
-                    platformStyle: ButtonStyle {
-                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-pressed" + (position ? "-" + position : "")
-                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled" + (position ? "-" + position : "")
-                        checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-selected" + (position ? "-" + position : "")
-                        checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled-selected" + (position ? "-" + position : "")
-                    }
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.leftMargin: UI.PADDING_XXLARGE
@@ -324,12 +307,6 @@ Page {
 
                 Button {
                     id: button
-                    platformStyle: ButtonStyle {
-                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-pressed" + (position ? "-" + position : "")
-                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled" + (position ? "-" + position : "")
-                        checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-selected" + (position ? "-" + position : "")
-                        checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled-selected" + (position ? "-" + position : "")
-                    }
                     text: "Log out " + (spotifySession.user ? spotifySession.user.canonicalName : "")
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -354,5 +331,5 @@ Page {
         id: aboutDialog
     }
 
-    ScrollDecorator { flickableItem: settingsFlickable }
+    Scrollbar { flickableItem: settingsFlickable }
 }

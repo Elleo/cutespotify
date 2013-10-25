@@ -71,7 +71,7 @@ MyPopup {
                  __findItem( "pageStackWindow") != null && __findItem( "pageStackWindow").showStatusBar ? 36 : 0
 
     property string __animationChief: "abstractMenu"
-    property int __pressDelay: platformStyle.pressDelay
+//    property int __pressDelay: platformStyle.pressDelay
 
     // This item will find the object with the given objectName ... or will return
     function __findItem( objectName ) {
@@ -90,7 +90,7 @@ MyPopup {
         return null;
     }
 
-    __dim: platformStyle.dim
+/*    __dim: platformStyle.dim
     __fadeInDuration: platformStyle.fadeInDuration
     __fadeOutDuration: platformStyle.fadeOutDuration
     __fadeInDelay: platformStyle.fadeInDelay
@@ -98,24 +98,15 @@ MyPopup {
     __faderBackground: platformStyle.faderBackground
     __fadeInEasingType: platformStyle.fadeInEasingType
     __fadeOutEasingType: platformStyle.fadeOutEasingType
-
+*/
     anchors.fill: parent
-
-    // When application is minimized menu is closed.
-    Connections {
-        target: platformWindow
-        onActiveChanged: {
-            if(!platformWindow.active)
-                close()
-        }
-    }
 
     // This is needed for menus which are not instantiated inside the
     // content window of the PageStackWindow:
     Item {
         id: roundedCorners
-        visible: root.status != DialogStatus.Closed && !visualParent
-                 && __findItem( "pageStackWindow") != null && __findItem( "pageStackWindow").platformStyle.cornersVisible
+        visible: root.status != "Closed" && !visualParent
+                 && __findItem( "pageStackWindow") != null
         anchors.left: parent.left
         anchors.right: parent.right
         height: parent.height - __statusBarDelta - 2
@@ -156,38 +147,35 @@ MyPopup {
         anchors.right: menuItem.left
         anchors.bottom : menuItem.bottom
         source: "image://theme/meegotouch-menu-shadow-left"
-        visible: root.status != DialogStatus.Closed
+        visible: root.status != "Closed"
     }
     Image {
         anchors.bottom : menuItem.top
         anchors.left: menuItem.left
         anchors.right : menuItem.right
         source: "image://theme/meegotouch-menu-shadow-top"
-        visible: root.status != DialogStatus.Closed
+        visible: root.status != "Closed"
     }
     Image {
         anchors.top : menuItem.top
         anchors.left: menuItem.right
         anchors.bottom : menuItem.bottom
         source: "image://theme/meegotouch-menu-shadow-right"
-        visible: root.status != DialogStatus.Closed
+        visible: root.status != "Closed"
     }
     Image {
         anchors.top : menuItem.bottom
         anchors.left: menuItem.left
         anchors.right : menuItem.right
         source: "image://theme/meegotouch-menu-shadow-bottom"
-        visible: root.status != DialogStatus.Closed
+        visible: root.status != "Closed"
     }
 
     Item {
         id: menuItem
         //ToDo: add support for layoutDirection Qt::RightToLeft
-        x: platformStyle.leftMargin
-        width:  parent.width  - platformStyle.leftMargin - platformStyle.rightMargin  // ToDo: better width heuristic
-        height: (screen.currentOrientation == 1) || (screen.currentOrientation == 4) ?
-                /* Portrait  */ titleBar.height + flickableContent.height + footerBar.height :
-                /* Landscape */ parent.height - platformStyle.topMargin - platformStyle.bottomMargin - __statusBarDelta
+        width:  parent.width // ToDo: better width heuristic
+        height: titleBar.height + flickableContent.height + footerBar.height
         anchors.bottom: parent.bottom
         anchors.right: parent.right
 
@@ -195,7 +183,7 @@ MyPopup {
 
         BorderImage {
            id: backgroundImage
-           source: theme.inverted ? "images/meegotouch-menu-background-inverted.png" : "image://theme/meegotouch-menu-background"
+           source: "image://theme/meegotouch-menu-background"
            anchors.fill : parent
            border { left: 22; top: 22;
                     right: 22; bottom: 22 }
@@ -225,25 +213,24 @@ MyPopup {
                     anchors.top: backgroundRect.top
                     anchors.topMargin: titleBar.height
                     property int maxHeight : visualParent
-                                             ? visualParent.height - platformStyle.topMargin - __statusBarDelta
+                                             ? visualParent.height - __statusBarDelta
                                                - footerBar.height - titleBar.height
                                              : root.parent
-                                                     ? root.parent.height - platformStyle.topMargin - __statusBarDelta
+                                                     ? root.parent.height - __statusBarDelta
                                                        - footerBar.height - titleBar.height
                                                      : 350
 
-                    height: root.layoutContentHeight + platformStyle.topPadding + platformStyle.bottomPadding < maxHeight
-                            ? root.layoutContentHeight + platformStyle.topPadding + platformStyle.bottomPadding
+                    height: root.layoutContentHeight < maxHeight
+                            ? root.layoutContentHeight 
                             : maxHeight
 
                     Flickable {
                         id: flickable
                         anchors.fill: parent
                         contentWidth: parent.width
-                        contentHeight: root.layoutContentHeight + platformStyle.topPadding + platformStyle.bottomPadding
+                        contentHeight: root.layoutContentHeight
                         interactive: contentHeight > flickable.height
                         flickableDirection: Flickable.VerticalFlick
-                        pressDelay: __pressDelay
                         clip: true
 
                         Item {
@@ -253,10 +240,6 @@ MyPopup {
                             anchors.top: parent.top
                             anchors.left: parent.left
                             anchors.right: parent.right
-                            anchors.topMargin: platformStyle.topPadding
-                            anchors.bottomMargin: platformStyle.bottomPadding
-                            anchors.leftMargin: platformStyle.leftPadding
-                            anchors.rightMargin: platformStyle.rightPadding
 
                             Item {
                                 id: contentField
@@ -295,7 +278,7 @@ MyPopup {
         states: [
             State {
                 name: "visible"
-                when: root.__animationChief == "abstractMenu" && (root.status == DialogStatus.Opening || root.status == DialogStatus.Open)
+                when: root.__animationChief == "abstractMenu" && (root.status == "Opening" || root.status == "Open")
                 PropertyChanges {
                     target: menuItem
                     opacity: 1.0
@@ -303,7 +286,7 @@ MyPopup {
             },
             State {
                 name: "hidden"
-                when: root.__animationChief == "abstractMenu" && (root.status == DialogStatus.Closing || root.status == DialogStatus.Closed)
+                when: root.__animationChief == "abstractMenu" && (root.status == "Closing" || root.status == "Closed")
                 PropertyChanges {
                     target: menuItem
                     opacity: 0.0
@@ -317,7 +300,7 @@ MyPopup {
                 SequentialAnimation {
                     ScriptAction {script: {
                             __fader().state = "hidden";
-                            root.status = DialogStatus.Closing;
+                            root.status = "Closing";
                         }
                     }
 
@@ -332,7 +315,7 @@ MyPopup {
                                      from: 1.0; to: 0.0; duration: 0}
 
                     ScriptAction {script: {
-                            status = DialogStatus.Closed;
+                            status = "Closed";
                         }
                     }
                 }
@@ -342,7 +325,7 @@ MyPopup {
                 SequentialAnimation {
                     ScriptAction {script: {
                             __fader().state = "visible";
-                            root.status = DialogStatus.Opening;
+                            root.status = "Opening";
                         }
                     }
 
@@ -351,7 +334,7 @@ MyPopup {
                                      from: -menuItem.height; to: 0; duration: 350}
 
                     ScriptAction {script: {
-                            status = DialogStatus.Open;
+                            status = "Open";
                         }
                     }
                 }

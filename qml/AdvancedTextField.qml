@@ -39,15 +39,11 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
 
 TextField {
     id: input
-    property alias showBusy: spinner.running
-    platformStyle: TextFieldStyle {
-        backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
-    }
 
     Image {
         id: editIcon
@@ -56,16 +52,6 @@ TextField {
         anchors.rightMargin: (parent.height - height) / 2
         anchors.verticalCenter: parent.verticalCenter
         opacity: iconMouseArea.pressed && input.text.length > 0 ? 0.5 : 1.0
-        visible: !spinner.visible
-    }
-
-    BusyIndicator {
-        id: spinner
-        anchors.right: parent.right
-        anchors.rightMargin: (parent.height - height) / 2
-        anchors.verticalCenter: parent.verticalCenter
-        platformStyle: BusyIndicatorStyle { size: "small"; inverted: false }
-        visible: running
     }
 
     MouseArea {
@@ -73,6 +59,5 @@ TextField {
         anchors.fill: editIcon
         onClicked: { input.text = ""; input.forceActiveFocus() }
         z: 2
-        enabled: !spinner.visible
     }
 }

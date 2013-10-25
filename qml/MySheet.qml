@@ -51,7 +51,7 @@ Item {
     property alias content: contentField.children
     property alias buttons: buttonRow.children
     property Item visualParent
-    property int status: DialogStatus.Closed
+    property string status: "Closed"
 
     property alias acceptButtonText: acceptButton.text
     property alias rejectButtonText: rejectButton.text
@@ -77,7 +77,7 @@ Item {
         accepted();
     }
 
-    visible: status != DialogStatus.Closed;
+    visible: status != "Closed";
 
     function open() {
         parent = visualParent || __findParent();
@@ -133,11 +133,11 @@ Item {
         state: "closed"
 
         function transitionStarted() {
-            status = (state == "closed") ? DialogStatus.Closing : DialogStatus.Opening;
+            status = (state == "closed") ? "Closing" : "Opening";
         }
 
         function transitionEnded() {
-            status = (state == "closed") ? DialogStatus.Closed : DialogStatus.Open;
+            status = (state == "closed") ? "Closed" : "Open";
         }
 
         states: [
@@ -169,7 +169,6 @@ Item {
         ]
 
         BorderImage {
-            source: platformStyle.background
             width: parent.width
             anchors.top: header.bottom
             anchors.bottom: parent.bottom
@@ -185,13 +184,6 @@ Item {
             height: headerBackground.height
             BorderImage {
                 id: headerBackground
-                border {
-                    left: platformStyle.headerBackgroundMarginLeft
-                    right: platformStyle.headerBackgroundMarginRight
-                    top: platformStyle.headerBackgroundMarginTop
-                    bottom: platformStyle.headerBackgroundMarginBottom
-                }
-                source: platformStyle.headerBackground
                 width: header.width
             }
             Item {
@@ -201,7 +193,6 @@ Item {
                     id: rejectButton
                     objectName: "rejectButton"
                     anchors.left: parent.left
-                    anchors.leftMargin: root.platformStyle.rejectButtonLeftMargin
                     anchors.verticalCenter: parent.verticalCenter
                     visible: text != ""
                     onClicked: close()
@@ -210,7 +201,6 @@ Item {
                     id: acceptButton
                     objectName: "acceptButton"
                     anchors.right: parent.right
-                    anchors.rightMargin: root.platformStyle.acceptButtonRightMargin
                     anchors.verticalCenter: parent.verticalCenter
                /*     platformStyle: SheetButtonAccentStyle {
                         background: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background"

@@ -38,24 +38,21 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
+import Ubuntu.Components.Popups 0.1;
 import "UIConstants.js" as UI
 
 Dialog {
     id: genericDialog
 
-    property string titleText: "About MeeSpot"
-
-    property Style platformStyle: SelectionDialogStyle {}
+    property string titleText: "About uSpot"
 
     //private
     property bool __drawFooterLine: false
 
-    title: Item {
+    Item {
         id: header
-        height: genericDialog.platformStyle.titleBarHeight
 
         anchors.left: parent.left
         anchors.right: parent.right
@@ -73,7 +70,6 @@ Dialog {
                 anchors.right: labelField.left
 
                 anchors.bottom:  parent.bottom
-                anchors.bottomMargin: genericDialog.platformStyle.titleBarLineMargin
 
                 //anchors.verticalCenter: labelField.verticalCenter
 
@@ -81,7 +77,6 @@ Dialog {
 
                 Label {
                     id: titleLabel
-                    x: genericDialog.platformStyle.titleBarIndent
                     font.family: UI.FONT_FAMILY
                     font.pixelSize: UI.FONT_XLARGE
                     color: UI.COLOR_INVERTED_FOREGROUND
@@ -106,7 +101,7 @@ Dialog {
 
     }
 
-    content: Column {
+    Column {
         width: parent.width
 
         Item {
@@ -121,13 +116,19 @@ Dialog {
         }
 
         Label {
-            text: "Copyright \u00a9 2011-2012 Yoann Lopes"
+            text: "Based on MeeSpot by Yoann Lopes"
             font.pixelSize: UI.FONT_LSMALL
             color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Label {
-            text: "Contact: yoann.lopes@gmail.com"
+            text: "Copyright \u00a9 2011-2013 Yoann Lopes, Michael Sheldon"
+            font.pixelSize: UI.FONT_LSMALL
+            color: UI.COLOR_INVERTED_FOREGROUND
+        }
+
+        Label {
+            text: "Contact: elleo@gnu.org"
             font.pixelSize: UI.FONT_LSMALL
             color: UI.COLOR_INVERTED_FOREGROUND
         }
@@ -163,7 +164,7 @@ Dialog {
         }
     }
 
-    buttons: Item {
+    Item {
         id: buttonColFiller
         width: parent.width
         height: childrenRect.height
@@ -174,8 +175,6 @@ Dialog {
             id: acceptButton
             text: "Close"
             onClicked: accept()
-            __dialogButton: true
-            platformStyle: ButtonStyle {inverted: true}
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 38

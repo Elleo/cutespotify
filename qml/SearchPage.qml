@@ -38,15 +38,13 @@
 **
 ****************************************************************************/
 
-
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 import "Utilities.js" as Utilities
 
 Page {
-    orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
     pageStack: parent
@@ -135,11 +133,6 @@ Page {
             placeholderText: "Search"
             width: parent.width
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-            showBusy: search.busy
-            platformSipAttributes: SipAttributes {
-                actionKeyLabel: "Close"
-                actionKeyEnabled: true
-            }
             onTextChanged: {
                 search.query = Utilities.trim(text)
                 search.search()
@@ -267,6 +260,6 @@ Page {
             onLinkActivated: searchField.text = search.didYouMean
         }
 
-        Scrollbar { listView: results }
+        Scrollbar { flickableItem: results }
     }
 }

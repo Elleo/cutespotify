@@ -39,8 +39,8 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
 import QtSpotify 1.0
 
 MyMenu {
@@ -63,19 +63,22 @@ MyMenu {
         titleText: "Playlists"
         parent: trackMenu.parent
         model: ListModel { }
-        onAccepted: {
-            var playlistItem = model.get(selectionDialog.selectedIndex);
-            if (playlistItem.object) {
-                banner.text = "Album added to " + playlistItem.name;
-                playlistItem.object.addAlbum(albumBrowse);
-            } else {
-                if (spotifySession.user.createPlaylistFromAlbum(albumBrowse)) {
-                    banner.text = "Album added to new playlist";
+        Button {
+            text: "Add"
+            onClicked: {
+                var playlistItem = model.get(selectionDialog.selectedIndex);
+                if (playlistItem.object) {
+                    banner.text = "Album added to " + playlistItem.name;
+                    playlistItem.object.addAlbum(albumBrowse);
                 } else {
-                    banner.text = "Could not add album to new playlist";
+                    if (spotifySession.user.createPlaylistFromAlbum(albumBrowse)) {
+                        banner.text = "Album added to new playlist";
+                    } else {
+                        banner.text = "Could not add album to new playlist";
+                    }
                 }
+                banner.show();
             }
-            banner.show();
         }
     }
 

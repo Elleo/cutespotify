@@ -46,38 +46,43 @@ import "UIConstants.js" as UI
 
 Page {
     id: mainPage
-    tools: player.state == "open" ? null : mainTools
+//    tools: player.state == "open" ? null : mainTools
 
     property alias tabs: tabGroup
     property alias searchTabAlias: searchTab
-    //property alias playlistSelection: playlistSelectionDialog
+    property alias playlistSelection: playlistSelectionDialog
 
-    NotificationBanner {
+/*    NotificationBanner {
         id: errorBanner
-    }
+    }*/
 
-/*    MySelectionDialog {
+    MySelectionDialog {
         id: playlistSelectionDialog
 
         property variant track: null
 
         titleText: "Playlists"
-        onAccepted: {
-            var playlistItem = model.get(playlistSelectionDialog.selectedIndex);
-            if (playlistItem.object) {
-                errorBanner.text = "Track added to " + playlistItem.name;
-                playlistItem.object.add(track);
-            } else {
-                if (spotifySession.user.createPlaylistFromTrack(track)) {
-                    errorBanner.text = "Track added to new playlist";
+
+        Button {
+
+            text: "Add"
+
+            onClicked: {
+                var playlistItem = model.get(playlistSelectionDialog.selectedIndex);
+                if (playlistItem.object) {
+                    errorBanner.text = "Track added to " + playlistItem.name;
+                    playlistItem.object.add(track);
                 } else {
-                    errorBanner.text = "Could not add track to new playlist";
+                    if (spotifySession.user.createPlaylistFromTrack(track)) {
+                         errorBanner.text = "Track added to new playlist";
+                    } else {
+                        errorBanner.text = "Could not add track to new playlist";
+                    }
                 }
+                errorBanner.show();
             }
-            errorBanner.show();
         }
     }
-*/
 
     property variant playlists: spotifySession.user ? spotifySession.user.playlistsFlat : null
     Connections {
@@ -132,26 +137,29 @@ Page {
     Tabs {
         id: tabGroup
         //enabled: !currentTab.busy
-        y: player.hidden ? 0 : screen.currentOrientation === Screen.Portrait ? UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
-                                                                            : UI.HEADER_DEFAULT_HEIGHT_LANDSCAPE
+        y: player.hidden ? 0 : UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
         height: parent.height - y
         Behavior on y { NumberAnimation { easing.type: Easing.OutQuart; duration: 500 } }
 
         Tab { 
             id: playlistsTab
+            title: "Playlists"
             page: PlaylistPage { }
         }
         Tab {
             id: searchTab
-            page: Page { }
+            title: "Search"
+            page: SearchPage { }
         }
         Tab {
             id: toplistTab
+            title: "Top"
             page: Page { }
         }
         Tab {
+            title: "Settings"
             id: settingsTab
-            page: Page { }
+            page: SettingsPage { }
         }
 
         /*Connections {
@@ -178,8 +186,7 @@ Page {
         ButtonRow {
             TabButton {
                 tab: playlistsTab
-                iconSource: theme.inverted ? "image://theme/icon-m-toolbar-list-white"
-                                           : "image://theme/icon-m-toolbar-list"
+                iconSource: "image://theme/icon-m-toolbar-list"
 
                 property bool isCurrentTab: false
 
@@ -195,8 +202,7 @@ Page {
             }
             TabButton {
                 tab: searchTab
-                iconSource: theme.inverted ? "image://theme/icon-m-toolbar-search-white"
-                                           : "image://theme/icon-m-toolbar-search"
+                iconSource: "image://theme/icon-m-toolbar-search"
 
                 property bool isCurrentTab: false
 
@@ -213,8 +219,7 @@ Page {
             }
             TabButton {
                 tab: toplistTab
-                iconSource: theme.inverted ? "image://theme/icon-m-toolbar-home-white"
-                                           : "image://theme/icon-m-toolbar-home"
+                iconSource: "image://theme/icon-m-toolbar-home"
 
                 property bool isCurrentTab: false
 
@@ -232,8 +237,7 @@ Page {
             }
             TabButton {
                 tab: settingsTab
-                iconSource: theme.inverted ? "image://theme/icon-m-toolbar-settings-white"
-                                           : "image://theme/icon-m-toolbar-settings"
+                iconSource: "image://theme/icon-m-toolbar-settings"
                 onClicked: { if (settingsTab.depth === 0) settingsTab.push(Qt.resolvedUrl("SettingsPage.qml")) }
             }
         }

@@ -39,8 +39,9 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1;
+import Ubuntu.Components.Popups 0.1;
 import "UIConstants.js" as UI
 
 Item {
@@ -53,13 +54,13 @@ Item {
     property alias titleFontFamily: titleText.font.family
     property alias titleFontWeight: titleText.font.weight
     property alias titleFontSize: titleText.font.pixelSize
-    property color titleColor: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
-    property color subtitleColor: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+    property color titleColor: UI.LIST_TITLE_COLOR
+    property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
     width: parent.width
     height: UI.LIST_ITEM_HEIGHT
 
-    SelectionDialog {
+    MySelectionDialog {
         id: dialog
         titleText: selector.title
     }
@@ -71,7 +72,7 @@ Item {
         anchors.leftMargin: -UI.MARGIN_XLARGE
         anchors.rightMargin: -UI.MARGIN_XLARGE
         opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: theme.inverted ? "#22FFFFFF" : "#15000000"
+        color: "#15000000"
         Behavior on opacity { NumberAnimation { duration: 50 } }
     }
 
@@ -105,15 +106,14 @@ Item {
         id: icon
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        source: theme.inverted ? "image://theme/icon-m-textinput-combobox-arrow"
-                               : "image://theme/icon-m-common-combobox-arrow"
+        source: "image://theme/icon-m-common-combobox-arrow"
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         onClicked: {
-            dialog.open()
+            PopupUtils.open(dialogC)
         }
     }
 }

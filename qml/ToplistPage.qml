@@ -300,7 +300,7 @@ Page {
             }
         }
 
-        Scrollbar { listView: results }
+        Scrollbar { flickableItem: results }
     }
 
     BusyIndicator {

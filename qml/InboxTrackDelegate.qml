@@ -106,16 +106,6 @@ Item {
         }
     }
 
-    Connections {
-        target: theme
-        onInvertedChanged: {
-            mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
-            subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-            thirdText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-            timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-        }
-    }
-
     onHighlightedChanged: {
         mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
         subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
