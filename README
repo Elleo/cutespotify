@@ -1,4 +1,4 @@
-You need to download libspotify 9 for ARM to be able to compile and create the .deb package.
+You need to download libspotify 12 to be able to compile and create the .deb package.
 Get it there: http://developer.spotify.com/en/libspotify/overview/
 Extract the content of the tarball inside 'libspotify'
 at the root of the project.
@@ -42,8 +42,3 @@ secret inside it using the following format:
 
      #endif // LASTFM_KEY_H
 
-----
-
-To compile the project, use the Qt SDK (version 1.1 or higher) with the Harmattan component
-installed from the Qt SDK maintenance tool.
---> Open the project in Qt Creator, compile and deploy on the device!
