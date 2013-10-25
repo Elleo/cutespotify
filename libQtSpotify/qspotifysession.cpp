@@ -513,11 +513,11 @@ void QSpotifySession::init()
 
     memset(&m_sp_config, 0, sizeof(m_sp_config));
     m_sp_config.api_version = SPOTIFY_API_VERSION;
-    m_sp_config.cache_location = "/home/phablet/.uspot";
-    m_sp_config.settings_location = "/home/phablet/.uspot";
+    m_sp_config.cache_location = "./.cutespotify";
+    m_sp_config.settings_location = "./.cutespotify";
     m_sp_config.application_key = g_appkey;
     m_sp_config.application_key_size = g_appkey_size;
-    m_sp_config.user_agent = "uSpot";
+    m_sp_config.user_agent = "CuteSpotify";
     m_sp_config.callbacks = &m_sp_callbacks;
     sp_error error = sp_session_create(&m_sp_config, &m_sp_session);
     if (error != SP_ERROR_OK) {

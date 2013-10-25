@@ -3,12 +3,12 @@
 	"framework": "ubuntu-sdk-13.10",
 	"hooks": {
 		"uspot": {
-			"apparmor": "uspot.json",
-			"desktop": "uspot.desktop"
+			"apparmor": "cutespotify.json",
+			"desktop": "cutespotify.desktop"
 		}
 	},
 	"maintainer": "Michael Sheldon",
-	"name": "com.ubuntu.developer.elleo.uspot",
-	"title": "uSpot",
+	"name": "com.mikeasoft.cutespotify",
+	"title": "CuteSpotify",
 	"version": "1.3"
 }

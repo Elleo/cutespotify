@@ -31,15 +31,15 @@ SOURCES += main.cpp \
 OTHER_FILES += \
     qml/MainPage.qml \
     qml/main.qml \
-    MeeSpot.desktop \
-    MeeSpot.png \
+    cutespotify.desktop \
+    CuteSpotify.png \
     qtc_packaging/debian_harmattan/rules \
     qtc_packaging/debian_harmattan/README \
     qtc_packaging/debian_harmattan/copyright \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
-    MeeSpot.conf \
+    CuteSpotify.conf \
     qml/LoginPage.qml \
     qml/UIConstants.js \
     qml/PlaylistPage.qml \
