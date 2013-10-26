@@ -142,11 +142,11 @@ bool QSpotifyTrack::updateData()
                 if (m_seen != seen)
                     updateSeen(seen);
 
-                QString crea = QString::fromUtf8(sp_user_canonical_name(sp_playlist_track_creator(m_playlist->m_sp_playlist, tindex)));
+                /*QString crea = QString::fromUtf8(sp_user_canonical_name(sp_playlist_track_creator(m_playlist->m_sp_playlist, tindex)));
                 if (m_creator != crea) {
                     m_creator = crea;
                     updated = true;
-                }
+                }*/
 
                 int cd = sp_playlist_track_create_time(m_playlist->m_sp_playlist, tindex);
                 QDateTime dt = QDateTime::fromTime_t(cd);
