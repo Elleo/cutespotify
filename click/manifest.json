@@ -2,7 +2,7 @@
 	"description": "Spotify client for Ubuntu Touch",
 	"framework": "ubuntu-sdk-13.10",
 	"hooks": {
-		"uspot": {
+		"cutespotify": {
 			"apparmor": "cutespotify.json",
 			"desktop": "cutespotify.desktop"
 		}
