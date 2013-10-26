@@ -52,12 +52,12 @@
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QApplication::setOrganizationName("uSpot");
-    QApplication::setOrganizationDomain("com.mikeasoft.uspot");
-    QApplication::setApplicationName("uSpot");
+    QApplication::setOrganizationName("CuteSpotify");
+    QApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
+    QApplication::setApplicationName("CuteSpotify");
     QApplication::setApplicationVersion("1.3.0");
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/phablet/.meespotconf"));
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/phablet/.cutespotify"));
 
     QApplication *app = new QApplication(argc, argv);
     QQuickView *view = new QQuickView();
