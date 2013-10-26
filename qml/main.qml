@@ -54,6 +54,11 @@ MainView {
         Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
     }
 
+    Player {
+        id: player
+        visible: false;
+    }
+
     Component {
         id: mainPage
         MainPage {

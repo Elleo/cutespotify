@@ -52,6 +52,10 @@ Page {
     property alias searchTabAlias: searchTab
     property alias playlistSelection: playlistSelectionDialog
 
+    Component.onCompleted: {
+        player.visible = true;
+    }
+
     NotificationBanner {
         id: errorBanner
     }
@@ -171,9 +175,6 @@ Page {
         }*/
     }
 
-    Player {
-        id: player
-    }
 
 /*
     property Item mainTools : ToolBarLayout {
