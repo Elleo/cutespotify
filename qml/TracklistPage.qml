@@ -53,12 +53,12 @@ Page {
 
     Component.onCompleted: playlist.trackFilter = ""
 
-    TrackMenu {
+/*    TrackMenu {
         id: menu
         deleteVisible: playlist && spotifySession.user ? (playlist.type != SpotifyPlaylist.Starred && spotifySession.user.canModifyPlaylist(playlist))
                                                        : false
         markSeenVisible: playlist && playlist.type == SpotifyPlaylist.Inbox
-    }
+    }*/
 
     Component {
         id: trackDelegate

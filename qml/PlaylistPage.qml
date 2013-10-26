@@ -46,7 +46,6 @@ import "UIConstants.js" as UI
 
 Page {
     id: playlistPage
-    pageStack: parent
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
