@@ -111,7 +111,7 @@ Page {
         }
 
         Item {
-            height: termsText.height
+            height: termsText.height + units.gu(5)
             width: parent.width
 
             CheckBox {
