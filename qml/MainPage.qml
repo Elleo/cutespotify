@@ -52,9 +52,9 @@ Page {
     property alias searchTabAlias: searchTab
     property alias playlistSelection: playlistSelectionDialog
 
-/*    NotificationBanner {
+    NotificationBanner {
         id: errorBanner
-    }*/
+    }
 
     MySelectionDialog {
         id: playlistSelectionDialog

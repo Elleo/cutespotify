@@ -80,7 +80,7 @@ Page {
                             font.family: UI.FONT_FAMILY_BOLD
                             font.weight: Font.Bold
                             font.pixelSize: UI.LIST_TILE_SIZE
-                            color: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
+                            color: UI.LIST_TITLE_COLOR
                             text: "Offline mode"
                         }
 
@@ -105,7 +105,7 @@ Page {
                         font.family: UI.FONT_FAMILY_LIGHT
                         font.pixelSize: UI.LIST_SUBTILE_SIZE
                         font.weight: Font.Light
-                        color: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+                        color: UI.LIST_SUBTITLE_COLOR
                         text: "When offline, only the playlists you've made available for offline listening will be playable."
                     }
 
@@ -149,7 +149,7 @@ Page {
                         font.family: UI.FONT_FAMILY_BOLD
                         font.weight: Font.Bold
                         font.pixelSize: UI.LIST_TILE_SIZE
-                        color: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
+                        color: UI.LIST_TITLE_COLOR
                         text: "Sync over 2G/3G"
                     }
 
@@ -187,7 +187,7 @@ Page {
                         anchors.leftMargin: -UI.MARGIN_XLARGE
                         anchors.rightMargin: -UI.MARGIN_XLARGE
                         opacity: lastfmMouseArea.pressed ? 1.0 : 0.0
-                        color: theme.inverted ? "#22FFFFFF" : "#15000000"
+                        color: "#15000000"
                         Behavior on opacity { NumberAnimation { duration: 50 } }
                     }
 
@@ -203,7 +203,7 @@ Page {
                             font.weight: Font.Bold
                             font.pixelSize: UI.LIST_TILE_SIZE
                             elide: Text.ElideRight
-                            color: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
+                            color: UI.LIST_TITLE_COLOR
                             text: "Scrobble to last.fm"
                         }
                         Label {
@@ -213,7 +213,7 @@ Page {
                             font.pixelSize: UI.LIST_SUBTILE_SIZE
                             font.weight: Font.Light
                             elide: Text.ElideRight
-                            color: theme.inverted ? UI.LIST_SUBTITLE_COLOR_INVERTED : UI.LIST_SUBTITLE_COLOR
+                            color: UI.LIST_SUBTITLE_COLOR
                             text: lastfm.user
                             visible: text.length > 0
                         }
@@ -256,19 +256,6 @@ Page {
                     Separator {
                         anchors.verticalCenter: parent.verticalCenter
                         width: parent.width
-                    }
-                }
-
-                Selector {
-                    title: "Theme"
-                    model: ListModel {
-                        ListElement { name: "Dark"; value: true }
-                        ListElement { name: "Light"; value: false }
-                    }
-                    selectedIndex: theme.inverted ? 0 : 1
-                    onSelectedIndexChanged: {
-                        theme.inverted = model.get(selectedIndex).value
-                        spotifySession.invertedTheme = theme.inverted;
                     }
                 }
 

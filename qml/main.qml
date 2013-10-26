@@ -45,8 +45,8 @@ import QtSpotify 1.0
 
 MainView {
     id: appWindow
-    width: units.gu(60);
-    height: units.gu(80);
+    width: units.gu(45);
+    height: units.gu(65);
     property string themeColor
 
     PageStack {

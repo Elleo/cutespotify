@@ -108,7 +108,6 @@ Page {
             onClicked: {
                 if (modelData.trackCount > 0) {
                     var component = Qt.createComponent("TracklistPage.qml");
-                    console.log("WAAAH");
                     if (component.status === Component.Ready) {
                         var playlistPage = component.createObject(pageStack, { playlist: modelData });
                         pageStack.push(playlistPage);

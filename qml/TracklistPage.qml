@@ -39,8 +39,8 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 import "Utilities.js" as Util
@@ -48,7 +48,6 @@ import "Utilities.js" as Util
 Page {
     id: tracklistPage
     property variant playlist
-    orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
@@ -162,7 +161,7 @@ Page {
         anchors.top: parent.top
         width: parent.width
         height: 0
-        color: theme.inverted ? UI.COLOR_INVERTED_BACKGROUND : UI.COLOR_BACKGROUND
+        color: UI.COLOR_BACKGROUND
         clip: true
 
         Column {
@@ -177,10 +176,6 @@ Page {
                 placeholderText: "Search"
                 width: parent.width
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                platformSipAttributes: SipAttributes {
-                    actionKeyLabel: "Close"
-                    actionKeyEnabled: true
-                }
                 Keys.onReturnPressed: { tracks.focus = true }
 
                 onTextChanged: playlist.trackFilter = Util.trim(text)

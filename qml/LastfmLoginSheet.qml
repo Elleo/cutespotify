@@ -130,10 +130,10 @@ MySheet {
     }
 
     onStatusChanged: {
-        if (status == DialogStatus.Opening) {
+        if (status == "Opening") {
             username.text = "";
             password.text = "";
-        } else if (status == DialogStatus.Open) {
+        } else if (status == "Open") {
             timer.start();
         }
     }

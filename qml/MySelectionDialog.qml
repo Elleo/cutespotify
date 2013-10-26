@@ -58,7 +58,6 @@ MyCommonDialog {
                 id: delegateItem
                 property bool selected: index == selectedIndex;
 
-                height: root.platformStyle.itemHeight
                 anchors.left: parent.left
                 anchors.right: parent.right
 
@@ -88,7 +87,6 @@ MyCommonDialog {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     text: name;
-                    font: root.platformStyle.itemFont
                 }
             }
         }

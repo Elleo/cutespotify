@@ -67,7 +67,7 @@ Page {
         visible: spotifySession.offlineMode
         anchors.rightMargin: -UI.MARGIN_XLARGE
         anchors.leftMargin: -UI.MARGIN_XLARGE
-        color: theme.inverted ? "#DD000000" : "#DDFFFFFF"
+        color: "#DDFFFFFF"
         z: 500
 
         Label {
