@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Terminal=false
-Exec=LD_LIBRARY_PATH=./lib ./CuteSpotify --desktop_file_hint=/opt/click.ubuntu.com/com.mikeasoft.cutespotify/current/cutespotify.desktop
+Exec=./CuteSpotify
 Name=CuteSpotify
 Icon=./cutespotify.png
 X-Ubuntu-Touch=true

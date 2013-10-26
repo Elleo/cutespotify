@@ -98,34 +98,8 @@ include(libQtSpotify/libQtSpotify.pri)
 include(liblastfm/liblastfm.pri)
 
 QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
-QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath,/opt/MeeSpot/lib
+QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath=/opt/click.ubuntu.com/com.mikeasoft.cutespotify/current/lib/
 
 HEADERS += \
     src/lastfmscrobbler.h
 #    src/hardwarekeyshandler.h
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
