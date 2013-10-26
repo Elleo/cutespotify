@@ -1,13 +1,14 @@
 {
 	"description": "Spotify client for Ubuntu Touch",
 	"framework": "ubuntu-sdk-13.10",
+	"architecture": "armhf",
 	"hooks": {
 		"cutespotify": {
 			"apparmor": "cutespotify.json",
 			"desktop": "cutespotify.desktop"
 		}
 	},
-	"maintainer": "Michael Sheldon",
+	"maintainer": "Michael Sheldon <elleo@gnu.org>",
 	"name": "com.mikeasoft.cutespotify",
 	"title": "CuteSpotify",
 	"version": "1.3"
