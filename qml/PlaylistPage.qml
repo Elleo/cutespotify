@@ -62,9 +62,9 @@ Page {
         }
     }
 
-    PlaylistMenu {
+/*    PlaylistMenu {
         id: menu
-    }
+    }*/
 
     PlaylistNameSheet {
         id: newPlaylistSheet
