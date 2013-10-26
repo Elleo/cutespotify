@@ -143,12 +143,6 @@ Page {
         Button {
             id: button
             text: "Log in"
-/*            platformStyle: ButtonStyle {
-                 pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-pressed" + (position ? "-" + position : "")
-                 disabledBackground: "image://theme/" + (position ? appWindow.themeColor + "-" : "") + "meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled" + (position ? "-" + position : "")
-                 checkedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-selected" + (position ? "-" + position : "")
-                 checkedDisabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-button-" + (theme.inverted ? "inverted-" : "") + "background-disabled-selected" + (position ? "-" + position : "")
-            }*/
 
             anchors.left: parent.left
             anchors.right: parent.right
@@ -199,10 +193,9 @@ Page {
             }
         }
 
-        /*BusyIndicator {
+        ActivityIndicator {
             anchors.horizontalCenter: parent.horizontalCenter
-            platformStyle: BusyIndicatorStyle { size: "medium" }
             running: parent.visible
-        }*/
+        }
     }
 }

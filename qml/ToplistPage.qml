@@ -303,10 +303,9 @@ Page {
         Scrollbar { flickableItem: results }
     }
 
-    BusyIndicator {
+    ActivityIndicator {
         anchors.centerIn: parent
         visible: toplist.busy && results.count === 0
         running: visible
-        BusyIndicatorStyle { size: "medium" }
     }
 }

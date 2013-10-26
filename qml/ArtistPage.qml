@@ -260,11 +260,10 @@ Page {
         Scrollbar { listView: artistView }
     }
 
-    BusyIndicator {
+    ActivityIndicator {
         id: busy
         running: browse.busy
         visible: running
         anchors.centerIn: parent
-        platformStyle: BusyIndicatorStyle { size: "medium" }
     }
 }
