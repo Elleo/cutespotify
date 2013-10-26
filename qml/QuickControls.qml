@@ -51,7 +51,8 @@ Rectangle {
     MouseArea {
         id: opener
         anchors.fill: parent
-        onClicked: player.openRequested ? player.openRequested = false : player.openRequested = true
+//        onClicked: player.openRequested ? player.openRequested = false : player.openRequested = true
+        onClicked: player.showFullControls = !player.showFullControls
     }
 
     Image {
@@ -143,7 +144,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
-                    source: "image://theme/icon-m-toolbar-mediacontrol-previous-selected"
+                    source: "qrc:/qml/images/previous.png"
                     opacity: previous.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
@@ -158,8 +159,8 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
-                    source: spotifySession.isPlaying ? "image://theme/icon-m-toolbar-mediacontrol-pause-selected"
-                                                     : "image://theme/icon-m-toolbar-mediacontrol-play-selected"
+                    source: spotifySession.isPlaying ? "qrc:/qml/images/pause.png"
+                                                     : "qrc:/qml/images/play.png"
                     opacity: play.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
@@ -174,7 +175,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
-                    source: "image://theme/icon-m-toolbar-mediacontrol-next-selected"
+                    source: "qrc:/qml/images/next.png"
                     opacity: next.pressed ? 0.4 : 1.0
                 }
                 MouseArea {

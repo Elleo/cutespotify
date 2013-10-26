@@ -45,10 +45,10 @@ import "UIConstants.js" as UI
 Rectangle {
     id: player
     width: parent.width
-    height: 818
     color: UI.COLOR_BACKGROUND
-    y: -height
+    anchors.bottom: parent.bottom;
 
+    property alias showFullControls: fullControls.visible
     property bool openRequested: false
     property bool hidden: true
     property bool inOpenPosition: y > -quickControls.y
@@ -62,7 +62,7 @@ Rectangle {
 
     FullControls {
         id: fullControls
-        anchors.top: parent.top
+        visible: false;
         anchors.bottom: quickControls.top
     }
 

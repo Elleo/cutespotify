@@ -130,7 +130,6 @@ Column {
                 snapMode: ListView.SnapOneItem
                 highlightRangeMode: ListView.StrictlyEnforceRange
                 cacheBuffer: width * 2
-                //highlightMoveSpeed: -1
                 highlightMoveDuration: 0
                 clip: true
                 pressDelay: 90
@@ -289,8 +288,7 @@ Column {
             Scrollbar {
                 anchors.topMargin: -UI.MARGIN_XLARGE
                 anchors.rightMargin: -UI.MARGIN_XLARGE
-                //scrollDecoratorRightMargin: -UI.MARGIN_XLARGE
-                //listView: queueList
+                flickableItem: queueList
             }
         }
     }
@@ -310,7 +308,7 @@ Column {
             Image {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image://theme/icon-m-toolbar-mediacontrol-previous"
+                source: "qrc:/qml/images/previous.png"
                 opacity: previous.pressed ? 0.4 : 1.0
 
                 MouseArea {
@@ -323,8 +321,8 @@ Column {
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                source: spotifySession.isPlaying ? "image://theme/icon-m-toolbar-mediacontrol-pause" 
-                                                 : "image://theme/icon-m-toolbar-mediacontrol-play" 
+                source: spotifySession.isPlaying ? "qrc:/qml/images/pause.png"
+                                                 : "qrc:/qml/images/play.png"
                 opacity: play.pressed ? 0.4 : 1.0
 
                 MouseArea {
@@ -337,7 +335,7 @@ Column {
             Image {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image://theme/icon-m-toolbar-mediacontrol-next"
+                source: "qrc:/qml/images/next.png"
                 opacity: next.pressed ? 0.4 : 1.0
 
                 MouseArea {
@@ -363,16 +361,7 @@ Column {
                 //valueIndicatorVisible: spotifySession.currentTrack ? true : false
                 //valueIndicatorMargin : 40
                 enabled: spotifySession.currentTrack ? true : false
-/*                platformStyle: SliderStyle {
-                    grooveItemElapsedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-slider-elapsed-"background-horizontal"
-                    handleBackground: "qrc:/qml/images/meegotouch-slider-handle-background-horizontal.png"
-                    handleBackgroundPressed: "qrc:/qml/images/meegotouch-slider-handle-background-pressed-horizontal.png"
-                    mouseMarginBottom: -25
-                    mouseMarginLeft: -25
-                    mouseMarginRight: -25
-                    mouseMarginTop: -25
-                }
-*/
+
                 function formatValue(v) {
                     return spotifySession.formatDuration(v);
                 }

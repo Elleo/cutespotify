@@ -81,13 +81,6 @@ Page {
             id: username
             placeholderText: "Username"
             width: parent.width
-/*            platformStyle: TextFieldStyle {
-                backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
-            }
-            platformSipAttributes: SipAttributes {
-                actionKeyLabel: (username.text.length > 0 && password.text.length > 0) ? "Log in" : "Next"
-                actionKeyEnabled: true
-            }*/
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             Keys.onReturnPressed: {
                 if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
@@ -133,6 +126,7 @@ Page {
             Label {
                 id: termsText
                 anchors.left: termsCheck.right
+                anchors.leftMargin: units.gu(2)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 text: "I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
