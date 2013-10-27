@@ -62,6 +62,7 @@
 #include <QSettings>
 #include <QThread>
 #include <QWaitCondition>
+#include <QtCore/QStandardPaths>
 
 #define BUFFER_SIZE 409600
 #define AUDIOSTREAM_UPDATE_INTERVAL 20
