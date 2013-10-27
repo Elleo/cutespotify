@@ -1,4 +1,3 @@
-<<<<<<< HEAD:README.md
 == Cute Spotify ==
 
 === Build Requirements ===
@@ -13,9 +12,8 @@ Get it there: http://developer.spotify.com/en/libspotify/overview/
 =======
 You need to download libspotify 12 to be able to compile and create the .click package.
 Get it there: https://developer.spotify.com/technologies/libspotify/
->>>>>>> 375e8aec6ba759653c3a7dc6bd8ee241f0a5f8ae:README
-Extract the content of the tarball inside 'libspotify'
-at the root of the project.
+
+Extract the content of the tarball inside 'libspotify' at the root of the project.
 
 The resulting hierarchy should be:
 libspotify/
