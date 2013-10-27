@@ -40,29 +40,31 @@
 
 
 #include "qspotifysession.h"
-#include "qspotifyuser.h"
-#include "qspotifytrack.h"
-#include "qspotifytracklist.h"
-#include "qspotifyplayqueue.h"
+
+//#include <QSystemStorageInfo>
+#include <QtCore/QBuffer>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDebug>
+#include <QtCore/QEvent>
+#include <QtCore/QHash>
+#include <QtCore/QIODevice>
+#include <QtCore/QMutexLocker>
+#include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QThread>
+#include <QtCore/QWaitCondition>
+#include <QtGui/QDesktopServices>
+#include <QtGui/QImage>
+#include <QtMultimedia/QAudioOutput>
+#include <QtNetwork/QNetworkConfigurationManager>
+
 #include "qspotifyalbum.h"
 #include "qspotifyartist.h"
+#include "qspotifyplayqueue.h"
+#include "qspotifytrack.h"
+#include "qspotifytracklist.h"
+#include "qspotifyuser.h"
 #include "spotify_key.h"
-
-#include <QtCore/QHash>
-#include <QtCore/QEvent>
-#include <QtCore/QCoreApplication>
-#include <QAudioOutput>
-#include <QtCore/QIODevice>
-#include <QtCore/QBuffer>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QDebug>
-#include <QtGui/QDesktopServices>
-#include <QtNetwork/QNetworkConfigurationManager>
-//#include <QSystemStorageInfo>
-#include <QSettings>
-#include <QThread>
-#include <QWaitCondition>
-#include <QtCore/QStandardPaths>
 
 #define BUFFER_SIZE 409600
 #define AUDIOSTREAM_UPDATE_INTERVAL 20

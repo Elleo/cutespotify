@@ -40,11 +40,13 @@
 
 
 #include "qspotifyalbum.h"
-#include "qspotifyartist.h"
-#include "qspotifysession.h"
+
+#include <QtCore/QDebug>
 
 #include <libspotify/api.h>
-#include <QtCore/QDebug>
+
+#include "qspotifyartist.h"
+#include "qspotifysession.h"
 
 QSpotifyAlbum::QSpotifyAlbum(sp_album *album)
     : QSpotifyObject(true)

@@ -41,9 +41,9 @@
 
 #include "qspotifyplayqueue.h"
 
+#include "qspotifysession.h"
 #include "qspotifytrack.h"
 #include "qspotifytracklist.h"
-#include "qspotifysession.h"
 
 QSpotifyPlayQueue::QSpotifyPlayQueue()
     : QObject()

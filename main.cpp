@@ -39,13 +39,13 @@
 ****************************************************************************/
 
 
-#include <QApplication>
-#include <QSettings>
-#include <QQmlEngine>
-#include <QQmlContext>
-#include <QQuickView>
+#include <QtCore/QDebug>
+#include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
-#include <QDebug>
+#include <QtQml/QQmlContext>
+#include <QtQml/QQmlEngine>
+#include <QtQuick/QQuickView>
+#include <QtWidgets/QApplication>
 
 //#include "src/hardwarekeyshandler.h"
 #include "src/lastfmscrobbler.h"

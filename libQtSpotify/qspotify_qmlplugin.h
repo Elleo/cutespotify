@@ -42,10 +42,9 @@
 #ifndef QSPOTIFY_QMLPLUGIN_H
 #define QSPOTIFY_QMLPLUGIN_H
 
+#include <QtQml/qqml.h>
+
 #include <QtSpotify>
-#include <QtQuick/QQuickView>
-#include <QtQml/QQmlEngine>
-#include <qqml.h>
 
 void registerQmlTypes()
 {

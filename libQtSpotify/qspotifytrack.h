@@ -42,15 +42,17 @@
 #ifndef QSPOTIFYTRACK_H
 #define QSPOTIFYTRACK_H
 
-#include <libspotify/api.h>
-#include "qspotifyobject.h"
-#include <QtCore/QVector>
 #include <QtCore/QDateTime>
+#include <QtCore/QVector>
 
+#include <libspotify/api.h>
+
+#include "qspotifyobject.h"
+
+class QSpotifyAlbum;
+class QSpotifyArtist;
 class QSpotifyPlaylist;
 class QSpotifyTrackList;
-class QSpotifyArtist;
-class QSpotifyAlbum;
 
 class QSpotifyTrack : public QSpotifyObject
 {

@@ -42,8 +42,8 @@
 #ifndef QSPOTIFYTRACKLIST_H
 #define QSPOTIFYTRACKLIST_H
 
-#include <QtCore/QObject>
 #include <QtCore/QList>
+#include <QtCore/QObject>
 
 class QSpotifyTrack;
 

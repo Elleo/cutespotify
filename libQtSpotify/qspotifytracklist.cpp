@@ -41,8 +41,8 @@
 
 #include "qspotifytracklist.h"
 
-#include "qspotifytrack.h"
 #include "qspotifysession.h"
+#include "qspotifytrack.h"
 
 QSpotifyTrackList::QSpotifyTrackList(bool reverse)
     : QObject()

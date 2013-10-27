@@ -41,9 +41,11 @@
 
 #include "qspotifyimageprovider.h"
 
-#include "qspotifysession.h"
+#include <QtConcurrent/QtConcurrentRun>
+
 #include <libspotify/api.h>
-#include <QtConcurrentRun>
+
+#include "qspotifysession.h"
 
 QSpotifyImageProvider::QSpotifyImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Image)

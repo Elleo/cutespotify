@@ -41,19 +41,19 @@
 
 #include "qspotifysearch.h"
 
-#include "qspotifyplaylist.h"
-#include "qspotifytracklist.h"
-#include "qspotifysession.h"
-#include "qspotifytrack.h"
-#include "qspotifyuser.h"
-#include "qspotifyalbum.h"
-#include "qspotifyartist.h"
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
+#include <QtCore/QMutexLocker>
 
 #include <libspotify/api.h>
 
-#include <QMutex>
-#include <QEvent>
-#include <QCoreApplication>
+#include "qspotifyalbum.h"
+#include "qspotifyartist.h"
+#include "qspotifyplaylist.h"
+#include "qspotifysession.h"
+#include "qspotifytrack.h"
+#include "qspotifytracklist.h"
+#include "qspotifyuser.h"
 
 static QHash<sp_search *, QSpotifySearch *> g_searchObjects;
 static QMutex g_mutex;

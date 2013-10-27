@@ -42,6 +42,7 @@
 #include "qspotifyartist.h"
 
 #include <QtCore/QDebug>
+
 #include <libspotify/api.h>
 
 QSpotifyArtist::QSpotifyArtist(sp_artist *artist)
