@@ -15,7 +15,7 @@ libspotify/
 ----
 
 You also need your own libspotify API key to be able to compile and run the program
-(see https://developer.spotify.com/en/libspotify/application-key/)
+(see https://developer.spotify.com/technologies/libspotify/keys/)
 Create a file spotify_key.h inside libQtSpotify and copy the provided key inside it
 using the following format:
 
