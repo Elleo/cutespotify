@@ -38,7 +38,8 @@ void
 ScrobblerHttp::onRequestFinished()
 {
     if (rp->error() == QNetworkReply::OperationCanceledError)
-        ; //we aborted it
+        return; //we aborted it
+
     if (rp->error())
     {
         qWarning() << "ERROR!" << rp->error();
