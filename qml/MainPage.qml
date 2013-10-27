@@ -46,7 +46,7 @@ import "UIConstants.js" as UI
 
 Page {
     id: mainPage
-//    tools: player.state == "open" ? null : mainTools
+    anchors.fill: parent;
 
     property alias tabs: tabGroup
     property alias searchTabAlias: searchTab
