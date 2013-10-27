@@ -4,59 +4,32 @@ QT += network xml
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    liblastfm/ScrobblerSubmission.h \
-    liblastfm/ScrobblerHttp.h \
-    liblastfm/ScrobblePoint.h \
-    liblastfm/ScrobbleCache.h \
-    liblastfm/Scrobble.h \
-    liblastfm/NowPlaying.h \
-    liblastfm/Audioscrobbler.h \
-    liblastfm/global.h \
-    liblastfm/Track.h \
-    liblastfm/Album.h \
-    liblastfm/Artist.h \
-    liblastfm/ws.h \
-    liblastfm/misc.h \
-    liblastfm/NetworkAccessManager.h \
-    liblastfm/lastfm_key.h \
-    liblastfm/XmlQuery.h
+    $$PWD/ScrobblerSubmission.h \
+    $$PWD/ScrobblerHttp.h \
+    $$PWD/ScrobblePoint.h \
+    $$PWD/ScrobbleCache.h \
+    $$PWD/Scrobble.h \
+    $$PWD/NowPlaying.h \
+    $$PWD/Audioscrobbler.h \
+    $$PWD/global.h \
+    $$PWD/Track.h \
+    $$PWD/Album.h \
+    $$PWD/Artist.h \
+    $$PWD/ws.h \
+    $$PWD/misc.h \
+    $$PWD/NetworkAccessManager.h \
+    $$PWD/lastfm_key.h \
+    $$PWD/XmlQuery.h
 
 SOURCES += \
-    liblastfm/ScrobblerSubmission.cpp \
-    liblastfm/ScrobblerHttp.cpp \
-    liblastfm/ScrobbleCache.cpp \
-    liblastfm/Scrobble.cpp \
-    liblastfm/NowPlaying.cpp \
-    liblastfm/Audioscrobbler.cpp \
-    liblastfm/Track.cpp \
-    liblastfm/ws.cpp \
-    liblastfm/misc.cpp \
-    liblastfm/NetworkAccessManager.cpp \
-    liblastfm/XmlQuery.cpp
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    $$PWD/ScrobblerSubmission.cpp \
+    $$PWD/ScrobblerHttp.cpp \
+    $$PWD/ScrobbleCache.cpp \
+    $$PWD/Scrobble.cpp \
+    $$PWD/NowPlaying.cpp \
+    $$PWD/Audioscrobbler.cpp \
+    $$PWD/Track.cpp \
+    $$PWD/ws.cpp \
+    $$PWD/misc.cpp \
+    $$PWD/NetworkAccessManager.cpp \
+    $$PWD/XmlQuery.cpp

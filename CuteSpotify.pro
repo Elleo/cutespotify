@@ -1,32 +1,8 @@
-# Add more folders to ship with the application, here
 
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
+TEMPLATE = subdirs
 
-QT+= qml quick widgets multimedia concurrent systeminfo
-symbian:TARGET.UID3 = 0xE119349A
-
-# Smart Installer package's UID
-# This UID is from the protected range and therefore the package will
-# fail to install if self-signed. By default qmake uses the unprotected
-# range value if unprotected UID is defined for the application and
-# 0x2002CCCF value if protected UID is given to the application
-#symbian:DEPLOYMENT.installer_header = 0x2002CCCF
-
-# Allow network access on Symbian
-symbian:TARGET.CAPABILITY += NetworkServices
-
-# If your application uses the Qt Mobility libraries, uncomment the following
-# lines and add the respective components to the MOBILITY variable.
-# CONFIG += mobility
-# MOBILITY +=
-
-CONFIG += qmsystem2
-
-# The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp \
-    src/lastfmscrobbler.cpp
-#    src/hardwarekeyshandler.cpp \
+SUBDIRS = \
+    src
 
 OTHER_FILES += \
     qml/MainPage.qml \
@@ -86,20 +62,3 @@ OTHER_FILES += \
     qml/Scrollbar.qml \
     qml/LastfmLoginSheet.qml \
     qml/FolderPage.qml
-
-RESOURCES += \
-    res.qrc
-
-# Please do not modify the following two lines. Required for deployment.
-include(deployment.pri)
-qtcAddDeployment()
-
-include(libQtSpotify/libQtSpotify.pri)
-include(liblastfm/liblastfm.pri)
-
-QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
-QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath=/opt/click.ubuntu.com/com.mikeasoft.cutespotify/current/lib/ -Llibspotify/lib/
-
-HEADERS += \
-    src/lastfmscrobbler.h
-#    src/hardwarekeyshandler.h

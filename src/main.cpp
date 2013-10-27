@@ -48,7 +48,7 @@
 #include <QtWidgets/QApplication>
 
 //#include "src/hardwarekeyshandler.h"
-#include "src/lastfmscrobbler.h"
+#include "lastfmscrobbler.h"
 #include <QtSpotify>
 #include <qspotify_qmlplugin.h>
 

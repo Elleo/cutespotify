@@ -1,5 +1,6 @@
 #!/bin/sh
 make
-cp CuteSpotify click/
+cp src/CuteSpotify click/
+mkdir click/lib
 cp libspotify/lib/libspotify* click/lib/
 click build click
