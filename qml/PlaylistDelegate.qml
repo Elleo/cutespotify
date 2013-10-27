@@ -242,12 +242,8 @@ Item {
                 Component {
                     id: downloadBarComponent
                     ProgressBar {
-/*                        platformStyle: ProgressBarStyle {
-                            knownTexture: "qrc:/qml/images/meegotouch-progressindicator-bar-known-texture.png"
-                            barMask: "image://theme/meegotouch-progressindicator-bar-mask"
-                        }
-*/
                         visible: listItem.offlineStatus == SpotifyPlaylist.Downloading
+                        height: units.gu(1.5)
                         minimumValue: 0
                         maximumValue: 100
                         value: listItem.downloadProgress

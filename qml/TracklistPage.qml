@@ -127,10 +127,32 @@ Page {
         cacheBuffer: 3000
         highlightMoveDuration: 1
         model: playlist.tracks
-        header: ViewHeader {
-            text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
+        header: Item {
+            width: parent.width
+            height: units.gu(10)
+            Label {
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: UI.FONT_FAMILY_BOLD
+                font.weight: Font.Bold
+                font.pixelSize: UI.LIST_TILE_SIZE
+                color: UI.LIST_TITLE_COLOR
+                text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
                                                              : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
                                                                                                          : "Inbox"))
+            }
+            Row {
+                spacing: units.gu(2)
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                Label {
+                    text: "Available offline"
+                }
+                Switch {
+                    onCheckedChanged: playlist.availableOffline = !playlist.availableOffline
+                    checked: playlist.availableOffline
+                }
+            }
         }
 
         onMovementStarted: {
