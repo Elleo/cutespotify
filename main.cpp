@@ -45,11 +45,19 @@
 #include <QQmlContext>
 #include <QQuickView>
 #include <QtCore/QStandardPaths>
+#include <QDebug>
 
 //#include "src/hardwarekeyshandler.h"
 #include "src/lastfmscrobbler.h"
 #include <QtSpotify>
 #include <qspotify_qmlplugin.h>
+
+void silentDebug(QtMsgType type, const QMessageLogContext& context, const QString &msg)
+{
+    Q_UNUSED(type);
+    Q_UNUSED(context);
+    Q_UNUSED(msg);
+}
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -62,6 +70,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QApplication *app = new QApplication(argc, argv);
     QQuickView *view = new QQuickView();
+
+    if (!app->arguments().contains(QLatin1String("--debug"))) {
+        qInstallMessageHandler(silentDebug);
+    }
 
     registerQmlTypes();
     view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
