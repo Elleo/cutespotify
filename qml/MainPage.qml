@@ -140,10 +140,6 @@ Page {
 
     Tabs {
         id: tabGroup
-        //enabled: !currentTab.busy
-        y: player.hidden ? 0 : UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
-        height: parent.height - y
-        Behavior on y { NumberAnimation { easing.type: Easing.OutQuart; duration: 500 } }
 
         Tab { 
             id: playlistsTab
@@ -166,84 +162,8 @@ Page {
             page: SettingsPage { }
         }
 
-        /*Connections {
-            target: spotifySession
-            onUserChanged: {
-                if (spotifySession.isLoggedIn)
-                    tabGroup.currentTab = playlistsTab
-            }
-        }*/
     }
 
-
-/*
-    property Item mainTools : ToolBarLayout {
-        ToolIcon {
-            iconId: enabled ? "toolbar-back" : "toolbar-back-dimmed"
-            onClicked: { tabGroup.currentTab.pop(); }
-            enabled: tabGroup.currentTab.depth > 1 && !tabGroup.currentTab.busy
-        }
-
-        ButtonRow {
-            TabButton {
-                tab: playlistsTab
-                iconSource: "image://theme/icon-m-toolbar-list"
-
-                property bool isCurrentTab: false
-
-                onPressedChanged: {
-                    if (pressed)
-                        isCurrentTab = (tabGroup.currentTab == playlistsTab);
-                }
-
-                onClicked: {
-                    if (isCurrentTab && playlistsTab.depth > 1)
-                        playlistsTab.pop(null);
-                }
-            }
-            TabButton {
-                tab: searchTab
-                iconSource: "image://theme/icon-m-toolbar-search"
-
-                property bool isCurrentTab: false
-
-                onPressedChanged: {
-                    if (pressed)
-                        isCurrentTab = (tabGroup.currentTab === searchTab);
-                }
-
-                onClicked: {
-                    mainPage.checkSearchPage();
-                    if (isCurrentTab && searchTab.depth > 1)
-                        searchTab.pop(null);
-                }
-            }
-            TabButton {
-                tab: toplistTab
-                iconSource: "image://theme/icon-m-toolbar-home"
-
-                property bool isCurrentTab: false
-
-                onPressedChanged: {
-                    if (pressed)
-                        isCurrentTab = (tabGroup.currentTab === toplistTab);
-                }
-
-                onClicked: {
-                    if (toplistTab.depth === 0)
-                        toplistTab.push(Qt.resolvedUrl("ToplistPage.qml"))
-                    else if (isCurrentTab && toplistTab.depth > 1)
-                        toplistTab.pop(null);
-                }
-            }
-            TabButton {
-                tab: settingsTab
-                iconSource: "image://theme/icon-m-toolbar-settings"
-                onClicked: { if (settingsTab.depth === 0) settingsTab.push(Qt.resolvedUrl("SettingsPage.qml")) }
-            }
-        }
-    }
-*/
     function checkSearchPage() {
         if (searchTab.depth === 0) searchTab.push(Qt.resolvedUrl("SearchPage.qml"))
     }
