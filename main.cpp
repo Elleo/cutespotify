@@ -57,7 +57,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setApplicationName("CuteSpotify");
     QApplication::setApplicationVersion("1.3.0");
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/phablet/.cutespotify"));
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/phablet/.local/share/com.mikeasoft.cutespotify/"));
 
     QApplication *app = new QApplication(argc, argv);
     QQuickView *view = new QQuickView();
