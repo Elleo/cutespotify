@@ -86,7 +86,7 @@ Page {
     SpotifySearch {
         id: search
     }
-
+/*
     TrackMenu {
         id: menu
         deleteVisible: false
@@ -101,7 +101,7 @@ Page {
             onTracksChanged: albumMenu.open()
         }
     }
-
+*/
     Column {
         id: header
         width: parent.width
@@ -255,7 +255,7 @@ Page {
             width: parent.width - UI.MARGIN_XLARGE * 2
             horizontalAlignment: Text.AlignHCenter
 
-            text: "<style type=text/css> a { text-decoration: underline; color:" + UI.SPOTIFY_COLOR + "} </style><a href='didyoumean'>" + search.didYouMean + "</a> ?"
+            text: "<a href='didyoumean'>" + search.didYouMean + "</a>?"
 
             onLinkActivated: searchField.text = search.didYouMean
         }
