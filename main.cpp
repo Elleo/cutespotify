@@ -73,7 +73,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QLatin1String("lastfm"), &scrobbler);
 
     view->setSource(QUrl("qrc:/qml/main.qml"));
-    view->show();
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
 
+    view->show();
     return app->exec();
 }
