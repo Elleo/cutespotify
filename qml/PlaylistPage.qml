@@ -137,10 +137,6 @@ Page {
             Component.onCompleted: updateIcon()
         }
 
-        header: ViewHeader {
-            text: "Playlists" + (spotifySession.offlineMode ? " (Offline mode)" : "")
-        }
-
         footer: Item {
             height: visible ? (UI.LIST_ITEM_HEIGHT + separator.height) : 0
             width: parent.width
