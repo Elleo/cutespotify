@@ -614,7 +614,6 @@ void QSpotifySession::cleanUp()
 
 bool QSpotifySession::event(QEvent *e)
 {
-    printf("Event\n");
     if (e->type() == QEvent::User) {
         qDebug() << "Process spotify event";
         processSpotifyEvents();

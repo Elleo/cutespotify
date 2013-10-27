@@ -45,14 +45,13 @@ import "UIConstants.js" as UI
 Rectangle {
     id: smallPlayer
     width: parent.width
-    height: UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
+    height: units.gu(8)
     color: "black"
 
     MouseArea {
         id: opener
         anchors.fill: parent
-//        onClicked: player.openRequested ? player.openRequested = false : player.openRequested = true
-        onClicked: player.showFullControls = !player.showFullControls
+        //onClicked: player.showFullControls = !player.showFullControls
     }
 
     Image {
@@ -60,25 +59,6 @@ Rectangle {
         anchors.fill: parent
         source: player.openRequested ? "images/player-quickcontrols-back-open.png" : "images/player-quickcontrols-back-closed.png"
         opacity: opener.pressed ? 0.5 : 1.0
-    }
-
-    SequentialAnimation {
-        running: !player.openRequested && !player.hidden && !player.openedOnce
-        loops: 5
-        PauseAnimation { duration: 2000 }
-        ParallelAnimation {
-            NumberAnimation { target: arrowIcon; property: "opacity"; from: 0.0; to: 1.0; duration: 500 }
-            NumberAnimation { target: quickControls; property: "opacity"; from: 1.0; to: 0.0; duration: 500 }
-        }
-        NumberAnimation { target: background; property: "opacity"; from: 1.0; to: 0.7; duration: 375 }
-        NumberAnimation { target: background; property: "opacity"; from: 0.7; to: 1.0; duration: 375 }
-        NumberAnimation { target: background; property: "opacity"; from: 1.0; to: 0.7; duration: 375 }
-        NumberAnimation { target: background; property: "opacity"; from: 0.7; to: 1.0; duration: 375 }
-        ParallelAnimation {
-            NumberAnimation { target: arrowIcon; property: "opacity"; from: 1.0; to: 0.0; duration: 500 }
-            NumberAnimation { target: quickControls; property: "opacity"; from: 0.0; to: 1.0; duration: 500 }
-        }
-        PauseAnimation { duration: 8000 }
     }
 
     Image {
@@ -100,7 +80,7 @@ Rectangle {
             anchors.left: parent.left
             id: cover
             spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
-            width: 48
+            width: 128
             height: width
         }
 
@@ -128,7 +108,17 @@ Rectangle {
                 anchors.right: parent.right
                 color: UI.COLOR_INVERTED_FOREGROUND
                 elide: Text.ElideRight
-                text: spotifySession.currentTrack ? spotifySession.currentTrack.artists + " | " + spotifySession.currentTrack.album : ""
+                text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
+            }
+            Label {
+                font.family: UI.FONT_FAMILY_LIGHT
+                font.weight: Font.Light
+                font.pixelSize: UI.FONT_LSMALL
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: UI.COLOR_INVERTED_FOREGROUND
+                elide: Text.ElideRight
+                text: spotifySession.currentTrack ? spotifySession.currentTrack.album : ""
             }
         }
 
@@ -140,7 +130,7 @@ Rectangle {
             spacing: -10
 
             Item {
-                width: 64; height: 64
+                width: 128; height: 128
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
@@ -155,7 +145,7 @@ Rectangle {
             }
 
             Item {
-                width: 64; height: 64
+                width: 128; height: 128
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
@@ -171,7 +161,7 @@ Rectangle {
             }
 
             Item {
-                width: 64; height: 64
+                width: 128; height: 128
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent

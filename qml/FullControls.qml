@@ -303,7 +303,7 @@ Column {
         Item {
             id: controls
             width: parent.width
-            height: 90
+            height: 128
 
             Image {
                 anchors.left: parent.left
@@ -482,6 +482,11 @@ Column {
                     }
                 }
             }
+        }
+        Rectangle {
+            height: units.gu(10)
+            anchors.bottom: parent.bottom
+            width: parent.width
         }
     }
 }

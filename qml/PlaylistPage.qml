@@ -63,14 +63,14 @@ Page {
 
 /*    PlaylistMenu {
         id: menu
-    }*/
+    }
 
     PlaylistNameSheet {
         id: newPlaylistSheet
         title: "Playlist name"
         onAccepted: { spotifySession.user.createPlaylist(newPlaylistSheet.playlistName); }
     }
-
+*/
     ListView {
         id: playlists
         anchors.fill: parent
