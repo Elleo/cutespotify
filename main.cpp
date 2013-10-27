@@ -44,6 +44,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickView>
+#include <QtCore/QStandardPaths>
 
 //#include "src/hardwarekeyshandler.h"
 #include "src/lastfmscrobbler.h"
@@ -57,7 +58,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setApplicationName("CuteSpotify");
     QApplication::setApplicationVersion("1.3.0");
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QLatin1String("/home/phablet/.local/share/com.mikeasoft.cutespotify/"));
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 
     QApplication *app = new QApplication(argc, argv);
     QQuickView *view = new QQuickView();
