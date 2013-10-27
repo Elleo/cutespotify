@@ -1,5 +1,7 @@
 = Cute Spotify =
+
 == Build Requirements ==
+
 === Prerequisites ===
 You need some libraries to build CuteSpotify, also you need QtCreator if you want to open the .pro file.
 
@@ -27,13 +29,13 @@ Create a file spotify_key.h inside libQtSpotify and copy the provided key inside
 using the following format:
 
 ```C
-    #ifndef SPOTIFY_KEY_H
-    #define SPOTIFY_KEY_H
+#ifndef SPOTIFY_KEY_H
+#define SPOTIFY_KEY_H
 
-    const uint8_t g_appkey[] = { 0x00, 0x00, ..., ... };
-    const size_t g_appkey_size = sizeof(g_appkey);
+const uint8_t g_appkey[] = { 0x00, 0x00, ..., ... };
+const size_t g_appkey_size = sizeof(g_appkey);
 
-    #endif // SPOTIFY_KEY_H
+#endif // SPOTIFY_KEY_H
 ```
 
 === LastFM ===
@@ -43,11 +45,11 @@ Create a file lastfm_key.h inside liblastfm and copy the provided API key and sh
 secret inside it using the following format:
 
 ```C
-     #ifndef LASTFM_KEY_H
-     #define LASTFM_KEY_H
+#ifndef LASTFM_KEY_H
+#define LASTFM_KEY_H
 
-     const char *g_lastfmAPIKey = "<api_key>";
-     const char *g_lastfmSecret = "<shared_secret>";
+const char *g_lastfmAPIKey = "<api_key>";
+const char *g_lastfmSecret = "<shared_secret>";
 
-     #endif // LASTFM_KEY_H
+#endif // LASTFM_KEY_H
 ```
