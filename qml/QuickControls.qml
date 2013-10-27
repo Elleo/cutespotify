@@ -80,7 +80,7 @@ Rectangle {
             anchors.left: parent.left
             id: cover
             spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
-            width: 128
+            width: units.gu(7)
             height: width
         }
 
@@ -130,7 +130,7 @@ Rectangle {
             spacing: -10
 
             Item {
-                width: 128; height: 128
+                width: units.gu(7); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
@@ -145,7 +145,7 @@ Rectangle {
             }
 
             Item {
-                width: 128; height: 128
+                width: units.gu(7); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
@@ -161,7 +161,7 @@ Rectangle {
             }
 
             Item {
-                width: 128; height: 128
+                width: units.gu(7); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
