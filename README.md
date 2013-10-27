@@ -1,3 +1,4 @@
+<<<<<<< HEAD:README.md
 == Cute Spotify ==
 
 === Build Requirements ===
@@ -9,6 +10,10 @@ sudo apt-get install libpulse-dev qtcreator
 ==== libSpotify ====
 You need to download libspotify 12 to be able to compile and create the .deb package.
 Get it there: http://developer.spotify.com/en/libspotify/overview/
+=======
+You need to download libspotify 12 to be able to compile and create the .click package.
+Get it there: https://developer.spotify.com/technologies/libspotify/
+>>>>>>> 375e8aec6ba759653c3a7dc6bd8ee241f0a5f8ae:README
 Extract the content of the tarball inside 'libspotify'
 at the root of the project.
 
@@ -23,7 +28,7 @@ libspotify/
 
 ==== Spotify API Key ====
 You also need your own libspotify API key to be able to compile and run the program
-(see https://developer.spotify.com/en/libspotify/application-key/)
+(see https://developer.spotify.com/technologies/libspotify/keys/)
 Create a file spotify_key.h inside libQtSpotify and copy the provided key inside it
 using the following format:
 
