@@ -61,7 +61,7 @@ Page {
 
     Image {
         id: logo
-        source: "images/cutespotify-logo.png"
+        source: "qrc:/qml/images/cutespotify-logo.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: username.activeFocus || password.activeFocus ? -25 : 100

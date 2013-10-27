@@ -46,67 +46,15 @@ import "UIConstants.js" as UI
 Dialog {
     id: genericDialog
 
-    property string titleText: "About uSpot"
-
     //private
     property bool __drawFooterLine: false
 
-    Item {
-        id: header
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-
-        Item {
-            id: labelField
-
-            anchors.fill:  parent
-
-            Item {
-                id: labelWrapper
-                anchors.left: labelField.left
-                anchors.right: labelField.left
-
-                anchors.bottom:  parent.bottom
-
-                //anchors.verticalCenter: labelField.verticalCenter
-
-                height: titleLabel.height
-
-                Label {
-                    id: titleLabel
-                    font.family: UI.FONT_FAMILY
-                    font.pixelSize: UI.FONT_XLARGE
-                    color: UI.COLOR_INVERTED_FOREGROUND
-                    text: genericDialog.titleText
-                }
-
-            }
-        }
-
-        Rectangle {
-            id: headerLine
-
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            anchors.bottom:  header.bottom
-
-            height: 1
-
-            color: "#4D4D4D"
-        }
-
-    }
-
     Column {
         width: parent.width
+        anchors.top: parent.top;
 
-        Item {
-            width: parent.width
-            height: 38
+        Image {
+            source: "qrc:/qml/images/cutespotify-logo.png"
         }
 
         Label {
@@ -162,23 +110,33 @@ Dialog {
                 text: "This product uses SPOTIFY CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group."
             }
         }
-    }
 
-    Item {
-        id: buttonColFiller
-        width: parent.width
-        height: childrenRect.height
+        Item {
+            width: parent.width
+            height: units.gu(5)
+        }
 
-        anchors.top: parent.top
+        Item {
+            id: buttonColFiller
+            width: parent.width
+            height: childrenRect.height
 
-        Button {
-            id: acceptButton
-            text: "Close"
-            onClicked: accept()
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 38
+            Row { 
+                width: parent.width
+                spacing: units.gu(10)
+
+                Button {
+                    id: donateButton
+                    text: "Donate!"
+                    onClicked: Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=8CK2DHNJDGBJJ&lc=GB&item_name=Michael%20Sheldon&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted")
+		}
+
+                Button {
+                    id: acceptButton
+                    text: "Close"
+                    onClicked: PopupUtils.close(genericDialog);
+                }
+            }
         }
     }
-
 }
