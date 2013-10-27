@@ -3,7 +3,7 @@
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
-QT+= qml quick widgets multimedia concurrent
+QT+= qml quick widgets multimedia concurrent systeminfo
 symbian:TARGET.UID3 = 0xE119349A
 
 # Smart Installer package's UID

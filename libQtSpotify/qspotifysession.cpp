@@ -41,7 +41,6 @@
 
 #include "qspotifysession.h"
 
-//#include <QSystemStorageInfo>
 #include <QtCore/QBuffer>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -57,6 +56,7 @@
 #include <QtGui/QImage>
 #include <QtMultimedia/QAudioOutput>
 #include <QtNetwork/QNetworkConfigurationManager>
+#include <QtSystemInfo/QStorageInfo>
 
 #include "qspotifyalbum.h"
 #include "qspotifyartist.h"
@@ -541,9 +541,8 @@ void QSpotifySession::init()
         fprintf(stderr, "failed to create session: %s\n",
                 sp_error_message(error));
     } else {
-//        QtMobility::QSystemStorageInfo storageInfo;
-//        qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
-        qlonglong totalSpace = 1000000000; // TODO: Fix
+        QStorageInfo storageInfo;
+        qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
         sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
 
         QSettings settings;
