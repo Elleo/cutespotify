@@ -42,13 +42,14 @@
 #ifndef QSPOTIFYPLAYLISTCONTAINER_H
 #define QSPOTIFYPLAYLISTCONTAINER_H
 
-#include "qspotifyobject.h"
-#include <QMetaType>
+#include <QtCore/QMetaType>
 
+#include "qspotifyobject.h"
+
+class QSpotifyPlaylist;
+struct sp_playlist;
 struct sp_playlistcontainer;
 struct sp_playlistcontainer_callbacks;
-struct sp_playlist;
-class QSpotifyPlaylist;
 
 class QSpotifyPlaylistContainer : public QSpotifyObject
 {

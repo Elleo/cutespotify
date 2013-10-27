@@ -42,14 +42,14 @@
 #ifndef QSPOTIFYARTISTBROWSE_H
 #define QSPOTIFYARTISTBROWSE_H
 
-#include <QtCore/QObject>
 #include <QtCore/QStringList>
+
 #include "qspotifysearch.h"
 
-struct sp_artistbrowse;
 class QSpotifyAlbum;
 class QSpotifyArtist;
 class QSpotifyTrackList;
+struct sp_artistbrowse;
 
 class QSpotifyArtistBrowse : public QObject
 {

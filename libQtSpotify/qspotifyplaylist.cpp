@@ -40,15 +40,16 @@
 
 
 #include "qspotifyplaylist.h"
-#include "qspotifytrack.h"
-#include "qspotifysession.h"
-#include "qspotifyplayqueue.h"
-#include "qspotifyuser.h"
-#include "qspotifyalbumbrowse.h"
 
 #include <QtCore/QCoreApplication>
-#include <QtCore/QHash>
 #include <QtCore/QDebug>
+#include <QtCore/QHash>
+
+#include "qspotifyalbumbrowse.h"
+#include "qspotifyplayqueue.h"
+#include "qspotifysession.h"
+#include "qspotifytrack.h"
+#include "qspotifyuser.h"
 
 static QHash<sp_playlist*, QSpotifyPlaylist*> g_playlistObjects;
 

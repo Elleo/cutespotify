@@ -40,6 +40,8 @@
 
 #include "lastfmscrobbler.h"
 
+#include <QtCore/QSettings>
+
 #include <lastfm_key.h>
 #include <ws.h>
 #include <misc.h>

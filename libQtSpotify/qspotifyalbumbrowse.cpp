@@ -41,19 +41,20 @@
 
 #include "qspotifyalbumbrowse.h"
 
-#include "qspotifytracklist.h"
-#include "qspotifyalbum.h"
-#include "qspotifysession.h"
-#include "qspotifyuser.h"
-#include "qspotifyplaylist.h"
-#include "qspotifytrack.h"
-#include "qspotifyplayqueue.h"
-
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
 #include <QtCore/QHash>
+#include <QtCore/QMutex>
+
 #include <libspotify/api.h>
-#include <QEvent>
-#include <QMutex>
-#include <QCoreApplication>
+
+#include "qspotifyalbum.h"
+#include "qspotifyplaylist.h"
+#include "qspotifyplayqueue.h"
+#include "qspotifysession.h"
+#include "qspotifytrack.h"
+#include "qspotifytracklist.h"
+#include "qspotifyuser.h"
 
 static QHash<sp_albumbrowse*, QSpotifyAlbumBrowse*> g_albumBrowseObjects;
 static QMutex g_mutex;

@@ -41,10 +41,8 @@
 #ifndef LASTFMSCROBBLER_H
 #define LASTFMSCROBBLER_H
 
-#include <QObject>
-#include <QSettings>
+#include <QtCore/QObject>
 #include <Audioscrobbler.h>
-#include <Track.h>
 
 class LastFmScrobbler : public QObject
 {

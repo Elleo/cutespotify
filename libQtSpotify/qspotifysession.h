@@ -42,19 +42,17 @@
 #ifndef QSPOTIFYSESSION_H
 #define QSPOTIFYSESSION_H
 
-#include <libspotify/api.h>
-//#include <policy/resource-set.h>
-
 #include <QtCore/QObject>
-#include <QtCore/QPair>
-#include <QtGui/QImage>
 
-class QSpotifyUser;
-class QSpotifyTrack;
-class QSpotifyAudioThread;
+#include <libspotify/api.h>
+
 class QAudioOutput;
-class QSpotifyPlayQueue;
+class QImage;
 class QNetworkConfigurationManager;
+class QSpotifyAudioThread;
+class QSpotifyPlayQueue;
+class QSpotifyTrack;
+class QSpotifyUser;
 
 class QSpotifySession : public QObject
 {

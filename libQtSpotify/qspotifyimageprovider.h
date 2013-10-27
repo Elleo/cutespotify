@@ -42,7 +42,7 @@
 #ifndef QSPOTIFYIMAGEPROVIDER_H
 #define QSPOTIFYIMAGEPROVIDER_H
 
-#include <QQuickImageProvider>
+#include <QtQuick/QQuickImageProvider>
 
 class QSpotifyImageProvider : public QQuickImageProvider
 {

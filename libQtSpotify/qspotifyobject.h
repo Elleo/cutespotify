@@ -42,7 +42,7 @@
 #ifndef QSPOTIFYOBJECT_H
 #define QSPOTIFYOBJECT_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QSpotifySession;
 

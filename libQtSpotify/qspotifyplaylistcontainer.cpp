@@ -40,14 +40,16 @@
 
 
 #include "qspotifyplaylistcontainer.h"
-#include "qspotifyplaylist.h"
-#include "qspotifysession.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 #include <QtCore/QHash>
 #include <QtCore/QStack>
+
 #include <libspotify/api.h>
+
+#include "qspotifyplaylist.h"
+#include "qspotifysession.h"
 
 static QHash<sp_playlistcontainer*, QSpotifyPlaylistContainer*> g_containerObjects;
 

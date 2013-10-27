@@ -42,10 +42,10 @@
 #ifndef QSPOTIFYSEARCH_H
 #define QSPOTIFYSEARCH_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
-struct sp_search;
 class QSpotifyTrackList;
+struct sp_search;
 
 class QSpotifySearch : public QObject
 {

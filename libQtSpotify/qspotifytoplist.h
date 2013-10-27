@@ -42,11 +42,11 @@
 #ifndef QSPOTIFYTOPLIST_H
 #define QSPOTIFYTOPLIST_H
 
-#include <QObject>
-#include <QDateTime>
+#include <QtCore/QDateTime>
+#include <QtCore/QObject>
 
-struct sp_toplistbrowse;
 class QSpotifyTrackList;
+struct sp_toplistbrowse;
 
 class QSpotifyToplist : public QObject
 {

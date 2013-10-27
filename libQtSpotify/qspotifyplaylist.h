@@ -44,18 +44,17 @@
 
 #include <QtCore/QSet>
 #include <QtCore/QVector>
-#include <QtCore/QMetaType>
+
+#include <libspotify/api.h>
 
 #include "qspotifyobject.h"
 #include "qspotifytracklist.h"
 
-#include <libspotify/api.h>
-
+class QSpotifyAlbumBrowse;
+class QSpotifyTrack;
 struct sp_playlist;
 struct sp_playlist_callbacks;
 struct sp_track;
-class QSpotifyTrack;
-class QSpotifyAlbumBrowse;
 
 class QSpotifyPlaylist : public QSpotifyObject
 {

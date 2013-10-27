@@ -44,9 +44,9 @@
 
 #include "qspotifyobject.h"
 
+class QSpotifyArtist;
 struct sp_album;
 struct sp_artist;
-class QSpotifyArtist;
 
 class QSpotifyAlbum : public QSpotifyObject
 {

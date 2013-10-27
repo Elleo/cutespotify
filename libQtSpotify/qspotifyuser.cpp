@@ -40,14 +40,15 @@
 
 
 #include "qspotifyuser.h"
-#include "qspotifyplaylistcontainer.h"
-#include "qspotifysession.h"
-#include "qspotifyplaylist.h"
-#include "qspotifytrack.h"
-#include "qspotifyalbumbrowse.h"
-#include "qspotifyalbum.h"
 
 #include <libspotify/api.h>
+
+#include "qspotifyalbumbrowse.h"
+#include "qspotifyalbum.h"
+#include "qspotifyplaylistcontainer.h"
+#include "qspotifyplaylist.h"
+#include "qspotifysession.h"
+#include "qspotifytrack.h"
 
 QSpotifyUser::QSpotifyUser(sp_user *user)
     : QSpotifyObject(true)

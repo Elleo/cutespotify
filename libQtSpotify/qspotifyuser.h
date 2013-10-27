@@ -44,11 +44,11 @@
 
 #include "qspotifyobject.h"
 
-struct sp_user;
-class QSpotifyPlaylistContainer;
-class QSpotifyPlaylist;
-class QSpotifyTrack;
 class QSpotifyAlbumBrowse;
+class QSpotifyPlaylist;
+class QSpotifyPlaylistContainer;
+class QSpotifyTrack;
+struct sp_user;
 
 class QSpotifyUser : public QSpotifyObject
 {

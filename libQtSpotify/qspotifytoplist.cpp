@@ -41,19 +41,19 @@
 
 #include "qspotifytoplist.h"
 
-#include "qspotifyplaylist.h"
-#include "qspotifytracklist.h"
-#include "qspotifysession.h"
-#include "qspotifytrack.h"
-#include "qspotifyuser.h"
-#include "qspotifyalbum.h"
-#include "qspotifyartist.h"
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
+#include <QtCore/QMutex>
 
 #include <libspotify/api.h>
 
-#include <QMutex>
-#include <QEvent>
-#include <QCoreApplication>
+#include "qspotifyalbum.h"
+#include "qspotifyartist.h"
+#include "qspotifyplaylist.h"
+#include "qspotifysession.h"
+#include "qspotifytrack.h"
+#include "qspotifytracklist.h"
+#include "qspotifyuser.h"
 
 static QHash<sp_toplistbrowse *, QSpotifyToplist *> g_toplistObjects;
 static QMutex g_mutex;

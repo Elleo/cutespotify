@@ -45,8 +45,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QQueue>
 
-class QSpotifyTrackList;
 class QSpotifyTrack;
+class QSpotifyTrackList;
 
 class QSpotifyPlayQueue : public QObject
 {

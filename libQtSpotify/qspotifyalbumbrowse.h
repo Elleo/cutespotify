@@ -42,12 +42,11 @@
 #ifndef QSPOTIFYALBUMBROWSE_H
 #define QSPOTIFYALBUMBROWSE_H
 
-#include <QtCore/QObject>
-#include <QStringList>
+#include <QtCore/QStringList>
 
-struct sp_albumbrowse;
 class QSpotifyAlbum;
 class QSpotifyTrackList;
+struct sp_albumbrowse;
 
 class QSpotifyAlbumBrowse : public QObject
 {

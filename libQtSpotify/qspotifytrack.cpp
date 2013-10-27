@@ -40,16 +40,16 @@
 
 
 #include "qspotifytrack.h"
-#include "qspotifysession.h"
-#include "qspotifyuser.h"
-#include "qspotifyplaylist.h"
-#include "qspotifytracklist.h"
-#include "qspotifyartist.h"
-#include "qspotifyalbum.h"
-#include "qspotifyplayqueue.h"
-#include <libspotify/api.h>
 
-#include <QDebug>
+#include <QtCore/QDebug>
+
+#include "qspotifyalbum.h"
+#include "qspotifyartist.h"
+#include "qspotifyplaylist.h"
+#include "qspotifyplayqueue.h"
+#include "qspotifysession.h"
+#include "qspotifytracklist.h"
+#include "qspotifyuser.h"
 
 QSpotifyTrack::QSpotifyTrack(sp_track *track, QSpotifyPlaylist *playlist)
     : QSpotifyObject(true)
