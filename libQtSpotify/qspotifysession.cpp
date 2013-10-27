@@ -62,6 +62,7 @@
 #include <QSettings>
 #include <QThread>
 #include <QWaitCondition>
+#include <QtCore/QStandardPaths>
 
 #define BUFFER_SIZE 409600
 #define AUDIOSTREAM_UPDATE_INTERVAL 20
@@ -527,8 +528,8 @@ void QSpotifySession::init()
 
     memset(&m_sp_config, 0, sizeof(m_sp_config));
     m_sp_config.api_version = SPOTIFY_API_VERSION;
-    m_sp_config.cache_location = "/home/phablet/.local/share/com.mikeasoft.cutespotify/";
-    m_sp_config.settings_location = "/home/phablet/.local/share/com.mikeasoft.cutespotify/";
+    m_sp_config.cache_location = QStandardPaths::writableLocation(QStandardPaths::CacheLocation).toLatin1();
+    m_sp_config.settings_location = QStandardPaths::writableLocation(QStandardPaths::DataLocation).toLatin1();
     m_sp_config.application_key = g_appkey;
     m_sp_config.application_key_size = g_appkey_size;
     m_sp_config.user_agent = "CuteSpotify";
