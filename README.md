@@ -5,6 +5,8 @@ You need some libraries to build CuteSpotify, also you need QtCreator if you wan
 
 sudo apt-get install libpulse-dev qtcreator
 
+Also, you might need some of the Qt development package, e.g. qtsystems5-src.
+
 ### libSpotify
 You need to download libspotify 12 to be able to compile and create the .click package.
 Get it there: https://developer.spotify.com/technologies/libspotify/
