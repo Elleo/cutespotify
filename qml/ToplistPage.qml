@@ -39,20 +39,16 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 import "Utilities.js" as Utilities
 
 Page {
-    orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
-    pageStack: parent
     enabled: !spotifySession.offlineMode
-
-    onStatusChanged: if (status == PageStatus.Active && !spotifySession.offlineMode) toplist.updateResults()
 
     Connections {
         target: spotifySession
@@ -73,7 +69,7 @@ Page {
         visible: spotifySession.offlineMode
         anchors.rightMargin: -UI.MARGIN_XLARGE
         anchors.leftMargin: -UI.MARGIN_XLARGE
-        color: theme.inverted ? "#DD000000" : "#DDFFFFFF"
+        color: "#DDFFFFFF"
         z: 500
 
         Label {
@@ -93,7 +89,7 @@ Page {
         id: toplist
     }
 
-    TrackMenu {
+/*    TrackMenu {
         id: menu
         deleteVisible: false
     }
@@ -107,7 +103,7 @@ Page {
             onTracksChanged: albumMenu.open()
         }
     }
-
+*/
     Column {
         id: whatsNew
         width: parent.width
@@ -147,7 +143,7 @@ Page {
                     anchors.bottom: parent.bottom
                     width: parent.width
                     height: newAlbumName.height + 2
-                    color: theme.inverted ? "#BA202020" : "#BAD7D7D7"
+                    color: "#BAD7D7D7"
 
                     Column {
                         id: newAlbumName
@@ -177,7 +173,7 @@ Page {
                 MouseArea {
                     id: newAlbumMouse
                     anchors.fill: parent
-                    onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
                     onPressAndHold: {
                         menuAlbumBrowse.album = modelData;
                         if (menuAlbumBrowse.totalDuration > 0)

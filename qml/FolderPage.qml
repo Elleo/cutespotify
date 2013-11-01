@@ -211,5 +211,5 @@ Page {
 //        }
     }
 
-    Scrollbar { listView: playlists }
+    Scrollbar { flickableItem: playlists }
 }

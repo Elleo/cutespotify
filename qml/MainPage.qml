@@ -154,7 +154,7 @@ Page {
         Tab {
             id: toplistTab
             title: "Top"
-            page: Page { }
+            page: ToplistPage { }
         }
         Tab {
             title: "Settings"
