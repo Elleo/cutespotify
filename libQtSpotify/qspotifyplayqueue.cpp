@@ -47,8 +47,8 @@
 
 QSpotifyPlayQueue::QSpotifyPlayQueue()
     : QObject()
-    , m_implicitTracks(0)
-    , m_currentExplicitTrack(0)
+    , m_implicitTracks(nullptr)
+    , m_currentExplicitTrack(nullptr)
     , m_currentTrackIndex(0)
     , m_shuffle(false)
     , m_repeat(false)
@@ -70,6 +70,7 @@ void QSpotifyPlayQueue::playTrack(QSpotifyTrack *track)
     if (m_implicitTracks != track->m_trackList) {
         if (m_implicitTracks)
             m_implicitTracks->release();
+
         m_implicitTracks = track->m_trackList;
         m_implicitTracks->addRef();
     }
@@ -104,7 +105,7 @@ void QSpotifyPlayQueue::selectTrack(QSpotifyTrack *track)
 
     if (m_currentExplicitTrack) {
         m_currentExplicitTrack->release();
-        m_currentExplicitTrack = 0;
+        m_currentExplicitTrack = nullptr;
     }
 
     int explicitPos = m_explicitTracks.indexOf(track);
@@ -135,7 +136,7 @@ void QSpotifyPlayQueue::playNext(bool repeat)
     } else {
         if (m_currentExplicitTrack) {
             m_currentExplicitTrack->release();
-            m_currentExplicitTrack = 0;
+            m_currentExplicitTrack = nullptr;
         }
 
         if (m_explicitTracks.isEmpty()) {
@@ -168,7 +169,7 @@ void QSpotifyPlayQueue::playPrevious()
 {
     if (m_currentExplicitTrack) {
         m_currentExplicitTrack->release();
-        m_currentExplicitTrack = 0;
+        m_currentExplicitTrack = nullptr;
     }
 
     if (m_implicitTracks) {
@@ -178,7 +179,7 @@ void QSpotifyPlayQueue::playPrevious()
             } else {
                 QSpotifySession::instance()->stop();
                 m_implicitTracks->release();
-                m_implicitTracks = 0;
+                m_implicitTracks = nullptr;
             }
         }
     } else {
@@ -191,18 +192,18 @@ void QSpotifyPlayQueue::playPrevious()
 void QSpotifyPlayQueue::clear()
 {
     if (m_currentExplicitTrack) {
-        m_currentExplicitTrack->release();
-        m_currentExplicitTrack = 0;
+        //m_currentExplicitTrack->release();
+        m_currentExplicitTrack = nullptr;
     }
 
     if (m_implicitTracks) {
         m_implicitTracks->release();
-        m_implicitTracks = 0;
+        m_implicitTracks = nullptr;
     }
 
-    int c = m_explicitTracks.count();
-    for (int i = 0; i < c; ++i)
-        m_explicitTracks[i]->release();
+    for(auto track: m_explicitTracks)
+        track->release();
+
     m_explicitTracks.clear();
 }
 

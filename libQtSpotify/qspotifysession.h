@@ -130,7 +130,7 @@ public:
 
     static QSpotifySession *instance();
 
-    Q_INVOKABLE bool isValid() const { return m_sp_session != 0; }
+    Q_INVOKABLE bool isValid() const { return m_sp_session != nullptr; }
 
     Q_INVOKABLE QString formatDuration(qint64 d) const;
 

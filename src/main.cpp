@@ -52,6 +52,9 @@
 #include <QtSpotify>
 #include <qspotify_qmlplugin.h>
 
+#include <iostream>
+using namespace std;
+
 void silentDebug(QtMsgType type, const QMessageLogContext& context, const QString &msg)
 {
     Q_UNUSED(type);
@@ -87,6 +90,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     view->setSource(QUrl("qrc:/qml/main.qml"));
     view->setResizeMode(QQuickView::SizeRootObjectToView);
 
-    view->show();
+    if(view->status() != QQuickView::Error)
+        view->show();
+    else
+    {
+        //Show errors
+        auto errors = view->errors();
+
+        for(auto error: errors) {
+            cerr << error.toString().toStdString() << endl;
+        }
+    }
+
     return app->exec();
 }

@@ -87,7 +87,6 @@ private Q_SLOTS:
     void onOfflineModeChanged();
 
 private:
-
     QSpotifyTrackList *m_implicitTracks;
     QQueue<QSpotifyTrack *> m_explicitTracks;
     QSpotifyTrack *m_currentExplicitTrack;

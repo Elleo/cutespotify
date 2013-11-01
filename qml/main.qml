@@ -40,8 +40,9 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
-import QtSpotify 1.0
+import Ubuntu.Components 0.1
+import Ubuntu.Layouts 0.1
+import Ubuntu.Layouts 0.1
 
 MainView {
     id: appWindow
@@ -49,15 +50,8 @@ MainView {
     height: units.gu(68);
     property string themeColor
 
-    PageStack {
-        id: pageStack;
-        Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
-    }
-
-    Player {
-        id: player
-        visible: false
-    }
+    property int sidebarWidth: 40
+    property bool showSidebar: appWindow.width >= units.gu(100)
 
     Component {
         id: mainPage
@@ -71,6 +65,7 @@ MainView {
         id: loginPage
         LoginPage { }
     }
+
 
     Component.onCompleted: {
         themeColor = "color2"
@@ -100,6 +95,91 @@ MainView {
             } else if (spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
                 pageStack.push(loginPage)
             }
+        }
+    }
+
+    Layouts {
+        id: layouts
+        anchors.fill: parent
+        property int threshold: 100
+
+        layouts: [ConditionalLayout {
+                name: "phone"
+                when: !appWindow.showSidebar
+
+                Item {
+                    anchors.fill: parent
+
+                ItemLayout {
+                    item: "player"
+
+                    anchors {
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.right
+                    }
+
+                    height: units.gu(5)
+                }
+
+                ItemLayout {
+                    item: "pageStack"
+
+                    anchors {
+                        bottom: playerLayout1.top
+                        top: parent.top
+                        right: parent.right
+                        left: parent.left
+                    }
+                }
+                }
+            },
+            ConditionalLayout {
+                name: "desktop"
+                when: appWindow.showSidebar
+
+                Item {
+                    anchors.fill: parent
+
+                ItemLayout {
+                    id: playerLayout2
+                    item: "player"
+
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        bottom: parent.bottom
+                    }
+
+                    width: units.gu(appWindow.sidebarWidth)
+                }
+
+                ItemLayout {
+                    item: "pageStack"
+
+                    anchors {
+                        left: playerLayout2.right
+                        top: parent.top
+                        right: parent.right
+                        bottom: parent.bottom
+                    }
+                }
+                }
+            }
+        ]
+
+        Player {
+            Layouts.item: "player"
+            id: player
+
+            visible: spotifySession.isLoggedIn
+        }
+
+        PageStack {
+            Layouts.item: "pageStack"
+            id: pageStack;
+
+            Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
         }
     }
 }

@@ -59,11 +59,6 @@ Page {
             width: settingsPage.width
             spacing: UI.MARGIN_XLARGE
 
-            ViewHeader {
-                id: header
-                text: "Settings"
-            }
-
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right

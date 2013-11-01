@@ -40,8 +40,9 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
+
 import "UIConstants.js" as UI
 
 Page {
@@ -52,9 +53,7 @@ Page {
     property alias searchTabAlias: searchTab
     property alias playlistSelection: playlistSelectionDialog
 
-    Component.onCompleted: {
-        player.visible = true;
-    }
+    property bool showToolbar : false
 
     NotificationBanner {
         id: errorBanner
@@ -141,7 +140,7 @@ Page {
     Tabs {
         id: tabGroup
 
-        Tab { 
+        Tab {
             id: playlistsTab
             title: "Playlists"
             page: PlaylistPage { }
@@ -161,7 +160,6 @@ Page {
             id: settingsTab
             page: SettingsPage { }
         }
-
     }
 
     function checkSearchPage() {

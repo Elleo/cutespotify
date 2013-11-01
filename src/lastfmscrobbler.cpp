@@ -224,7 +224,7 @@ void LastFmScrobbler::saveUser()
 void LastFmScrobbler::restoreUser()
 {
     QSettings s;
-    m_user = s.value("lastfmUser").toString();
+    m_user = "kaimast";//s.value("lastfmUser").toString();
     m_sessionKey = s.value("lastfmSk").toString();
     m_enabled = s.value("lastfmEnabled", false).toBool();
     lastfm::ws::Username = m_user;

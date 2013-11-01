@@ -44,14 +44,12 @@ import "UIConstants.js" as UI
 
 Rectangle {
     id: player
-    width: parent.width
     color: UI.COLOR_BACKGROUND
-    anchors.bottom: parent.bottom;
 
     property alias showFullControls: fullControls.visible
     property bool openRequested: false
     property bool hidden: true
-    property bool inOpenPosition: y > -quickControls.y
+    property bool inOpenPosition:  y > -quickControls.y
 
     property bool openedOnce: false
     onOpenRequestedChanged: if (openRequested) openedOnce = true
@@ -67,7 +65,10 @@ Rectangle {
     }
 
     QuickControls {
+        visible: true
+
         id: quickControls
+
         anchors.bottom: parent.bottom
     }
 
@@ -80,7 +81,7 @@ Rectangle {
         State {
             when: !openRequested && !hidden
             name: "small"
-            PropertyChanges { target: player; y: -quickControls.y }
+            PropertyChanges { target: player; y: 0}// -quickControls.y }
         }
     ]
 
