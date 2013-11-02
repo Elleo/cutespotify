@@ -369,13 +369,14 @@ static void SP_CALLCONV callback_offline_error(sp_session *, sp_error error)
 QSpotifySession::QSpotifySession()
     : QObject(0)
     , m_timerID(0)
+    , m_sp_session(nullptr)
     , m_connectionStatus(LoggedOut)
     , m_connectionError(Ok)
     , m_connectionRules(AllowSyncOverWifi | AllowNetworkIfRoaming)
     , m_streamingQuality(Unknown)
     , m_syncQuality(Unknown)
     , m_syncOverMobile(false)
-    , m_user(0)
+    , m_user(nullptr)
     , m_pending_connectionRequest(false)
     , m_isLoggedIn(false)
     , m_explicitLogout(false)
@@ -383,7 +384,7 @@ QSpotifySession::QSpotifySession()
     , m_forcedOfflineMode(false)
     , m_ignoreNextConnectionError(false)
     , m_playQueue(new QSpotifyPlayQueue)
-    , m_currentTrack(0)
+    , m_currentTrack(nullptr)
     , m_isPlaying(false)
     , m_currentTrackPosition(0)
     , m_currentTrackPlayedDuration(0)
@@ -443,52 +444,57 @@ void QSpotifySession::init()
     m_sp_config.user_agent = "CuteSpotify";
     m_sp_config.callbacks = &m_sp_callbacks;
     sp_error error = sp_session_create(&m_sp_config, &m_sp_session);
-    if (error != SP_ERROR_OK) {
+
+    if (error != SP_ERROR_OK)
+    {
         fprintf(stderr, "failed to create session: %s\n",
                 sp_error_message(error));
-    } else {
-        QStorageInfo storageInfo;
-        qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
-        sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
 
-        QSettings settings;
-
-        // Remove stored login information from older version of MeeSpot
-        if (settings.contains("username")) {
-            settings.remove("username");
-            settings.remove("password");
-        }
-
-        m_offlineMode = settings.value("offlineMode", false).toBool();
-        m_invertedTheme = settings.value("invertedTheme", true).toBool();
-
-        checkNetworkAccess();
-
-        StreamingQuality quality = StreamingQuality(settings.value("streamingQuality", int(LowQuality)).toInt());
-        setStreamingQuality(quality);
-
-        StreamingQuality syncQuality = StreamingQuality(settings.value("syncQuality", int(HighQuality)).toInt());
-        setSyncQuality(syncQuality);
-
-        bool syncMobile = settings.value("syncOverMobile", false).toBool();
-        setSyncOverMobile(syncMobile);
-
-        QString storedLogin = getStoredLoginInformation();
-        if (!storedLogin.isEmpty()) {
-            login(storedLogin);
-        }
-
-        bool shuffle = settings.value("shuffle", false).toBool();
-        setShuffle(shuffle);
-
-        bool repeat = settings.value("repeat", false).toBool();
-        setRepeat(repeat);
-
-        bool repeatOne = settings.value("repeatOne", false).toBool();
-        setRepeatOne(repeatOne);
-
-        connect(this, SIGNAL(offlineModeChanged()), m_playQueue, SLOT(onOfflineModeChanged()));
+        m_sp_session = nullptr;
+        return;
     }
+
+    QStorageInfo storageInfo;
+    qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
+    sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
+
+    QSettings settings;
+
+    // Remove stored login information from older version of MeeSpot
+    if (settings.contains("username")) {
+        settings.remove("username");
+        settings.remove("password");
+    }
+
+    m_offlineMode = settings.value("offlineMode", false).toBool();
+    m_invertedTheme = settings.value("invertedTheme", true).toBool();
+
+    checkNetworkAccess();
+
+    StreamingQuality quality = StreamingQuality(settings.value("streamingQuality", int(LowQuality)).toInt());
+    setStreamingQuality(quality);
+
+    StreamingQuality syncQuality = StreamingQuality(settings.value("syncQuality", int(HighQuality)).toInt());
+    setSyncQuality(syncQuality);
+
+    bool syncMobile = settings.value("syncOverMobile", false).toBool();
+    setSyncOverMobile(syncMobile);
+
+    QString storedLogin = getStoredLoginInformation();
+    if (!storedLogin.isEmpty()) {
+        login(storedLogin);
+    }
+
+    bool shuffle = settings.value("shuffle", false).toBool();
+    setShuffle(shuffle);
+
+    bool repeat = settings.value("repeat", false).toBool();
+    setRepeat(repeat);
+
+    bool repeatOne = settings.value("repeatOne", false).toBool();
+    setRepeatOne(repeatOne);
+
+    connect(this, SIGNAL(offlineModeChanged()), m_playQueue, SLOT(onOfflineModeChanged()));
 }
 
 QSpotifySession::~QSpotifySession()
@@ -516,7 +522,7 @@ void QSpotifySession::cleanUp()
     delete m_user;
     logout(true);
     sp_session_release(m_sp_session);
-//    delete m_resourceSet;
+    //    delete m_resourceSet;
     delete m_networkConfManager;
 }
 
@@ -849,7 +855,7 @@ void QSpotifySession::play(QSpotifyTrack *track)
     emit currentTrackPositionChanged();
 
     beginPlayBack();
-//    m_resourceSet->acquire();
+    //    m_resourceSet->acquire();
 }
 
 void QSpotifySession::beginPlayBack()
@@ -874,7 +880,7 @@ void QSpotifySession::pause()
 
     QCoreApplication::postEvent(g_audioWorker, new QEvent(QEvent::Type(QEvent::User + 7)));
 
-//    m_resourceSet->release();
+    //    m_resourceSet->release();
 }
 
 void QSpotifySession::resume()
@@ -884,7 +890,7 @@ void QSpotifySession::resume()
         return;
 
     beginPlayBack();
-//    m_resourceSet->acquire();
+    //    m_resourceSet->acquire();
 }
 
 void QSpotifySession::stop(bool dontEmitSignals)
@@ -900,14 +906,14 @@ void QSpotifySession::stop(bool dontEmitSignals)
     m_currentTrackPlayedDuration = 0;
 
     if (!dontEmitSignals) {
-         emit isPlayingChanged();
-         emit currentTrackChanged();
-         emit currentTrackPositionChanged();
+        emit isPlayingChanged();
+        emit currentTrackChanged();
+        emit currentTrackPositionChanged();
     }
 
     QCoreApplication::postEvent(g_audioWorker, new QEvent(QEvent::Type(QEvent::User + 8)));
 
-//    m_resourceSet->release();
+    //    m_resourceSet->release();
 }
 
 void QSpotifySession::seek(int offset)
