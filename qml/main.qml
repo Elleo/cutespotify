@@ -101,7 +101,6 @@ MainView {
     Layouts {
         id: layouts
         anchors.fill: parent
-        property int threshold: 100
 
         layouts: [ConditionalLayout {
                 name: "phone"
