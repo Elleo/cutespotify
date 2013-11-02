@@ -39,8 +39,8 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -48,11 +48,8 @@ Page {
     id: albumPage
 
     property variant album
-    orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
-
-    onStatusChanged: if (status == PageStatus.Active) browse.album = albumPage.album
 
     SpotifyAlbumBrowse {
         id: browse
@@ -60,7 +57,7 @@ Page {
         property int trackCount: browse.tracks.length;
     }
 
-    TrackMenu {
+/*    TrackMenu {
         id: menu
         deleteVisible: false
         albumVisible: false
@@ -71,7 +68,7 @@ Page {
         playVisible: false
         artistVisible: !browse.hasMultipleArtists
     }
-
+*/
     Column {
         id: header
         width: parent.width
@@ -127,7 +124,7 @@ Page {
         Label {
             width: parent ? parent.width : 0
             height: paintedHeight + UI.MARGIN_XLARGE * 2
-            text: "<style type=text/css> a { text-decoration: none; color:" + color + "} </style>" + modelData
+            text: modelData
             textFormat: Text.RichText
             wrapMode: Text.WordWrap
             font.pixelSize: UI.FONT_LSMALL
@@ -188,7 +185,7 @@ Page {
             }
         }
 
-        Scrollbar { listView: tracks }
+        Scrollbar { flickableItem: tracks }
     }
 
     ActivityIndicator {

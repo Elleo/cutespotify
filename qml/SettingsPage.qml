@@ -68,7 +68,7 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT
+                        height: UI.LIST_ITEM_HEIGHT * 1.5
 
                         Label {
                             anchors.left: parent.left
@@ -111,33 +111,70 @@ Page {
                     }
                 }
 
-                Selector {
-                    title: "Stream"
-                    model: ListModel {
-                        ListElement { name: "Low quality (96kbps)"; value: SpotifySession.LowQuality }
-                        ListElement { name: "Normal quality (160kbps)"; value: SpotifySession.HighQuality }
-                        ListElement { name: "High quality (320kbps)"; value: SpotifySession.UltraQuality }
+                Column {
+                    width: parent.width
+
+                    Label {
+                        height: UI.LIST_TILE_SIZE * 1.5
+                        font.family: UI.FONT_FAMILY_BOLD
+                        font.weight: Font.Bold
+                        font.pixelSize: UI.LIST_TILE_SIZE
+                        color: UI.LIST_TITLE_COLOR
+                        text: "Stream"
                     }
-                    selectedIndex: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
-                                                                                                : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
-                    onSelectedIndexChanged: spotifySession.streamingQuality = model.get(selectedIndex).value
+
+                    OptionSelector {
+                        model: ListModel {
+                            ListElement { name: "Low quality"; description: "96kbps"; value: SpotifySession.LowQuality }
+                            ListElement { name: "Normal quality"; description: "160kbps"; value: SpotifySession.HighQuality }
+                            ListElement { name: "High quality"; description: "320kbps"; value: SpotifySession.UltraQuality }
+                        }
+                        delegate: OptionSelectorDelegate { text: name; subText: description;}
+                        selectedIndex: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
+                                                                                                    : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
+                        onSelectedIndexChanged: spotifySession.streamingQuality = model.get(selectedIndex).value
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: UI.MARGIN_XLARGE * 2
+                    }
+
                 }
 
-                Selector {
-                    title: "Offline Sync"
-                    model: ListModel {
-                        ListElement { name: "Low quality (96kbps)"; value: SpotifySession.LowQuality }
-                        ListElement { name: "Normal quality (160kbps)"; value: SpotifySession.HighQuality }
-                        ListElement { name: "High quality (320kbps)"; value: SpotifySession.UltraQuality }
+                Column {
+                    width: parent.width
+
+                    Label {
+                        height: UI.LIST_TILE_SIZE * 1.5
+                        font.family: UI.FONT_FAMILY_BOLD
+                        font.weight: Font.Bold
+                        font.pixelSize: UI.LIST_TILE_SIZE
+                        color: UI.LIST_TITLE_COLOR
+                        text: "Offline Sync"
                     }
-                    selectedIndex: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
-                                                                                           : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
-                    onSelectedIndexChanged: spotifySession.syncQuality = model.get(selectedIndex).value
+
+                    OptionSelector {
+                        model: ListModel {
+                            ListElement { name: "Low quality"; description: "96kbps"; value: SpotifySession.LowQuality }
+                            ListElement { name: "Normal quality"; description: "160kbps"; value: SpotifySession.HighQuality }
+                            ListElement { name: "High quality"; description: "320kbps"; value: SpotifySession.UltraQuality }
+                        }
+                        delegate: OptionSelectorDelegate { text: name; subText: description;}
+                        selectedIndex: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
+                                                                                               : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
+                        onSelectedIndexChanged: spotifySession.syncQuality = model.get(selectedIndex).value
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: UI.MARGIN_XLARGE * 2
+                    }
                 }
 
                 Item {
                     width: parent.width
-                    height: UI.LIST_ITEM_HEIGHT
+                    height: UI.LIST_ITEM_HEIGHT * 1.5
 
                     Label {
                         anchors.left: parent.left
@@ -169,7 +206,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.LIST_ITEM_HEIGHT
+                    height: UI.LIST_ITEM_HEIGHT * 1.5
 
                     LastfmLoginSheet {
                         id: lastfmLogin
@@ -307,7 +344,12 @@ Page {
                     height: UI.MARGIN_XLARGE * 2
                 }
             }
+            Item {
+                width: parent.width
+                height: units.gu(10)
+            }
         }
+
     }
 
     Component {

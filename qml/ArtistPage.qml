@@ -257,7 +257,7 @@ Page {
             font.weight: Font.Light
         }
 
-        Scrollbar { listView: artistView }
+        Scrollbar { flickableItem: artistView }
     }
 
     ActivityIndicator {

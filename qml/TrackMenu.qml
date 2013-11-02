@@ -53,7 +53,7 @@ MyMenu {
     property bool markSeenVisible: false
 
     layoutContentHeight: layout.height
-
+/*
     Dialog {
         id: confirmDeleteDialog
         parent: trackMenu.parent
@@ -68,7 +68,7 @@ MyMenu {
             text: "No"
         }
     }
-
+*/
     MyMenuLayout {
         id:layout
 
@@ -80,7 +80,6 @@ MyMenu {
         MyMenuItem {
             text: "Add to queue";
             onClicked: { track.enqueue() }
-            visible: track && track.isAvailable
         }
         MyMenuItem {
             id: starItem
@@ -110,11 +109,11 @@ MyMenu {
                 mainPage.playlistSelection.open();
             }
         }
-        MyMenuItem {
+/*        MyMenuItem {
             text: "Delete";
             visible: trackMenu.deleteVisible && !spotifySession.offlineMode;
             onClicked: { confirmDeleteDialog.open(); }
-        }
+        }*/
     }
 
     onStatusChanged: {
