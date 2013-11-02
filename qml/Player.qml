@@ -42,9 +42,8 @@ import QtQuick 2.0
 import Ubuntu.Components 0.1
 import "UIConstants.js" as UI
 
-Rectangle {
+Item {
     id: player
-    color: UI.COLOR_BACKGROUND
 
     property alias showFullControls: fullControls.visible
     property bool openRequested: false
@@ -60,7 +59,7 @@ Rectangle {
 
     FullControls {
         id: fullControls
-        visible: false;
+        visible: false
         anchors.bottom: quickControls.top
     }
 
@@ -81,7 +80,7 @@ Rectangle {
         State {
             when: !openRequested && !hidden
             name: "small"
-            PropertyChanges { target: player; y: 0}// -quickControls.y }
+            PropertyChanges { target: player; y: -quickControls.y }
         }
     ]
 

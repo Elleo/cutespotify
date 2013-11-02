@@ -45,13 +45,18 @@ import QtSpotify 1.0
 import "UIConstants.js" as UI
 
 Page {
+    anchors.leftMargin: appWindow.showSidebar ? appWindow.sidebarWidth : 0
+
     id: settingsPage
     anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    //anchors.leftMargin: UI.MARGIN_XLARGE
 
     ListView {
-        id: settingsFlickable
+        // FIXME: Bug in conditional layouts. Have to add this to every page...
+        anchors.leftMargin: appWindow.showSidebar ? units.gu(appWindow.sidebarWidth) : 0
         anchors.fill: parent
+
+        id: settingsFlickable
 
         model: 1
         delegate: Column {

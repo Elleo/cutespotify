@@ -72,6 +72,9 @@ Page {
     }
 */
     ListView {
+        // FIXME: Bug in conditional layouts. Have to add this to every page...
+        anchors.leftMargin: appWindow.showSidebar ? units.gu(appWindow.sidebarWidth) : 0
+
         id: playlists
         anchors.fill: parent
 

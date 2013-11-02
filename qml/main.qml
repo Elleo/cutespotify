@@ -42,7 +42,6 @@
 import QtQuick 2.0
 import Ubuntu.Components 0.1
 import Ubuntu.Layouts 0.1
-import Ubuntu.Layouts 0.1
 
 MainView {
     id: appWindow
@@ -51,10 +50,11 @@ MainView {
     property string themeColor
 
     property int sidebarWidth: 40
-    property bool showSidebar: appWindow.width >= units.gu(100)
+    property bool showSidebar: appWindow.width >= units.gu(100) && appWindow.height >= units.gu(60)
 
     Component {
         id: mainPage
+
         MainPage {
             id: mainPageItem
             onToolsChanged: appWindow.pageStack.toolBar.setTools(mainPageItem.tools, "replace")
@@ -98,39 +98,49 @@ MainView {
         }
     }
 
+
+    PageStack {
+        Layouts.item: "pageStack"
+        id: pageStack
+
+        Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
+    }
+
+
     Layouts {
         id: layouts
         anchors.fill: parent
 
-        layouts: [ConditionalLayout {
+        layouts: [
+            ConditionalLayout {
                 name: "phone"
                 when: !appWindow.showSidebar
 
                 Item {
                     anchors.fill: parent
 
-                ItemLayout {
-                    item: "player"
+                    ItemLayout {
+                        item: "player"
 
-                    anchors {
-                        bottom: parent.bottom
-                        left: parent.left
-                        right: parent.right
+                        anchors {
+                            bottom: parent.bottom
+                            left: parent.left
+                            right: parent.right
+                        }
+
+                        height: units.gu(5)
                     }
 
-                    height: units.gu(5)
-                }
+                 /*   ItemLayout {
+                        item: "pageStack"
 
-                ItemLayout {
-                    item: "pageStack"
-
-                    anchors {
-                        bottom: playerLayout1.top
-                        top: parent.top
-                        right: parent.right
-                        left: parent.left
-                    }
-                }
+                        anchors {
+                            bottom: playerLayout1.top
+                            top: parent.top
+                            right: parent.right
+                            left: parent.left
+                        }
+                    }*/
                 }
             },
             ConditionalLayout {
@@ -140,29 +150,29 @@ MainView {
                 Item {
                     anchors.fill: parent
 
-                ItemLayout {
-                    id: playerLayout2
-                    item: "player"
+                    ItemLayout {
+                        id: playerLayout2
+                        item: "player"
 
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        bottom: parent.bottom
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            bottom: parent.bottom
+                        }
+
+                        width: units.gu(appWindow.sidebarWidth)
                     }
 
-                    width: units.gu(appWindow.sidebarWidth)
-                }
+                 /*   ItemLayout {
+                        item: "pageStack"
 
-                ItemLayout {
-                    item: "pageStack"
-
-                    anchors {
-                        left: playerLayout2.right
-                        top: parent.top
-                        right: parent.right
-                        bottom: parent.bottom
-                    }
-                }
+                        anchors {
+                            left: playerLayout2.right
+                            top: parent.top
+                            right: parent.right
+                            bottom: parent.bottom
+                        }
+                    }*/
                 }
             }
         ]
@@ -172,13 +182,6 @@ MainView {
             id: player
 
             visible: spotifySession.isLoggedIn
-        }
-
-        PageStack {
-            Layouts.item: "pageStack"
-            id: pageStack;
-
-            Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
         }
     }
 }
