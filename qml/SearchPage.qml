@@ -47,7 +47,6 @@ import "Utilities.js" as Utilities
 Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
-    pageStack: parent
     enabled: !spotifySession.offlineMode
 
     Connections {
@@ -106,22 +105,20 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
+	anchors.topMargin: UI.MARGIN_XLARGE
         spacing: UI.MARGIN_XLARGE
 
         Column {
             width: parent.width
-            Selector {
+            OptionSelector {
                 id: selector
-                title: "Search"
-                titleFontFamily: UI.FONT_FAMILY_LIGHT
-                titleFontWeight: Font.Light
-                titleFontSize: UI.FONT_LARGE
                 selectedIndex: 0
                 model: ListModel {
                     ListElement { name: "Tracks" }
                     ListElement { name: "Albums" }
                     ListElement { name: "Artists" }
                 }
+                delegate: OptionSelectorDelegate { text: name; }
             }
             Separator {
                 width: parent.width
@@ -184,7 +181,7 @@ Page {
                     name: modelData.name
                     artist: modelData.artist
                     albumCover: modelData.coverId
-                    onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
                     onPressAndHold: {
                         menuAlbumBrowse.album = modelData;
                         if (menuAlbumBrowse.totalDuration > 0)
@@ -197,7 +194,7 @@ Page {
                 ArtistDelegate {
                     name: modelData.name
                     portrait: modelData.pictureId
-                    onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
                 }
             }
 

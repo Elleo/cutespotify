@@ -51,6 +51,10 @@ Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
+    Component.onCompleted: {
+        browse.album = album
+    }
+
     SpotifyAlbumBrowse {
         id: browse
 
