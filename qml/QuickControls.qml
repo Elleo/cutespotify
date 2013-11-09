@@ -72,7 +72,6 @@ Rectangle {
         id: quickControls
         anchors.fill: parent
         anchors.rightMargin: UI.MARGIN_XLARGE
-        anchors.leftMargin: UI.MARGIN_XLARGE
         opacity: player.openRequested ? 0.0 : 1.0
 
         SpotifyImage {
@@ -80,7 +79,7 @@ Rectangle {
             anchors.left: parent.left
             id: cover
             spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
-            width: units.gu(7)
+            width: units.gu(8)
             height: width
         }
 
