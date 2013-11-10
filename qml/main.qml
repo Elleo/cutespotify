@@ -96,6 +96,7 @@ MainView {
         }
         onPendingConnectionRequestChanged: {
             if (!spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
+                pageStack.pop() // Remove login page from stack
                 pageStack.push(mainPage)
             } else if (spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
                 pageStack.push(loginPage)
