@@ -77,6 +77,54 @@ Page {
                             font.weight: Font.Bold
                             font.pixelSize: UI.LIST_TILE_SIZE
                             color: UI.LIST_TITLE_COLOR
+                            text: "Shuffle"
+                        }
+
+                        Switch {
+                            id: shuffleSwitch
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            onCheckedChanged: spotifySession.shuffle = checked
+                            Component.onCompleted: checked = spotifySession.shuffle;
+                        }
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: UI.LIST_ITEM_HEIGHT * 1.5
+
+                        Label {
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.family: UI.FONT_FAMILY_BOLD
+                            font.weight: Font.Bold
+                            font.pixelSize: UI.LIST_TILE_SIZE
+                            color: UI.LIST_TITLE_COLOR
+                            text: "Repeat songs"
+                        }
+
+                        Switch {
+                            id: repeatSwitch
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            onCheckedChanged: spotifySession.repeat = checked
+                            Component.onCompleted: checked = spotifySession.repeat;
+                        }   
+                    }
+
+
+
+                    Item {
+                        width: parent.width
+                        height: UI.LIST_ITEM_HEIGHT * 1.5
+
+                        Label {
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.family: UI.FONT_FAMILY_BOLD
+                            font.weight: Font.Bold
+                            font.pixelSize: UI.LIST_TILE_SIZE
+                            color: UI.LIST_TITLE_COLOR
                             text: "Offline mode"
                         }
 
