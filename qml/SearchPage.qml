@@ -222,6 +222,12 @@ Page {
                     results.model = search.artists
                 }
             }
+
+            footer: Item {
+                width: parent.width
+                height: units.gu(10)
+            }
+
         }
 
         Label {

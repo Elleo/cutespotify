@@ -182,6 +182,7 @@ Page {
                 }
 
                 Label {
+                    id: newPlaylistLabel
                     anchors.verticalCenter: parent.verticalCenter
                     font.family: UI.FONT_FAMILY_BOLD
                     font.weight: Font.Bold
@@ -199,6 +200,11 @@ Page {
                     newPlaylistSheet.playlistName = "";
                     newPlaylistSheet.open();
                 }
+            }
+            Item {
+                anchors.top: newPlaylistLabel.bottom
+                width: parent.width
+                height: units.gu(10)
             }
         }
 

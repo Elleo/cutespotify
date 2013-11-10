@@ -169,6 +169,11 @@ Page {
                 _movementFromBeginning = false;
             }
         }
+
+        footer: Item {
+            width: parent.width
+            height: units.gu(10)
+        }
     }
 
     Connections {

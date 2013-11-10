@@ -194,6 +194,12 @@ Page {
                 }
                 tracks.positionViewAtBeginning()
             }
+
+            footer: Item {
+                width: parent.width
+                height: units.gu(10)
+            }
+
         }
 
         Scrollbar { flickableItem: tracks }

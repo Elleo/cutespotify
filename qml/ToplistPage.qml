@@ -304,8 +304,13 @@ Page {
                     results.model = toplist.artists
                 }
             }
-        }
 
+            footer: Item {
+                width: parent.width
+                height: units.gu(10)
+            }
+
+        }
         Scrollbar { flickableItem: results }
     }
 
