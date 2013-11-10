@@ -81,5 +81,7 @@
         <file>qml/images/play.png</file>
         <file>qml/images/pause.png</file>
         <file>qml/images/cutespotify-logo.png</file>
+        <file>qml/images/star.png</file>
+        <file>qml/images/emptystar.png</file>
     </qresource>
 </RCC>

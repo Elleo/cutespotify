@@ -128,6 +128,23 @@ Rectangle {
             anchors.rightMargin: -UI.MARGIN_XLARGE
             spacing: -10
 
+            Image {
+                id: favIcon
+                anchors.verticalCenter: parent.verticalCenter
+                opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
+                source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("qrc:/qml/images/star.png")
+                                                                                             : ("qrc:/qml/images/emptystar.png"))
+                                                    : ("qrc:/qml/images/emptystar.png")
+                enabled: !spotifySession.offlineMode
+
+                MouseArea {
+                    id: starArea
+                    anchors.fill: parent
+                    anchors.margins: -15
+                    onClicked: spotifySession.currentTrack.isStarred = !spotifySession.currentTrack.isStarred
+                }
+            }
+
             Item {
                 width: units.gu(7); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
