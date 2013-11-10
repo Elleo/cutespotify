@@ -109,7 +109,7 @@ MyMenu {
         MyMenuItem {
             text: "Artist";
             onClicked: {
-                mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: albumBrowse.tracks[0].artistObject })
+                pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: albumBrowse.tracks[0].artistObject })
             }
             visible: artistVisible
         }

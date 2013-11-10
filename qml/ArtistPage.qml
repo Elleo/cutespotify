@@ -149,7 +149,7 @@ Page {
                     artist: modelData.sectionType == "Appears on" ? modelData.artist : (modelData.year > 0 ? modelData.year : "")
                     albumCover: modelData.coverId
                     onClicked: {
-                        mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData })
+                        pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData })
                     }
                     onPressAndHold: {
                         menuAlbumBrowse.album = modelData;
@@ -164,7 +164,7 @@ Page {
                 ArtistDelegate {
                     name: modelData.name
                     portrait: modelData.pictureId
-                    onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
                 }
             }
 

@@ -90,14 +90,14 @@ MyMenu {
             text: "Album";
             visible: trackMenu.albumVisible && !spotifySession.offlineMode
             onClicked: {
-                mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: track.albumObject })
+                pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: track.albumObject })
             }
         }
         MyMenuItem {
             text: "Artist";
             visible: !spotifySession.offlineMode
             onClicked: {
-                mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: track.artistObject })
+                pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: track.artistObject })
             }
         }
         MyMenuItem {
