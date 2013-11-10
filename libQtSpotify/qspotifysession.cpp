@@ -439,6 +439,7 @@ static int SP_CALLCONV callback_music_delivery(sp_session *, const sp_audioforma
 static void SP_CALLCONV callback_end_of_track(sp_session *)
 {
     qDebug() << "End of track";
+    QCoreApplication::postEvent(QSpotifySession::instance(), new QEvent(QEvent::Type(QEvent::User + 4)));
     QCoreApplication::postEvent(g_audioWorker, new QEvent(QEvent::Type(QEvent::User + 4)));
 }
 
