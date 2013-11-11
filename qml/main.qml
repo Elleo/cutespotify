@@ -45,9 +45,10 @@ import QtSpotify 1.0
 
 MainView {
     id: appWindow
-    width: units.gu(43);
-    height: units.gu(68);
+    width: units.gu(43)
+    height: units.gu(68)
     property string themeColor
+    applicationName: "CuteSpotify"
 
     PageStack {
         id: pageStack;
