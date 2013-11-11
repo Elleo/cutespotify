@@ -181,7 +181,7 @@ Page {
                     }
                 }
 
-                Label {
+/*                Label {
                     id: newPlaylistLabel
                     anchors.verticalCenter: parent.verticalCenter
                     font.family: UI.FONT_FAMILY_BOLD
@@ -190,7 +190,7 @@ Page {
                     color: UI.LIST_TITLE_COLOR
                     opacity: 0.4
                     text: "New playlist"
-                }
+                }*/
             }
 
             MouseArea {
