@@ -49,6 +49,11 @@ Dialog {
     //private
     property bool __drawFooterLine: false
 
+    Component {
+        id: licenseC
+        LicenseDialog { }
+    }
+
     Column {
         width: parent.width
         anchors.top: parent.top;
@@ -123,13 +128,19 @@ Dialog {
 
             Row { 
                 width: parent.width
-                spacing: units.gu(10)
+                spacing: units.gu(1)
 
                 Button {
                     id: donateButton
                     text: "Donate!"
                     onClicked: Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=8CK2DHNJDGBJJ&lc=GB&item_name=Michael%20Sheldon&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted")
 		}
+
+                Button {
+                    id: licenseButton
+                    text: "License"
+                    onClicked: PopupUtils.open(licenseC);
+                }
 
                 Button {
                     id: acceptButton
