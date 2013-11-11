@@ -166,7 +166,7 @@ Item {
                 width: 34; height: width
                 smooth: true
                 visible: listItem.starred
-                source: "image://theme/icon-m-toolbar-favorite-mark"
+                source: "qrc:/qml/images/star.png"
             }
         }
 

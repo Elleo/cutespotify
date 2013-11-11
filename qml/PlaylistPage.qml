@@ -127,7 +127,7 @@ Page {
                 if (modelData.type === SpotifyPlaylist.Playlist)
                     staticIcon = "images/icon-m-music-video-all-songs-black.png";
                 else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-common-favorite-mark"
+                    staticIcon = "qrc:/qml/images/star.png";
                 else if (modelData.type === SpotifyPlaylist.Inbox)
                     staticIcon = "images/icon-m-toolbar-directory-move-to-black.png";
                 else if (modelData.type === SpotifyPlaylist.Folder)
