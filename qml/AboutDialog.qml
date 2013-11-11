@@ -81,7 +81,7 @@ Dialog {
         }
 
         Label {
-            text: "Contact: elleo@gnu.org"
+            text: "Contact: mike@mikeasoft.com"
             font.pixelSize: UI.FONT_LSMALL
             color: UI.COLOR_INVERTED_FOREGROUND
         }
