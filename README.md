@@ -35,19 +35,3 @@ const size_t g_appkey_size = sizeof(g_appkey);
 
 #endif // SPOTIFY_KEY_H
 ```
-
-### LastFM
-In addition to the libspotify API key, you also need to get a last.fm API key
-(see http://www.last.fm/api/account)
-Create a file lastfm_key.h inside liblastfm and copy the provided API key and shared
-secret inside it using the following format:
-
-```C
-#ifndef LASTFM_KEY_H
-#define LASTFM_KEY_H
-
-const char *g_lastfmAPIKey = "<api_key>";
-const char *g_lastfmSecret = "<shared_secret>";
-
-#endif // LASTFM_KEY_H
-```
