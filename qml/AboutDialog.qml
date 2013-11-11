@@ -63,7 +63,7 @@ Dialog {
         }
 
         Label {
-            text: "Version 1.3.0"
+            text: "Version 1.3.1"
             font.pixelSize: UI.FONT_LSMALL
             color: UI.COLOR_INVERTED_FOREGROUND
         }
