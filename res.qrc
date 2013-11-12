@@ -46,6 +46,7 @@
         <file>qml/images/spotify-core-logo-128x128.png</file>
         <file>qml/images/meegotouch-progressindicator-bar-known-texture.png</file>
         <file>qml/AboutDialog.qml</file>
+        <file>qml/LicenseDialog.qml</file>
         <file>qml/images/meespot-logo.png</file>
         <file>qml/MyMenuItemStyle.qml</file>
         <file>qml/images/meegotouch-list-inverted-background-vertical-top.png</file>
@@ -81,5 +82,7 @@
         <file>qml/images/play.png</file>
         <file>qml/images/pause.png</file>
         <file>qml/images/cutespotify-logo.png</file>
+        <file>qml/images/star.png</file>
+        <file>qml/images/emptystar.png</file>
     </qresource>
 </RCC>

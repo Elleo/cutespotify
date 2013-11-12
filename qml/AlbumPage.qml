@@ -51,6 +51,10 @@ Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
+    Component.onCompleted: {
+        browse.album = album
+    }
+
     SpotifyAlbumBrowse {
         id: browse
 
@@ -74,17 +78,24 @@ Page {
         width: parent.width
         anchors.top: parent.top
 
-        Selector {
+        Label {
+            height: UI.LIST_TILE_SIZE * 1.5
+            font.family: UI.FONT_FAMILY_BOLD
+            font.weight: Font.Bold
+            font.pixelSize: UI.LIST_TILE_SIZE
+            color: UI.LIST_TITLE_COLOR
+            text: album ? album.name : ""
+        }
+
+
+        OptionSelector {
             id: selector
-            title: album ? album.name : ""
-            titleFontFamily: UI.FONT_FAMILY_LIGHT
-            titleFontWeight: Font.Light
-            titleFontSize: UI.FONT_LARGE
             selectedIndex: 0
             model: ListModel {
                 ListElement { name: "Tracks" }
                 ListElement { name: "Review" }
             }
+            delegate: OptionSelectorDelegate { text: name }
         }
 
         Separator {
@@ -183,6 +194,12 @@ Page {
                 }
                 tracks.positionViewAtBeginning()
             }
+
+            footer: Item {
+                width: parent.width
+                height: units.gu(10)
+            }
+
         }
 
         Scrollbar { flickableItem: tracks }

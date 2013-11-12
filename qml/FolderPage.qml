@@ -131,7 +131,7 @@ Page {
                 if (modelData.type === SpotifyPlaylist.Playlist)
                     staticIcon = theme.inverted ? "image://theme/icon-m-music-video-all-songs" : "images/icon-m-music-video-all-songs-black.png";
                 else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-common-favorite-mark" + (theme.inverted ? "-inverse" : "");
+                    staticIcon = "qrc:/qml/images/star.png";
                 else if (modelData.type === SpotifyPlaylist.Inbox)
                     staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-move-to-white-selected" : "images/icon-m-toolbar-directory-move-to-black.png";
                 else if (modelData.type === SpotifyPlaylist.Folder)

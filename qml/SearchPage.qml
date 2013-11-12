@@ -47,7 +47,6 @@ import "Utilities.js" as Utilities
 Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
-    pageStack: parent
     enabled: !spotifySession.offlineMode
 
     Connections {
@@ -107,30 +106,21 @@ Page {
         }
     }
 */
+
         Column {
             id: header
             width: parent.width
-            anchors.top: parent.top
-            spacing: UI.MARGIN_XLARGE
 
-            Column {
-                width: parent.width
-                Selector {
-                    id: selector
-                    title: "Search"
-                    titleFontFamily: UI.FONT_FAMILY_LIGHT
-                    titleFontWeight: Font.Light
-                    titleFontSize: UI.FONT_LARGE
-                    selectedIndex: 0
-                    model: ListModel {
-                        ListElement { name: "Tracks" }
-                        ListElement { name: "Albums" }
-                        ListElement { name: "Artists" }
-                    }
+            OptionSelector {
+                id: selector
+                selectedIndex: 0
+                model: ListModel {
+                    ListElement { name: "Tracks" }
+                    ListElement { name: "Albums" }
+                    ListElement { name: "Artists" }
+
                 }
-                Separator {
-                    width: parent.width
-                }
+                delegate: OptionSelectorDelegate { text: name; }
             }
 
             AdvancedTextField {
@@ -190,7 +180,7 @@ Page {
                         name: modelData.name
                         artist: modelData.artist
                         albumCover: modelData.coverId
-                        onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                        onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
                         onPressAndHold: {
                             menuAlbumBrowse.album = modelData;
                             if (menuAlbumBrowse.totalDuration > 0)
@@ -198,75 +188,76 @@ Page {
                         }
                     }
                 }
+
                 Component {
                     id: artistComponent
                     ArtistDelegate {
                         name: modelData.name
                         portrait: modelData.pictureId
-                        onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                        onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    }
+
+                    Connections {
+                        target: selector
+                        onSelectedIndexChanged: results.updateResults()
+                    }
+
+                    Connections {
+                        target: search
+                        onResultsChanged: results.updateResults()
+                    }
+
+                    function updateResults() {
+                        results.model = 0
+                        results.delegate = null
+                        if (selector.selectedIndex === 0) {
+                            results.delegate = trackComponent
+                            results.model = search.tracks
+                        } else if (selector.selectedIndex == 1) {
+                            results.delegate = albumComponent
+                            results.model = search.albums
+                        } else if (selector.selectedIndex == 2) {
+                            results.delegate = artistComponent
+                            results.model = search.artists
+                        }
                     }
                 }
 
-                Connections {
-                    target: selector
-                    onSelectedIndexChanged: results.updateResults()
+                Label {
+                    id: errorMessage
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: 80
+                    visible: results.count === 0 && search.query.length > 0 && !search.busy
+                    font.pixelSize: UI.FONT_LARGE
+                    font.family: UI.FONT_FAMILY_LIGHT
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    width: parent.width - UI.MARGIN_XLARGE * 2
+                    horizontalAlignment: Text.AlignHCenter
+
+                    text: search.didYouMean.length > 0 ? "Did you mean"
+                                                       : (selector.selectedIndex === 0 ? "No tracks found" :
+                                                                                         selector.selectedIndex == 1 ? "No albums found" :
+                                                                                                                       "No artists found")
+                }
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: errorMessage.bottom
+                    visible: results.count === 0 && search.query.length > 0 && !search.busy && search.didYouMean.length > 0
+                    font.pixelSize: UI.FONT_LARGE
+                    font.family: UI.FONT_FAMILY_LIGHT
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    width: parent.width - UI.MARGIN_XLARGE * 2
+                    horizontalAlignment: Text.AlignHCenter
+
+                    text: "<a href='didyoumean'>" + search.didYouMean + "</a>?"
+
+                    onLinkActivated: searchField.text = search.didYouMean
                 }
 
-                Connections {
-                    target: search
-                    onResultsChanged: results.updateResults()
-                }
-
-                function updateResults() {
-                    results.model = 0
-                    results.delegate = null
-                    if (selector.selectedIndex === 0) {
-                        results.delegate = trackComponent
-                        results.model = search.tracks
-                    } else if (selector.selectedIndex == 1) {
-                        results.delegate = albumComponent
-                        results.model = search.albums
-                    } else if (selector.selectedIndex == 2) {
-                        results.delegate = artistComponent
-                        results.model = search.artists
-                    }
-                }
+                Scrollbar { flickableItem: results }
             }
-
-            Label {
-                id: errorMessage
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: 80
-                visible: results.count === 0 && search.query.length > 0 && !search.busy
-                font.pixelSize: UI.FONT_LARGE
-                font.family: UI.FONT_FAMILY_LIGHT
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                width: parent.width - UI.MARGIN_XLARGE * 2
-                horizontalAlignment: Text.AlignHCenter
-
-                text: search.didYouMean.length > 0 ? "Did you mean"
-                                                   : (selector.selectedIndex === 0 ? "No tracks found" :
-                                                                                     selector.selectedIndex == 1 ? "No albums found" :
-                                                                                                                   "No artists found")
-            }
-            Label {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: errorMessage.bottom
-                visible: results.count === 0 && search.query.length > 0 && !search.busy && search.didYouMean.length > 0
-                font.pixelSize: UI.FONT_LARGE
-                font.family: UI.FONT_FAMILY_LIGHT
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                width: parent.width - UI.MARGIN_XLARGE * 2
-                horizontalAlignment: Text.AlignHCenter
-
-                text: "<a href='didyoumean'>" + search.didYouMean + "</a>?"
-
-                onLinkActivated: searchField.text = search.didYouMean
-            }
-
-            Scrollbar { flickableItem: results }
         }
     }
 }

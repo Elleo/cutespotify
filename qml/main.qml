@@ -45,9 +45,10 @@ import Ubuntu.Layouts 0.1
 
 MainView {
     id: appWindow
-    width: units.gu(43);
-    height: units.gu(68);
+    width: units.gu(43)
+    height: units.gu(68)
     property string themeColor
+    applicationName: "CuteSpotify"
 
     property int sidebarWidth: 40
     property bool showSidebar: appWindow.width >= units.gu(100) && appWindow.height >= units.gu(60)
@@ -91,6 +92,7 @@ MainView {
         }
         onPendingConnectionRequestChanged: {
             if (!spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
+                pageStack.pop() // Remove login page from stack
                 pageStack.push(mainPage)
             } else if (spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
                 pageStack.push(loginPage)

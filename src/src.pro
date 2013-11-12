@@ -11,11 +11,8 @@ QT += \
     widgets
 
 SOURCES += \
-    lastfmscrobbler.cpp \
     main.cpp
 
-HEADERS += \
-    lastfmscrobbler.h
 
 RESOURCES += \
     ../res.qrc
@@ -31,4 +28,3 @@ target.path = $$PREFIX/bin
 INSTALLS += target
 
 include(../libQtSpotify/libQtSpotify.pri)
-include(../liblastfm/liblastfm.pri)

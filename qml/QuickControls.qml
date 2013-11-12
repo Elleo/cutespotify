@@ -75,6 +75,7 @@ Rectangle {
       I reported a bug here: https://bugs.launchpad.net/ubuntu-ui-toolkit/+bug/1247457
     Layouts {
         anchors.fill: parent
+<<<<<<< HEAD
 
         layouts: [
             ConditionalLayout {
@@ -165,10 +166,19 @@ Rectangle {
                 }
             }
         ]
+=======
+        anchors.rightMargin: UI.MARGIN_XLARGE
+        opacity: player.openRequested ? 0.0 : 1.0
+>>>>>>> c6fc2c9a98d1917554d6e332d6084ec16724ebfe
 
         SpotifyImage {
             Layouts.item: "coverimage"
             spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
+<<<<<<< HEAD
+=======
+            width: units.gu(8)
+            height: width
+>>>>>>> c6fc2c9a98d1917554d6e332d6084ec16724ebfe
         }
 
         Column {
@@ -334,7 +344,28 @@ Rectangle {
             spacing: -10
 
             Item {
-                width: units.gu(7); height: units.gu(7)
+                width: units.gu(5); height: units.gu(7)
+                anchors.verticalCenter: parent.verticalCenter
+                Image {
+                    id: favIcon
+                    anchors.centerIn: parent
+                    opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
+                    source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("qrc:/qml/images/star.png")
+                                                                                                 : ("qrc:/qml/images/emptystar.png"))
+                                                        : ("qrc:/qml/images/emptystar.png")
+                    enabled: !spotifySession.offlineMode
+                }
+
+                MouseArea {
+                    id: starArea
+                    anchors.fill: parent
+                    anchors.margins: -15
+                    onClicked: spotifySession.currentTrack.isStarred = !spotifySession.currentTrack.isStarred
+               }
+            }
+
+            Item {
+                width: units.gu(5); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
@@ -349,7 +380,7 @@ Rectangle {
             }
 
             Item {
-                width: units.gu(7); height: units.gu(7)
+                width: units.gu(5); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
@@ -365,7 +396,7 @@ Rectangle {
             }
 
             Item {
-                width: units.gu(7); height: units.gu(7)
+                width: units.gu(5); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent

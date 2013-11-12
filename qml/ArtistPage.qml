@@ -39,8 +39,8 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -48,17 +48,18 @@ Page {
     id: artistPage
 
     property variant artist
-    orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
-    onStatusChanged: if (status == PageStatus.Active) browse.artist = artistPage.artist
+    Component.onCompleted: {
+        browse.artist = artist
+    }
 
     SpotifyArtistBrowse {
         id: browse
     }
 
-    TrackMenu {
+/*    TrackMenu {
         id: menu
         deleteVisible: false
     }
@@ -72,18 +73,24 @@ Page {
             onTracksChanged: albumMenu.open()
         }
     }
-
+*/
     Column {
         id: header
         width: parent.width
         anchors.top: parent.top
+        anchors.topMargin: UI.MARGIN_XLARGE
 
-        Selector {
+        Label {
+            height: UI.LIST_TILE_SIZE * 1.5
+            font.family: UI.FONT_FAMILY_BOLD
+            font.weight: Font.Bold
+            font.pixelSize: UI.LIST_TILE_SIZE
+            color: UI.LIST_TITLE_COLOR
+            text: artist ? artist.name : ""
+        }
+
+        OptionSelector {
             id: selector
-            title: artist ? artist.name : ""
-            titleFontFamily: UI.FONT_FAMILY_LIGHT
-            titleFontWeight: Font.Light
-            titleFontSize: UI.FONT_LARGE
             selectedIndex: 1
             model: ListModel {
                 ListElement { name: "Top hits" }
@@ -91,6 +98,7 @@ Page {
                 ListElement { name: "Biography" }
                 ListElement { name: "Related artists" }
             }
+            delegate: OptionSelectorDelegate { text: name }
         }
 
         Separator {
@@ -141,7 +149,7 @@ Page {
                     artist: modelData.sectionType == "Appears on" ? modelData.artist : (modelData.year > 0 ? modelData.year : "")
                     albumCover: modelData.coverId
                     onClicked: {
-                        mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData })
+                        pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData })
                     }
                     onPressAndHold: {
                         menuAlbumBrowse.album = modelData;
@@ -156,7 +164,7 @@ Page {
                 ArtistDelegate {
                     name: modelData.name
                     portrait: modelData.pictureId
-                    onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
                 }
             }
 
@@ -244,6 +252,11 @@ Page {
                     artistView.delegate = artistComponent
                 }
                 artistView.positionViewAtBeginning()
+            }
+
+            footer: Item {
+                width: parent.width
+                height: units.gu(10)
             }
         }
 

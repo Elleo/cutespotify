@@ -50,6 +50,10 @@ Page {
     anchors.leftMargin: UI.MARGIN_XLARGE
     enabled: !spotifySession.offlineMode
 
+    Component.onCompleted: {
+        toplist.updateResults()
+    }
+
     Connections {
         target: spotifySession
         onOfflineModeChanged: {
@@ -194,18 +198,24 @@ Page {
             width: parent.width
         }
 
-        Selector {
+        Label {
+            height: UI.LIST_TILE_SIZE * 1.5
+            font.family: UI.FONT_FAMILY_BOLD
+            font.weight: Font.Bold
+            font.pixelSize: UI.LIST_TILE_SIZE
+            color: UI.LIST_TITLE_COLOR
+            text: "Top lists"
+        }
+
+        OptionSelector {
             id: selector
-            title: "Top lists"
-            titleFontFamily: UI.FONT_FAMILY_LIGHT
-            titleFontWeight: Font.Light
-            titleFontSize: UI.FONT_LARGE
             selectedIndex: 0
             model: ListModel {
                 ListElement { name: "Tracks" }
                 ListElement { name: "Albums" }
                 ListElement { name: "Artists" }
             }
+            delegate: OptionSelectorDelegate { text: name }
         }
 
         Separator {
@@ -253,7 +263,7 @@ Page {
                     artist: modelData.artist
                     albumCover: modelData.coverId
                     showIndex: true
-                    onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
                     onPressAndHold: {
                         menuAlbumBrowse.album = modelData;
                         if (menuAlbumBrowse.totalDuration > 0)
@@ -267,7 +277,7 @@ Page {
                     name: modelData.name
                     portrait: modelData.pictureId
                     showIndex: true
-                    onClicked: { mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
                 }
             }
 
@@ -295,8 +305,13 @@ Page {
                     results.model = toplist.artists
                 }
             }
-        }
 
+            footer: Item {
+                width: parent.width
+                height: units.gu(10)
+            }
+
+        }
         Scrollbar { flickableItem: results }
     }
 

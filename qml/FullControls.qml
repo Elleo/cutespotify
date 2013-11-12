@@ -436,9 +436,9 @@ Column {
                 x: 136
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
-                source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("image://theme/icon-m-toolbar-favorite-mark")
-                                                                                             : ("image://theme/icon-m-toolbar-favorite-unmark"))
-                                                    : ("image://theme/icon-m-toolbar-favorite-unmark")
+                source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("qrc:/qml/images/star.png")
+                                                                                             : ("qrc:/qml/images/emptystar.png"))
+                                                    : ("qrc:/qml/images/emptystar.png")
                 enabled: !spotifySession.offlineMode
 
                 MouseArea {

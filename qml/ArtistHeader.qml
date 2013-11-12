@@ -39,8 +39,8 @@
 ****************************************************************************/
 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Ubuntu.Components 0.1
 import "UIConstants.js" as UI
 
 Column {
@@ -66,13 +66,13 @@ Column {
             height: parent.height
             width: height
             anchors.left: parent.left
-            color: theme.inverted ? "#202020" : "#C9C9C9"
+            color: "#C9C9C9"
             visible: albumCount.length > 0 || singleCount.length > 0 || compilationCount.length > 0
             SpotifyImage {
                 id: coverImage
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
-                defaultImage: theme.inverted ? "images/icon-l-contact-avatar-placeholder-big.png" : "images/icon-l-contact-avatar-placeholder-black-big.png"
+                defaultImage: "images/icon-l-contact-avatar-placeholder-black-big.png"
                 clip: true
             }
         }

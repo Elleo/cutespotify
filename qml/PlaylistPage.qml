@@ -130,7 +130,7 @@ Page {
                 if (modelData.type === SpotifyPlaylist.Playlist)
                     staticIcon = "images/icon-m-music-video-all-songs-black.png";
                 else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-common-favorite-mark"
+                    staticIcon = "qrc:/qml/images/star.png";
                 else if (modelData.type === SpotifyPlaylist.Inbox)
                     staticIcon = "images/icon-m-toolbar-directory-move-to-black.png";
                 else if (modelData.type === SpotifyPlaylist.Folder)
@@ -184,7 +184,8 @@ Page {
                     }
                 }
 
-                Label {
+/*                Label {
+                    id: newPlaylistLabel
                     anchors.verticalCenter: parent.verticalCenter
                     font.family: UI.FONT_FAMILY_BOLD
                     font.weight: Font.Bold
@@ -192,7 +193,7 @@ Page {
                     color: UI.LIST_TITLE_COLOR
                     opacity: 0.4
                     text: "New playlist"
-                }
+                }*/
             }
 
             MouseArea {
@@ -202,6 +203,11 @@ Page {
                     newPlaylistSheet.playlistName = "";
                     newPlaylistSheet.open();
                 }
+            }
+            Item {
+                anchors.top: newPlaylistLabel.bottom
+                width: parent.width
+                height: units.gu(10)
             }
         }
 

@@ -48,7 +48,6 @@
 #include <QtWidgets/QApplication>
 
 //#include "src/hardwarekeyshandler.h"
-#include "lastfmscrobbler.h"
 #include <QtSpotify>
 #include <qspotify_qmlplugin.h>
 
@@ -83,9 +82,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
 
     //HardwareKeysHandler keyHandler;
-
-    LastFmScrobbler scrobbler;
-    view->rootContext()->setContextProperty(QLatin1String("lastfm"), &scrobbler);
 
     view->setSource(QUrl("qrc:/qml/main.qml"));
     view->setResizeMode(QQuickView::SizeRootObjectToView);
