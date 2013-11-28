@@ -41,7 +41,7 @@ HEADERS += $$PWD/qspotifysession.h \
     $$PWD/qspotifytoplist.h \
     ../libQtSpotify/qspotifyevents.h
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++0x
 
 INCLUDEPATH += $$PWD/../libspotify/include
 LIBS += -L$$PWD/../libspotify/lib -lspotify
