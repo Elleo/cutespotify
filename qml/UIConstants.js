@@ -129,8 +129,8 @@ var MARGIN_XLARGE = 16;
 var LIST_ITEM_MARGIN = 18
 var LIST_ITEM_SPACING = 16
 var LIST_ITEM_HEIGHT = 80
-var LIST_ICON_SIZE = units.gu(10)
-var LIST_TILE_SIZE = units.gu(6)
+var LIST_ICON_SIZE = 64
+var LIST_TILE_SIZE = 26
 var LIST_TITLE_COLOR = "#191919"
 var LIST_TITLE_COLOR_INVERTED = "#ffffff"
 var LIST_SUBTILE_SIZE = 22
@@ -138,10 +138,10 @@ var LIST_SUBTITLE_COLOR = "#505050"
 var LIST_SUBTITLE_COLOR_INVERTED = "#b8b8b8"
 
 /* Font properties */
-var FONT_FAMILY = "Ubuntu";
-var FONT_FAMILY_BOLD = "Ubuntu Bold";
-var FONT_FAMILY_LIGHT = "Ubuntu Light";
-var FONT_DEFAULT_SIZE = units.gu(4);
+var FONT_FAMILY = "Nokia Pure Text";
+var FONT_FAMILY_BOLD = "Nokia Pure Text";
+var FONT_FAMILY_LIGHT = "Nokia Pure Text Light";
+var FONT_DEFAULT_SIZE = 24;
 var FONT_LIGHT_SIZE = 22;
 
 /* TUMBLER properties */

@@ -40,20 +40,21 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
-
 import "UIConstants.js" as UI
 
 Page {
     id: mainPage
     anchors.fill: parent
 
-    property alias tabs: tabGroup
-    property alias searchTabAlias: searchTab
+//    property alias tabs: tabGroup
+//    property alias searchTabAlias: searchTab
     property alias playlistSelection: playlistSelectionDialog
 
-    property bool showToolbar : false
+    Component.onCompleted: {
+        player.visible = true;
+    }
 
     NotificationBanner {
         id: errorBanner
@@ -137,10 +138,10 @@ Page {
         }
     }
 
-    Tabs {
+    /*Tabs {
         id: tabGroup
 
-        Tab {
+        Tab { 
             id: playlistsTab
             title: "Playlists"
             page: PlaylistPage { }
@@ -160,7 +161,8 @@ Page {
             id: settingsTab
             page: SettingsPage { }
         }
-    }
+
+    }*/
 
     function checkSearchPage() {
         if (searchTab.depth === 0) searchTab.push(Qt.resolvedUrl("SearchPage.qml"))

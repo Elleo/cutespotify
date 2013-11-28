@@ -39,16 +39,19 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import "UIConstants.js" as UI
 
-Item {
+Rectangle {
     id: player
+    width: parent.width
+    color: UI.COLOR_BACKGROUND
+    anchors.bottom: parent.bottom;
 
     property alias showFullControls: fullControls.visible
     property bool openRequested: false
     property bool hidden: true
-    property bool inOpenPosition:  y > -quickControls.y
+    property bool inOpenPosition: y > -quickControls.y
 
     property bool openedOnce: false
     onOpenRequestedChanged: if (openRequested) openedOnce = true
@@ -59,15 +62,12 @@ Item {
 
     FullControls {
         id: fullControls
-        visible: false
+        visible: false;
         anchors.bottom: quickControls.top
     }
 
     QuickControls {
-        visible: true
-
         id: quickControls
-
         anchors.bottom: parent.bottom
     }
 

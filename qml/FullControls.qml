@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import "UIConstants.js" as UI
 import QtSpotify 1.0
 
@@ -269,10 +269,10 @@ Column {
                 delegate: TrackDelegate {
                     property bool isExplicit: spotifySession.playQueue.isExplicitTrack(index)
                     name: modelData.name
+                    backgroundOpacity: isExplicit ? 0.6 : 0.0
                     titleColor: isExplicit ? ("#c6a83f") : (UI.LIST_TITLE_COLOR)
                     subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
-                    artist: modelData.artists
-                    album: modelData.album
+                    artistAndAlbum: modelData.artists + " | " + modelData.album
                     duration: modelData.duration
                     highlighted: index == spotifySession.playQueue.currentIndex
                     onClicked: if (!highlighted) spotifySession.playQueue.selectTrack(modelData)
@@ -285,11 +285,11 @@ Column {
                 }
             }
 
-            Scrollbar {
+/*            Scrollbar {
                 anchors.topMargin: -UI.MARGIN_XLARGE
                 anchors.rightMargin: -UI.MARGIN_XLARGE
                 flickableItem: queueList
-            }
+            }*/
         }
     }
 

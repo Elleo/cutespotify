@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -94,9 +94,9 @@ Item {
                 unseenBox.opacity = 1.0
                 offlineStatusIcon.opacity = 1.0
                 downloadBar.opacity = 1.0
-                mainText.color = listItem.titleColor
-                subText.color = listItem.subtitleColor
-                timing.color = listItem.subtitleColor
+                mainText.color = Theme.primaryColor
+                subText.color = Theme.secondaryColor
+                timing.color = Theme.secondaryColor
             }
         }
     }
@@ -144,7 +144,7 @@ Item {
                     font.family: listItem.titleFont
                     font.weight: Font.Bold
                     font.pixelSize: listItem.titleSize
-                    color: listItem.titleColor
+                    color: Theme.primaryColor
                     elide: Text.ElideRight
                 }
 
@@ -171,7 +171,7 @@ Item {
                             anchors.centerIn: parent
                             font.family: listItem.titleFont
                             font.pixelSize: listItem.subtitleSize
-                            color: UI.LIST_TITLE_COLOR_INVERTED
+                            color: Theme.primaryColor
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: listItem.unseens
@@ -210,7 +210,7 @@ Item {
                         font.family: listItem.subtitleFont
                         font.pixelSize: listItem.subtitleSize
                         font.weight: Font.Light
-                        color: listItem.subtitleColor
+                        color: Theme.secondaryColor
                         anchors.left: parent.left
                         anchors.right: timing.left
                         anchors.rightMargin: UI.MARGIN_XLARGE
@@ -223,7 +223,7 @@ Item {
                         font.family: listItem.subtitleFont
                         font.weight: Font.Light
                         font.pixelSize: listItem.subtitleSize
-                        color: listItem.subtitleColor
+                        color: Theme.secondaryColor
                         anchors.right: parent.right
                         visible: text != ""
                     }
@@ -265,7 +265,7 @@ Item {
                         font.family: listItem.subtitleFont
                         font.pixelSize: listItem.subtitleSize
                         font.weight: Font.Light
-                        color: listItem.subtitleColor
+                        color: Theme.secondaryColor
                         text: "Waiting for sync"
                     }
                 }

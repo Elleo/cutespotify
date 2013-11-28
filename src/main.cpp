@@ -71,6 +71,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/com.mikeasoft.cutespotify/");
 
     QApplication *app = new QApplication(argc, argv);
+    QQuickWindow::setDefaultAlphaBuffer(true);
     QQuickView *view = new QQuickView();
 
     if (!app->arguments().contains(QLatin1String("--debug"))) {
@@ -85,7 +86,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     view->setSource(QUrl("qrc:/qml/main.qml"));
     view->setResizeMode(QQuickView::SizeRootObjectToView);
-
     if(view->status() != QQuickView::Error)
         view->show();
     else
@@ -96,6 +96,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         for(auto error: errors) {
             cerr << error.toString().toStdString() << endl;
         }
+        view->show();
     }
 
     return app->exec();

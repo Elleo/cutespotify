@@ -244,8 +244,7 @@ Page {
                 id: trackComponent
                 TrackDelegate {
                     name: modelData.name
-                    artist: modelData.artist
-                    album: modelData.album
+                    artistAndAlbum: modelData.artists + " | " + modelData.album
                     duration: modelData.duration
                     highlighted: modelData.isCurrentPlayingTrack
                     starred: modelData.isStarred

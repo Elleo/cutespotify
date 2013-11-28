@@ -40,7 +40,7 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -48,6 +48,12 @@ Page {
     id: playlistPage
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
+
+
+    Component.onCompleted: {
+        player.visible = true;
+    }
+
 
     Connections {
         target: spotifySession
@@ -72,11 +78,12 @@ Page {
     }
 */
     ListView {
-        // FIXME: Bug in conditional layouts. Have to add this to every page...
-        anchors.leftMargin: appWindow.showSidebar ? units.gu(appWindow.sidebarWidth) : 0
-
         id: playlists
         anchors.fill: parent
+        anchors.topMargin: 100
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.bottomMargin: 100
 
         cacheBuffer: 3000
         model: spotifySession.user ? spotifySession.user.playlists : 0
@@ -204,11 +211,11 @@ Page {
                     newPlaylistSheet.open();
                 }
             }
-            Item {
+            /*Item {
                 anchors.top: newPlaylistLabel.bottom
                 width: parent.width
-                height: units.gu(10)
-            }
+                height: 80
+            }*/
         }
 
         section.criteria: ViewSection.FirstCharacter
@@ -220,5 +227,5 @@ Page {
         }
     }
 
-    Scrollbar { flickableItem: playlists }
+    //Scrollbar { flickableItem: playlists }
 }

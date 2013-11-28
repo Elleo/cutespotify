@@ -38,27 +38,28 @@
 **
 ****************************************************************************/
 
-
 import QtQuick 2.0
-import Ubuntu.Components 0.1
-import Ubuntu.Layouts 0.1
+import Sailfish.Silica 1.0
+import QtSpotify 1.0
 
-MainView {
+ApplicationWindow {
     id: appWindow
-    width: units.gu(43)
-    height: units.gu(68)
     property string themeColor
-    applicationName: "CuteSpotify"
+    anchors.topMargin: 50
+    anchors.leftMargin: 10
+    anchors.rightMargin: 10
 
-    property int sidebarWidth: 40
-    property bool showSidebar: appWindow.width >= units.gu(100) && appWindow.height >= units.gu(60)
+    Player {
+        id: player
+        visible: false
+    }
 
     Component {
         id: mainPage
-
-        MainPage {
+        // MainPage {
+        PlaylistPage {
             id: mainPageItem
-            onToolsChanged: appWindow.pageStack.toolBar.setTools(mainPageItem.tools, "replace")
+            //onToolsChanged: appWindow.pageStack.toolBar.setTools(mainPageItem.tools, "replace")
         }
     }
 
@@ -67,8 +68,8 @@ MainView {
         LoginPage { }
     }
 
-
     Component.onCompleted: {
+        spotifySession.isLoggedIn ? pageStack.push(mainPage) : pageStack.push(loginPage)
         themeColor = "color2"
         if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
             openConnection();
@@ -97,93 +98,6 @@ MainView {
             } else if (spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
                 pageStack.push(loginPage)
             }
-        }
-    }
-
-
-    PageStack {
-        Layouts.item: "pageStack"
-        id: pageStack
-
-        Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
-    }
-
-
-    Layouts {
-        id: layouts
-        anchors.fill: parent
-
-        layouts: [
-            ConditionalLayout {
-                name: "phone"
-                when: !appWindow.showSidebar
-
-                Item {
-                    anchors.fill: parent
-
-                    ItemLayout {
-                        item: "player"
-
-                        anchors {
-                            bottom: parent.bottom
-                            left: parent.left
-                            right: parent.right
-                        }
-
-                        height: units.gu(5)
-                    }
-
-                 /*   ItemLayout {
-                        item: "pageStack"
-
-                        anchors {
-                            bottom: playerLayout1.top
-                            top: parent.top
-                            right: parent.right
-                            left: parent.left
-                        }
-                    }*/
-                }
-            },
-            ConditionalLayout {
-                name: "desktop"
-                when: appWindow.showSidebar
-
-                Item {
-                    anchors.fill: parent
-
-                    ItemLayout {
-                        id: playerLayout2
-                        item: "player"
-
-                        anchors {
-                            left: parent.left
-                            top: parent.top
-                            bottom: parent.bottom
-                        }
-
-                        width: units.gu(appWindow.sidebarWidth)
-                    }
-
-                 /*   ItemLayout {
-                        item: "pageStack"
-
-                        anchors {
-                            left: playerLayout2.right
-                            top: parent.top
-                            right: parent.right
-                            bottom: parent.bottom
-                        }
-                    }*/
-                }
-            }
-        ]
-
-        Player {
-            Layouts.item: "player"
-            id: player
-
-            visible: spotifySession.isLoggedIn
         }
     }
 }

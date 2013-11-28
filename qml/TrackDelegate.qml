@@ -39,21 +39,17 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
-import Ubuntu.Layouts 0.1
+import Sailfish.Silica 1.0
 import "UIConstants.js" as UI
 
-Rectangle {
+Item {
     id: listItem
-
-    color: index % 2 == 0 ? Qt.rgba(1,1,1,0.5) : "transparent"
 
     signal clicked
     signal pressAndHold
     property alias pressed: mouseArea.pressed
     property alias name: mainText.text
-    property string artist
-    property string album
+    property alias artistAndAlbum: subText.text
     property alias duration: timing.text
     property string coverId: ""
     property bool highlighted: false
@@ -72,7 +68,11 @@ Rectangle {
     property string subtitleFont: UI.FONT_FAMILY_LIGHT
     property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
-    height: appWindow.showSidebar ? units.gu(4) : units.gu(8)
+    property real backgroundOpacity: 0.0
+
+    property real defaultHeight: UI.LIST_ITEM_HEIGHT
+
+    height: defaultHeight
     width: parent.width
 
     SequentialAnimation {
@@ -107,6 +107,16 @@ Rectangle {
         mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
         subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
         timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
+    }
+
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        // Fill page porders
+        anchors.leftMargin: -UI.MARGIN_XLARGE
+        anchors.rightMargin: -UI.MARGIN_XLARGE
+        opacity: mouseArea.pressed ? 1.0 : backgroundOpacity
+        color: "#15000000"
     }
 
     Loader {
@@ -150,162 +160,17 @@ Rectangle {
         }
     }
 
-    Layouts {
-        anchors {
-            left: coverContainer.right
-            leftMargin: listItem.coverId.length > 0 ? UI.MARGIN_XLARGE : 0
-            right: parent.right
-            bottom: parent.bottom
-            top: parent.top
-        }
-
-        layouts: [
-            ConditionalLayout {
-                name: "phone"
-                when: !appWindow.showSidebar
-
-                Item {
-                    anchors.fill: parent
-                    anchors.margins: units.gu(0.5)
-
-                    opacity: listItem.available ? 1.0 : 0.3
-
-                    ItemLayout {
-                        id: textLayout1
-
-                        item: "text"
-
-                        anchors {
-                            top: parent.top
-                            left: parent.left
-                            right: parent.right
-                        }
-
-                        height: mainText.height
-                    }
-
-                    Label {
-                        anchors {
-                            left: parent.left
-                            right: timingLayout1.left
-                            top: textLayout1.bottom
-                            bottom: parent.bottom
-                        }
-
-                        id: subText
-                        text: artist + " | " + album
-
-                        font.family: listItem.subtitleFont
-                        font.pixelSize: listItem.subtitleSize
-                        font.weight: Font.Light
-                        color: highlighted ? listItem.highlightColor : listItem.subtitleColor
-                        elide: Text.ElideRight
-                        clip: true
-                        visible: text != ""
-                        Behavior on color { ColorAnimation { duration: 200 } }
-                    }
-
-                    ItemLayout {
-                        id: timingLayout1
-                        item: "timing"
-
-                        anchors {
-                            right: parent.right
-                            top: parent.top
-                            bottom: parent.bottom
-                        }
-
-                        width: units.gu(5)
-                    }
-                }
-            },
-            ConditionalLayout {
-                name: "desktop"
-                when: appWindow.showSidebar
-
-                Item {
-                    anchors.fill: parent
-                    anchors.margins: units.gu(0.5)
-
-                    ItemLayout {
-                        id: textlayout2
-                        item: "text"
-
-                        anchors {
-                            left: parent.left
-                            top: parent.top
-                            bottom: parent.bottom
-                        }
-
-                        width: Math.max(units.gu(40), parent.width * 0.4)
-
-                    }
-
-                    Label {
-                        id: artistLabel
-
-                        anchors {
-                            left:  textlayout2.right
-                            top:    parent.top
-                            bottom: parent.bottom
-                        }
-
-                        width: units.gu(40)
-                        text: artist
-
-                        font.family: listItem.subtitleFont
-                        font.pixelSize: listItem.subtitleSize
-                        font.weight: Font.Light
-                        color: highlighted ? listItem.highlightColor : listItem.subtitleColor
-                        elide: Text.ElideRight
-                        clip: true
-                        visible: text != ""
-                        Behavior on color { ColorAnimation { duration: 200 } }
-                    }
-
-                    Label {
-                        id: albumText
-
-                        anchors {
-                            left: artistLabel.right
-                            top: parent.top
-                            bottom: parent.bottom
-                        }
-
-                        visible: parent.width > (textlayout2.width + artistLabel.width + albumText.width + timingLayout2.width)
-
-                        width: units.gu(40)
-                        text: album
-
-                        font.family: listItem.subtitleFont
-                        font.pixelSize: listItem.subtitleSize
-                        font.weight: Font.Light
-
-                        color: highlighted ? listItem.highlightColor : listItem.subtitleColor
-                        elide: Text.ElideRight
-
-                        Behavior on color { ColorAnimation { duration: 200 } }
-                    }
-
-                    ItemLayout {
-                        id: timingLayout2
-                        item: "timing"
-
-                        anchors {
-                            right: parent.right
-                            top: parent.top
-                            bottom: parent.bottom
-                        }
-
-                        width: units.gu(5)
-                    }
-                }
-            }
-        ]
+    Column {
+        anchors.left: coverContainer.right
+        anchors.leftMargin: listItem.coverId.length > 0 ? UI.MARGIN_XLARGE : 0
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        opacity: listItem.available ? 1.0 : 0.3
 
         Item {
-            Layouts.item: "text"
-
+            height: mainText.height
+            anchors.left: parent.left
+            anchors.right: parent.right
             Label {
                 id: mainText
                 height: 34
@@ -332,17 +197,35 @@ Rectangle {
             }
         }
 
-        Label {
-            Layouts.item: "timing"
-
-            id: timing
-            font.family: listItem.subtitleFont
-            font.weight: Font.Light
-            font.pixelSize: listItem.subtitleSize
-            color: highlighted ? listItem.highlightColor : listItem.subtitleColor
-            visible: text != ""
-
-            Behavior on color { ColorAnimation { duration: 200 } }
+        Item {
+            height: subText.height
+            anchors.left: parent.left
+            anchors.right: parent.right
+            Label {
+                id: subText
+                height: 29
+                anchors.left: parent.left
+                anchors.right: timing.left
+                anchors.rightMargin: UI.MARGIN_XLARGE
+                font.family: listItem.subtitleFont
+                font.pixelSize: listItem.subtitleSize
+                font.weight: Font.Light
+                color: highlighted ? listItem.highlightColor : listItem.subtitleColor
+                elide: Text.ElideRight
+                clip: true
+                visible: text != ""
+                Behavior on color { ColorAnimation { duration: 200 } }
+            }
+            Label {
+                id: timing
+                font.family: listItem.subtitleFont
+                font.weight: Font.Light
+                font.pixelSize: listItem.subtitleSize
+                color: highlighted ? listItem.highlightColor : listItem.subtitleColor
+                anchors.right: parent.right
+                visible: text != ""
+                Behavior on color { ColorAnimation { duration: 200 } }
+            }
         }
     }
 

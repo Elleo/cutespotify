@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -64,7 +64,6 @@ Page {
         source: "qrc:/qml/images/cutespotify-logo.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: username.activeFocus || password.activeFocus ? -25 : 100
     }
 
     Column {
@@ -110,36 +109,17 @@ Page {
             }
         }
 
-        Item {
-            height: termsText.height + units.gu(5)
-            width: parent.width
-
-            CheckBox {
-                id: termsCheck
-                anchors.verticalCenter: parent.verticalCenter
-            /*    platformStyle: CheckBoxStyle {
-                    backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-selected"
-                    backgroundPressed: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-pressed"
-                    backgroundDisabled: "image://theme/" + appWindow.themeColor + "-meegotouch-button-checkbox-" + (theme.inverted ? "inverted-" : "") + "background-disabled"
-                }*/
-            }
-            Label {
-                id: termsText
-                anchors.left: termsCheck.right
-                anchors.leftMargin: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                text: "I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
-                wrapMode: Text.WordWrap
-                font.pixelSize: UI.FONT_LSMALL
-                onLinkActivated: Qt.openUrlExternally(link)
-            }
+        TextSwitch {
+            id: termsCheck
+            text: "Accept"
+            description: "I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
         }
 
         Item {
             height: UI.DEFAULT_MARGIN
             width: 1
         }
+
         Button {
             id: button
             text: "Log in"
@@ -193,7 +173,7 @@ Page {
             }
         }
 
-        ActivityIndicator {
+        BusyIndicator {
             anchors.horizontalCenter: parent.horizontalCenter
             running: parent.visible
         }

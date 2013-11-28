@@ -40,19 +40,20 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 import "Utilities.js" as Util
 
 Page {
     id: tracklistPage
-
     property variant playlist
+    anchors.rightMargin: UI.MARGIN_XLARGE
+    anchors.leftMargin: UI.MARGIN_XLARGE
+
     Component.onCompleted: playlist.trackFilter = ""
 
-
-    /*    TrackMenu {
+/*    TrackMenu {
         id: menu
         deleteVisible: playlist && spotifySession.user ? (playlist.type != SpotifyPlaylist.Starred && spotifySession.user.canModifyPlaylist(playlist))
                                                        : false
@@ -63,8 +64,9 @@ Page {
         id: trackDelegate
         TrackDelegate {
             name: searchField.text.length > 0 ? Util.highlightWord(modelData.name, searchField.text) : modelData.name
-            artist: searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists
-            album: searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album
+            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists)
+                            + " | "
+                            + (searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album)
             duration: modelData.duration
             highlighted: modelData.isCurrentPlayingTrack
             starred: modelData.isStarred
@@ -104,112 +106,99 @@ Page {
         tracks.positionViewAtBeginning();
     }
 
-    Item {
-        // FIXME: Bug in conditional layouts. Have to add this to every page...
-        anchors.leftMargin: appWindow.showSidebar ? units.gu(appWindow.sidebarWidth) : 0
-        anchors.fill: parent
+    ListView {
+        id: tracks
 
-        ListView {
+        property bool showSearchField: false
+        property bool _movementFromBeginning: false
 
-            id: tracks
+        Component.onCompleted: tracks.positionViewAtBeginning();
 
-            property bool showSearchField: false
-            property bool _movementFromBeginning: false
+        Timer {
+            id: searchFieldTimer
+            onTriggered: tracks.showSearchField = false
+            interval: 5000
+        }
 
-            Component.onCompleted: tracks.positionViewAtBeginning();
+        width: parent.width
+        anchors.top: searchFieldContainer.bottom
+        anchors.bottom: parent.bottom
 
-            Timer {
-                id: searchFieldTimer
-                onTriggered: tracks.showSearchField = false
-                interval: 5000
-            }
-
+        cacheBuffer: 3000
+        highlightMoveDuration: 1
+        model: playlist.tracks
+        header: Item {
             width: parent.width
-            anchors.top: searchFieldContainer.bottom
-            anchors.bottom: parent.bottom
-
-            cacheBuffer: 3000
-            highlightMoveDuration: 1
-            model: playlist.tracks
-            header: Item {
-                anchors {
-                    right: parent.right
-                    left: parent.left
-
-                    rightMargin: UI.MARGIN_XLARGE
-                    leftMargin: UI.MARGIN_XLARGE
-                }
-
-                height: units.gu(10)
-                Label {
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.family: UI.FONT_FAMILY_BOLD
-                    font.weight: Font.Bold
-                    font.pixelSize: appWindow.showSidebar ? units.gu(4) : units.gu(2)
-                    color: UI.LIST_TITLE_COLOR
-                    text: (playlist.type === SpotifyPlaylist.Playlist ? playlist.name
-                                                                     : (playlist.type === SpotifyPlaylist.Starred ? "Starred"
-                                                                                                                 : "Inbox"))
-                }
-                Row {
-                    spacing: units.gu(2)
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    Label {
-                        text: "Available offline"
-                    }
-                    Switch {
-                        onCheckedChanged: playlist.availableOffline = !playlist.availableOffline
-                        checked: playlist.availableOffline
-                    }
-                }
+            height: 100
+            Label {
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: UI.FONT_FAMILY_BOLD
+                font.weight: Font.Bold
+                font.pixelSize: UI.LIST_TILE_SIZE
+                color: UI.LIST_TITLE_COLOR
+                text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
+                                                             : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
+                                                                                                         : "Inbox"))
             }
-
-            onMovementStarted: {
-                tracks.focus = true;
-                if (atYBeginning)
-                    _movementFromBeginning = true;
-            }
-
-            onContentYChanged: {
-                if (contentY < 0 && _movementFromBeginning) {
-                    showSearchField = true;
-                    searchFieldTimer.start()
-                } else {
-                    _movementFromBeginning = false;
+            Row {
+                spacing: 20
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                /*Label {
+                    text: "Available offline"
                 }
+                TextSwitch {
+                    onCheckedChanged: playlist.availableOffline = !playlist.availableOffline
+                    checked: playlist.availableOffline
+                }*/
             }
         }
 
-        Connections {
-            target: playlist
-            onPlaylistDestroyed: {
-                playlistsTab.pop(null);
+        onMovementStarted: {
+            tracks.focus = true;
+            if (atYBeginning)
+                _movementFromBeginning = true;
+        }
+
+        onContentYChanged: {
+            if (contentY < 0 && _movementFromBeginning) {
+                showSearchField = true;
+                searchFieldTimer.start()
+            } else {
+                _movementFromBeginning = false;
             }
         }
 
-        Rectangle {
-            color: Qt.rgba(1,1,1,0.8)
+        footer: Item {
+            width: parent.width
+            height: 100
+        }
+    }
 
-            anchors {
-                top: parent.top
-                right: parent.right
-                left: parent.left
-            }
+    Connections {
+        target: playlist
+        onPlaylistDestroyed: {
+            playlistsTab.pop(null);
+        }
+    }
 
-            id: searchFieldContainer
-            height: 0
-            clip: true
+    Rectangle {
+        id: searchFieldContainer
+        anchors.top: parent.top
+        width: parent.width
+        height: 0
+        color: UI.COLOR_BACKGROUND
+        clip: true
 
+        Column {
+            id: searchColumn
+            y: UI.MARGIN_XLARGE
+            width: parent.width
+            spacing: UI.MARGIN_XLARGE
             opacity: 0
 
             AdvancedTextField {
-                anchors {
-                    fill: parent
-                    margins: units.gu(1)
-                }
-
                 id: searchField
                 placeholderText: "Search"
                 width: parent.width
@@ -226,53 +215,51 @@ Page {
                 }
             }
 
-            states: State {
-                name: "visible"
-
-                //always show search field if there is enough height
-                when: searchField.text.length > 0 || searchField.activeFocus || tracks.showSearchField || appWindow.showSidebar
-
-                PropertyChanges {
-                    target: searchFieldContainer
-                    height: units.gu(6)
-                }
-
-                PropertyChanges {
-                    target: searchFieldContainer
-                    opacity: 1
-                }
-            }
-
-            transitions: [
-                Transition {
-                    from: "visible"; to: ""
-                    SequentialAnimation {
-                        NumberAnimation {
-                            properties: "opacity"
-                            duration: 250
-                        }
-                        NumberAnimation {
-                            properties: "height"
-                            duration: 350
-                        }
-                    }
-                },
-                Transition {
-                    from: ""; to: "visible"
-                    SequentialAnimation {
-                        NumberAnimation {
-                            properties: "height"
-                            duration: 100
-                        }
-                        NumberAnimation {
-                            properties: "opacity"
-                            duration: 200
-                        }
-                    }
-                }
-            ]
+            Separator { width: parent.width }
         }
 
-        Scrollbar { flickableItem: tracks }
+        states: State {
+            name: "visible"
+            when: searchField.text.length > 0 || searchField.activeFocus || tracks.showSearchField
+            PropertyChanges {
+                target: searchFieldContainer
+                height: searchColumn.height + UI.MARGIN_XLARGE
+            }
+            PropertyChanges {
+                target: searchColumn
+                opacity: 1
+            }
+        }
+
+        transitions: [
+            Transition {
+                from: "visible"; to: ""
+                SequentialAnimation {
+                    NumberAnimation {
+                        properties: "opacity"
+                        duration: 250
+                    }
+                    NumberAnimation {
+                        properties: "height"
+                        duration: 350
+                    }
+                }
+            },
+            Transition {
+                from: ""; to: "visible"
+                SequentialAnimation {
+                    NumberAnimation {
+                        properties: "height"
+                        duration: 100
+                    }
+                    NumberAnimation {
+                        properties: "opacity"
+                        duration: 200
+                    }
+                }
+            }
+        ]
     }
+
+    //Scrollbar { flickableItem: tracks }
 }
