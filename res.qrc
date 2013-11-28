@@ -73,8 +73,11 @@
         <file>qml/images/icon-l-contact-avatar-placeholder-big.png</file>
         <file>qml/images/icon-l-contact-avatar-placeholder-black-big.png</file>
         <file>qml/images/icon-m-toolbar-directory-black.png</file>
+        <file>qml/images/icon-m-toolbar-directory-white.png</file>
         <file>qml/images/icon-m-music-video-all-songs-black.png</file>
+        <file>qml/images/icon-m-music-video-all-songs-white.png</file>
         <file>qml/images/icon-m-toolbar-directory-move-to-black.png</file>
+        <file>qml/images/icon-m-toolbar-directory-move-to-white.png</file>
         <file>qml/images/icon-m-toolbar-shuffle-selected.png</file>
         <file>qml/images/icon-m-toolbar-repeat-one-white-selected.png</file>
         <file>qml/images/next.png</file>
