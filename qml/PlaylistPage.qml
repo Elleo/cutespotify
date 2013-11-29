@@ -51,10 +51,6 @@ Page {
     anchors.topMargin: 50
 
 
-    Component.onCompleted: {
-        player.visible = true;
-    }
-
 /*    Component {
         id: searchPage
         SearchPage { }

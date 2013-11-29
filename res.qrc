@@ -87,5 +87,6 @@
         <file>qml/images/cutespotify-logo.png</file>
         <file>qml/images/star.png</file>
         <file>qml/images/emptystar.png</file>
+        <file>qml/images/cutespotify.png</file>
     </qresource>
 </RCC>

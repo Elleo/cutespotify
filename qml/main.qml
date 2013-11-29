@@ -50,12 +50,20 @@ ApplicationWindow {
     anchors.rightMargin: 10
 
     cover: CoverBackground {
+
         SpotifyImage {
             id: coverImage
             anchors.top: parent.top
             width: parent.width
             height: width
+            visible: spotifySession.currentTrack ? true : false
             spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
+        }
+
+        Image {
+            anchors.centerIn: parent
+            source: "qrc:/qml/images/cutespotify.png"
+            visible: spotifySession.currentTrack ? false : true
         }
 
         Column {
@@ -83,14 +91,14 @@ ApplicationWindow {
             id: coverAction
 
             CoverAction {
-                iconSource: spotifySession.isPlaying ? "image://theme/icon-cover-pause" : "image://theme/icon-cover-play"
+                iconSource: spotifySession.currentTrack ? (spotifySession.isPlaying ? "image://theme/icon-cover-pause" : "image://theme/icon-cover-play") : ""
                 onTriggered: {
                     spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
                 }
             }
 
             CoverAction {
-                iconSource: "image://theme/icon-cover-next"
+                iconSource: spotifySession.currentTrack ? "image://theme/icon-cover-next" : ""
                 onTriggered: {
                     spotifySession.playNext()
                 }
@@ -101,7 +109,7 @@ ApplicationWindow {
 
     Player {
         id: player
-        visible: false
+        visible: spotifySession.currentTrack ? true : false
     }
 
     Component {
