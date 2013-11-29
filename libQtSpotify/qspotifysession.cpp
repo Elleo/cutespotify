@@ -208,6 +208,20 @@ void QSpotifyAudioThreadWorker::startStreaming(int channels, int sampleRate)
 
         QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
         if (!info.isFormatSupported(af)) {
+            qWarning() << "Device: " << info.deviceName();
+            qWarning() << "Available devices: ";
+
+            QList<QAudioDeviceInfo> devices = QAudioDeviceInfo::availableDevices(QAudio::AudioOutput);
+            for (int i = 0; i < devices.size(); i++) {
+                QAudioDeviceInfo dev = devices[i];
+                qWarning() << dev.deviceName();
+            }
+            qWarning() << "Byte orders: " << info.supportedByteOrders();
+            qWarning() << "Channel counts: " << info.supportedChannelCounts();
+            qWarning() << "Codecs: " << info.supportedCodecs();
+            qWarning() << "Sample rates: " << info.supportedSampleRates();
+            qWarning() << "Sample sizes: " << info.supportedSampleSizes();
+            qWarning() << "Sample types: " << info.supportedSampleTypes();
             qWarning()<<"raw audio format not supported by backend, cannot play audio.";
             QCoreApplication::postEvent(QSpotifySession::instance(), new QEvent(QEvent::Type(QEvent::User + 5)));
             return;
