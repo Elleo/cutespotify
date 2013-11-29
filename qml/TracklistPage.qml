@@ -130,13 +130,14 @@ Page {
         header: Item {
             width: parent.width
             height: 100
+            anchors.topMargin: 100
             Label {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 font.family: UI.FONT_FAMILY_BOLD
                 font.weight: Font.Bold
                 font.pixelSize: UI.LIST_TILE_SIZE
-                color: UI.LIST_TITLE_COLOR
+                color: Theme.primaryColor
                 text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
                                                              : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
                                                                                                          : "Inbox"))

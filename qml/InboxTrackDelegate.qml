@@ -40,7 +40,7 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import "UIConstants.js" as UI
 
 Item {

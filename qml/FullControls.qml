@@ -54,8 +54,8 @@ Column {
     Connections {
         target: spotifySession
         onCurrentTrackChanged: {
-            if (infoDialog.status != DialogStatus.Closed)
-                infoDialog.reject()
+        //    if (infoDialog.status != DialogStatus.Closed)
+        //        infoDialog.reject()
         }
     }
 
@@ -484,7 +484,7 @@ Column {
             }
         }
         Rectangle {
-            height: units.gu(10)
+            height: 100
             anchors.bottom: parent.bottom
             width: parent.width
         }
