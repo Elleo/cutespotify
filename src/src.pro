@@ -1,5 +1,3 @@
-
-TEMPLATE = app
 TARGET = CuteSpotify
 
 QT += \
@@ -18,13 +16,19 @@ RESOURCES += \
     ../res.qrc
 
 QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
-QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath=/opt/click.ubuntu.com/com.mikeasoft.cutespotify/current/lib/ -Llibspotify/lib/
+QMAKE_LFLAGS += -pie -rdynamic -Wl,-rpath=/usr/share/cutespotify/ -Llibspotify/lib/
 
 isEmpty(PREFIX) {
-    PREFIX = /usr/local
+    PREFIX = /usr/
 }
 
+lib.path = $$PREFIX/share/cutespotify/
+lib.files = ../libspotify/lib/libspotify*
+desktop.path = $$PREFIX/share/applications/
+desktop.files = ../cutespotify.desktop
+icon.path = $$PREFIX/share/icons/hicolor/90x90/apps/
+icon.files = ../cutespotify.png
 target.path = $$PREFIX/bin
-INSTALLS += target
+INSTALLS += target desktop lib icon
 
 include(../libQtSpotify/libQtSpotify.pri)

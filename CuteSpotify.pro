@@ -9,6 +9,7 @@ OTHER_FILES += \
     qml/main.qml \
     cutespotify.desktop \
     CuteSpotify.png \
+    cutespotify.png \
     qtc_packaging/debian_harmattan/rules \
     qtc_packaging/debian_harmattan/README \
     qtc_packaging/debian_harmattan/copyright \
@@ -61,4 +62,6 @@ OTHER_FILES += \
     qml/MyCommonDialog.qml \
     qml/Scrollbar.qml \
     qml/LastfmLoginSheet.qml \
-    qml/FolderPage.qml
+    qml/FolderPage.qml \
+    rpm/cutespotify.yaml \
+    rpm/cutespotify.spec
