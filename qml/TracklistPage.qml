@@ -106,7 +106,7 @@ Page {
         tracks.positionViewAtBeginning();
     }
 
-    ListView {
+    SilicaListView {
         id: tracks
 
         property bool showSearchField: false
@@ -123,6 +123,7 @@ Page {
         width: parent.width
         anchors.top: searchFieldContainer.bottom
         anchors.bottom: parent.bottom
+        anchors.topMargin: 50
 
         cacheBuffer: 3000
         highlightMoveDuration: 1
@@ -184,12 +185,12 @@ Page {
         }
     }
 
-    Rectangle {
+    Item {
         id: searchFieldContainer
+        anchors.topMargin: 60
         anchors.top: parent.top
         width: parent.width
         height: 0
-        color: UI.COLOR_BACKGROUND
         clip: true
 
         Column {
@@ -215,8 +216,6 @@ Page {
                         searchFieldTimer.start();
                 }
             }
-
-            Separator { width: parent.width }
         }
 
         states: State {
