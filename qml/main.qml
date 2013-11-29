@@ -49,6 +49,56 @@ ApplicationWindow {
     anchors.leftMargin: 10
     anchors.rightMargin: 10
 
+    cover: CoverBackground {
+        SpotifyImage {
+            id: coverImage
+            anchors.top: parent.top
+            width: parent.width
+            height: width
+            spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
+        }
+
+        Column {
+            anchors.top: coverImage.bottom
+            anchors.topMargin: 0
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+            width: parent.width
+
+            Label {
+                elide: Text.ElideRight
+                font.pixelSize: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
+            }
+            Label {
+                elide: Text.ElideRight
+                font.pixelSize: 14
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
+            }
+        }
+
+        CoverActionList {
+            id: coverAction
+
+            CoverAction {
+                iconSource: spotifySession.isPlaying ? "image://theme/icon-cover-pause" : "image://theme/icon-cover-play"
+                onTriggered: {
+                    spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
+                }
+            }
+
+            CoverAction {
+                iconSource: "image://theme/icon-cover-next"
+                onTriggered: {
+                    spotifySession.playNext()
+                }
+            }
+
+        }
+    }
+
     Player {
         id: player
         visible: false

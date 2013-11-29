@@ -96,7 +96,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         for(auto error: errors) {
             cerr << error.toString().toStdString() << endl;
         }
-        view->show();
     }
 
     return app->exec();
