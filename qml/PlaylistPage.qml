@@ -77,10 +77,10 @@ Page {
         onAccepted: { spotifySession.user.createPlaylist(newPlaylistSheet.playlistName); }
     }
 */
-    ListView {
+    SilicaListView {
         id: playlists
         anchors.fill: parent
-        anchors.topMargin: 100
+        anchors.topMargin: 20
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         anchors.bottomMargin: 100
@@ -89,6 +89,21 @@ Page {
         model: spotifySession.user ? spotifySession.user.playlists : 0
 
         Component.onCompleted: positionViewAtBeginning()
+
+        PullDownMenu {
+            MenuItem {
+                text: "Settings"
+                onClicked: console.log("Settings");
+            }
+            MenuItem {
+                text: "Top"
+                onClicked: console.log("Top");
+            }
+            MenuItem {
+                text: "Search"
+                onClicked: console.log("Search");
+            }
+        }
 
         delegate: PlaylistDelegate {
             id: playlistDelegate
