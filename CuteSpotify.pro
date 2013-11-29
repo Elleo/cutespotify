@@ -63,5 +63,6 @@ OTHER_FILES += \
     qml/Scrollbar.qml \
     qml/LastfmLoginSheet.qml \
     qml/FolderPage.qml \
+    qml/LicenseDialog.qml \
     rpm/cutespotify.yaml \
     rpm/cutespotify.spec

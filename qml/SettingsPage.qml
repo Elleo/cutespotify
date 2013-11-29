@@ -39,29 +39,27 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
-import Ubuntu.Components.Popups 0.1;
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
 Page {
     id: settingsPage
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
 
-    ListView {
+    SilicaListView {
         id: settingsFlickable
         anchors.fill: parent
+        anchors.topMargin: 50
+        anchors.rightMargin: UI.MARGIN_XLARGE
+        anchors.leftMargin: UI.MARGIN_XLARGE
 
         model: 1
         delegate: Column {
             id: settingsContainer
             width: settingsPage.width
-            spacing: UI.MARGIN_XLARGE
 
             Column {
-                anchors.left: parent.left
-                anchors.right: parent.right
+                width: parent.width
 
                 Column {
                     width: parent.width
@@ -76,7 +74,7 @@ Page {
                             font.family: UI.FONT_FAMILY_BOLD
                             font.weight: Font.Bold
                             font.pixelSize: UI.LIST_TILE_SIZE
-                            color: UI.LIST_TITLE_COLOR
+                            color: Theme.primaryColor
                             text: "Shuffle"
                         }
 
@@ -91,7 +89,7 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT * 1.5
+                        height: UI.LIST_ITEM_HEIGHT
 
                         Label {
                             anchors.left: parent.left
@@ -99,7 +97,7 @@ Page {
                             font.family: UI.FONT_FAMILY_BOLD
                             font.weight: Font.Bold
                             font.pixelSize: UI.LIST_TILE_SIZE
-                            color: UI.LIST_TITLE_COLOR
+                            color: Theme.primaryColor
                             text: "Repeat songs"
                         }
 
@@ -114,9 +112,9 @@ Page {
 
 
 
-                    Item {
+ /*                   Item {
                         width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT * 1.5
+                        height: UI.LIST_ITEM_HEIGHT
 
                         Label {
                             anchors.left: parent.left
@@ -124,7 +122,7 @@ Page {
                             font.family: UI.FONT_FAMILY_BOLD
                             font.weight: Font.Bold
                             font.pixelSize: UI.LIST_TILE_SIZE
-                            color: UI.LIST_TITLE_COLOR
+                            color: Theme.primaryColor
                             text: "Offline mode"
                         }
 
@@ -149,10 +147,10 @@ Page {
                         font.family: UI.FONT_FAMILY_LIGHT
                         font.pixelSize: UI.LIST_SUBTILE_SIZE
                         font.weight: Font.Light
-                        color: UI.LIST_SUBTITLE_COLOR
+                        color: Theme.secondaryColor
                         text: "When offline, only the playlists you've made available for offline listening will be playable."
                     }
-
+*/
                     Item {
                         width: parent.width
                         height: UI.MARGIN_XLARGE * 2
@@ -163,24 +161,23 @@ Page {
                     width: parent.width
 
                     Label {
-                        height: UI.LIST_TILE_SIZE * 1.5
+                        height: UI.LIST_TILE_SIZE
                         font.family: UI.FONT_FAMILY_BOLD
                         font.weight: Font.Bold
                         font.pixelSize: UI.LIST_TILE_SIZE
-                        color: UI.LIST_TITLE_COLOR
+                        color: Theme.primaryColor
                         text: "Stream"
                     }
 
-                    OptionSelector {
-                        model: ListModel {
-                            ListElement { name: "Low quality"; description: "96kbps"; value: SpotifySession.LowQuality }
-                            ListElement { name: "Normal quality"; description: "160kbps"; value: SpotifySession.HighQuality }
-                            ListElement { name: "High quality"; description: "320kbps"; value: SpotifySession.UltraQuality }
+
+                    ComboBox {
+                        menu: ContextMenu {
+                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.streamingQuality = spotifySession.LowQuality }
+                            MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.HighQuality }
+                            MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.UltraQuality }
                         }
-                        delegate: OptionSelectorDelegate { text: name; subText: description;}
-                        selectedIndex: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
-                                                                                                    : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
-                        onSelectedIndexChanged: spotifySession.streamingQuality = model.get(selectedIndex).value
+                        currentItem: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
+                                                                                                   : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
                     }
 
                     Item {
@@ -194,24 +191,22 @@ Page {
                     width: parent.width
 
                     Label {
-                        height: UI.LIST_TILE_SIZE * 1.5
+                        height: UI.LIST_TILE_SIZE
                         font.family: UI.FONT_FAMILY_BOLD
                         font.weight: Font.Bold
                         font.pixelSize: UI.LIST_TILE_SIZE
-                        color: UI.LIST_TITLE_COLOR
+                        color: Theme.primaryColor
                         text: "Offline Sync"
                     }
 
-                    OptionSelector {
-                        model: ListModel {
-                            ListElement { name: "Low quality"; description: "96kbps"; value: SpotifySession.LowQuality }
-                            ListElement { name: "Normal quality"; description: "160kbps"; value: SpotifySession.HighQuality }
-                            ListElement { name: "High quality"; description: "320kbps"; value: SpotifySession.UltraQuality }
+                    ComboBox {
+                        menu: ContextMenu {
+                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.syncQuality = spotifySession.LowQuality }
+                            MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.HighQuality }
+                            MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.UltraQuality }
                         }
-                        delegate: OptionSelectorDelegate { text: name; subText: description;}
-                        selectedIndex: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
-                                                                                               : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
-                        onSelectedIndexChanged: spotifySession.syncQuality = model.get(selectedIndex).value
+                        currentItem: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
+                                                                                              : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
                     }
 
                     Item {
@@ -222,7 +217,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.LIST_ITEM_HEIGHT * 1.5
+                    height: UI.LIST_ITEM_HEIGHT
 
                     Label {
                         anchors.left: parent.left
@@ -230,7 +225,7 @@ Page {
                         font.family: UI.FONT_FAMILY_BOLD
                         font.weight: Font.Bold
                         font.pixelSize: UI.LIST_TILE_SIZE
-                        color: UI.LIST_TITLE_COLOR
+                        color: Theme.primaryColor
                         text: "Sync over 2G/3G"
                     }
 
@@ -245,48 +240,14 @@ Page {
                 Item {
                     width: parent.width
                     height: UI.MARGIN_XLARGE * 2
-
-                    Separator {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
-
-                    Separator {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
-
-                    Separator {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.MARGIN_XLARGE
                 }
 
                 Button {
                     id: buttonAbout
                     text: "About"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: UI.PADDING_XXLARGE
-                    anchors.rightMargin: UI.PADDING_XXLARGE
-
+                    anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {
-                        PopupUtils.open(aboutDialogC)
+                        pageStack.push(aboutDialogC)
                     }
                 }
 
@@ -298,14 +259,9 @@ Page {
                 Button {
                     id: button
                     text: "Log out " + (spotifySession.user ? spotifySession.user.canonicalName : "")
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: UI.PADDING_XXLARGE
-                    anchors.rightMargin: UI.PADDING_XXLARGE
-
+                    anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {
                         spotifySession.logout(false);
-                        lastfm.forgetUser();
                     }
                 }
 
@@ -316,7 +272,7 @@ Page {
             }
             Item {
                 width: parent.width
-                height: units.gu(10)
+                height: 100
             }
         }
 
@@ -329,5 +285,4 @@ Page {
         }
     }
 
-    Scrollbar { flickableItem: settingsFlickable }
 }

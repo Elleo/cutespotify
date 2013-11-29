@@ -39,8 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
-import Ubuntu.Components.Popups 0.1;
+import Sailfish.Silica 1.0
 import "UIConstants.js" as UI
 
 Dialog {
@@ -55,8 +54,11 @@ Dialog {
     }
 
     Column {
-        width: parent.width
-        anchors.top: parent.top;
+        anchors.top: parent.top
+        anchors.topMargin: 50
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.rightMargin: UI.MARGIN_XLARGE
+        anchors.leftMargin: UI.MARGIN_LARGE
 
         Image {
             source: "qrc:/qml/images/cutespotify-logo.png"
@@ -65,25 +67,25 @@ Dialog {
         Label {
             text: "Version 1.3.1"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
+            color: Theme.primaryColor
         }
 
         Label {
             text: "Based on MeeSpot by Yoann Lopes"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
+            color: Theme.primaryColor
         }
 
         Label {
             text: "Copyright \u00a9 2011-2013 Yoann Lopes, Michael Sheldon"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
+            color: Theme.primaryColor
         }
 
         Label {
             text: "Contact: mike@mikeasoft.com"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
+            color: Theme.primaryColor
         }
 
         Item {
@@ -111,14 +113,14 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
                 font.family: UI.FONT_FAMILY
                 font.pixelSize: UI.FONT_XSMALL
-                color: UI.LIST_SUBTITLE_COLOR_INVERTED
+                color: Theme.secondaryColor
                 text: "This product uses SPOTIFY CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group."
             }
         }
 
         Item {
             width: parent.width
-            height: units.gu(5)
+            height: 50
         }
 
         Item {
@@ -128,24 +130,19 @@ Dialog {
 
             Row { 
                 width: parent.width
-                spacing: units.gu(1)
+                spacing: 10
 
                 Button {
                     id: donateButton
                     text: "Donate!"
                     onClicked: Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=8CK2DHNJDGBJJ&lc=GB&item_name=Michael%20Sheldon&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted")
-		}
+
+                }
 
                 Button {
                     id: licenseButton
                     text: "License"
-                    onClicked: PopupUtils.open(licenseC);
-                }
-
-                Button {
-                    id: acceptButton
-                    text: "Close"
-                    onClicked: PopupUtils.close(genericDialog);
+                    onClicked: pageStack.push(licenseC)
                 }
             }
         }

@@ -48,22 +48,41 @@ Page {
     id: playlistPage
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.topMargin: 50
 
 
     Component.onCompleted: {
         player.visible = true;
     }
 
+/*    Component {
+        id: searchPage
+        SearchPage { }
+    }*/
+
+    Component {
+        id: settingsPage
+        SettingsPage { }
+    }
+
+/*    Component {
+        id: topPage
+        ToplistPage { }
+    }*/
 
     Connections {
         target: spotifySession
         onOfflineModeChanged: {
-            if (spotifySession.offlineMode)
-                pageStack.pop(null);
+            if (spotifySession.offlineMode) {
+                pageStack.clear();
+                pageStack.push(loginPage)
+            }
         }
         onConnectionStatusChanged: {
-            if (spotifySession.connectionStatus != SpotifySession.LoggedIn)
-                pageStack.pop(null);
+            if (spotifySession.connectionStatus != SpotifySession.LoggedIn) {
+                pageStack.clear();
+                pageStack.push(loginPage);
+            }
         }
     }
 
@@ -93,15 +112,15 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: "Settings"
-                onClicked: console.log("Settings");
+                onClicked: pageStack.push(settingsPage)
             }
             MenuItem {
                 text: "Top"
-                onClicked: console.log("Top");
+                onClicked: pageStack.push(topPage)
             }
             MenuItem {
                 text: "Search"
-                onClicked: console.log("Search");
+                onClicked: pageStack.push(searchPage)
             }
         }
 
