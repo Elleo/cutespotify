@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 X-Nemo-Application-Type=silica-qt5
-Name=seagullstrike-sailfish
-Icon=/usr/share/cutespotify/cutespotify.png
+Name=CuteSpotify
+Icon=/usr/share/icons/hicolor/90x90/apps/cutespotify.png
 Exec=/usr/bin/CuteSpotify
 
 X-Desktop-File-Install-Version=0.20
