@@ -123,7 +123,6 @@ Page {
         width: parent.width
         anchors.top: searchFieldContainer.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: 50
 
         cacheBuffer: 3000
         highlightMoveDuration: 1
