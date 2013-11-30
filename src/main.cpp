@@ -46,6 +46,7 @@
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QQuickView>
 #include <QtWidgets/QApplication>
+#include <sailfishapp.h>
 
 //#include "src/hardwarekeyshandler.h"
 #include <QtSpotify>
@@ -69,10 +70,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setApplicationVersion("1.3.0");
 
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/com.mikeasoft.cutespotify/");
-
-    QApplication *app = new QApplication(argc, argv);
+    QGuiApplication *app = SailfishApp::application(argc, argv);
     QQuickWindow::setDefaultAlphaBuffer(true);
-    QQuickView *view = new QQuickView();
+    QQuickView *view = SailfishApp::createView();
 
     if (!app->arguments().contains(QLatin1String("--debug"))) {
         qInstallMessageHandler(silentDebug);

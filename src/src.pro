@@ -21,6 +21,10 @@ isEmpty(PREFIX) {
     PREFIX = /usr/
 }
 
+CONFIG += link_pkgconfig
+PKGCONFIG += sailfishapp
+INCLUDEPATH += /usr/include/sailfishapp
+
 lib.path = $$PREFIX/share/cutespotify/
 lib.files = ../libspotify/lib/libspotify*
 desktop.path = $$PREFIX/share/applications/
