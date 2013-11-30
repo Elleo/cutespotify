@@ -169,7 +169,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
-                    source: spotifySession.isPlaying ? "image://theme/icon-m-play"
+                    source: spotifySession.isPlaying ? "image://theme/icon-m-pause"
                                                      : "image://theme/icon-m-play"
                     opacity: play.pressed ? 0.4 : 1.0
                 }
