@@ -11,6 +11,7 @@ Description: |
 Configure: none
 Builder: qtc5
 PkgConfigBR:
+- Qt5SystemInfo
 - Qt5Core
 - Qt5Qml
 - Qt5Quick
@@ -20,7 +21,6 @@ Requires:
 - sailfishsilica-qt5
 - qt5-qtmultimedia-plugin-audio-pulseaudio
 Files:
-- 
 - /usr/share/icons/hicolor/90x90/apps
 - /usr/share/applications
 - /usr/share/cutespotify
@@ -28,3 +28,4 @@ Files:
 - '%{_datadir}/icons/hicolor/90x90/apps/%{name}.png'
 - '%{_datadir}/applications/%{name}.desktop'
 - '%{_bindir}'
+PkgBR: []
