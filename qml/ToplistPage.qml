@@ -68,32 +68,37 @@ Page {
         }
     }
 
-    Rectangle {
+    Item {
+        // FIXME: Bug in conditional layouts. Have to add this to every page...
+        anchors.leftMargin: appWindow.showSidebar ? units.gu(appWindow.sidebarWidth) : 0
         anchors.fill: parent
-        visible: spotifySession.offlineMode
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        color: "#DDFFFFFF"
-        z: 500
 
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Not available in offline mode"
-            font.pixelSize: UI.FONT_XLARGE
-            font.family: UI.FONT_FAMILY_LIGHT
-            font.weight: Font.Light
-            wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
-            horizontalAlignment: Text.AlignHCenter
+        Rectangle {
+            anchors.fill: parent
+            visible: spotifySession.offlineMode
+            anchors.rightMargin: -UI.MARGIN_XLARGE
+            anchors.leftMargin: -UI.MARGIN_XLARGE
+            color: "#DDFFFFFF"
+            z: 500
+
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Not available in offline mode"
+                font.pixelSize: UI.FONT_XLARGE
+                font.family: UI.FONT_FAMILY_LIGHT
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                width: parent.width - UI.MARGIN_XLARGE * 2
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
-    }
 
-    SpotifyToplist {
-        id: toplist
-    }
+        SpotifyToplist {
+            id: toplist
+        }
 
-/*    TrackMenu {
+        /*    TrackMenu {
         id: menu
         deleteVisible: false
     }
@@ -108,216 +113,217 @@ Page {
         }
     }
 */
-    Column {
-        id: whatsNew
-        width: parent.width
-        spacing: UI.MARGIN_XLARGE
-
-        ViewHeader {
-            text: "New releases"
-        }
-
-        SpotifySearch {
-            id: searchNew
-            query: "tag:new"
-            Component.onCompleted: search()
-        }
-
-        ListView {
-            id: newAlbumsView
+        Column {
+            id: whatsNew
             width: parent.width
-            height: 112
-            orientation: ListView.Horizontal
-            model: searchNew.albums
-            clip: true
-            snapMode: ListView.SnapToItem
-            cacheBuffer: 3000
-            pressDelay: 50
+            spacing: UI.MARGIN_XLARGE
 
-            Component.onCompleted: positionViewAtBeginning()
-
-            delegate: SpotifyImage {
-                spotifyId: modelData.coverId
-                height: newAlbumsView.height
-                width: height
-                clip: true
-                opacity: newAlbumMouse.pressed ? 0.3 : 1.0
-
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: newAlbumName.height + 2
-                    color: "#BAD7D7D7"
-
-                    Column {
-                        id: newAlbumName
-                        anchors.left: parent.left
-                        anchors.leftMargin: 4
-                        anchors.right: parent.right
-                        anchors.rightMargin: 4
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: -3
-                        Label {
-                            text: modelData.name
-                            font.pixelSize: UI.FONT_XSMALL
-                            width: parent.width
-                            elide: Text.ElideRight
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                        Label {
-                            text: modelData.artist
-                            font.pixelSize: UI.FONT_XXSMALL
-                            width: parent.width
-                            elide: Text.ElideRight
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                }
-
-                MouseArea {
-                    id: newAlbumMouse
-                    anchors.fill: parent
-                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
-                    onPressAndHold: {
-                        menuAlbumBrowse.album = modelData;
-                        if (menuAlbumBrowse.totalDuration > 0)
-                            albumMenu.open()
-                    }
-                }
-            }
-        }
-    }
-
-    Column {
-        id: header
-        width: parent.width
-        anchors.top: whatsNew.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-
-        Separator {
-            width: parent.width
-        }
-
-        Label {
-            height: UI.LIST_TILE_SIZE * 1.5
-            font.family: UI.FONT_FAMILY_BOLD
-            font.weight: Font.Bold
-            font.pixelSize: UI.LIST_TILE_SIZE
-            color: UI.LIST_TITLE_COLOR
-            text: "Top lists"
-        }
-
-        OptionSelector {
-            id: selector
-            selectedIndex: 0
-            model: ListModel {
-                ListElement { name: "Tracks" }
-                ListElement { name: "Albums" }
-                ListElement { name: "Artists" }
-            }
-            delegate: OptionSelectorDelegate { text: name }
-        }
-
-        Separator {
-            width: parent.width
-        }
-    }
-
-    Item {
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        clip: true
-
-        ListView {
-            id: results
-            anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            cacheBuffer: 8000
-
-            Component {
-                id: trackComponent
-                TrackDelegate {
-                    name: modelData.name
-                    artist: modelData.artist
-                    album: modelData.album
-                    duration: modelData.duration
-                    highlighted: modelData.isCurrentPlayingTrack
-                    starred: modelData.isStarred
-                    coverId: modelData.albumCoverId
-                    showIndex: true
-                    available: modelData.isAvailable
-                    onClicked: modelData.play()
-                    onPressAndHold: { menu.track = modelData; menu.open(); }
-                }
-            }
-            Component {
-                id: albumComponent
-                AlbumDelegate {
-                    name: modelData.name
-                    artist: modelData.artist
-                    albumCover: modelData.coverId
-                    showIndex: true
-                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
-                    onPressAndHold: {
-                        menuAlbumBrowse.album = modelData;
-                        if (menuAlbumBrowse.totalDuration > 0)
-                            albumMenu.open()
-                    }
-                }
-            }
-            Component {
-                id: artistComponent
-                ArtistDelegate {
-                    name: modelData.name
-                    portrait: modelData.pictureId
-                    showIndex: true
-                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
-                }
+            ViewHeader {
+                text: "New releases"
             }
 
-            Connections {
-                target: selector
-                onSelectedIndexChanged: results.updateResults()
+            SpotifySearch {
+                id: searchNew
+                query: "tag:new"
+                Component.onCompleted: search()
             }
 
-            Connections {
-                target: toplist
-                onResultsChanged: results.updateResults()
-            }
-
-            function updateResults() {
-                results.model = 0
-                results.delegate = null
-                if (selector.selectedIndex === 0) {
-                    results.delegate = trackComponent
-                    results.model = toplist.tracks
-                } else if (selector.selectedIndex == 1) {
-                    results.delegate = albumComponent
-                    results.model = toplist.albums
-                } else if (selector.selectedIndex == 2) {
-                    results.delegate = artistComponent
-                    results.model = toplist.artists
-                }
-            }
-
-            footer: Item {
+            ListView {
+                id: newAlbumsView
                 width: parent.width
-                height: units.gu(10)
+                height: 112
+                orientation: ListView.Horizontal
+                model: searchNew.albums
+                clip: true
+                snapMode: ListView.SnapToItem
+                cacheBuffer: 3000
+                pressDelay: 50
+
+                Component.onCompleted: positionViewAtBeginning()
+
+                delegate: SpotifyImage {
+                    spotifyId: modelData.coverId
+                    height: newAlbumsView.height
+                    width: height
+                    clip: true
+                    opacity: newAlbumMouse.pressed ? 0.3 : 1.0
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        width: parent.width
+                        height: newAlbumName.height + 2
+                        color: "#BAD7D7D7"
+
+                        Column {
+                            id: newAlbumName
+                            anchors.left: parent.left
+                            anchors.leftMargin: 4
+                            anchors.right: parent.right
+                            anchors.rightMargin: 4
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: -3
+                            Label {
+                                text: modelData.name
+                                font.pixelSize: UI.FONT_XSMALL
+                                width: parent.width
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            Label {
+                                text: modelData.artist
+                                font.pixelSize: UI.FONT_XXSMALL
+                                width: parent.width
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+                    }
+
+                    MouseArea {
+                        id: newAlbumMouse
+                        anchors.fill: parent
+                        onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                        onPressAndHold: {
+                            menuAlbumBrowse.album = modelData;
+                            if (menuAlbumBrowse.totalDuration > 0)
+                                albumMenu.open()
+                        }
+                    }
+                }
+            }
+        }
+
+        Column {
+            id: header
+            width: parent.width
+            anchors.top: whatsNew.bottom
+            anchors.topMargin: UI.MARGIN_XLARGE
+
+            Separator {
+                width: parent.width
             }
 
-        }
-        Scrollbar { flickableItem: results }
-    }
+            Label {
+                height: UI.LIST_TILE_SIZE * 1.5
+                font.family: UI.FONT_FAMILY_BOLD
+                font.weight: Font.Bold
+                font.pixelSize: UI.LIST_TILE_SIZE
+                color: UI.LIST_TITLE_COLOR
+                text: "Top lists"
+            }
 
-    ActivityIndicator {
-        anchors.centerIn: parent
-        visible: toplist.busy && results.count === 0
-        running: visible
+            OptionSelector {
+                id: selector
+                selectedIndex: 0
+                model: ListModel {
+                    ListElement { name: "Tracks" }
+                    ListElement { name: "Albums" }
+                    ListElement { name: "Artists" }
+                }
+                delegate: OptionSelectorDelegate { text: name }
+            }
+
+            Separator {
+                width: parent.width
+            }
+        }
+
+        Item {
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: header.bottom
+            anchors.bottom: parent.bottom
+            anchors.topMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: -UI.MARGIN_XLARGE
+            anchors.leftMargin: -UI.MARGIN_XLARGE
+            clip: true
+
+            ListView {
+                id: results
+                anchors.fill: parent
+                anchors.rightMargin: UI.MARGIN_XLARGE
+                anchors.leftMargin: UI.MARGIN_XLARGE
+                cacheBuffer: 8000
+
+                Component {
+                    id: trackComponent
+                    TrackDelegate {
+                        name: modelData.name
+                        artist: modelData.artist
+                        album: modelData.album
+                        duration: modelData.duration
+                        highlighted: modelData.isCurrentPlayingTrack
+                        starred: modelData.isStarred
+                        coverId: modelData.albumCoverId
+                        showIndex: true
+                        available: modelData.isAvailable
+                        onClicked: modelData.play()
+                        onPressAndHold: { menu.track = modelData; menu.open(); }
+                    }
+                }
+                Component {
+                    id: albumComponent
+                    AlbumDelegate {
+                        name: modelData.name
+                        artist: modelData.artist
+                        albumCover: modelData.coverId
+                        showIndex: true
+                        onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                        onPressAndHold: {
+                            menuAlbumBrowse.album = modelData;
+                            if (menuAlbumBrowse.totalDuration > 0)
+                                albumMenu.open()
+                        }
+                    }
+                }
+                Component {
+                    id: artistComponent
+                    ArtistDelegate {
+                        name: modelData.name
+                        portrait: modelData.pictureId
+                        showIndex: true
+                        onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    }
+                }
+
+                Connections {
+                    target: selector
+                    onSelectedIndexChanged: results.updateResults()
+                }
+
+                Connections {
+                    target: toplist
+                    onResultsChanged: results.updateResults()
+                }
+
+                function updateResults() {
+                    results.model = 0
+                    results.delegate = null
+                    if (selector.selectedIndex === 0) {
+                        results.delegate = trackComponent
+                        results.model = toplist.tracks
+                    } else if (selector.selectedIndex == 1) {
+                        results.delegate = albumComponent
+                        results.model = toplist.albums
+                    } else if (selector.selectedIndex == 2) {
+                        results.delegate = artistComponent
+                        results.model = toplist.artists
+                    }
+                }
+
+                footer: Item {
+                    width: parent.width
+                    height: units.gu(10)
+                }
+
+            }
+            Scrollbar { flickableItem: results }
+        }
+
+        ActivityIndicator {
+            anchors.centerIn: parent
+            visible: toplist.busy && results.count === 0
+            running: visible
+        }
     }
 }
