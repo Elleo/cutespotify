@@ -16,11 +16,12 @@ Summary:    CuteSpotify
 Version:    1.3.0
 Release:    1
 Group:      Qt/Qt
-License:    LICENSE
+License:    BSD
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  cutespotify.yaml
 Requires:   sailfishsilica-qt5
 Requires:   qt5-qtmultimedia-plugin-audio-pulseaudio
+BuildRequires:  pkgconfig(Qt5Concurrent)
 BuildRequires:  pkgconfig(Qt5SystemInfo)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -30,7 +31,9 @@ BuildRequires:  pkgconfig(sailfishapp)
 BuildRequires:  desktop-file-utils
 
 %description
-CuteSpotify allows you to make use of Spotify on Sailfish devices. A Spotify premium account is required.
+CuteSpotify allows you to make use of Spotify on Sailfish devices.
+
+A Spotify premium account is required to make use of this application.
 
 
 %prep
