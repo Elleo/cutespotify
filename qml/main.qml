@@ -68,19 +68,23 @@ ApplicationWindow {
 
         Column {
             anchors.top: coverImage.bottom
-            anchors.topMargin: 0
+            anchors.topMargin: 5
             anchors.leftMargin: 5
             anchors.rightMargin: 5
+            visible: spotifySession.currentTrack ? true : false
             width: parent.width
 
             Label {
                 elide: Text.ElideRight
+                width: parent.width - 20
                 font.pixelSize: 20
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
             }
+
             Label {
                 elide: Text.ElideRight
+                width: parent.width - 20
                 font.pixelSize: 14
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
