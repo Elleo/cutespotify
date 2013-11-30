@@ -193,7 +193,7 @@ Item {
                 width: 34; height: width
                 smooth: true
                 visible: listItem.starred
-                source: "qrc:/qml/images/star.png"
+                source: "image://theme/icon-m-favorite-selected"
             }
         }
 

@@ -135,9 +135,9 @@ Rectangle {
                     id: favIcon
                     anchors.centerIn: parent
                     opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
-                    source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("qrc:/qml/images/star.png")
-                                                                                                 : ("qrc:/qml/images/emptystar.png"))
-                                                        : ("qrc:/qml/images/emptystar.png")
+                    source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("image://theme/icon-m-favorite-selected")
+                                                                                                 : ("image://theme/icon-m-favorite"))
+                                                        : ""
                     enabled: !spotifySession.offlineMode
                 }
 
@@ -154,7 +154,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
-                    source: "qrc:/qml/images/previous.png"
+                    source: "image://theme/icon-m-previous-song"
                     opacity: previous.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
@@ -169,8 +169,8 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
-                    source: spotifySession.isPlaying ? "qrc:/qml/images/pause.png"
-                                                     : "qrc:/qml/images/play.png"
+                    source: spotifySession.isPlaying ? "image://theme/icon-m-play"
+                                                     : "image://theme/icon-m-play"
                     opacity: play.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
@@ -185,7 +185,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     anchors.centerIn: parent
-                    source: "qrc:/qml/images/next.png"
+                    source: "image://theme/icon-m-next-song"
                     opacity: next.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
