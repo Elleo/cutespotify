@@ -40,7 +40,7 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -78,27 +78,26 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
-        anchors.topMargin: UI.MARGIN_XLARGE
+        anchors.topMargin: 80
 
         Label {
             height: UI.LIST_TILE_SIZE * 1.5
             font.family: UI.FONT_FAMILY_BOLD
             font.weight: Font.Bold
             font.pixelSize: UI.LIST_TILE_SIZE
-            color: UI.LIST_TITLE_COLOR
+            color: Theme.primaryColor
             text: artist ? artist.name : ""
         }
 
-        OptionSelector {
+        ComboBox {
             id: selector
-            selectedIndex: 1
-            model: ListModel {
-                ListElement { name: "Top hits" }
-                ListElement { name: "Music" }
-                ListElement { name: "Biography" }
-                ListElement { name: "Related artists" }
+            currentIndex: 1
+            menu: ContextMenu {
+                MenuItem { text: "Top hits"; onClicked: artistView.updateResults(); }
+                MenuItem { text: "Music"; onClicked: artistView.updateResults(); }
+                MenuItem { text: "Biography"; onClicked: artistView.updateResults(); }
+                MenuItem { text: "Related artists"; onClicked: artistView.updateResults(); }
             }
-            delegate: OptionSelectorDelegate { text: name }
         }
 
         Separator {
@@ -112,12 +111,10 @@ Page {
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
         anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
         clip: true
         visible: !browse.busy
 
-        ListView {
+        SilicaListView {
             id: artistView
             anchors.fill: parent
             anchors.rightMargin: UI.MARGIN_XLARGE
@@ -222,11 +219,6 @@ Page {
             section.property: "sectionType"
 
             Connections {
-                target: selector
-                onSelectedIndexChanged: artistView.updateResults()
-            }
-
-            Connections {
                 target: browse
                 onDataChanged: artistView.updateResults()
             }
@@ -236,18 +228,18 @@ Page {
                 artistView.delegate = null
                 artistView.header = null
                 artistView.section.delegate = null
-                if (selector.selectedIndex === 0) {
+                if (selector.currentIndex === 0) {
                     artistView.model = browse.topTracks
                     artistView.delegate = trackComponent
-                } else if (selector.selectedIndex == 1) {
+                } else if (selector.currentIndex == 1) {
                     artistView.header = headerComponent
                     artistView.section.delegate = sectionComponent
                     artistView.delegate = albumComponent
                     artistView.model = browse.albums
-                } else if (selector.selectedIndex == 2) {
+                } else if (selector.currentIndex == 2) {
                     artistView.model = browse.biography
                     artistView.delegate = bioComponent
-                } else if (selector.selectedIndex == 3) {
+                } else if (selector.currentIndex == 3) {
                     artistView.model = browse.similarArtists
                     artistView.delegate = artistComponent
                 }
@@ -270,10 +262,9 @@ Page {
             font.weight: Font.Light
         }
 
-        Scrollbar { flickableItem: artistView }
     }
 
-    ActivityIndicator {
+    BusyIndicator {
         id: busy
         running: browse.busy
         visible: running

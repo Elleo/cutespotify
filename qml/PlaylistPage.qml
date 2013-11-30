@@ -51,10 +51,10 @@ Page {
     anchors.topMargin: 50
 
 
-/*    Component {
+    Component {
         id: searchPage
         SearchPage { }
-    }*/
+    }
 
     Component {
         id: settingsPage

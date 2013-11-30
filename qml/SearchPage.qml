@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 import "Utilities.js" as Utilities
@@ -48,18 +48,6 @@ Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
     enabled: !spotifySession.offlineMode
-
-    Connections {
-        target: spotifySession
-        onOfflineModeChanged: {
-            if (spotifySession.offlineMode)
-                pageStack.pop(null);
-        }
-        onConnectionStatusChanged: {
-            if (spotifySession.connectionStatus != SpotifySession.LoggedIn)
-                pageStack.pop(null);
-        }
-    }
 
     Rectangle {
         anchors.fill: parent
@@ -105,20 +93,19 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
-	anchors.topMargin: UI.MARGIN_XLARGE
-        spacing: UI.MARGIN_XLARGE
+        anchors.topMargin: 60
+        spacing: UI.MARGIN_LARGE
 
         Column {
             width: parent.width
-            OptionSelector {
+            ComboBox {
                 id: selector
-                selectedIndex: 0
-                model: ListModel {
-                    ListElement { name: "Tracks" }
-                    ListElement { name: "Albums" }
-                    ListElement { name: "Artists" }
+                currentIndex: 0
+                menu: ContextMenu {
+                    MenuItem { text: "Tracks"; onClicked: results.updateResults(); }
+                    MenuItem { text: "Albums"; onClicked: results.updateResults(); }
+                    MenuItem { text: "Artists"; onClicked: results.updateResults(); }
                 }
-                delegate: OptionSelectorDelegate { text: name; }
             }
             Separator {
                 width: parent.width
@@ -148,11 +135,9 @@ Page {
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
         anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
         clip: true
 
-        ListView {
+        SilicaListView {
             id: results
             anchors.fill: parent
             anchors.rightMargin: UI.MARGIN_XLARGE
@@ -199,11 +184,6 @@ Page {
             }
 
             Connections {
-                target: selector
-                onSelectedIndexChanged: results.updateResults()
-            }
-
-            Connections {
                 target: search
                 onResultsChanged: results.updateResults()
             }
@@ -211,13 +191,13 @@ Page {
             function updateResults() {
                 results.model = 0
                 results.delegate = null
-                if (selector.selectedIndex === 0) {
+                if (selector.currentIndex === 0) {
                     results.delegate = trackComponent
                     results.model = search.tracks
-                } else if (selector.selectedIndex == 1) {
+                } else if (selector.currentIndex == 1) {
                     results.delegate = albumComponent
                     results.model = search.albums
-                } else if (selector.selectedIndex == 2) {
+                } else if (selector.currentIndex == 2) {
                     results.delegate = artistComponent
                     results.model = search.artists
                 }
@@ -243,8 +223,8 @@ Page {
             horizontalAlignment: Text.AlignHCenter
 
             text: search.didYouMean.length > 0 ? "Did you mean"
-                                               : (selector.selectedIndex === 0 ? "No tracks found" :
-                                                  selector.selectedIndex == 1 ? "No albums found" :
+                                               : (selector.currentIndex === 0 ? "No tracks found" :
+                                                  selector.currentIndex == 1 ? "No albums found" :
                                                   "No artists found")
         }
         Label {
@@ -263,6 +243,5 @@ Page {
             onLinkActivated: searchField.text = search.didYouMean
         }
 
-        Scrollbar { flickableItem: results }
     }
 }

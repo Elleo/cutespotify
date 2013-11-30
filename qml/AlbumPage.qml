@@ -40,7 +40,7 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
@@ -77,25 +77,25 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
+        anchors.topMargin: 80
 
         Label {
             height: UI.LIST_TILE_SIZE * 1.5
             font.family: UI.FONT_FAMILY_BOLD
             font.weight: Font.Bold
             font.pixelSize: UI.LIST_TILE_SIZE
-            color: UI.LIST_TITLE_COLOR
+            color: Theme.primaryColor
             text: album ? album.name : ""
         }
 
 
-        OptionSelector {
+        ComboBox {
             id: selector
-            selectedIndex: 0
-            model: ListModel {
-                ListElement { name: "Tracks" }
-                ListElement { name: "Review" }
+            currentIndex: 0
+            menu: ContextMenu {
+                MenuItem { text: "Tracks"; onClicked: tracks.updateResults(); }
+                MenuItem { text: "Review"; onClicked: tracks.updateResults(); }
             }
-            delegate: OptionSelectorDelegate { text: name }
         }
 
         Separator {
@@ -149,11 +149,9 @@ Page {
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
         anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
         clip: true
 
-        ListView {
+        SilicaListView {
             id: tracks
             anchors.fill: parent
             anchors.rightMargin: UI.MARGIN_XLARGE
@@ -173,11 +171,6 @@ Page {
             Component.onCompleted: positionViewAtBeginning()
 
             Connections {
-                target: selector
-                onSelectedIndexChanged: tracks.updateResults()
-            }
-
-            Connections {
                 target: browse
                 onTracksChanged: tracks.updateResults()
             }
@@ -185,10 +178,10 @@ Page {
             function updateResults() {
                 tracks.model = 0
                 tracks.delegate = null
-                if (selector.selectedIndex === 0) {
+                if (selector.currentIndex === 0) {
                     tracks.model = browse.tracks
                     tracks.delegate = browse.hasMultipleArtists ? compilationDelegate : albumDelegate
-                } else if (selector.selectedIndex == 1) {
+                } else if (selector.currentIndex == 1) {
                     tracks.delegate = reviewComponent
                     tracks.model = browse.review
                 }
@@ -202,10 +195,9 @@ Page {
 
         }
 
-        Scrollbar { flickableItem: tracks }
     }
 
-    ActivityIndicator {
+    BusyIndicator {
         id: busy
         running: browse.busy
         visible: running
