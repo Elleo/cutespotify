@@ -43,7 +43,7 @@
 #define QSPOTIFYSESSION_H
 
 #include <QtCore/QObject>
-
+#include <policy/resource-set.h>
 #include <libspotify/api.h>
 
 class QAudioOutput;
@@ -229,8 +229,8 @@ protected:
     bool event(QEvent *);
 
 private Q_SLOTS:
-//    void resourceAcquiredHandler(const QList<ResourcePolicy::ResourceType>&);
-//    void resourceLostHandler();
+    void resourceAcquiredHandler(const QList<ResourcePolicy::ResourceType>&);
+    void resourceLostHandler();
     void cleanUp();
     void onOnlineChanged();
     void configurationChanged();
@@ -293,10 +293,10 @@ private:
 
     QSpotifyAudioThread *m_audioThread;
 
-/*    // Phone Resource Management
+    // Phone Resource Management
     ResourcePolicy::ResourceSet *m_resourceSet;
     ResourcePolicy::AudioResource *m_audioResource;
-    ResourcePolicy::ScaleButtonResource *m_scaleButtonResource; */
+    ResourcePolicy::ScaleButtonResource *m_scaleButtonResource;
 
     // Network Management
     QNetworkConfigurationManager *m_networkConfManager;

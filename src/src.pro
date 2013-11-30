@@ -6,10 +6,16 @@ QT += \
     qml \
     quick \
     systeminfo \
-    widgets
+    widgets 
+
+CONFIG += qmsystem2-qt5
+
+HEADERS += \
+    hardwarekeyshandler.h
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    hardwarekeyshandler.cpp
 
 RESOURCES += \
     ../res.qrc
