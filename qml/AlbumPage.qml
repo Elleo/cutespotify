@@ -190,7 +190,7 @@ Page {
 
             footer: Item {
                 width: parent.width
-                height: units.gu(10)
+                height: 100
             }
 
         }

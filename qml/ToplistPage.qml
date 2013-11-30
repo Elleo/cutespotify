@@ -40,7 +40,7 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 import "Utilities.js" as Utilities
@@ -71,8 +71,6 @@ Page {
     Rectangle {
         anchors.fill: parent
         visible: spotifySession.offlineMode
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
         color: "#DDFFFFFF"
         z: 500
 
@@ -112,6 +110,8 @@ Page {
         id: whatsNew
         width: parent.width
         spacing: UI.MARGIN_XLARGE
+        anchors.top: parent.top
+        anchors.topMargin: 60
 
         ViewHeader {
             text: "New releases"
@@ -147,7 +147,7 @@ Page {
                     anchors.bottom: parent.bottom
                     width: parent.width
                     height: newAlbumName.height + 2
-                    color: "#BAD7D7D7"
+                    color: "#BA000000"
 
                     Column {
                         id: newAlbumName
@@ -160,14 +160,18 @@ Page {
                         Label {
                             text: modelData.name
                             font.pixelSize: UI.FONT_XSMALL
+                            font.bold: true
                             width: parent.width
                             elide: Text.ElideRight
+                            color: Theme.primaryColor
                             verticalAlignment: Text.AlignVCenter
                         }
                         Label {
                             text: modelData.artist
                             font.pixelSize: UI.FONT_XXSMALL
+                            font.bold: true
                             width: parent.width
+                            color: Theme.primaryColor
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
                         }
@@ -192,7 +196,7 @@ Page {
         id: header
         width: parent.width
         anchors.top: whatsNew.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
+        anchors.topMargin: 60
 
         Separator {
             width: parent.width
@@ -203,19 +207,18 @@ Page {
             font.family: UI.FONT_FAMILY_BOLD
             font.weight: Font.Bold
             font.pixelSize: UI.LIST_TILE_SIZE
-            color: UI.LIST_TITLE_COLOR
+            color: Theme.primaryColor
             text: "Top lists"
         }
 
-        OptionSelector {
+        ComboBox {
             id: selector
-            selectedIndex: 0
-            model: ListModel {
-                ListElement { name: "Tracks" }
-                ListElement { name: "Albums" }
-                ListElement { name: "Artists" }
+            currentIndex: 0
+            menu: ContextMenu {
+                MenuItem { text: "Tracks"; onClicked: results.updateResults(); }
+                MenuItem { text: "Albums"; onClicked: results.updateResults(); }
+                MenuItem { text: "Artists"; onClicked:results.updateResults(); }
             }
-            delegate: OptionSelectorDelegate { text: name }
         }
 
         Separator {
@@ -229,11 +232,9 @@ Page {
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
         anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
         clip: true
 
-        ListView {
+        SilicaListView {
             id: results
             anchors.fill: parent
             anchors.rightMargin: UI.MARGIN_XLARGE
@@ -281,11 +282,6 @@ Page {
             }
 
             Connections {
-                target: selector
-                onSelectedIndexChanged: results.updateResults()
-            }
-
-            Connections {
                 target: toplist
                 onResultsChanged: results.updateResults()
             }
@@ -293,13 +289,13 @@ Page {
             function updateResults() {
                 results.model = 0
                 results.delegate = null
-                if (selector.selectedIndex === 0) {
+                if (selector.currentIndex === 0) {
                     results.delegate = trackComponent
                     results.model = toplist.tracks
-                } else if (selector.selectedIndex == 1) {
+                } else if (selector.currentIndex == 1) {
                     results.delegate = albumComponent
                     results.model = toplist.albums
-                } else if (selector.selectedIndex == 2) {
+                } else if (selector.currentIndex == 2) {
                     results.delegate = artistComponent
                     results.model = toplist.artists
                 }
@@ -307,14 +303,14 @@ Page {
 
             footer: Item {
                 width: parent.width
-                height: units.gu(10)
+                height: 100
             }
 
         }
-        Scrollbar { flickableItem: results }
+
     }
 
-    ActivityIndicator {
+    BusyIndicator {
         anchors.centerIn: parent
         visible: toplist.busy && results.count === 0
         running: visible

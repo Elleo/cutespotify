@@ -65,7 +65,7 @@ Rectangle {
             anchors.right: parent.right
             id: title
             verticalAlignment: Text.AlignVCenter
-            color: UI.COLOR_FOREGROUND
+            color: Theme.primaryColor
             font.pixelSize: UI.FONT_LARGE
             font.family: UI.FONT_FAMILY_LIGHT
             elide: Text.ElideRight
@@ -76,7 +76,7 @@ Rectangle {
             anchors.left: text.length > 0 ? parent.left : undefined
             anchors.right: text.length > 0 ? parent.right : undefined
             verticalAlignment: Text.AlignVCenter
-            color: UI.LIST_SUBTITLE_COLOR
+            color: Theme.secondaryColor
             font.pixelSize: UI.FONT_SMALL
             elide: Text.ElideRight
             opacity: contentOpacity

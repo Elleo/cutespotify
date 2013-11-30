@@ -61,10 +61,10 @@ Page {
         SettingsPage { }
     }
 
-/*    Component {
+    Component {
         id: topPage
         ToplistPage { }
-    }*/
+    }
 
     Connections {
         target: spotifySession

@@ -46,19 +46,12 @@ Rectangle {
     id: smallPlayer
     width: parent.width
     height: 100
-    color: "black"
+    color: "#BA000000"
 
     MouseArea {
         id: opener
         anchors.fill: parent
         //onClicked: player.showFullControls = !player.showFullControls
-    }
-
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        color: "#000000"
-        opacity: 0.5
     }
 
     Image {
