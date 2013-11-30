@@ -46,8 +46,6 @@ QMAKE_CXXFLAGS += -std=c++0x
 INCLUDEPATH += $$PWD/../libspotify/include
 LIBS += -L$$PWD/../libspotify/lib -lspotify
 
-INCLUDEPATH += /usr/include/resource/qt4
-PKGCONFIG += libresourceqt1
 
 
 

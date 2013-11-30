@@ -11,7 +11,6 @@ QT += \
 SOURCES += \
     main.cpp
 
-
 RESOURCES += \
     ../res.qrc
 
