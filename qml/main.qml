@@ -64,6 +64,7 @@ ApplicationWindow {
             anchors.centerIn: parent
             source: "qrc:/qml/images/cutespotify.png"
             visible: spotifySession.currentTrack ? false : true
+            opacity: 0.5
         }
 
         Column {
