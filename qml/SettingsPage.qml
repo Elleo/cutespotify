@@ -172,11 +172,11 @@ Page {
 
                     ComboBox {
                         menu: ContextMenu {
-                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.streamingQuality = spotifySession.LowQuality }
+                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.LowQuality }
                             MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.HighQuality }
                             MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.UltraQuality }
                         }
-                        currentItem: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
+                        currentIndex: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
                                                                                                    : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
                     }
 
@@ -201,11 +201,11 @@ Page {
 
                     ComboBox {
                         menu: ContextMenu {
-                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.syncQuality = spotifySession.LowQuality }
+                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.LowQuality }
                             MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.HighQuality }
                             MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.UltraQuality }
                         }
-                        currentItem: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
+                        currentIndex: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
                                                                                               : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
                     }
 
