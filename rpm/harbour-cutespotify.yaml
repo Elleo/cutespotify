@@ -13,7 +13,6 @@ Description: |
 Configure: none
 Builder: qtc5
 PkgConfigBR:
-- libresourceqt5
 - Qt5Concurrent
 - Qt5SystemInfo
 - Qt5Core
