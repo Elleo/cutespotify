@@ -34,9 +34,9 @@ INCLUDEPATH += /usr/include/sailfishapp
 lib.path = $$PREFIX/share/cutespotify/
 lib.files = ../libspotify/lib/libspotify*
 desktop.path = $$PREFIX/share/applications/
-desktop.files = ../cutespotify.desktop
+desktop.files = ../harbour-cutespotify.desktop
 icon.path = $$PREFIX/share/icons/hicolor/90x90/apps/
-icon.files = ../cutespotify.png
+icon.files = ../harbour-cutespotify.png
 target.path = $$PREFIX/bin
 INSTALLS += target desktop lib icon
 
