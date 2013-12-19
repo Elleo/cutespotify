@@ -543,15 +543,14 @@ void QSpotifySession::cleanUp()
 {
     qDebug() << "QSpotifySession::cleanUp";
     stop();
-    delete m_playQueue;
     m_audioThread->quit();
     m_audioThread->wait();
-    delete m_audioThread;
-    delete m_user;
     logout(true);
     sp_session_release(m_sp_session);
-    delete m_resourceSet;
+    delete m_playQueue;
     delete m_networkConfManager;
+    delete m_audioThread;
+    delete m_user;
 }
 
 bool QSpotifySession::eventFilter(QObject *obj, QEvent *e)
