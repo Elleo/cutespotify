@@ -32,7 +32,7 @@ PKGCONFIG += sailfishapp
 INCLUDEPATH += /usr/include/sailfishapp
 
 lib.path = $$PREFIX/share/cutespotify/
-lib.files = ../libspotify/lib/libspotify*
+lib.files = ../libspotify/lib/*
 desktop.path = $$PREFIX/share/applications/
 desktop.files = ../harbour-cutespotify.desktop
 icon.path = $$PREFIX/share/icons/hicolor/90x90/apps/
