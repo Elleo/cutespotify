@@ -234,6 +234,7 @@ private Q_SLOTS:
     void cleanUp();
     void onOnlineChanged();
     void configurationChanged();
+    bool eventFilter(QObject *obj, QEvent *e);
 
 private:
     QSpotifySession();
@@ -288,6 +289,7 @@ private:
     bool m_shuffle;
     bool m_repeat;
     bool m_repeatOne;
+    int m_volume;
 
     bool m_invertedTheme;
 

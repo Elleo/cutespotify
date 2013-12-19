@@ -51,6 +51,22 @@ private:
     int m_delta;
 };
 
+
+class QSpotifyVolumeEvent : public QEvent
+{
+public:
+    QSpotifyVolumeEvent(int vol)
+        : QEvent(Type(QEvent::User + 20))
+        , m_vol(vol)
+    { }
+
+    int volume() const { return m_vol; }
+
+private:
+    int m_vol;
+};
+
+
 class QSpotifyRequestImageEvent : public QEvent
 {
 public:

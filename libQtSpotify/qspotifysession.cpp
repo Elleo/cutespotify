@@ -57,6 +57,7 @@
 #include <QtMultimedia/QAudioOutput>
 #include <QtNetwork/QNetworkConfigurationManager>
 #include <QtSystemInfo/QStorageInfo>
+#include <QKeyEvent>
 
 #include <assert.h>
 
@@ -184,6 +185,11 @@ bool QSpotifyAudioThreadWorker::event(QEvent *e)
         }
         e->accept();
         return true;
+    } else if (e->type() == QEvent::User + 20) {
+        QSpotifyVolumeEvent *ev = static_cast<QSpotifyVolumeEvent *>(e);
+        m_audioOutput->setVolume(ev->volume() / 100.0);
+        e->accept();
+        return true;
     } else if (e->type() == QEvent::Timer) {
         QTimerEvent *te = static_cast<QTimerEvent *>(e);
         if (te->timerId() == m_audioTimerID) {
@@ -229,6 +235,9 @@ void QSpotifyAudioThreadWorker::startStreaming(int channels, int sampleRate)
 
         m_audioOutput = new QAudioOutput(af);
         m_audioOutput->setBufferSize(BUFFER_SIZE);
+        QSettings settings;
+        int vol = settings.value("volume", 50).toInt();
+        m_audioOutput->setVolume(vol);
         m_iodevice = m_audioOutput->start();
         m_audioOutput->suspend();
         m_audioTimerID = startTimer(AUDIOSTREAM_UPDATE_INTERVAL);
@@ -425,8 +434,10 @@ QSpotifySession::QSpotifySession()
     m_audioResource->setStreamTag(QLatin1String("media.name"), QLatin1String("*"));
     m_audioResource->setOptional(false);
     m_resourceSet->addResourceObject(m_audioResource);
+    m_resourceSet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
     connect(m_resourceSet, SIGNAL(resourcesGranted(QList<ResourcePolicy::ResourceType>)), this, SLOT(resourceAcquiredHandler(QList<ResourcePolicy::ResourceType>)));
     connect(m_resourceSet, SIGNAL(lostResources()), this, SLOT(resourceLostHandler()));
+    QCoreApplication::instance()->installEventFilter(this);
 }
 
 void QSpotifySession::init()
@@ -509,6 +520,8 @@ void QSpotifySession::init()
     bool repeatOne = settings.value("repeatOne", false).toBool();
     setRepeatOne(repeatOne);
 
+    m_volume = settings.value("volume", 50).toInt();
+
     connect(this, SIGNAL(offlineModeChanged()), m_playQueue, SLOT(onOfflineModeChanged()));
 }
 
@@ -539,6 +552,28 @@ void QSpotifySession::cleanUp()
     sp_session_release(m_sp_session);
     delete m_resourceSet;
     delete m_networkConfManager;
+}
+
+bool QSpotifySession::eventFilter(QObject *obj, QEvent *e)
+{
+    if(e->type() == QEvent::KeyPress) {
+        QKeyEvent *ek = dynamic_cast<QKeyEvent *>(e);
+        int key = ek->key();
+        if (key == Qt::Key_VolumeUp || key == Qt::Key_VolumeDown) {
+            if (key == Qt::Key_VolumeUp && m_volume <= 90) {
+                m_volume += 10;
+            } else if (key == Qt::Key_VolumeDown && m_volume >= 10) {
+                m_volume -= 10;
+            }
+            QCoreApplication::postEvent(g_audioWorker, new QSpotifyVolumeEvent(m_volume));
+            QSettings settings;
+            settings.setValue("volume", m_volume);
+            e->accept();
+            return true;
+        }
+    }
+
+    return QObject::eventFilter(obj, e);
 }
 
 bool QSpotifySession::event(QEvent *e)
