@@ -227,7 +227,7 @@ void QSpotifyAudioThreadWorker::startStreaming(int channels, int sampleRate)
         m_audioOutput->setBufferSize(BUFFER_SIZE);
         QSettings settings;
         int vol = settings.value("volume", 50).toInt();
-        m_audioOutput->setVolume(vol);
+        m_audioOutput->setVolume(vol / 100.0);
         m_iodevice = m_audioOutput->start();
         m_audioOutput->suspend();
         m_audioTimerID = startTimer(AUDIOSTREAM_UPDATE_INTERVAL);
