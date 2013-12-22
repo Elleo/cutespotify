@@ -78,6 +78,7 @@ class QSpotifySession : public QObject
     Q_PROPERTY(StreamingQuality syncQuality READ syncQuality WRITE setSyncQuality NOTIFY syncQualityChanged)
     Q_PROPERTY(bool syncOverMobile READ syncOverMobile WRITE setSyncOverMobile NOTIFY syncOverMobileChanged)
     Q_PROPERTY(bool invertedTheme READ invertedTheme WRITE setInvertedTheme NOTIFY invertedThemeChanged)
+    Q_PROPERTY(int volume READ volume WRITE setVolume NOTIFY volumeChanged)
     Q_ENUMS(ConnectionStatus)
     Q_ENUMS(ConnectionError)
     Q_ENUMS(OfflineError)
@@ -184,6 +185,9 @@ public:
     bool repeatOne() const { return m_repeatOne; }
     void setRepeatOne(bool r);
 
+    int volume() const { return m_volume; }
+    void setVolume(int vol);
+
     sp_session *spsession() const { return m_sp_session; }
 
     QSpotifyPlayQueue *playQueue() const { return m_playQueue; }
@@ -224,6 +228,7 @@ Q_SIGNALS:
     void isLoggedInChanged();
     void offlineErrorMessageChanged();
     void invertedThemeChanged();
+    void volumeChanged();
 
 protected:
     bool event(QEvent *);

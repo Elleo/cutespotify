@@ -554,15 +554,21 @@ bool QSpotifySession::eventFilter(QObject *obj, QEvent *e)
             } else if (key == Qt::Key_VolumeDown && m_volume >= 10) {
                 m_volume -= 10;
             }
-            QCoreApplication::postEvent(g_audioWorker, new QSpotifyVolumeEvent(m_volume));
-            QSettings settings;
-            settings.setValue("volume", m_volume);
+            setVolume(m_volume);
             e->accept();
             return true;
         }
     }
 
     return QObject::eventFilter(obj, e);
+}
+
+void QSpotifySession::setVolume(int vol)
+{
+    QCoreApplication::postEvent(g_audioWorker, new QSpotifyVolumeEvent(vol));
+    QSettings settings;
+    settings.setValue("volume", vol);
+    emit volumeChanged();
 }
 
 bool QSpotifySession::event(QEvent *e)

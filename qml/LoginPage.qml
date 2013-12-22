@@ -45,16 +45,13 @@ import "UIConstants.js" as UI
 
 Page {
 
-    NotificationBanner {
-        id: errorBanner
-    }
-
     Connections {
         target: spotifySession
         onConnectionErrorChanged: {
             if (spotifySession.connectionError != SpotifySession.Ok) {
                 errorBanner.text = spotifySession.connectionErrorMessage;
                 errorBanner.show();
+                console.log(spotifySession.connectionErrorMessage);
             }
         }
     }
