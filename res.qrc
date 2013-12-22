@@ -80,13 +80,7 @@
         <file>qml/images/icon-m-toolbar-directory-move-to-white.png</file>
         <file>qml/images/icon-m-toolbar-shuffle-selected.png</file>
         <file>qml/images/icon-m-toolbar-repeat-one-white-selected.png</file>
-        <file>qml/images/next.png</file>
-        <file>qml/images/previous.png</file>
-        <file>qml/images/play.png</file>
-        <file>qml/images/pause.png</file>
         <file>qml/images/cutespotify-logo.png</file>
-        <file>qml/images/star.png</file>
-        <file>qml/images/emptystar.png</file>
         <file>qml/images/cutespotify.png</file>
     </qresource>
 </RCC>
