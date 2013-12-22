@@ -465,8 +465,7 @@ void QSpotifySession::init()
     }
 
     QStorageInfo storageInfo;
-    qlonglong totalSpace = storageInfo.totalDiskSpace(QString::fromLatin1(m_sp_config.cache_location));
-    sp_session_set_cache_size(m_sp_session, totalSpace / 1000000 - 1000);
+    sp_session_set_cache_size(m_sp_session, 0);
 
     QSettings settings;
 
