@@ -131,9 +131,13 @@ Page {
             width: parent.width
             height: 100
             anchors.topMargin: 100
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+
             Label {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: 10
                 font.family: UI.FONT_FAMILY_BOLD
                 font.weight: Font.Bold
                 font.pixelSize: UI.LIST_TILE_SIZE
@@ -222,7 +226,7 @@ Page {
             when: searchField.text.length > 0 || searchField.activeFocus || tracks.showSearchField
             PropertyChanges {
                 target: searchFieldContainer
-                height: searchColumn.height + UI.MARGIN_XLARGE
+                height: searchColumn.height + UI.MARGIN_XLARGE + 40
             }
             PropertyChanges {
                 target: searchColumn

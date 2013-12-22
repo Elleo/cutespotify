@@ -113,6 +113,8 @@ Item {
 
     Row {
         anchors.fill: parent
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
         spacing: UI.LIST_ITEM_SPACING
 
         Item {

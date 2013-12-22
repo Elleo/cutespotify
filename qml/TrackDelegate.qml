@@ -171,6 +171,9 @@ Item {
             height: mainText.height
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+
             Label {
                 id: mainText
                 height: 34
@@ -201,6 +204,8 @@ Item {
             height: subText.height
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
             Label {
                 id: subText
                 height: 29

@@ -46,10 +46,6 @@ import "UIConstants.js" as UI
 
 Page {
     id: playlistPage
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
-    anchors.topMargin: 50
-
 
     Component {
         id: searchPage
@@ -95,9 +91,6 @@ Page {
     SilicaListView {
         id: playlists
         anchors.fill: parent
-        anchors.topMargin: 20
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
         anchors.bottomMargin: 100
 
         cacheBuffer: 3000
@@ -118,6 +111,11 @@ Page {
                 text: "Search"
                 onClicked: pageStack.push(searchPage)
             }
+        }
+
+        header: Item {
+            height: 20
+            width: parent.width
         }
 
         delegate: PlaylistDelegate {

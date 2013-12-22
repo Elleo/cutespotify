@@ -45,9 +45,6 @@ import QtSpotify 1.0
 ApplicationWindow {
     id: appWindow
     property string themeColor
-    anchors.topMargin: 50
-    anchors.leftMargin: 10
-    anchors.rightMargin: 10
 
     cover: CoverBackground {
 
