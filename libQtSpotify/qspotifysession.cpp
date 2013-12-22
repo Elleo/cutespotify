@@ -56,7 +56,6 @@
 #include <QtGui/QImage>
 #include <QtMultimedia/QAudioOutput>
 #include <QtNetwork/QNetworkConfigurationManager>
-#include <QtSystemInfo/QStorageInfo>
 #include <QKeyEvent>
 
 #include <assert.h>
@@ -464,7 +463,6 @@ void QSpotifySession::init()
         return;
     }
 
-    QStorageInfo storageInfo;
     sp_session_set_cache_size(m_sp_session, 0);
 
     QSettings settings;
