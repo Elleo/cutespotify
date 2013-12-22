@@ -103,7 +103,7 @@ ApplicationWindow {
             }
 
             CoverAction {
-                iconSource: spotifySession.currentTrack ? "image://theme/icon-cover-next" : ""
+                iconSource: spotifySession.currentTrack ? "image://theme/icon-cover-next-song" : ""
                 onTriggered: {
                     spotifySession.playNext()
                 }
