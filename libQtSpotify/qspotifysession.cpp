@@ -432,24 +432,18 @@ QSpotifySession::QSpotifySession()
 
 void QSpotifySession::init()
 {
+    memset(&m_sp_callbacks, 0, sizeof(m_sp_callbacks));
     m_sp_callbacks.logged_in = callback_logged_in;
     m_sp_callbacks.logged_out = callback_logged_out;
     m_sp_callbacks.metadata_updated = callback_metadata_updated;
     m_sp_callbacks.connection_error = callback_connection_error;
-    m_sp_callbacks.message_to_user = 0;
     m_sp_callbacks.notify_main_thread = callback_notify_main_thread;
     m_sp_callbacks.music_delivery = callback_music_delivery;
     m_sp_callbacks.play_token_lost = callback_play_token_lost;
     m_sp_callbacks.log_message = callback_log_message;
     m_sp_callbacks.end_of_track = callback_end_of_track;
-    m_sp_callbacks.streaming_error = 0;
     m_sp_callbacks.userinfo_updated = callback_userinfo_updated;
-    m_sp_callbacks.start_playback = 0;
-    m_sp_callbacks.stop_playback = 0;
-    m_sp_callbacks.get_audio_buffer_stats = 0;
-    m_sp_callbacks.offline_status_updated = 0;
     m_sp_callbacks.offline_error = callback_offline_error;
-    m_sp_callbacks.credentials_blob_updated = 0;
 
     memset(&m_sp_config, 0, sizeof(m_sp_config));
     m_sp_config.api_version = SPOTIFY_API_VERSION;
