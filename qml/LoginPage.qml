@@ -131,10 +131,30 @@ Page {
             }
         }
 
-        TextSwitch {
-            id: termsCheck
-            text: "Accept"
-            description: "I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
+        Column {
+            width: parent.width
+            TextSwitch {
+                id: termsCheck
+                text: "Accept"
+            }
+
+            Row {
+                width: parent.width
+
+                Item {
+                    height: 30
+                    width: 50
+                }
+
+                Label {
+                    onLinkActivated: Qt.openUrlExternally(link)
+                    textFormat: Text.RichText
+                    width: parent.width - 50
+                    wrapMode: Text.WordWrap
+                    font.pixelSize: UI.FONT_LSMALL
+                    text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
+                }
+            }
         }
 
         Item {
@@ -168,7 +188,8 @@ Page {
             font.pixelSize: UI.FONT_LSMALL
             onLinkActivated: Qt.openUrlExternally(link)
             horizontalAlignment: Text.AlignHCenter
-            text: "Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
+            textFormat: Text.RichText
+            text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
         }
     }
 
