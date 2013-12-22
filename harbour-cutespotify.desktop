@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
+X-Nemo-Application-Type=silica-qt5
 Name=CuteSpotify
 Icon=/usr/share/icons/hicolor/90x90/apps/harbour-cutespotify.png
 Exec=/usr/bin/CuteSpotify
