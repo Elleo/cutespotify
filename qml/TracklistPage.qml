@@ -146,17 +146,21 @@ Page {
                                                              : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
                                                                                                          : "Inbox"))
             }
-            Row {
-                spacing: 20
+            TextSwitch {
                 anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                /*Label {
-                    text: "Available offline"
+                width: 220
+                text: "Available offline"
+                property bool completed: false;
+                onCheckedChanged: {
+                    if(completed) {
+                        console.log("Offline changed");
+                        playlist.availableOffline = !playlist.availableOffline;
+                    }
                 }
-                TextSwitch {
-                    onCheckedChanged: playlist.availableOffline = !playlist.availableOffline
-                    checked: playlist.availableOffline
-                }*/
+                checked: playlist.availableOffline
+                Component.onCompleted: {
+                    completed = true;
+                }
             }
         }
 
