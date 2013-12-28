@@ -58,6 +58,17 @@ Page {
         }
     }
 
+    Connections {
+        target: spotifySession
+        onConnectionStatusChanged: {
+            if (spotifySession.connectionStatus == SpotifySession.LoggedIn) {
+                pageStack.clear();
+                pageStack.push(mainPage);
+            }
+        }
+    }
+
+
     Rectangle {
         id: errorRect
         color: Theme.highlightColor

@@ -64,12 +64,6 @@ Page {
 
     Connections {
         target: spotifySession
-        onOfflineModeChanged: {
-            if (spotifySession.offlineMode) {
-                pageStack.clear();
-                pageStack.push(loginPage)
-            }
-        }
         onConnectionStatusChanged: {
             if (spotifySession.connectionStatus != SpotifySession.LoggedIn) {
                 pageStack.clear();
