@@ -236,9 +236,9 @@ Item {
                     anchors.left: offlineStatusIcon.right
                     anchors.right: parent.right
                     anchors.rightMargin: UI.MARGIN_XLARGE
-                    anchors.leftMargin: UI.MARGIN_XLARGE
+                    anchors.leftMargin: -65
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 3
+                    anchors.bottomMargin: -25
                     sourceComponent: listItem.offlineStatus == SpotifyPlaylist.Downloading ? downloadBarComponent : null
                 }
 
@@ -246,7 +246,6 @@ Item {
                     id: downloadBarComponent
                     ProgressBar {
                         visible: listItem.offlineStatus == SpotifyPlaylist.Downloading
-                        height: 20
                         minimumValue: 0
                         maximumValue: 100
                         value: listItem.downloadProgress
