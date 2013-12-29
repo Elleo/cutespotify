@@ -141,12 +141,15 @@ Page {
                 font.family: UI.FONT_FAMILY_BOLD
                 font.weight: Font.Bold
                 font.pixelSize: UI.LIST_TILE_SIZE
+                wrapMode: Text.WordWrap
+                width: parent.width - offlineSwitch.width - 10
                 color: Theme.primaryColor
                 text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
                                                              : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
                                                                                                          : "Inbox"))
             }
             TextSwitch {
+                id: offlineSwitch
                 anchors.right: parent.right
                 width: 220
                 text: "Available offline"
