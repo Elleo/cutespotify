@@ -25,11 +25,11 @@ Requires:
 - sailfishsilica-qt5
 - qt5-qtmultimedia-plugin-audio-pulseaudio
 Files:
-- /usr/share/icons/hicolor/90x90/apps
+- /usr/share/icons/hicolor/86x86/apps
 - /usr/share/applications
-- /usr/share/cutespotify
+- '/usr/share/%{name}'
 - /usr/bin
-- '%{_datadir}/icons/hicolor/90x90/apps/%{name}.png'
+- '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'
 - '%{_datadir}/applications/%{name}.desktop'
 - '%{_bindir}'
 PkgBR: []
