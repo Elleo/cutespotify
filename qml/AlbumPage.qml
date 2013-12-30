@@ -93,8 +93,11 @@ Page {
             id: selector
             currentIndex: 0
             menu: ContextMenu {
-                MenuItem { text: "Tracks"; onClicked: tracks.updateResults(); }
-                MenuItem { text: "Review"; onClicked: tracks.updateResults(); }
+                MenuItem { text: "Tracks"; }
+                MenuItem { text: "Review"; }
+            }
+            onCurrentIndexChanged: {
+                tracks.updateResults();
             }
         }
 

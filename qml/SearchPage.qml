@@ -102,9 +102,12 @@ Page {
                 id: selector
                 currentIndex: 0
                 menu: ContextMenu {
-                    MenuItem { text: "Tracks"; onClicked: results.updateResults(); }
-                    MenuItem { text: "Albums"; onClicked: results.updateResults(); }
-                    MenuItem { text: "Artists"; onClicked: results.updateResults(); }
+                    MenuItem { text: "Tracks"; }
+                    MenuItem { text: "Albums"; }
+                    MenuItem { text: "Artists"; }
+                }
+                onCurrentIndexChanged: {
+                    results.updateResults();
                 }
             }
             Separator {

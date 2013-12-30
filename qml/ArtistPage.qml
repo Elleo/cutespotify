@@ -93,10 +93,13 @@ Page {
             id: selector
             currentIndex: 1
             menu: ContextMenu {
-                MenuItem { text: "Top hits"; onClicked: artistView.updateResults(); }
-                MenuItem { text: "Music"; onClicked: artistView.updateResults(); }
-                MenuItem { text: "Biography"; onClicked: artistView.updateResults(); }
-                MenuItem { text: "Related artists"; onClicked: artistView.updateResults(); }
+                MenuItem { text: "Top hits"; }
+                MenuItem { text: "Music"; }
+                MenuItem { text: "Biography"; }
+                MenuItem { text: "Related artists"; }
+            }
+            onCurrentIndexChanged: {
+                artistView.updateResults();
             }
         }
 
