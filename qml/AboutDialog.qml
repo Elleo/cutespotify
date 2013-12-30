@@ -65,7 +65,7 @@ Dialog {
         }
 
         Label {
-            text: "Version 1.3.1"
+            text: "Version 1.3.0"
             font.pixelSize: UI.FONT_LSMALL
             color: Theme.primaryColor
         }
