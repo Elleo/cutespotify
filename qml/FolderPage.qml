@@ -38,14 +38,13 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
 Page {
     id: folderPage
-    orientationLock: PageOrientation.LockPortrait
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
@@ -63,25 +62,18 @@ Page {
         target: folder
         onPlaylistDestroyed: {
             folderPage.folderDeleted = true
-            var foundPage = playlistsTab.find(folderNotDeleted);
-            if (foundPage !== playlistsTab.currentPage)
-                playlistsTab.pop(foundPage, true);
+            var foundPage = pageStack.find(folderNotDeleted);
+            if (foundPage !== pageStack.currentPage)
+                pageStack.pop(foundPage, true);
         }
     }
 
-    PlaylistMenu {
-        id: menu
-    }
-
-//    PlaylistNameSheet {
-//        id: newPlaylistSheet
-//        title: "Playlist name"
-//        onAccepted: { spotifySession.user.createPlaylistInFolder(newPlaylistSheet.playlistName, folderPage.folder); }
-//    }
-
-    ListView {
+    SilicaListView {
         id: playlists
         anchors.fill: parent
+        anchors.topMargin: 75
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
 
         cacheBuffer: 3000
         model: folder.playlists
@@ -112,14 +104,14 @@ Page {
                 if (modelData.trackCount > 0) {
                     var component = Qt.createComponent("TracklistPage.qml");
                     if (component.status === Component.Ready) {
-                        var playlistPage = component.createObject(playlistsTab, { playlist: modelData });
-                        playlistsTab.push(playlistPage);
+                        var playlistPage = component.createObject(pageStack, { playlist: modelData });
+                        pageStack.push(playlistPage);
                     }
                 } else if (modelData.type === SpotifyPlaylist.Folder) {
                     var component2 = Qt.createComponent("FolderPage.qml");
                     if (component2.status === Component.Ready) {
-                        var folderPage = component2.createObject(playlistsTab, { folder: modelData });
-                        playlistsTab.push(folderPage);
+                        var folderPage = component2.createObject(pageStack, { folder: modelData });
+                        pageStack.push(folderPage);
                     }
                 }
             }
@@ -129,87 +121,21 @@ Page {
 
             function updateIcon() {
                 if (modelData.type === SpotifyPlaylist.Playlist)
-                    staticIcon = theme.inverted ? "image://theme/icon-m-music-video-all-songs" : "images/icon-m-music-video-all-songs-black.png";
+                    staticIcon = "images/icon-m-music-video-all-songs-white.png";
                 else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "qrc:/qml/images/star.png";
+                    staticIcon = "image://theme/icon-m-favorite-selected";
                 else if (modelData.type === SpotifyPlaylist.Inbox)
-                    staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-move-to-white-selected" : "images/icon-m-toolbar-directory-move-to-black.png";
+                    staticIcon = "images/icon-m-toolbar-directory-move-to-white.png";
                 else if (modelData.type === SpotifyPlaylist.Folder)
-                    staticIcon = theme.inverted ? "image://theme/icon-m-toolbar-directory-selected" : "images/icon-m-toolbar-directory-black.png"
+                    staticIcon = "images/icon-m-toolbar-directory-white.png";
             }
 
             Component.onCompleted: updateIcon()
         }
 
         header: ViewHeader {
-            text: folder.name
+                text: folder.name
         }
-
-//        footer: Item {
-//            height: visible ? (UI.LIST_ITEM_HEIGHT + separator.height) : 0
-//            width: parent.width
-//            visible: !spotifySession.offlineMode
-
-//            Separator {
-//                id: separator
-//                anchors.left: parent.left
-//                anchors.right: parent.right
-//                anchors.top: parent.top
-//            }
-
-//            Rectangle {
-//                id: background
-//                anchors.fill: row
-//                // Fill page porders
-//                anchors.leftMargin: -UI.MARGIN_XLARGE
-//                anchors.rightMargin: -UI.MARGIN_XLARGE
-//                opacity: mouseArea.pressed ? 1.0 : 0.0
-//                color: "#22FFFFFF"
-//            }
-
-//            Row {
-//                id: row
-//                width: parent.width
-//                anchors.top: separator.bottom
-//                anchors.bottom: parent.bottom
-//                spacing: UI.LIST_ITEM_SPACING
-
-//                Item {
-//                    id: iconItem
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    visible: iconImage.source !== "" ? true : false
-//                    width: 40
-//                    height: 40
-
-//                    Image {
-//                        id: iconImage
-//                        anchors.centerIn: parent
-//                        source: theme.inverted ? "image://theme/icon-m-input-add" : "image://theme/icon-m-common-add"
-//                        opacity: 0.4
-//                    }
-//                }
-
-//                Label {
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    font.family: UI.FONT_FAMILY_BOLD
-//                    font.weight: Font.Bold
-//                    font.pixelSize: UI.LIST_TILE_SIZE
-//                    color: theme.inverted ? UI.LIST_TITLE_COLOR_INVERTED : UI.LIST_TITLE_COLOR
-//                    opacity: 0.4
-//                    text: "New playlist"
-//                }
-//            }
-
-//            MouseArea {
-//                id: mouseArea;
-//                anchors.fill: parent
-//                onClicked: {
-//                    newPlaylistSheet.playlistName = "";
-//                    newPlaylistSheet.open();
-//                }
-//            }
-//        }
     }
 
-    Scrollbar { flickableItem: playlists }
 }

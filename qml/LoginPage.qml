@@ -78,7 +78,7 @@ Page {
 
         Label {
             id: errorBanner
-            color: black
+            color: "black"
             font.pixelSize: 20
             anchors.centerIn: parent
             text: ""

@@ -83,11 +83,4 @@ Rectangle {
         }
     }
 
-    Separator {
-        anchors.left: parent.left
-        anchors.leftMargin: contentMargins
-        anchors.right: parent.right
-        anchors.rightMargin: contentMargins
-        anchors.bottom: parent.bottom
-    }
 }
