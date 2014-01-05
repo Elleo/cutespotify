@@ -21,6 +21,7 @@ PkgConfigBR:
 - Qt5Multimedia
 - sailfishapp
 - qmsystem2-qt5
+- libresourceqt5
 Requires:
 - sailfishsilica-qt5
 - qt5-qtmultimedia-plugin-audio-pulseaudio
