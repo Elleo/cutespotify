@@ -11,6 +11,7 @@ SOURCES += $$PWD/qspotifysession.cpp \
     $$PWD/qspotifytrack.cpp \
     $$PWD/qspotifyplaylist.cpp \
     $$PWD/qspotifyplaylistcontainer.cpp \
+    $$PWD/qspotifyplaylistsearchentry.cpp \
     $$PWD/qspotifytracklist.cpp \
     $$PWD/qspotifyartist.cpp \
     $$PWD/qspotifyalbum.cpp \
@@ -28,6 +29,7 @@ HEADERS += $$PWD/qspotifysession.h \
     $$PWD/qspotifytrack.h \
     $$PWD/qspotifyplaylist.h \
     $$PWD/qspotifyplaylistcontainer.h \
+    $$PWD/qspotifyplaylistsearchentry.h \
     $$PWD/qspotifytracklist.h \
     $$PWD/QtSpotify \
     $$PWD/qspotify_qmlplugin.h \

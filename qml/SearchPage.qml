@@ -105,6 +105,7 @@ Page {
                     MenuItem { text: "Tracks"; }
                     MenuItem { text: "Albums"; }
                     MenuItem { text: "Artists"; }
+                    MenuItem { text: "Playlists"; }
                 }
                 onCurrentIndexChanged: {
                     results.updateResults();
@@ -185,6 +186,23 @@ Page {
                     onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
                 }
             }
+            Component {
+                id: playlistComponent
+                PlaylistDelegate {
+                    title: modelData.name
+                    icon: "images/icon-m-music-video-all-songs-white.png"
+
+                    onClicked: {
+                        console.log("qml: Loading playlist")
+                        var component = Qt.createComponent("TracklistPage.qml");
+                        if (component.status === Component.Ready) {
+                            var playlistPage = component.createObject(pageStack, { playlist: modelData.playlist });
+                            pageStack.push(playlistPage);
+                        }
+                    }
+                }
+            }
+
 
             Connections {
                 target: search
@@ -203,6 +221,9 @@ Page {
                 } else if (selector.currentIndex == 2) {
                     results.delegate = artistComponent
                     results.model = search.artists
+                } else if (selector.currentIndex == 3) {
+                    results.delegate = playlistComponent
+                    results.model = search.playlists
                 }
             }
 

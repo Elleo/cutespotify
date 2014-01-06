@@ -54,6 +54,7 @@ class QSpotifySearch : public QObject
     Q_PROPERTY(QList<QObject *> tracks READ tracks NOTIFY resultsChanged)
     Q_PROPERTY(QList<QObject *> albums READ albums NOTIFY resultsChanged)
     Q_PROPERTY(QList<QObject *> artists READ artists NOTIFY resultsChanged)
+    Q_PROPERTY(QList<QObject *> playlists READ playlists NOTIFY resultsChanged)
     Q_PROPERTY(QString didYouMean READ didYouMean NOTIFY resultsChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
 public:
@@ -67,7 +68,7 @@ public:
     QList<QObject *> tracks() const;
     QList<QObject *> albums() const { return m_albumResults; }
     QList<QObject *> artists() const { return m_artistResults; }
-    QList<QObject *> playlists() const { return m_playlistsResults; }
+    QList<QObject *> playlists() const { return m_playlistResults; }
 
     QString didYouMean() const { return m_didYouMean; }
 
@@ -99,7 +100,7 @@ private:
     QSpotifyTrackList *m_trackResults;
     QList<QObject *> m_albumResults;
     QList<QObject *> m_artistResults;
-    QList<QObject *> m_playlistsResults;
+    QList<QObject *> m_playlistResults;
     QString m_didYouMean;
     bool m_busy;
 

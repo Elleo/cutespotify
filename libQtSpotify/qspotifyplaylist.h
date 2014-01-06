@@ -95,6 +95,7 @@ public:
         Waiting = SP_PLAYLIST_OFFLINE_STATUS_WAITING
     };
 
+    QSpotifyPlaylist(Type type, sp_playlist *playlist, bool incrRefCount = true);
     virtual ~QSpotifyPlaylist();
 
     bool isLoaded();
@@ -165,7 +166,6 @@ private Q_SLOTS:
     void onTrackChanged();
 
 private:
-    QSpotifyPlaylist(Type type, sp_playlist *playlist, bool incrRefCount = true);
     void addTrack(sp_track *track, int pos = -1);
     void registerTrackType(QSpotifyTrack *t);
     void unregisterTrackType(QSpotifyTrack *t);

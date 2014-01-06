@@ -9,6 +9,7 @@
 #include "qspotifyobject.h"
 #include "qspotifyplaylist.h"
 #include "qspotifyplaylistcontainer.h"
+#include "qspotifyplaylistsearchentry.h"
 #include "qspotifyplayqueue.h"
 #include "qspotifysearch.h"
 #include "qspotifysession.h"

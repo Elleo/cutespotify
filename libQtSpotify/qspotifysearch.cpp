@@ -50,6 +50,7 @@
 #include "qspotifyalbum.h"
 #include "qspotifyartist.h"
 #include "qspotifyplaylist.h"
+#include "qspotifyplaylistsearchentry.h"
 #include "qspotifysession.h"
 #include "qspotifytrack.h"
 #include "qspotifytracklist.h"
@@ -86,6 +87,8 @@ QSpotifySearch::~QSpotifySearch()
     m_albumResults.clear();
     qDeleteAll(m_artistResults);
     m_artistResults.clear();
+    qDeleteAll(m_playlistResults);
+    m_playlistResults.clear();
     clearSearch();
 }
 
@@ -154,6 +157,8 @@ void QSpotifySearch::populateResults()
     m_albumResults.clear();
     qDeleteAll(m_artistResults);
     m_artistResults.clear();
+    qDeleteAll(m_playlistResults);
+    m_playlistResults.clear();
 
     if (m_sp_search) {
         if (sp_search_error(m_sp_search) != SP_ERROR_OK)
@@ -184,6 +189,13 @@ void QSpotifySearch::populateResults()
         for (int i = 0; i < c; ++i) {
             QSpotifyArtist *artist = new QSpotifyArtist(sp_search_artist(m_sp_search, i));
             m_artistResults.append((QObject *)artist);
+        }
+
+        // Populate playlists
+        c = sp_search_num_playlists(m_sp_search);
+        for (int i = 0; i < c; ++i) {
+            QSpotifyPlaylistSearchEntry *playlist = new QSpotifyPlaylistSearchEntry(sp_search_playlist_name(m_sp_search, i), sp_search_playlist(m_sp_search, i));
+            m_playlistResults.append((QObject *)playlist);
         }
 
         m_didYouMean = QString::fromUtf8(sp_search_did_you_mean(m_sp_search));
