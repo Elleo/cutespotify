@@ -245,25 +245,15 @@ void QSpotifyAudioThreadWorker::updateAudioBuffer()
     if (m_audioOutput->state() == QAudio::SuspendedState)
         m_audioOutput->resume();
 
-    if (m_endOfTrack && m_audioOutput->state() == QAudio::IdleState) {
-        killTimer(m_audioTimerID);
-        int elapsedTime = int(m_audioOutput->processedUSecs() / 1000);
-        QCoreApplication::postEvent(QSpotifySession::instance(), new QSpotifyTrackProgressEvent(elapsedTime - m_previousElapsedTime));
-        QCoreApplication::postEvent(QSpotifySession::instance(), new QEvent(QEvent::Type(QEvent::User + 4)));
-        m_previousElapsedTime = elapsedTime;
-        return;
-    } else {
-        g_mutex.lock();
-        int toRead = qMin(g_writePos - g_readPos, m_audioOutput->bytesFree());
-        g_buffer.seek(g_readPos);
-        char data[toRead];
-        int read =  g_buffer.read(&data[0], toRead);
-        g_readPos += read;
-        g_mutex.unlock();
+    g_mutex.lock();
+    int toRead = qMin(g_writePos - g_readPos, m_audioOutput->bytesFree());
+    g_buffer.seek(g_readPos);
+    char data[toRead];
+    int read =  g_buffer.read(&data[0], toRead);
+    g_readPos += read;
+    g_mutex.unlock();
 
-        m_iodevice->write(&data[0], read);
-
-    }
+    m_iodevice->write(&data[0], read);
 
     m_timeCounter += AUDIOSTREAM_UPDATE_INTERVAL;
     if (m_timeCounter >= 1000) {
@@ -357,7 +347,6 @@ static int SP_CALLCONV callback_music_delivery(sp_session *, const sp_audioforma
 static void SP_CALLCONV callback_end_of_track(sp_session *)
 {
     qDebug() << "End of track";
-    QCoreApplication::postEvent(QSpotifySession::instance(), new QEvent(QEvent::Type(QEvent::User + 4)));
     QCoreApplication::postEvent(g_audioWorker, new QEvent(QEvent::Type(QEvent::User + 4)));
 }
 
@@ -607,6 +596,10 @@ bool QSpotifySession::event(QEvent *e)
         QSpotifyTrackProgressEvent *ev = static_cast<QSpotifyTrackProgressEvent *>(e);
         m_currentTrackPosition += ev->delta();
         m_currentTrackPlayedDuration += ev->delta();
+        if(m_currentTrackPosition > m_currentTrack->duration()) {
+            // Don't switch tracks until we've really reached the end of the track
+            QCoreApplication::postEvent(QSpotifySession::instance(), new QEvent(QEvent::Type(QEvent::User + 4)));
+        }
         emit currentTrackPositionChanged();
         e->accept();
         return true;
