@@ -69,7 +69,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setApplicationName("CuteSpotify");
     QApplication::setApplicationVersion("1.3.0");
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/home/nemo/.local/share/harbour-cutespotify/");
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-cutespotify/";
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);
+    QSettings settings;
+    if(!settings.contains("dataPath")) {
+        // Set default path, but allow for it to be overridden
+        // e.g. so data can be store on SD card
+        settings.setValue("dataPath", settingsPath);
+    }
     QGuiApplication *app = SailfishApp::application(argc, argv);
     QQuickWindow::setDefaultAlphaBuffer(true);
     QQuickView *view = SailfishApp::createView();

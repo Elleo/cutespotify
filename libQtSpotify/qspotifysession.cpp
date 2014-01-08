@@ -420,6 +420,7 @@ QSpotifySession::QSpotifySession()
 
 void QSpotifySession::init()
 {
+    QSettings settings;
     memset(&m_sp_callbacks, 0, sizeof(m_sp_callbacks));
     m_sp_callbacks.logged_in = callback_logged_in;
     m_sp_callbacks.logged_out = callback_logged_out;
@@ -435,8 +436,8 @@ void QSpotifySession::init()
 
     memset(&m_sp_config, 0, sizeof(m_sp_config));
     m_sp_config.api_version = SPOTIFY_API_VERSION;
-    m_sp_config.cache_location = "/home/nemo/.local/share/harbour-cutespotify";
-    m_sp_config.settings_location = "/home/nemo/.local/share/harbour-cutespotify";
+    m_sp_config.cache_location = settings.value("dataPath").toString().toLatin1();
+    m_sp_config.settings_location = settings.value("dataPath").toString().toLatin1();
     m_sp_config.application_key = g_appkey;
     m_sp_config.application_key_size = g_appkey_size;
     m_sp_config.user_agent = "CuteSpotify";
@@ -453,8 +454,6 @@ void QSpotifySession::init()
     }
 
     sp_session_set_cache_size(m_sp_session, 0);
-
-    QSettings settings;
 
     // Remove stored login information from older version of MeeSpot
     if (settings.contains("username")) {
