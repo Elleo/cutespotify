@@ -38,17 +38,16 @@
 **
 ****************************************************************************/
 
-
+#include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QQuickView>
-#include <QtWidgets/QApplication>
+#include <QGuiApplication>
 #include <sailfishapp.h>
 
-#include "hardwarekeyshandler.h"
 #include <QtSpotify>
 #include <qspotify_qmlplugin.h>
 
@@ -64,10 +63,10 @@ void silentDebug(QtMsgType type, const QMessageLogContext& context, const QStrin
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QApplication::setOrganizationName("CuteSpotify");
-    QApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
-    QApplication::setApplicationName("CuteSpotify");
-    QApplication::setApplicationVersion("1.3.0");
+    QCoreApplication::setOrganizationName("CuteSpotify");
+    QCoreApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
+    QCoreApplication::setApplicationName("CuteSpotify");
+    QCoreApplication::setApplicationVersion("1.3.0");
 
     QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-cutespotify/";
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);
@@ -88,8 +87,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     registerQmlTypes();
     view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
     view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
-
-    HardwareKeysHandler keyHandler;
 
     view->setSource(QUrl("qrc:/qml/main.qml"));
     view->setResizeMode(QQuickView::SizeRootObjectToView);

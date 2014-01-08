@@ -4,18 +4,10 @@ QT += \
     concurrent \
     multimedia \
     qml \
-    quick \
-    systeminfo \
-    widgets 
-
-CONFIG += qmsystem2-qt5
-
-HEADERS += \
-    hardwarekeyshandler.h
+    quick
 
 SOURCES += \
-    main.cpp \
-    hardwarekeyshandler.cpp
+    main.cpp
 
 RESOURCES += \
     ../res.qrc
