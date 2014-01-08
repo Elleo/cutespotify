@@ -14,17 +14,13 @@ Configure: none
 Builder: qtc5
 PkgConfigBR:
 - Qt5Concurrent
-- Qt5SystemInfo
 - Qt5Core
 - Qt5Qml
 - Qt5Quick
 - Qt5Multimedia
 - sailfishapp
-- qmsystem2-qt5
-- libresourceqt5
 Requires:
 - sailfishsilica-qt5
-- qt5-qtmultimedia-plugin-audio-pulseaudio
 Files:
 - /usr/share/icons/hicolor/86x86/apps
 - /usr/share/applications

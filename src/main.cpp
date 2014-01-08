@@ -67,6 +67,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
     QCoreApplication::setApplicationName("CuteSpotify");
     QCoreApplication::setApplicationVersion("1.3.0");
+    QCoreApplication::addLibraryPath("/usr/share/harbour-cutespotify/lib/");
 
     QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-cutespotify/";
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);

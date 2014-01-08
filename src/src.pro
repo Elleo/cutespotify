@@ -24,12 +24,14 @@ PKGCONFIG += sailfishapp
 INCLUDEPATH += /usr/include/sailfishapp
 
 lib.path = $$PREFIX/share/harbour-cutespotify/lib/
-lib.files = ../libspotify/lib/*
+lib.files = ../libspotify/lib/lib*
+qtpulse.path = $$PREFIX/share/harbour-cutespotify/lib/audio/
+qtpulse.files = ../libspotify/lib/audio/*
 desktop.path = $$PREFIX/share/applications/
 desktop.files = ../harbour-cutespotify.desktop
 icon.path = $$PREFIX/share/icons/hicolor/86x86/apps/
 icon.files = ../harbour-cutespotify.png
 target.path = $$PREFIX/bin
-INSTALLS += target desktop lib icon
+INSTALLS += target desktop lib icon qtpulse
 
 include(../libQtSpotify/libQtSpotify.pri)
