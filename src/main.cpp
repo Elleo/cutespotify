@@ -63,9 +63,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setOrganizationName("CuteSpotify");
     QApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
     QApplication::setApplicationName("CuteSpotify");
-    QApplication::setApplicationVersion("1.3.0");
+    QApplication::setApplicationVersion("1.3.2");
 
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/com.mikeasoft.cutespotify/");
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/com.mikeasoft.cutespotify/";
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);
+    QSettings settings;
+    if(!settings.contains("dataPath")) {
+        // Set default path, but allow for it to be overridden
+        // e.g. so data can be store on SD card
+        settings.setValue("dataPath", settingsPath);
+    }
 
     QApplication *app = new QApplication(argc, argv);
     QQuickView *view = new QQuickView();
