@@ -308,6 +308,8 @@ private:
     // Network Management
     QNetworkConfigurationManager *m_networkConfManager;
 
+    char *dataPath;
+
     friend class QSpotifyUser;
     friend class QSpotifyTrack;
     friend class QSpotifyImageProvider;

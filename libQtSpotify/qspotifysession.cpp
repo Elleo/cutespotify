@@ -434,10 +434,14 @@ void QSpotifySession::init()
     m_sp_callbacks.userinfo_updated = callback_userinfo_updated;
     m_sp_callbacks.offline_error = callback_offline_error;
 
+    QString dpString = settings.value("dataPath").toString();
+    dataPath = (char *) calloc(strlen(dpString.toLatin1() + 1), sizeof(char));
+    strcpy(dataPath, dpString.toLatin1());
+
     memset(&m_sp_config, 0, sizeof(m_sp_config));
     m_sp_config.api_version = SPOTIFY_API_VERSION;
-    m_sp_config.cache_location = settings.value("dataPath").toString().toLatin1();
-    m_sp_config.settings_location = settings.value("dataPath").toString().toLatin1();
+    m_sp_config.cache_location = dataPath;
+    m_sp_config.settings_location = dataPath;
     m_sp_config.application_key = g_appkey;
     m_sp_config.application_key_size = g_appkey_size;
     m_sp_config.user_agent = "CuteSpotify";
@@ -516,6 +520,7 @@ void QSpotifySession::cleanUp()
     m_audioThread->wait();
     logout(true);
     sp_session_release(m_sp_session);
+    free(dataPath);
     delete m_playQueue;
     delete m_networkConfManager;
     delete m_audioThread;
