@@ -92,115 +92,155 @@ Page {
         }
     }
 
-    Image {
-        id: logo
-        source: "qrc:/qml/images/cutespotify-logo.png"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-    }
+    SilicaFlickable {
 
-    Column {
-        id: fields
-        visible: !spotifySession.pendingConnectionRequest && spotifySession.connectionStatus == SpotifySession.LoggedOut
-        spacing: UI.DEFAULT_MARGIN
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: UI.PADDING_XXLARGE
-        anchors.rightMargin: UI.PADDING_XXLARGE
-        anchors.top: logo.bottom
+        anchors.fill: parent
 
-        TextField {
-            id: username
-            placeholderText: "Username"
-            width: parent.width
-            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-            Keys.onReturnPressed: {
-                if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
-                    login();
-                else
-                    password.forceActiveFocus();
+        PullDownMenu {
+            visible: spotifySession.connectionStatus == SpotifySession.LoggedOut
+
+            MenuItem {
+                text: "Clear cache and offline song storage"
+                onClicked: {
+                    spotifySession.clearCache();
+                }
             }
         }
-        TextField {
-            id: password
-            placeholderText: "Password"
-            echoMode: TextInput.Password
-            width: parent.width
-            /*platformStyle: TextFieldStyle {
-                backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
-            }
-            platformSipAttributes: SipAttributes {
-                actionKeyLabel: (username.text.length > 0 && password.text.length > 0 && termsCheck.checked) ? "Log in" : "Next"
-                actionKeyEnabled: true
-            }*/
-            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-            Keys.onReturnPressed: {
-                if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
-                    login();
-                else
-                    username.forceActiveFocus();
-            }
+
+        Image {
+            id: logo
+            source: "qrc:/qml/images/cutespotify-logo.png"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
         }
 
         Column {
-            width: parent.width
-            TextSwitch {
-                id: termsCheck
-                text: "Accept"
-            }
-
-            Row {
-                width: parent.width
-
-                Item {
-                    height: 30
-                    width: 50
-                }
-
-                Label {
-                    onLinkActivated: Qt.openUrlExternally(link)
-                    textFormat: Text.RichText
-                    width: parent.width - 50
-                    wrapMode: Text.WordWrap
-                    font.pixelSize: UI.FONT_LSMALL
-                    text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
-                }
-            }
-        }
-
-        Item {
-            height: UI.DEFAULT_MARGIN
-            width: 1
-        }
-
-        Button {
-            id: button
-            text: "Log in"
-
+            id: fields
+            visible: !spotifySession.pendingConnectionRequest && spotifySession.connectionStatus == SpotifySession.LoggedOut
+            spacing: UI.DEFAULT_MARGIN
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.leftMargin: UI.PADDING_XXLARGE
             anchors.rightMargin: UI.PADDING_XXLARGE
-            enabled: username.text.length > 0 && password.text.length > 0 && termsCheck.checked
+            anchors.top: logo.bottom
 
-            onClicked: {
-                login();
+            TextField {
+                id: username
+                placeholderText: "Username"
+                width: parent.width
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+                Keys.onReturnPressed: {
+                    if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
+                        login();
+                    else
+                        password.forceActiveFocus();
+                }
+            }
+            TextField {
+                id: password
+                placeholderText: "Password"
+                echoMode: TextInput.Password
+                width: parent.width
+                /*platformStyle: TextFieldStyle {
+                    backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
+                }
+                platformSipAttributes: SipAttributes {
+                    actionKeyLabel: (username.text.length > 0 && password.text.length > 0 && termsCheck.checked) ? "Log in" : "Next"
+                    actionKeyEnabled: true
+                }*/
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+                Keys.onReturnPressed: {
+                    if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
+                        login();
+                    else
+                        username.forceActiveFocus();
+                }
+            }
+
+            Column {
+                width: parent.width
+                TextSwitch {
+                    id: termsCheck
+                    text: "Accept"
+                }
+
+                Row {
+                    width: parent.width
+
+                    Item {
+                        height: 30
+                        width: 50
+                    }
+
+                    Label {
+                        onLinkActivated: Qt.openUrlExternally(link)
+                        textFormat: Text.RichText
+                        width: parent.width - 50
+                        wrapMode: Text.WordWrap
+                        font.pixelSize: UI.FONT_LSMALL
+                        text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
+                    }
+                }
+            }
+
+            Item {
+                height: UI.DEFAULT_MARGIN
+                width: 1
+            }
+
+            Button {
+                id: button
+                text: "Log in"
+
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: UI.PADDING_XXLARGE
+                anchors.rightMargin: UI.PADDING_XXLARGE
+                enabled: username.text.length > 0 && password.text.length > 0 && termsCheck.checked
+
+                onClicked: {
+                    login();
+                }
+            }
+
+            Item {
+                height: UI.DEFAULT_MARGIN * 3
+                width: 1
+            }
+
+            Label {
+                width: parent.width
+                wrapMode: Text.WordWrap
+                font.pixelSize: UI.FONT_LSMALL
+                onLinkActivated: Qt.openUrlExternally(link)
+                horizontalAlignment: Text.AlignHCenter
+                textFormat: Text.RichText
+                text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
             }
         }
 
-        Item {
-            height: UI.DEFAULT_MARGIN * 3
-            width: 1
-        }
+        Column {
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: UI.DEFAULT_MARGIN * 2
+            visible: !fields.visible
+            spacing: UI.DEFAULT_MARGIN * 2
 
-        Label {
-            width: parent.width
-            wrapMode: Text.WordWrap
-            font.pixelSize: UI.FONT_LSMALL
-            onLinkActivated: Qt.openUrlExternally(link)
-            horizontalAlignment: Text.AlignHCenter
-            textFormat: Text.RichText
-            text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
+            Label {
+                id: loggingText
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Logging in"
+
+                Connections {
+                    target:  spotifySession
+                    onLoggingIn: loggingText.text = "Logging in"
+                    onLoggingOut: loggingText.text = "Logging out"
+                }
+            }
+
+            BusyIndicator {
+                anchors.horizontalCenter: parent.horizontalCenter
+                running: parent.visible
+            }
         }
     }
 
@@ -209,27 +249,4 @@ Page {
         password.text = ""
     }
 
-    Column {
-        anchors.centerIn: parent
-        anchors.verticalCenterOffset: UI.DEFAULT_MARGIN * 2
-        visible: !fields.visible
-        spacing: UI.DEFAULT_MARGIN * 2
-
-        Label {
-            id: loggingText
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Logging in"
-
-            Connections {
-                target:  spotifySession
-                onLoggingIn: loggingText.text = "Logging in"
-                onLoggingOut: loggingText.text = "Logging out"
-            }
-        }
-
-        BusyIndicator {
-            anchors.horizontalCenter: parent.horizontalCenter
-            running: parent.visible
-        }
-    }
 }
