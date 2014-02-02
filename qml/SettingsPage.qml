@@ -296,7 +296,7 @@ Page {
 
                     Button {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: spotifySession.lfmLoggedIn ? "Logout of Last.fm" : "Login to Last.fm";
+                        text: spotifySession.lfmLoggedIn ? "Log out of Last.fm" : "Log in to Last.fm";
                         onClicked: {
                             if(spotifySession.lfmLoggedIn) {
                                 spotifySession.lfmLogin("", "");
