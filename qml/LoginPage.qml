@@ -47,48 +47,11 @@ Page {
 
     Connections {
         target: spotifySession
-        onConnectionErrorChanged: {
-            if (spotifySession.connectionError != SpotifySession.Ok) {
-                errorBanner.text = spotifySession.connectionErrorMessage;
-                errorRect.visible = true;
-                errorRectFadeOut.stop();
-                errorRectFadeOut.start();
-                console.log(spotifySession.connectionErrorMessage);
-            }
-        }
-    }
-
-    Connections {
-        target: spotifySession
         onConnectionStatusChanged: {
             if (spotifySession.connectionStatus == SpotifySession.LoggedIn) {
                 pageStack.clear();
                 pageStack.push(mainPage);
             }
-        }
-    }
-
-
-    Rectangle {
-        id: errorRect
-        color: Theme.highlightColor
-        width: parent.width
-        height: 32
-        visible: false
-
-        Label {
-            id: errorBanner
-            color: "black"
-            font.pixelSize: 20
-            anchors.centerIn: parent
-            text: ""
-        }
-
-        NumberAnimation on opacity {
-            id: errorRectFadeOut
-            from: 1
-            to: 0
-            duration: 10000
         }
     }
 
