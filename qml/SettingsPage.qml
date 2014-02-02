@@ -242,6 +242,76 @@ Page {
                     height: UI.MARGIN_XLARGE * 2
                 }
 
+                Item {
+                    width: parent.width
+                    height: UI.LIST_ITEM_HEIGHT
+
+                    Label {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: UI.FONT_FAMILY_BOLD
+                        font.weight: Font.Bold
+                        font.pixelSize: UI.LIST_TILE_SIZE
+                        color: Theme.primaryColor
+                        text: "Scrobble to Last.fm"
+                    }
+
+                    Switch {
+                        id: scrobbleSwitch
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        checked: spotifySession.scrobble
+                        onCheckedChanged: spotifySession.scrobble = checked
+                    }
+                }
+
+                Column {
+                    width: parent.width
+                    visible: scrobbleSwitch.checked
+
+                    Item {
+                        width: parent.width
+                        height: UI.MARGIN_XLARGE * 2
+                    }
+
+                    TextField {
+                        id: lfmUser
+                        visible: !spotifySession.lfmLoggedIn
+                        placeholderText: "Last.fm Username"
+                        width: parent.width
+                        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+                        Keys.onReturnPressed: {
+                            lfmPass.forceActiveFocus();
+                        }
+                    }
+
+                    TextField {
+                        id: lfmPass
+                        visible: !spotifySession.lfmLoggedIn
+                        placeholderText: "Last.fm Password"
+                        echoMode: TextInput.Password
+                        width: parent.width
+                        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+                    }
+
+                    Button {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: spotifySession.lfmLoggedIn ? "Logout of Last.fm" : "Login to Last.fm";
+                        onClicked: {
+                            if(spotifySession.lfmLoggedIn) {
+                                spotifySession.lfmLogin("", "");
+                            } else {
+                                spotifySession.lfmLogin(lfmUser.text, lfmPass.text);
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: UI.MARGIN_XLARGE * 2
+                }
+
                 Button {
                     id: buttonAbout
                     text: "About"

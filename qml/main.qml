@@ -188,6 +188,15 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: spotifySession
+        onLfmLoginError: {
+            errorBanner.text = "Last.fm login failed, please check username and password";
+            errorRect.visible = true;
+            errorRectFadeOut.stop();
+            errorRectFadeOut.start();
+        }
+    }
 
     Player {
         id: player

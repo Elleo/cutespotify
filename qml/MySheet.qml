@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
+import Sailfish.Silica 1.0
 
 Item {
     id: root
@@ -61,11 +61,6 @@ Item {
 
     signal accepted
     signal rejected
-
-//    property QtObject platformStyle: SheetStyle {}
-
-    //Deprecated, TODO Remove this on w13
-//    property alias style: root.platformStyle
 
     function reject() {
         close();
@@ -202,11 +197,6 @@ Item {
                     objectName: "acceptButton"
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-               /*     platformStyle: SheetButtonAccentStyle {
-                        background: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background"
-                        pressedBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background-pressed"
-                        disabledBackground: "image://theme/" + appWindow.themeColor + "-meegotouch-sheet-button-accent-" + (theme.inverted ? "inverted-" : "") + "background-disabled"
-                    } */
                     visible: text != ""
                     onClicked: close()
                 }

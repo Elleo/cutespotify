@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
+import Sailfish.Silica 1.0;
 import "UIConstants.js" as UI
 
 MySheet {
@@ -120,7 +120,7 @@ MySheet {
     function authenticate()
     {
         if (username.text.length > 0 && password.text.length > 0)
-            lastfm.authenticate(username.text, password.text);
+            spotifysession.lastfmLogin(username.text, password.text);
     }
 
     Timer {
