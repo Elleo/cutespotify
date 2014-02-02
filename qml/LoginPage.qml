@@ -141,13 +141,6 @@ Page {
                 placeholderText: "Password"
                 echoMode: TextInput.Password
                 width: parent.width
-                /*platformStyle: TextFieldStyle {
-                    backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"
-                }
-                platformSipAttributes: SipAttributes {
-                    actionKeyLabel: (username.text.length > 0 && password.text.length > 0 && termsCheck.checked) ? "Log in" : "Next"
-                    actionKeyEnabled: true
-                }*/
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                 Keys.onReturnPressed: {
                     if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
