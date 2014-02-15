@@ -105,7 +105,7 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
-	anchors.topMargin: UI.MARGIN_XLARGE
+        anchors.topMargin: UI.MARGIN_XLARGE
         spacing: UI.MARGIN_XLARGE
 
         Column {
@@ -117,6 +117,7 @@ Page {
                     ListElement { name: "Tracks" }
                     ListElement { name: "Albums" }
                     ListElement { name: "Artists" }
+                    ListElement { name: "Playlists" }
                 }
                 delegate: OptionSelectorDelegate { text: name; }
             }
@@ -197,6 +198,21 @@ Page {
                     onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
                 }
             }
+            Component {
+                id: playlistComponent {
+                    name: model
+                    title: modelData.name
+                    icon: "images/icon-m-music-video-all-songs-white.png"
+
+                    onClicked: {
+                        var component = Qt.createComponent("TracklistPage.qml");
+                        if (component.status === Component.Ready) {
+                            var playlistPage = component.createObject(pageStack, { playlist: modelData.playlist });
+                            pageStack.push(playlistPage);
+                        }
+                    }
+                }
+            }
 
             Connections {
                 target: selector
@@ -220,6 +236,9 @@ Page {
                 } else if (selector.selectedIndex == 2) {
                     results.delegate = artistComponent
                     results.model = search.artists
+                } else if (selector.selectedIndex == 3) {
+                    results.delegate = playlistComponent
+                    results.model = search.playlists
                 }
             }
 
