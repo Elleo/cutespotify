@@ -199,8 +199,8 @@ Page {
                 }
             }
             Component {
-                id: playlistComponent {
-                    name: model
+                id: playlistComponent
+                PlaylistDelegate {
                     title: modelData.name
                     icon: "images/icon-m-music-video-all-songs-white.png"
 
