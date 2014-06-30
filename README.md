@@ -14,13 +14,13 @@ Get it there: https://developer.spotify.com/technologies/libspotify/
 Extract the content of the tarball inside 'libspotify' at the root of the project.
 
 The resulting hierarchy should be:
-libspotify/
-    include/
-        libspotify/
-            api.h
-    lib/
-        libspotify.so
-        libspotify.so.9
+* libspotify/
+  * include/
+    * libspotify/
+      * api.h
+  * lib/
+    * libspotify.so
+    * libspotify.so.9
 
 ### Spotify API Key
 You also need your own libspotify API key to be able to compile and run the program
