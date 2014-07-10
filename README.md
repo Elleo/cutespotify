@@ -5,11 +5,13 @@ You need some libraries to build CuteSpotify, also you need QtCreator if you wan
 
 sudo apt-get install libpulse-dev qtcreator
 
-Also, you might need some of the Qt development package, e.g. qtsystems5-src.
+Also, you might need some of the Qt development package, e.g. qt5-qtsysteminfo-devel.
 
 ### libSpotify
-You need to download libspotify 12 to be able to compile and create the .click package.
+You need to download libspotify 12 to be able to compile and create the rpm package.
 Get it there: https://developer.spotify.com/technologies/libspotify/
+(For the device you need the version for the eabi-armv6hf architecture)
+
 
 Extract the content of the tarball inside 'libspotify' at the root of the project.
 
