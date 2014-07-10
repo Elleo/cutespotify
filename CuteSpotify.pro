@@ -24,7 +24,6 @@ OTHER_FILES += \
     qml/Selector.qml \
     qml/SearchPage.qml \
     qml/SpotifyImage.qml \
-    qml/AdvancedTextField.qml \
     qml/Utilities.js \
     qml/TrackMenu.qml \
     qml/PlaylistMenu.qml \
@@ -46,7 +45,6 @@ OTHER_FILES += \
     qml/MyMenuItemStyle.qml \
     qml/MySheet.qml \
     qml/InboxTrackDelegate.qml \
-    qml/HeaderSearchField.qml \
     qml/ToplistPage.qml \
     qml/MySelectionDialog.qml \
     qml/MyCommonDialog.qml \

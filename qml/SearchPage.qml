@@ -118,7 +118,7 @@ Page {
             }
         }
 
-        AdvancedTextField {
+        SearchField {
             id: searchField
             placeholderText: "Search"
             width: parent.width

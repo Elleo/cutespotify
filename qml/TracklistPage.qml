@@ -210,7 +210,7 @@ Page {
             spacing: UI.MARGIN_XLARGE
             opacity: 0
 
-            AdvancedTextField {
+            SearchField {
                 id: searchField
                 placeholderText: "Search"
                 width: parent.width
