@@ -47,21 +47,6 @@ import "UIConstants.js" as UI
 Page {
     id: playlistPage
 
-    Component {
-        id: searchPage
-        SearchPage { }
-    }
-
-    Component {
-        id: settingsPage
-        SettingsPage { }
-    }
-
-    Component {
-        id: topPage
-        ToplistPage { }
-    }
-
     Connections {
         target: spotifySession
         onConnectionStatusChanged: {
@@ -95,15 +80,15 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: "Settings"
-                onClicked: pageStack.push(settingsPage)
+                onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
             }
             MenuItem {
                 text: "Top"
-                onClicked: pageStack.push(topPage)
+                onClicked: pageStack.push(Qt.resolvedUrl("ToplistPage.qml"))
             }
             MenuItem {
                 text: "Search"
-                onClicked: pageStack.push(searchPage)
+                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
             }
         }
 
