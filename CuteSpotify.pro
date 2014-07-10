@@ -8,14 +8,6 @@ OTHER_FILES += \
     qml/MainPage.qml \
     qml/main.qml \
     cutespotify.desktop \
-    CuteSpotify.png \
-    cutespotify.png \
-    qtc_packaging/debian_harmattan/rules \
-    qtc_packaging/debian_harmattan/README \
-    qtc_packaging/debian_harmattan/copyright \
-    qtc_packaging/debian_harmattan/control \
-    qtc_packaging/debian_harmattan/compat \
-    qtc_packaging/debian_harmattan/changelog \
     CuteSpotify.conf \
     qml/LoginPage.qml \
     qml/UIConstants.js \
@@ -56,7 +48,6 @@ OTHER_FILES += \
     qml/InboxTrackDelegate.qml \
     qml/HeaderSearchField.qml \
     qml/Separator.qml \
-    qtc_packaging/debian_harmattan/postrm \
     qml/ToplistPage.qml \
     qml/MySelectionDialog.qml \
     qml/MyCommonDialog.qml \

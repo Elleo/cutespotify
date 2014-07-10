@@ -3,6 +3,7 @@
 
 # MeeSpot specific stuff
 libspotify/*/*
+libspotify/*
 MeeSpot
 *.deb
 *.changes
