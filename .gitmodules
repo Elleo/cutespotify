@@ -1,3 +1,3 @@
 [submodule "libQtSpotify"]
 	path = libQtSpotify
-	url = git@github.com:Elleo/libQtSpotify.git
+	url = https://github.com/lukedirtwalker/libQtSpotify.git
