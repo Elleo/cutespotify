@@ -63,7 +63,6 @@
         <file>qml/MySelectionDialog.qml</file>
         <file>qml/MyCommonDialog.qml</file>
         <file>qml/Scrollbar.qml</file>
-        <file>qml/LastfmLoginSheet.qml</file>
         <file>qml/FolderPage.qml</file>
         <file>qml/images/icon-l-contact-avatar-placeholder-black.png</file>
         <file>qml/images/icon-l-contact-avatar-placeholder.png</file>
@@ -79,5 +78,7 @@
         <file>qml/images/icon-m-toolbar-repeat-one-white-selected.png</file>
         <file>qml/images/cutespotify-logo.png</file>
         <file>qml/images/cutespotify.png</file>
+        <file>qml/LastFMDialog.qml</file>
+        <file>qml/LogoutDialog.qml</file>
     </qresource>
 </RCC>
