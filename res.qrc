@@ -61,7 +61,6 @@
         <file>qml/images/icon-m-common-green.png</file>
         <file>qml/InboxTrackDelegate.qml</file>
         <file>qml/HeaderSearchField.qml</file>
-        <file>qml/Separator.qml</file>
         <file>qml/ToplistPage.qml</file>
         <file>qml/MySelectionDialog.qml</file>
         <file>qml/MyCommonDialog.qml</file>

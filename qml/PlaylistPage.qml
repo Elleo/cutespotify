@@ -164,6 +164,8 @@ Page {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
+//                height: 2
+                color: Theme.primaryColor
             }
 
             Rectangle {
@@ -231,6 +233,8 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             visible: section === "p"
+            height: 2
+            color: Theme.primaryColor
         }
     }
 

@@ -105,6 +105,8 @@ Page {
 
         Separator {
             width: parent.width
+            height: 2
+            color: Theme.primaryColor
         }
     }
 
@@ -203,6 +205,8 @@ Page {
                         anchors.right: sectionText.left
                         anchors.rightMargin: UI.MARGIN_XLARGE * 2
                         anchors.verticalCenter: parent.verticalCenter
+                        height: 2
+                        color: Theme.primaryColor
                     }
 
                     Label {

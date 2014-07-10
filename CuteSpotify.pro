@@ -47,7 +47,6 @@ OTHER_FILES += \
     qml/MySheet.qml \
     qml/InboxTrackDelegate.qml \
     qml/HeaderSearchField.qml \
-    qml/Separator.qml \
     qml/ToplistPage.qml \
     qml/MySelectionDialog.qml \
     qml/MyCommonDialog.qml \

@@ -200,6 +200,8 @@ Page {
 
         Separator {
             width: parent.width
+            height: 2
+            color: Theme.primaryColor
         }
 
         Label {
@@ -226,6 +228,8 @@ Page {
 
         Separator {
             width: parent.width
+            height: 2
+            color: Theme.primaryColor
         }
     }
 

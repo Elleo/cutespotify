@@ -113,6 +113,8 @@ Page {
             }
             Separator {
                 width: parent.width
+                height: 2
+                color: Theme.primaryColor
             }
         }
 
@@ -130,6 +132,8 @@ Page {
 
         Separator {
             width: parent.width
+            height: 2
+            color: Theme.primaryColor
         }
     }
 
