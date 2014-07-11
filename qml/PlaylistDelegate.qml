@@ -43,96 +43,39 @@ import Sailfish.Silica 1.0
 import QtSpotify 1.0
 import "UIConstants.js" as UI
 
-Item {
+BackgroundItem {
     id: listItem
 
-    signal clicked
-    signal pressAndHold
-    property alias pressed: mouseArea.pressed
     property alias title: mainText.text
     property alias subtitle: subText.text
     property alias extraText: timing.text
-    property alias icon: iconImage.source
+    property string iconSource
     property int offlineStatus: 0
     property bool availableOffline: false
     property int downloadProgress: 0
     property int unseens: 0
 
-    property int titleSize: UI.LIST_TILE_SIZE
-    property string titleFont: UI.FONT_FAMILY_BOLD
-    property color titleColor: UI.LIST_TITLE_COLOR
-
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
-    property string subtitleFont: UI.FONT_FAMILY_LIGHT
-    property color subtitleColor: UI.LIST_SUBTITLE_COLOR
-
-    height: UI.LIST_ITEM_HEIGHT
+    height: Theme.itemSizeMedium
     width: parent.width
-
-    SequentialAnimation {
-        id: backAnimation
-        property bool animEnded: false
-        running: mouseArea.pressed
-
-        ScriptAction { script: backAnimation.animEnded = false }
-        PauseAnimation { duration: 200 }
-        ParallelAnimation {
-            NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: subText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: "#DDDDDD"; duration: 300 }
-            NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
-            NumberAnimation { target: unseenBox; property: "opacity"; to: 0.2; duration: 300 }
-            NumberAnimation { target: offlineStatusIcon; property: "opacity"; to: 0.2; duration: 300 }
-            NumberAnimation { target: downloadBar; property: "opacity"; to: 0.2; duration: 300 }
-        }
-        PauseAnimation { duration: 100 }
-        ScriptAction { script: { backAnimation.animEnded = true; listItem.pressAndHold(); } }
-        onRunningChanged: {
-            if (!running) {
-                iconItem.opacity = 1.0
-                unseenBox.opacity = 1.0
-                offlineStatusIcon.opacity = 1.0
-                downloadBar.opacity = 1.0
-                mainText.color = Theme.primaryColor
-                subText.color = Theme.secondaryColor
-                timing.color = Theme.secondaryColor
-            }
-        }
-    }
-
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: "#15000000"
-    }
 
     Row {
         anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-        spacing: UI.LIST_ITEM_SPACING
+        anchors.leftMargin: Theme.paddingMedium
+        anchors.rightMargin: Theme.paddingLarge
+        spacing: Theme.paddingMedium
 
-        Item {
-            id: iconItem
+        Image {
+            id: iconImage
             anchors.verticalCenter: parent.verticalCenter
-            visible: iconImage.source !== "" ? true : false
-            width: 40
-            height: 40
-
-            Image {
-                id: iconImage
-                anchors.centerIn: parent
-            }
+            visible: iconSource !== "" ? true : false
+            width: Theme.iconSizeMedium
+            height: Theme.iconSizeMedium
+            source: iconSource + (listItem.highlighted ? ("?" + Theme.highlightColor) : "")
         }
 
         Column {
             anchors.verticalCenter: parent.verticalCenter
-            width: parent.width - (iconItem.visible ? iconItem.width + UI.LIST_ITEM_SPACING : 0)
+            width: parent.width - (iconImage.visible ? iconImage.width + Theme.paddingMedium : 0)
 
             Item {
                 anchors.left: parent.left
@@ -143,10 +86,7 @@ Item {
                     id: mainText
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    font.family: listItem.titleFont
-                    font.weight: Font.Bold
-                    font.pixelSize: listItem.titleSize
-                    color: Theme.primaryColor
+                    color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                     elide: Text.ElideRight
                 }
 
@@ -171,9 +111,8 @@ Item {
                         Label {
                             id: unseenText
                             anchors.centerIn: parent
-                            font.family: listItem.titleFont
-                            font.pixelSize: listItem.subtitleSize
-                            color: Theme.primaryColor
+                            font.pixelSize: Theme.fontSizeSmall
+                            color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: listItem.unseens
@@ -193,7 +132,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     height: visible ? 24 : 0; width: height
                     verticalAlignment: Text.AlignVCenter
-                    color: UI.SPOTIFY_COLOR
+                    color: Theme.highlightColor
                     font.bold: true
                     font.pixelSize: 32
                     text: "\u2022"
@@ -209,10 +148,9 @@ Item {
 
                     Label {
                         id: subText
-                        font.family: listItem.subtitleFont
-                        font.pixelSize: listItem.subtitleSize
+                        font.pixelSize: Theme.fontSizeSmall
                         font.weight: Font.Light
-                        color: Theme.secondaryColor
+                        color: listItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         anchors.left: parent.left
                         anchors.right: timing.left
                         anchors.rightMargin: UI.MARGIN_XLARGE
@@ -222,10 +160,9 @@ Item {
 
                     Label {
                         id: timing
-                        font.family: listItem.subtitleFont
                         font.weight: Font.Light
-                        font.pixelSize: listItem.subtitleSize
-                        color: Theme.secondaryColor
+                        font.pixelSize: Theme.fontSizeSmall
+                        color: listItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         anchors.right: parent.right
                         visible: text != ""
                     }
@@ -264,23 +201,13 @@ Item {
                     id: waitingTextComponent
                     Label {
                         visible: listItem.offlineStatus == SpotifyPlaylist.Waiting && !spotifySession.offlineMode
-                        font.family: listItem.subtitleFont
-                        font.pixelSize: listItem.subtitleSize
+                        font.pixelSize: Theme.fontSizeSmall
                         font.weight: Font.Light
-                        color: Theme.secondaryColor
+                        color: listItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         text: "Waiting for sync"
                     }
                 }
             }
-        }
-    }
-
-    MouseArea {
-        id: mouseArea;
-        anchors.fill: parent
-        onClicked: {
-            if (!backAnimation.animEnded)
-                listItem.clicked();
         }
     }
 }

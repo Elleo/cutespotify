@@ -194,7 +194,7 @@ Page {
                 id: playlistComponent
                 PlaylistDelegate {
                     title: modelData.name
-                    icon: "images/icon-m-music-video-all-songs-white.png"
+                    iconSource: "images/icon-m-music-video-all-songs-white.png"
 
                     onClicked: {
                         console.log("qml: Loading playlist")

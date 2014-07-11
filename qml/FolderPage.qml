@@ -92,7 +92,7 @@ Page {
                                   + ((spotifySession.user ? spotifySession.user.ownsPlaylist(modelData) : false) ? "" : " | by " + modelData.owner)
                       }
             extraText: modelData.type === SpotifyPlaylist.Folder ? "" : spotifySession.formatDuration(modelData.totalDuration)
-            icon: modelData.collaborative ? "images/icon-m-collaborative-playlist.png" : staticIcon
+            iconSource: modelData.collaborative ? "images/icon-m-collaborative-playlist.png" : staticIcon
             offlineStatus: modelData.offlineStatus
             availableOffline: modelData.availableOffline
             downloadProgress: modelData.offlineDownloadProgress
