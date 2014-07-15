@@ -147,34 +147,6 @@ ApplicationWindow {
             }
     }
 
-    Rectangle {
-            id: vol
-            visible: false
-            anchors.top: parent.top
-            anchors.left: parent.left
-            width: (spotifySession.volume / 100) * parent.width
-            height: 32
-            color: Theme.highlightColor
-            NumberAnimation on opacity {
-                id: volFadeOut
-                from: 1
-                to: 0
-                duration: 2000
-            }
-    }
-
-    Connections {
-        target: spotifySession
-        onVolumeChanged: {
-            volBack.visible = true;
-            volBackFadeOut.stop();
-            volBackFadeOut.start();
-            vol.visible = true;
-            volFadeOut.stop();
-            volFadeOut.start();
-        }
-    }
-
     Connections {
         target: spotifySession
         onConnectionErrorChanged: {

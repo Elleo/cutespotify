@@ -1,7 +1,7 @@
 Name: harbour-cutespotify
 Summary: CuteSpotify
-Version: 1.3.0
-Release: 15
+Version: 1.4.0
+Release: 1
 Group: Qt/Qt
 License: BSD
 Sources:
@@ -21,6 +21,7 @@ PkgConfigBR:
 - sailfishapp
 - libresourceqt5
 Requires:
+- sailfish-version >= 1.0.8
 - sailfishsilica-qt5
 - qt5-qtmultimedia-plugin-audio-pulseaudio
 Files:
