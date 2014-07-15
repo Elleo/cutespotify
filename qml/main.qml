@@ -159,7 +159,7 @@ ApplicationWindow {
 
     Player {
         id: player
-        visible: spotifySession.currentTrack ? true : false
+        hidden: spotifySession.currentTrack ? false : true
     }
 
     Component {

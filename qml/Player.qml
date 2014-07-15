@@ -49,6 +49,9 @@ Rectangle {
     anchors.bottom: parent.bottom;
     anchors.bottomMargin: hidden || showFullControls ? 0 : -100;
 
+    property bool hidden
+    visible: !hidden
+
     property bool showFullControls: false
     onShowFullControlsChanged: {
         if(showFullControls) {
@@ -58,10 +61,9 @@ Rectangle {
         }
     }
 
-    property bool hidden: true
     onHiddenChanged:  {
-        if(showFullControls) {
-            pageStack.pop(undefined, PageStackAction.Immediate)
+        if(hidden && showFullControls) {
+            showFullControls = false;
         }
     }
 
