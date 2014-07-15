@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
-        <file>qml/MainPage.qml</file>
         <file>qml/LoginPage.qml</file>
         <file>qml/UIConstants.js</file>
         <file>qml/PlaylistPage.qml</file>

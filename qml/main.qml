@@ -164,11 +164,7 @@ ApplicationWindow {
 
     Component {
         id: mainPage
-        // MainPage {
-        PlaylistPage {
-            id: mainPageItem
-            //onToolsChanged: appWindow.pageStack.toolBar.setTools(mainPageItem.tools, "replace")
-        }
+        PlaylistPage { }
     }
 
     Component {
