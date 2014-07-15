@@ -46,6 +46,7 @@ SilicaFlickable {
 
     width: parent.width
     height: 100
+    visible: !player.showFullControls
 
     Rectangle {
         id: smallPlayer
@@ -55,21 +56,13 @@ SilicaFlickable {
         MouseArea {
             id: opener
             anchors.fill: parent
-            //onClicked: player.showFullControls = !player.showFullControls
-        }
-
-        Image {
-            id: arrowIcon
-            anchors.centerIn: parent
-            source: player.openRequested ? "image://theme/icon-m-toolbar-up-selected" : "image://theme/icon-m-toolbar-down-selected"
-            opacity: player.openRequested ? 1.0 : 0.0
+            onClicked: player.showFullControls = !player.showFullControls
         }
 
         Item {
             id: quickControls
             anchors.fill: parent
             anchors.rightMargin: UI.MARGIN_XLARGE
-            opacity: player.openRequested ? 0.0 : 1.0
 
             SpotifyImage {
                 anchors.verticalCenter: parent.verticalCenter

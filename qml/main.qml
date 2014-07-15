@@ -46,7 +46,7 @@ ApplicationWindow {
     id: appWindow
     property string themeColor
 
-    bottomMargin: player.hidden ? 0 : 100
+    bottomMargin: player.hidden || player.showFullControls ? 0 : 100
 
     cover: CoverBackground {
 

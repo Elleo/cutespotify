@@ -47,24 +47,26 @@ Rectangle {
     width: parent.width
     color: UI.COLOR_BACKGROUND
     anchors.bottom: parent.bottom;
-    anchors.bottomMargin: hidden ? 0 : -100;
+    anchors.bottomMargin: hidden || showFullControls ? 0 : -100;
 
-    property alias showFullControls: fullControls.visible
-    property bool openRequested: false
+    property bool showFullControls: false
+    onShowFullControlsChanged: {
+        if(showFullControls) {
+            pageStack.push(fullControls, undefined, PageStackAction.Immediate)
+        } else {
+            pageStack.pop(undefined, PageStackAction.Immediate)
+        }
+    }
+
     property bool hidden: true
-    property bool inOpenPosition: y > -quickControls.y
-
-    property bool openedOnce: false
-    onOpenRequestedChanged: if (openRequested) openedOnce = true
-
-    MouseArea {
-        anchors.fill: parent
+    onHiddenChanged:  {
+        if(showFullControls) {
+            pageStack.pop(undefined, PageStackAction.Immediate)
+        }
     }
 
     FullControls {
         id: fullControls
-        visible: false;
-        anchors.bottom: quickControls.top
     }
 
     QuickControls {
@@ -72,30 +74,8 @@ Rectangle {
         anchors.bottom: parent.bottom
     }
 
-    states: [
-        State {
-            when: openRequested && !hidden
-            name: "open"
-            PropertyChanges { target: player; y: 0 }
-        },
-        State {
-            when: !openRequested && !hidden
-            name: "small"
-            PropertyChanges { target: player; y: -quickControls.y }
-        }
-    ]
-
-    transitions: Transition {
-        NumberAnimation { properties: "y"; easing.type: Easing.OutQuart; duration: 500 }
-    }
-
     Connections {
         target: spotifySession
         onCurrentTrackChanged: hidden = !spotifySession.hasCurrentTrack
-    }
-
-    onHiddenChanged: {
-        if (hidden)
-            openRequested = false;
     }
 }
