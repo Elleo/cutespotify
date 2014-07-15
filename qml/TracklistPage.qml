@@ -60,9 +60,9 @@ Page {
         id: trackDelegate
         TrackDelegate {
             name: searchField.text.length > 0 ? Theme.highlightText(modelData.name, searchField.text, Theme.highlightColor) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(modelData.artists, searchField.text, Theme.highlightColor) : modelData.artists)
+            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(modelData.artists, searchField.text, Theme.secondaryHighlightColor) : modelData.artists)
                             + " | "
-                            + (searchField.text.length > 0 ? Theme.highlightText(modelData.album, searchField.text, Theme.highlightColor) : modelData.album)
+                            + (searchField.text.length > 0 ? Theme.highlightText(modelData.album, searchField.text, Theme.secondaryHighlightColor) : modelData.album)
             duration: modelData.duration
             highlighted: modelData.isCurrentPlayingTrack
             starred: modelData.isStarred
@@ -79,9 +79,9 @@ Page {
         id: inboxDelegate
         InboxTrackDelegate {
             name: searchField.text.length > 0 ? Theme.highlightText(modelData.name, searchField.text, Theme.highlightColor) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(modelData.artists, searchField.text, Theme.highlightColor) : modelData.artists)
+            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(modelData.artists, searchField.text, Theme.secondaryHighlightColor) : modelData.artists)
                             + " | "
-                            + (searchField.text.length > 0 ? Theme.highlightText(modelData.album, searchField.text, Theme.highlightColor) : modelData.album)
+                            + (searchField.text.length > 0 ? Theme.highlightText(modelData.album, searchField.text, Theme.secondaryHighlightColor) : modelData.album)
             creatorAndDate: (searchField.text.length > 0 ? Theme.highlightText(modelData.creator, searchField.text, Theme.highlightColor) : modelData.creator)
                             + " | " + Qt.formatDateTime(modelData.creationDate)
             duration: modelData.duration

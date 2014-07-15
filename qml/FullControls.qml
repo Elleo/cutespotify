@@ -270,13 +270,13 @@ Column {
                     property bool isExplicit: spotifySession.playQueue.isExplicitTrack(index)
                     name: modelData.name
                     backgroundOpacity: isExplicit ? 0.6 : 0.0
+                    // TODO those colors are no longer used.. / the opacity above neither
                     titleColor: isExplicit ? ("#c6a83f") : (UI.LIST_TITLE_COLOR)
                     subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
                     artistAndAlbum: modelData.artists + " | " + modelData.album
                     duration: modelData.duration
                     highlighted: index == spotifySession.playQueue.currentIndex
                     onClicked: if (!highlighted) spotifySession.playQueue.selectTrack(modelData)
-                    pressAndHoldEnabled: false
                 }
 
                 Connections {
