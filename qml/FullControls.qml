@@ -139,10 +139,19 @@ Column {
                 clip: true
                 pressDelay: 90
 
-                currentIndex: spotifySession.playQueue.currentIndex
+                highlightFollowsCurrentItem: true
+
+                currentIndex: -1
                 onMovingChanged: {
                     if (!moving)
                         spotifySession.playQueue.selectTrack(model[currentIndex])
+                }
+
+                Connections {
+                    target: spotifySession.playQueue
+                    onTracksChanged: {
+                        coverList.currentIndex = spotifySession.playQueue.currentIndex()
+                    }
                 }
 
                 model: spotifySession.playQueue.tracks
