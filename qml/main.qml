@@ -132,21 +132,6 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
-            id: volBack
-            visible: false
-            anchors.top: parent.top
-            width: parent.width
-            height: 32
-            color: Theme.secondaryColor
-            NumberAnimation on opacity {
-                id: volBackFadeOut
-                from: 1
-                to: 0
-                duration: 2000
-            }
-    }
-
     Connections {
         target: spotifySession
         onConnectionErrorChanged: {
