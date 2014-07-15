@@ -46,6 +46,8 @@ ApplicationWindow {
     id: appWindow
     property string themeColor
 
+    bottomMargin: player.hidden ? 0 : 100
+
     cover: CoverBackground {
 
         SpotifyImage {

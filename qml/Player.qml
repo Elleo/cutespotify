@@ -47,6 +47,7 @@ Rectangle {
     width: parent.width
     color: UI.COLOR_BACKGROUND
     anchors.bottom: parent.bottom;
+    anchors.bottomMargin: hidden ? 0 : -100;
 
     property alias showFullControls: fullControls.visible
     property bool openRequested: false
