@@ -48,10 +48,9 @@
 #include <QGuiApplication>
 #include <sailfishapp.h>
 
-#include <QtSpotify>
-#include <qspotify_qmlplugin.h>
+#include "../libQtSpotify/QtSpotify"
+#include "../libQtSpotify/qspotify_qmlplugin.h"
 
-#include <iostream>
 using namespace std;
 
 void silentDebug(QtMsgType type, const QMessageLogContext& context, const QString &msg)
@@ -99,7 +98,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         auto errors = view->errors();
 
         for(auto error: errors) {
-            cerr << error.toString().toStdString() << endl;
+            qDebug() << error.toString();
         }
     }
 
