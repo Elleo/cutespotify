@@ -41,19 +41,17 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
-import "Utilities.js" as Utilities
+import QtSpotifySingleton 1.0 as SearchProvider
 
 Page {
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
     enabled: !spotifySession.offlineMode
+
+    property int searchType: 0
+    property variant search: SearchProvider.SpotifySearch
 
     Rectangle {
         anchors.fill: parent
         visible: spotifySession.offlineMode
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
         color: "#DDFFFFFF"
         z: 500
 
@@ -61,19 +59,15 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Search is not available in offline mode"
-            font.pixelSize: UI.FONT_XLARGE
-            font.family: UI.FONT_FAMILY_LIGHT
+            font.pixelSize: Theme.fontSizeHuge
             font.weight: Font.Light
             wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
+            width: parent.width - Theme.paddingLarge * 2
             horizontalAlignment: Text.AlignHCenter
         }
     }
 
-    SpotifySearch {
-        id: search
-    }
-/*
+    /*
     TrackMenu {
         id: menu
         deleteVisible: false
@@ -89,187 +83,188 @@ Page {
         }
     }
 */
-    Column {
-        id: header
-        width: parent.width
-        anchors.top: parent.top
-        anchors.topMargin: 60
-        spacing: UI.MARGIN_LARGE
 
-        Column {
-            width: parent.width
-            ComboBox {
-                id: selector
-                currentIndex: 0
-                menu: ContextMenu {
-                    MenuItem { text: "Tracks"; }
-                    MenuItem { text: "Albums"; }
-                    MenuItem { text: "Artists"; }
-                    MenuItem { text: "Playlists"; }
-                }
-                onCurrentIndexChanged: {
-                    results.updateResults();
-                }
-            }
-            Separator {
-                width: parent.width
-                height: 2
-                color: Theme.primaryColor
-            }
+
+    Column {
+        id: headerContainer
+        width: parent.width
+
+        spacing: Theme.paddingMedium
+
+        PageHeader {
+            title: qsTr("Search ") + currentModeString()
         }
 
         SearchField {
             id: searchField
-            placeholderText: "Search"
+            property bool _hasHadFocus: false
+            placeholderText: qsTr("Search")
             width: parent.width
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             onTextChanged: {
-                search.query = Utilities.trim(text)
+                search.query = text.trim()
                 search.search()
             }
-            Keys.onReturnPressed: { results.focus = true }
-        }
+            EnterKey.iconSource: "image://theme/icon-m-enter-close"
+            EnterKey.onClicked: {_hasHadFocus = false; results.focus = true;}
 
-        Separator {
-            width: parent.width
-            height: 2
-            color: Theme.primaryColor
+//            focusOutBehavior: FocusBehavior.KeepFocus
         }
     }
 
-    Item {
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
+    SilicaListView {
+        id: results
+        anchors.fill: parent
+        cacheBuffer: 8000
         clip: true
+        currentIndex: -1
 
-        SilicaListView {
-            id: results
-            anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            onMovementStarted: results.focus = true
-            cacheBuffer: 8000
+        header: Item {
+            id: header
+            width: headerContainer.width
+            height: headerContainer.height
+            Component.onCompleted: headerContainer.parent = header
+        }
 
-            Component.onCompleted: positionViewAtBeginning()
+        model: searchType == 0 ? search.tracks() : (searchType == 1 ? search.albums : (searchType == 2 ? search.artists : search.playlists))
+        delegate: searchType == 0 ? trackComponent : (searchType == 1 ? albumComponent : (searchType == 2 ? artistComponent : playlistComponent))
 
-            Component {
-                id: trackComponent
-                TrackDelegate {
-                    name: modelData.name
-                    artistAndAlbum: modelData.artists + " | " + modelData.album
-                    duration: modelData.duration
-                    highlighted: modelData.isCurrentPlayingTrack
-                    starred: modelData.isStarred
-                    available: modelData.isAvailable
-                    onClicked: modelData.play()
-                    onPressAndHold: { menu.track = modelData; menu.open(); }
+        PullDownMenu {
+            id: selector
+            MenuItem {
+                visible: searchType !== 0
+                text: "Tracks"
+                onClicked: {
+                    pageStack.replace(Qt.resolvedUrl("SearchPage.qml"),
+                                      {"search" : search, "searchType" : 0})
                 }
             }
-            Component {
-                id: albumComponent
-                AlbumDelegate {
-                    name: modelData.name
-                    artist: modelData.artist
-                    albumCover: modelData.coverId
-                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
-                    onPressAndHold: {
-                        menuAlbumBrowse.album = modelData;
-                        if (menuAlbumBrowse.totalDuration > 0)
-                            albumMenu.open()
+            MenuItem {
+                visible: searchType !== 1
+                text: "Albums"
+                onClicked: {
+                    pageStack.replace(Qt.resolvedUrl("SearchPage.qml"),
+                                      {"search" : search, "searchType" : 1})
+                }
+            }
+            MenuItem {
+                visible: searchType !== 2
+                text: "Artists"
+                onClicked: {
+                    pageStack.replace(Qt.resolvedUrl("SearchPage.qml"),
+                                      {"search" : search, "searchType" : 2})
+                }
+            }
+            MenuItem {
+                visible: searchType !== 3
+                text: "Playlists"
+                onClicked: {
+                    pageStack.replace(Qt.resolvedUrl("SearchPage.qml"),
+                                      {"search" : search, "searchType" : 3})
+                }
+            }
+//            MenuItem { visible: searchType !== 1; text: "Albums"; onClicked: searchType = 1;}
+//            MenuItem { visible: searchType !== 2; text: "Artists"; onClicked: searchType = 2;}
+//            MenuItem { visible: searchType !== 3; text: "Playlists"; onClicked: searchType = 3;}
+        }
+
+        VerticalScrollDecorator { }
+
+        ViewPlaceholder {
+            text: search.didYouMean.length > 0 ? "Did you mean" : qsTr("No %1 found").arg(currentModeString() + "s")
+            enabled: results.count === 0 && search.query.length > 0 && !search.busy
+        }
+
+        Component {
+            id: trackComponent
+            TrackDelegate {
+                name: trackName
+                artistAndAlbum: artists + " | " + album
+                duration: trackDuration
+                highlighted: isCurrentPlayingTrack
+                starred: isStarred
+                available: isAvailable
+                // TODO onClicked: model.play()
+//                onPressAndHold: { menu.track = modelData; menu.open(); }
+            }
+        }
+        Component {
+            id: albumComponent
+            AlbumDelegate {
+                name: modelData.name
+                artist: modelData.artist
+                albumCover: modelData.coverId
+                onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                onPressAndHold: {
+                    menuAlbumBrowse.album = modelData;
+                    if (menuAlbumBrowse.totalDuration > 0)
+                        albumMenu.open()
+                }
+            }
+        }
+        Component {
+            id: artistComponent
+            ArtistDelegate {
+                name: modelData.name
+                portrait: modelData.pictureId
+                onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+            }
+        }
+        Component {
+            id: playlistComponent
+            PlaylistDelegate {
+                title: modelData.name
+                iconSource: "image://theme/icon-m-sounds"
+
+                onClicked: {
+                    console.log("qml: Loading playlist")
+                    var component = Qt.createComponent("TracklistPage.qml");
+                    if (component.status === Component.Ready) {
+                        var playlistPage = component.createObject(pageStack, { playlist: modelData.playlist });
+                        pageStack.push(playlistPage);
                     }
                 }
             }
-            Component {
-                id: artistComponent
-                ArtistDelegate {
-                    name: modelData.name
-                    portrait: modelData.pictureId
-                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
-                }
-            }
-            Component {
-                id: playlistComponent
-                PlaylistDelegate {
-                    title: modelData.name
-                    iconSource: "images/icon-m-music-video-all-songs-white.png"
-
-                    onClicked: {
-                        console.log("qml: Loading playlist")
-                        var component = Qt.createComponent("TracklistPage.qml");
-                        if (component.status === Component.Ready) {
-                            var playlistPage = component.createObject(pageStack, { playlist: modelData.playlist });
-                            pageStack.push(playlistPage);
-                        }
-                    }
-                }
-            }
-
-
-            Connections {
-                target: search
-                onResultsChanged: results.updateResults()
-            }
-
-            function updateResults() {
-                results.model = 0
-                results.delegate = null
-                if (selector.currentIndex === 0) {
-                    results.delegate = trackComponent
-                    results.model = search.tracks
-                } else if (selector.currentIndex == 1) {
-                    results.delegate = albumComponent
-                    results.model = search.albums
-                } else if (selector.currentIndex == 2) {
-                    results.delegate = artistComponent
-                    results.model = search.artists
-                } else if (selector.currentIndex == 3) {
-                    results.delegate = playlistComponent
-                    results.model = search.playlists
-                }
-            }
-
-            footer: Item {
-                width: parent.width
-                height: 100
-            }
-
         }
 
-        Label {
-            id: errorMessage
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 80
-            visible: results.count === 0 && search.query.length > 0 && !search.busy
-            font.pixelSize: UI.FONT_LARGE
-            font.family: UI.FONT_FAMILY_LIGHT
-            font.weight: Font.Light
-            wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
-            horizontalAlignment: Text.AlignHCenter
+//        Label {
+//            id: errorMessage
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            y: 80
+//            visible: results.count === 0 && search.query.length > 0 && !search.busy
+//            font.pixelSize: Theme.fontSizeLarge
+//            font.weight: Font.Light
+//            wrapMode: Text.WordWrap
+//            width: parent.width - Theme.paddingLarge * 2
+//            horizontalAlignment: Text.AlignHCenter
 
-            text: search.didYouMean.length > 0 ? "Did you mean"
-                                               : (selector.currentIndex === 0 ? "No tracks found" :
-                                                  selector.currentIndex == 1 ? "No albums found" :
-                                                  "No artists found")
-        }
-        Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: errorMessage.bottom
-            visible: results.count === 0 && search.query.length > 0 && !search.busy && search.didYouMean.length > 0
-            font.pixelSize: UI.FONT_LARGE
-            font.family: UI.FONT_FAMILY_LIGHT
-            font.weight: Font.Light
-            wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
-            horizontalAlignment: Text.AlignHCenter
+//            text: search.didYouMean.length > 0 ? "Did you mean" : qsTr("No %1 found").arg(currentModeString() + "s")
+//        }
+//        Label {
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.top: errorMessage.bottom
+//            visible: results.count === 0 && search.query.length > 0 && !search.busy && search.didYouMean.length > 0
+//            font.pixelSize: Theme.fontSizeLarge
+//            font.weight: Font.Light
+//            wrapMode: Text.WordWrap
+//            width: parent.width - Theme.paddingLarge * 2
+//            horizontalAlignment: Text.AlignHCenter
 
-            text: "<a href='didyoumean'>" + search.didYouMean + "</a>?"
+//            text: "<a href='didyoumean'>" + search.didYouMean + "</a>?"
 
-            onLinkActivated: searchField.text = search.didYouMean
-        }
+//            onLinkActivated: searchField.text = search.didYouMean
+//        }
 
+    }
+
+    function currentModeString() {
+        if(searchType === 0)
+            return "track";
+        if(searchType === 1)
+            return "album"
+        if(searchType === 2)
+            return "artist"
+        if(searchType === 3)
+            return "playlist"
     }
 }

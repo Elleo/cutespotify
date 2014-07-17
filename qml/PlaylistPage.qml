@@ -66,6 +66,7 @@ Page {
         onAccepted: { spotifySession.user.createPlaylist(newPlaylistSheet.playlistName); }
     }
 */
+
     SilicaFlickable {
         anchors.fill: parent
         clip: true

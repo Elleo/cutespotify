@@ -244,9 +244,9 @@ Page {
         SilicaListView {
             id: results
             anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
             cacheBuffer: 8000
+
+            VerticalScrollDecorator {}
 
             Component {
                 id: trackComponent

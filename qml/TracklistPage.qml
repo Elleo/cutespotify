@@ -47,7 +47,7 @@ Page {
     id: tracklistPage
     property variant playlist
 
-    Component.onCompleted: playlist.trackFilter = ""
+    Component.onCompleted: tracksModel.filter = ""
 
     /*    TrackMenu {
         id: menu
@@ -59,17 +59,17 @@ Page {
     Component {
         id: trackDelegate
         TrackDelegate {
-            name: searchField.text.length > 0 ? Theme.highlightText(modelData.name, searchField.text, Theme.highlightColor) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(modelData.artists, searchField.text, Theme.secondaryHighlightColor) : modelData.artists)
+            name: searchField.text.length > 0 ? Theme.highlightText(trackName, searchField.text, Theme.highlightColor) : trackName
+            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
                             + " | "
-                            + (searchField.text.length > 0 ? Theme.highlightText(modelData.album, searchField.text, Theme.secondaryHighlightColor) : modelData.album)
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
+                            + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
+            duration: trackDuration
+            highlighted: isCurrentPlayingTrack
+            starred: isStarred
+            available: isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                modelData.play()
+                tracksModel.trackList.playTrackAtIndex(index)
             }
 //            onPressAndHold: { menu.track = modelData; menu.open(); }
         }
@@ -78,21 +78,21 @@ Page {
     Component {
         id: inboxDelegate
         InboxTrackDelegate {
-            name: searchField.text.length > 0 ? Theme.highlightText(modelData.name, searchField.text, Theme.highlightColor) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(modelData.artists, searchField.text, Theme.secondaryHighlightColor) : modelData.artists)
+            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
+            name: searchField.text.length > 0 ? Theme.highlightText(tackName, searchField.text, Theme.highlightColor) : trackName
                             + " | "
-                            + (searchField.text.length > 0 ? Theme.highlightText(modelData.album, searchField.text, Theme.secondaryHighlightColor) : modelData.album)
-            creatorAndDate: (searchField.text.length > 0 ? Theme.highlightText(modelData.creator, searchField.text, Theme.highlightColor) : modelData.creator)
-                            + " | " + Qt.formatDateTime(modelData.creationDate)
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
+                            + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
+            creatorAndDate: (searchField.text.length > 0 ? Theme.highlightText(creator, searchField.text, Theme.highlightColor) : creator)
+                            + " | " + Qt.formatDateTime(creationDate)
+            duration: tackDuration
+            highlighted: isCurrentPlayingTrack
+            starred: isStarred
+            available: isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                modelData.play()
+                tracksModel.trackList.playTrackAtIndex(index)
             }
-            seen: modelData.seen
+            seen: model.seen
 //            onPressAndHold: { menu.track = modelData; menu.open(); }
         }
     }
@@ -125,7 +125,7 @@ Page {
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             Keys.onReturnPressed: { tracks.focus = true }
 
-            onTextChanged: playlist.trackFilter = text.trim()
+            onTextChanged: tracksModel.filter = text.trim()
 
             states: State {
                 name: "visible"
@@ -191,10 +191,10 @@ Page {
             pressDelay: 0
             cacheBuffer: 3000
             highlightMoveDuration: 1
-            model: playlist.tracks
+            model: tracksModel
 
             header: Column {
-                width: parent.width
+                width: tracks.width
 
                 TextSwitch {
                     id: offlineSwitch
@@ -220,6 +220,15 @@ Page {
             onPlaylistDestroyed: {
                 playlistsTab.pop(null);
             }
+        }
+    }
+
+    TrackListFilterModel {
+        id: tracksModel
+        trackList: playlist.tracks()
+
+        Component.onCompleted: {
+            init()
         }
     }
 }
