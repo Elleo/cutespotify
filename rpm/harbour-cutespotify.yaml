@@ -19,7 +19,6 @@ PkgConfigBR:
 - Qt5Quick
 - Qt5Multimedia
 - sailfishapp
-- libresourceqt5
 Requires:
 - sailfish-version >= 1.0.8
 - sailfishsilica-qt5

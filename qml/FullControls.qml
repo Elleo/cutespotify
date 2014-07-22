@@ -45,6 +45,7 @@ import QtSpotify 1.0
 
 Page {
     showNavigationIndicator: false
+    backNavigation: false
 
 Column {
     id: fullControls
@@ -144,7 +145,7 @@ Column {
                 currentIndex: -1
                 onMovingChanged: {
                     if (!moving)
-                        spotifySession.playQueue.selectTrack(model[currentIndex])
+                        spotifySession.playQueue.selectTrack(currentIndex)
                 }
 
                 Connections {
@@ -154,11 +155,11 @@ Column {
                     }
                 }
 
-                model: spotifySession.playQueue.tracks
+                model: spotifySession.playQueue.tracks()
                 delegate: SpotifyImage {
                     width: coverList.width
                     height: width
-                    spotifyId: modelData.albumCoverId
+                    spotifyId: albumCoverId
                     fillMode: Image.PreserveAspectCrop
                     clip: true
                     smooth: true
@@ -279,18 +280,18 @@ Column {
 
                 VerticalScrollDecorator {}
 
-                model: spotifySession.playQueue.tracks
+                model: spotifySession.playQueue.tracks()
                 delegate: TrackDelegate {
                     property bool isExplicit: spotifySession.playQueue.isExplicitTrack(index)
-                    name: modelData.name
+                    name: trackName
                     backgroundOpacity: isExplicit ? 0.6 : 0.0
                     // TODO those colors are no longer used.. / the opacity above neither
                     titleColor: isExplicit ? ("#c6a83f") : (UI.LIST_TITLE_COLOR)
                     subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
-                    artistAndAlbum: modelData.artists + " | " + modelData.album
-                    duration: modelData.duration
+                    artistAndAlbum: artists + " | " + album
+                    duration: duration
                     highlighted: index == spotifySession.playQueue.currentIndex
-                    onClicked: if (!highlighted) spotifySession.playQueue.selectTrack(modelData)
+                    onClicked: if (!highlighted) spotifySession.playQueue.selectTrack(index)
                 }
 
                 Connections {

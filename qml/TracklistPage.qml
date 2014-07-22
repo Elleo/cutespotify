@@ -69,7 +69,7 @@ Page {
             available: isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                tracksModel.trackList.playTrackAtIndex(index)
+                tracksModel.trackList.playTrack(index)
             }
 //            onPressAndHold: { menu.track = modelData; menu.open(); }
         }
@@ -90,7 +90,7 @@ Page {
             available: isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                tracksModel.trackList.playTrackAtIndex(index)
+                tracksModel.trackList.playTrack(index)
             }
             seen: model.seen
 //            onPressAndHold: { menu.track = modelData; menu.open(); }
