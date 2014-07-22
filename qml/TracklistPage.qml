@@ -71,7 +71,7 @@ Page {
             onClicked: {
                 tracksModel.trackList.playTrack(index)
             }
-//            onPressAndHold: { menu.track = modelData; menu.open(); }
+            //            onPressAndHold: { menu.track = modelData; menu.open(); }
         }
     }
 
@@ -80,8 +80,8 @@ Page {
         InboxTrackDelegate {
             artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
             name: searchField.text.length > 0 ? Theme.highlightText(tackName, searchField.text, Theme.highlightColor) : trackName
-                            + " | "
-                            + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
+                                                + " | "
+                                                + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
             creatorAndDate: (searchField.text.length > 0 ? Theme.highlightText(creator, searchField.text, Theme.highlightColor) : creator)
                             + " | " + Qt.formatDateTime(creationDate)
             duration: tackDuration
@@ -93,7 +93,7 @@ Page {
                 tracksModel.trackList.playTrack(index)
             }
             seen: model.seen
-//            onPressAndHold: { menu.track = modelData; menu.open(); }
+            //            onPressAndHold: { menu.track = modelData; menu.open(); }
         }
     }
 
@@ -102,10 +102,9 @@ Page {
         tracks.positionViewAtBeginning();
     }
 
-    SilicaFlickable {
-        anchors.fill: parent
-        clip: true
-        pressDelay: 0
+    Column {
+        id: headerContainer
+        width: tracks.width
 
         PageHeader {
             id: header
@@ -114,112 +113,69 @@ Page {
                                                                                                           : "Inbox"))
         }
 
+        TextSwitch {
+            id: offlineSwitch
+            width: parent.width
+
+            text: qsTr("Available offline")
+            property bool completed: false;
+            onCheckedChanged: {
+                if(completed) {
+                    console.log("Offline changed");
+                    playlist.availableOffline = !playlist.availableOffline;
+                }
+            }
+            checked: playlist.availableOffline
+            Component.onCompleted: {
+                completed = true;
+            }
+        }
+
         SearchField {
             id: searchField
-            anchors.top: header.bottom
             width: parent.width
-            height: 0
-            opacity: 0
-            focus: false
+
             placeholderText: qsTr("Search tracks")
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-            Keys.onReturnPressed: { tracks.focus = true }
-
             onTextChanged: tracksModel.filter = text.trim()
 
-            states: State {
-                name: "visible"
-                when: tracks.showSearchField
-                PropertyChanges {
-                    target: searchField
-                    height: 100
-                }
-                PropertyChanges {
-                    target: searchField
-                    opacity: 1
-                }
-                PropertyChanges {
-                    target: searchField
-                    focus: true
-                }
-            }
-
-            transitions: [
-                Transition {
-                    from: "visible"; to: ""
-                    SequentialAnimation {
-                        NumberAnimation {
-                            properties: "opacity"
-                            duration: 200
-                        }
-                        NumberAnimation {
-                            properties: "height"
-                            duration: 300
-                        }
-                    }
-                },
-                Transition {
-                    from: ""; to: "visible"
-                    SequentialAnimation {
-                        NumberAnimation {
-                            properties: "height"
-                            duration: 100
-                        }
-                        NumberAnimation {
-                            properties: "opacity"
-                            duration: 200
-                        }
-                    }
-                }
-            ]
+            EnterKey.iconSource: "image://theme/icon-m-enter-close"
+            EnterKey.onClicked: {focus = false}
         }
+    }
 
-        SilicaListView {
-            id: tracks
-            width: parent.width
-            anchors.top: searchField.bottom
-            anchors.bottom: parent.bottom
+    SilicaListView {
+        id: tracks
+        anchors.fill: parent
 
-            property bool showSearchField: atYBeginning
-            property bool _movementFromBeginning: false
+        property bool showSearchField: atYBeginning
+        property bool _movementFromBeginning: false
 
-            Component.onCompleted: tracks.positionViewAtBeginning();
+        Component.onCompleted: tracks.positionViewAtBeginning();
 
-            VerticalScrollDecorator {}
+        VerticalScrollDecorator {}
 
-            clip: true
-            pressDelay: 0
-            cacheBuffer: 3000
-            highlightMoveDuration: 1
-            model: tracksModel
+        clip: true
+        pressDelay: 0
+        cacheBuffer: 3000
+        highlightMoveDuration: 1
 
-            header: Column {
-                width: tracks.width
+        currentIndex: -1
 
-                TextSwitch {
-                    id: offlineSwitch
-                    width: parent.width
-                    text: qsTr("Available offline")
-                    property bool completed: false;
-                    onCheckedChanged: {
-                        if(completed) {
-                            console.log("Offline changed");
-                            playlist.availableOffline = !playlist.availableOffline;
-                        }
-                    }
-                    checked: playlist.availableOffline
-                    Component.onCompleted: {
-                        completed = true;
-                    }
-                }
-            }
+        model: tracksModel
+
+        header: Item {
+            id: headerItemPlace
+            width: headerContainer.width
+            height: headerContainer.height
+            Component.onCompleted: headerContainer.parent = headerItemPlace
         }
+    }
 
-        Connections {
-            target: playlist
-            onPlaylistDestroyed: {
-                playlistsTab.pop(null);
-            }
+    Connections {
+        target: playlist
+        onPlaylistDestroyed: {
+            playlistsTab.pop(null);
         }
     }
 

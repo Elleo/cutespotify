@@ -120,10 +120,10 @@ Page {
         currentIndex: -1
 
         header: Item {
-            id: header
+            id: headerItemPlace
             width: headerContainer.width
             height: headerContainer.height
-            Component.onCompleted: headerContainer.parent = header
+            Component.onCompleted: headerContainer.parent = headerItemPlace
         }
 
         model: searchType == 0 ? search.tracks() : (searchType == 1 ? search.albums : (searchType == 2 ? search.artists : search.playlists))

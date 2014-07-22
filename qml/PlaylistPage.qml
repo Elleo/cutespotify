@@ -67,10 +67,14 @@ Page {
     }
 */
 
-    SilicaFlickable {
+    SilicaListView {
+        id: playlists
         anchors.fill: parent
         clip: true
         pressDelay: 0
+
+        cacheBuffer: 3000
+        model: spotifySession.user ? spotifySession.user.playlists : 0
 
         PullDownMenu {
             MenuItem {
@@ -87,164 +91,143 @@ Page {
             }
         }
 
-        PageHeader {
+        header: PageHeader {
             id: header
             title: qsTr("Playlists")
         }
 
 
-        SilicaListView {
-            id: playlists
-            width: parent.width
-            anchors.top: header.bottom
-            anchors.bottom: parent.bottom
-            clip: true
-            pressDelay: 0
+        VerticalScrollDecorator {}
 
-            cacheBuffer: 3000
-            model: spotifySession.user ? spotifySession.user.playlists : 0
-
-            VerticalScrollDecorator {}
-
-            delegate: PlaylistDelegate {
-                id: playlistDelegate
-                title: !modelData.isLoaded ? "Loading..." : (modelData.type === SpotifyPlaylist.Playlist || modelData.type === SpotifyPlaylist.Folder ? modelData.name
-                                                                                                                                                      : (modelData.type === SpotifyPlaylist.Starred ? "Starred"
-                                                                                                                                                                                                    : "Inbox"))
-                subtitle: if (!modelData.isLoaded) {
-                              "";
+        delegate: PlaylistDelegate {
+            id: playlistDelegate
+            title: !modelData.isLoaded ? "Loading..." : (modelData.type === SpotifyPlaylist.Playlist || modelData.type === SpotifyPlaylist.Folder ? modelData.name
+                                                                                                                                                  : (modelData.type === SpotifyPlaylist.Starred ? "Starred"
+                                                                                                                                                                                                : "Inbox"))
+            subtitle: if (!modelData.isLoaded) {
+                          "";
+                      } else {
+                          if (modelData.type === SpotifyPlaylist.Folder) {
+                              modelData.playlistCount + " playlist" + (modelData.playlistCount > 1 ? "s" : "")
                           } else {
-                              if (modelData.type === SpotifyPlaylist.Folder) {
-                                  modelData.playlistCount + " playlist" + (modelData.playlistCount > 1 ? "s" : "")
-                              } else {
-                                  modelData.trackCount + " song" + (modelData.trackCount > 1 ? "s" : "")
-                                          + ((spotifySession.user ? spotifySession.user.ownsPlaylist(modelData) : false) ? "" : " | by " + modelData.owner)
-                              }
+                              modelData.trackCount + " song" + (modelData.trackCount > 1 ? "s" : "")
+                                      + ((spotifySession.user ? spotifySession.user.ownsPlaylist(modelData) : false) ? "" : " | by " + modelData.owner)
                           }
-                extraText: modelData.type === SpotifyPlaylist.Folder || !modelData.isLoaded ? "" : spotifySession.formatDuration(modelData.totalDuration)
-                iconSource: modelData.collaborative ? "image://theme/icon-m-music" : staticIcon
-                offlineStatus: modelData.offlineStatus
-                availableOffline: modelData.availableOffline
-                downloadProgress: modelData.offlineDownloadProgress
-                unseens: modelData.unseenCount
-                enabled: opacity == 1.0
-                opacity: (!spotifySession.offlineMode || modelData.availableOffline || modelData.type === SpotifyPlaylist.Folder) && modelData.isLoaded ? 1.0 : 0.3
+                      }
+            extraText: modelData.type === SpotifyPlaylist.Folder || !modelData.isLoaded ? "" : spotifySession.formatDuration(modelData.totalDuration)
+            iconSource: modelData.collaborative ? "image://theme/icon-m-music" : staticIcon
+            offlineStatus: modelData.offlineStatus
+            availableOffline: modelData.availableOffline
+            downloadProgress: modelData.offlineDownloadProgress
+            unseens: modelData.unseenCount
+            enabled: opacity == 1.0
+            opacity: (!spotifySession.offlineMode || modelData.availableOffline || modelData.type === SpotifyPlaylist.Folder) && modelData.isLoaded ? 1.0 : 0.3
 
-                onClicked: {
-                    if (modelData.trackCount > 0) {
-                        var component = Qt.createComponent("TracklistPage.qml");
-                        if (component.status === Component.Ready) {
-                            var playlistPage = component.createObject(pageStack, { playlist: modelData });
-                            pageStack.push(playlistPage);
-                        }
-                    } else if (modelData.type === SpotifyPlaylist.Folder) {
-                        var component2 = Qt.createComponent("FolderPage.qml");
-                        if (component2.status === Component.Ready) {
-                            var folderPage = component2.createObject(pageStack, { folder: modelData });
-                            pageStack.push(folderPage);
-                        }
-                    }
-                }
-                onPressAndHold: { menu.playlist = modelData; menu.open(); }
+            onClicked: {
+                if (modelData.trackCount > 0)
+                    pageStack.push(Qt.resolvedUrl("TracklistPage.qml"), {"playlist": modelData })
+                else if (modelData.type === SpotifyPlaylist.Folder)
+                    pageStack.push(Qt.resolvedUrl("FolderPage.qml"), {"folder": modelData })
+            }
+            onPressAndHold: { menu.playlist = modelData; menu.open(); }
 
-                property string staticIcon
+            property string staticIcon
 
-                function updateIcon() {
-                    if (modelData.type === SpotifyPlaylist.Playlist)
-                        staticIcon = "image://theme/icon-m-sounds";
-                    else if (modelData.type === SpotifyPlaylist.Starred)
-                        staticIcon = "image://theme/icon-m-favorite-selected";
-                    else if (modelData.type === SpotifyPlaylist.Inbox)
-                        staticIcon = "image://theme/icon-m-mail";
-                    else if (modelData.type === SpotifyPlaylist.Folder)
-                        staticIcon = "image://theme/icon-m-folder";
-                }
-
-                Component.onCompleted: updateIcon()
+            function updateIcon() {
+                if (modelData.type === SpotifyPlaylist.Playlist)
+                    staticIcon = "image://theme/icon-m-sounds";
+                else if (modelData.type === SpotifyPlaylist.Starred)
+                    staticIcon = "image://theme/icon-m-favorite-selected";
+                else if (modelData.type === SpotifyPlaylist.Inbox)
+                    staticIcon = "image://theme/icon-m-mail";
+                else if (modelData.type === SpotifyPlaylist.Folder)
+                    staticIcon = "image://theme/icon-m-folder";
             }
 
-//            footer: Item {
-//                height: visible ? (UI.LIST_ITEM_HEIGHT + separator.height) : 0
-//                width: parent.width
-//                visible: !spotifySession.offlineMode
+            Component.onCompleted: updateIcon()
+        }
 
-//                Separator {
-//                    id: separator
-//                    anchors.left: parent.left
-//                    anchors.right: parent.right
-//                    anchors.top: parent.top
-//                    //                height: 2
-//                    color: Theme.primaryColor
-//                }
+        //            footer: Item {
+        //                height: visible ? (UI.LIST_ITEM_HEIGHT + separator.height) : 0
+        //                width: parent.width
+        //                visible: !spotifySession.offlineMode
 
-//                Rectangle {
-//                    id: background
-//                    anchors.fill: row
-//                    // Fill page porders
-//                    anchors.leftMargin: -UI.MARGIN_XLARGE
-//                    anchors.rightMargin: -UI.MARGIN_XLARGE
-//                    opacity: mouseArea.pressed ? 1.0 : 0.0
-//                    color: "#15000000"
-//                }
+        //                Separator {
+        //                    id: separator
+        //                    anchors.left: parent.left
+        //                    anchors.right: parent.right
+        //                    anchors.top: parent.top
+        //                    //                height: 2
+        //                    color: Theme.primaryColor
+        //                }
 
-//                Row {
-//                    id: row
-//                    width: parent.width
-//                    anchors.top: separator.bottom
-//                    anchors.bottom: parent.bottom
-//                    spacing: UI.LIST_ITEM_SPACING
+        //                Rectangle {
+        //                    id: background
+        //                    anchors.fill: row
+        //                    // Fill page porders
+        //                    anchors.leftMargin: -UI.MARGIN_XLARGE
+        //                    anchors.rightMargin: -UI.MARGIN_XLARGE
+        //                    opacity: mouseArea.pressed ? 1.0 : 0.0
+        //                    color: "#15000000"
+        //                }
 
-//                    Item {
-//                        id: iconItem
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        visible: iconImage.source !== "" ? true : false
-//                        width: 40
-//                        height: 40
+        //                Row {
+        //                    id: row
+        //                    width: parent.width
+        //                    anchors.top: separator.bottom
+        //                    anchors.bottom: parent.bottom
+        //                    spacing: UI.LIST_ITEM_SPACING
 
-//                        Image {
-//                            id: iconImage
-//                            anchors.centerIn: parent
-//                            source: "image://theme/icon-m-common-add"
-//                            opacity: 0.4
-//                        }
-//                    }
+        //                    Item {
+        //                        id: iconItem
+        //                        anchors.verticalCenter: parent.verticalCenter
+        //                        visible: iconImage.source !== "" ? true : false
+        //                        width: 40
+        //                        height: 40
 
-//                    /*                Label {
-//                    id: newPlaylistLabel
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    font.family: UI.FONT_FAMILY_BOLD
-//                    font.weight: Font.Bold
-//                    font.pixelSize: UI.LIST_TILE_SIZE
-//                    color: UI.LIST_TITLE_COLOR
-//                    opacity: 0.4
-//                    text: "New playlist"
-//                }*/
-//                }
+        //                        Image {
+        //                            id: iconImage
+        //                            anchors.centerIn: parent
+        //                            source: "image://theme/icon-m-common-add"
+        //                            opacity: 0.4
+        //                        }
+        //                    }
 
-//                MouseArea {
-//                    id: mouseArea;
-//                    anchors.fill: parent
-//                    onClicked: {
-//                        newPlaylistSheet.playlistName = "";
-//                        newPlaylistSheet.open();
-//                    }
-//                }
-//                /*Item {
-//                anchors.top: newPlaylistLabel.bottom
-//                width: parent.width
-//                height: 80
-//            }*/
-//            }
+        //                    /*                Label {
+        //                    id: newPlaylistLabel
+        //                    anchors.verticalCenter: parent.verticalCenter
+        //                    font.family: UI.FONT_FAMILY_BOLD
+        //                    font.weight: Font.Bold
+        //                    font.pixelSize: UI.LIST_TILE_SIZE
+        //                    color: UI.LIST_TITLE_COLOR
+        //                    opacity: 0.4
+        //                    text: "New playlist"
+        //                }*/
+        //                }
 
-            section.criteria: ViewSection.FirstCharacter
-            section.property: "listSection"
-            section.delegate: Separator {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                visible: section === "p"
-                height: 2
-                color: Theme.primaryColor
-            }
+        //                MouseArea {
+        //                    id: mouseArea;
+        //                    anchors.fill: parent
+        //                    onClicked: {
+        //                        newPlaylistSheet.playlistName = "";
+        //                        newPlaylistSheet.open();
+        //                    }
+        //                }
+        //                /*Item {
+        //                anchors.top: newPlaylistLabel.bottom
+        //                width: parent.width
+        //                height: 80
+        //            }*/
+        //            }
+
+        section.criteria: ViewSection.FirstCharacter
+        section.property: "listSection"
+        section.delegate: Separator {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            visible: section === "p"
+            height: 2
+            color: Theme.primaryColor
         }
     }
 }
