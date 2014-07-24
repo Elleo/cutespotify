@@ -41,13 +41,12 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import QtSpotifySingleton 1.0 as SearchProvider
 
 Page {
     enabled: !spotifySession.offlineMode
 
     property int searchType: 0
-    property variant search: SearchProvider.SpotifySearch
+    property variant search
 
     Rectangle {
         anchors.fill: parent
