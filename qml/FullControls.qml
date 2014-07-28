@@ -151,7 +151,7 @@ Column {
                 Connections {
                     target: spotifySession.playQueue
                     onTracksChanged: {
-                        coverList.currentIndex = spotifySession.playQueue.currentIndex()
+                        coverList.currentIndex = coverList.model.currentPlayIndex
                     }
                 }
 
@@ -159,11 +159,10 @@ Column {
                 delegate: SpotifyImage {
                     width: coverList.width
                     height: width
-                    spotifyId: albumCoverId
+                    spotifyId: albumCoverId + (imageMouseArea.pressed ? "?" + Theme.highlightColor : "")
                     fillMode: Image.PreserveAspectCrop
                     clip: true
                     smooth: true
-                    opacity: imageMouseArea.pressed ? 0.4 : 1.0
 
                     MouseArea {
                         id: imageMouseArea
@@ -176,24 +175,21 @@ Column {
             Rectangle {
                 anchors.bottom: parent.bottom
                 width: parent.width
-                height: detailsColumn.height + UI.MARGIN_XLARGE
-                color: (moreMouseArea.pressed ? "#DD" : "#BA") + ("#D7D7D7")
+                height: detailsColumn.height + Theme.paddingLarge
+                color: (moreMouseArea.pressed ? Theme.highlightColor: Theme.secondaryHighlightColor)
+                opacity: 0.4
 
                 Column {
                     id: detailsColumn
                     anchors.left: parent.left
-                    anchors.leftMargin: UI.MARGIN_XLARGE
+                    anchors.leftMargin: Theme.paddingLarge
                     anchors.right: parent.right
-                    anchors.rightMargin: UI.MARGIN_XLARGE
+                    anchors.rightMargin: Theme.paddingLarge
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 8
 
                     Label {
                         width: parent.width
-                        font.family: UI.FONT_FAMILY
-                        font.weight: Font.Bold
-                        font.pixelSize: UI.FONT_DEFAULT
-                        color: UI.COLOR_FOREGROUND
                         elide: Text.ElideRight
                         opacity: details.opacity
                         text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
@@ -209,12 +205,11 @@ Column {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
                             anchors.right: moreIcon.left
-                            anchors.rightMargin: UI.MARGIN_XLARGE
+                            anchors.rightMargin: Theme.paddingLarge
                             Label {
                                 width: parent.width
-                                font.family: UI.FONT_FAMILY
-                                font.pixelSize: UI.FONT_LSMALL
-                                color: UI.LIST_SUBTITLE_COLOR
+                                font.pixelSize: Theme.fontSizeSmall
+//                                color: UI.LIST_SUBTITLE_COLOR
                                 elide: Text.ElideRight
                                 anchors.left: parent.left
                                 anchors.right: parent.right
@@ -222,9 +217,8 @@ Column {
                             }
                             Label {
                                 width: parent.width
-                                font.family: UI.FONT_FAMILY
-                                font.pixelSize: UI.FONT_LSMALL
-                                color: UI.LIST_SUBTITLE_COLOR
+                                font.pixelSize: Theme.fontSizeSmall
+//                                color: UI.LIST_SUBTITLE_COLOR
                                 elide: Text.ElideRight
                                 anchors.left: parent.left
                                 anchors.right: parent.right
@@ -239,6 +233,7 @@ Column {
                             visible: !spotifySession.offlineMode
                         }
                         MouseArea {
+                            // TODO
                             id: moreMouseArea
                             anchors.fill: parent
                             onClicked: { infoDialog.selectedIndex = -1; infoDialog.open(); }
@@ -290,7 +285,7 @@ Column {
                     subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
                     artistAndAlbum: artists + " | " + album
                     duration: duration
-                    highlighted: index == spotifySession.playQueue.currentIndex
+                    highlighted: isCurrentPlayingTrack
                     onClicked: if (!highlighted) spotifySession.playQueue.selectTrack(index)
                 }
 
