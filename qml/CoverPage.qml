@@ -28,8 +28,7 @@ CoverBackground {
             right: parent.right
             rightMargin: Theme.paddingMedium
         }
-        horizontalAlignment: Text.AlignHCenter
-        elide: Text.ElideRight
+        truncationMode: TruncationMode.Fade
         font.pixelSize: Theme.fontSizeSmall
         text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
     }
@@ -43,7 +42,7 @@ CoverBackground {
             right: parent.right
             rightMargin: Theme.paddingMedium
         }
-        horizontalAlignment: Text.AlignHCenter
+        truncationMode: TruncationMode.Fade
         font.pixelSize: Theme.fontSizeTiny
         text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
     }
