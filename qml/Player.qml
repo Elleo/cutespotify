@@ -41,6 +41,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "UIConstants.js" as UI
+import QtSpotify 1.0
 
 Rectangle {
     id: player
@@ -79,5 +80,13 @@ Rectangle {
     Connections {
         target: spotifySession
         onCurrentTrackChanged: hidden = !spotifySession.hasCurrentTrack
+
+        onConnectionStatusChanged: {
+            if (spotifySession.connectionStatus !== SpotifySession.LoggedIn) {
+                showFullControls = false
+            } else if (spotifySession.connectionStatus === SpotifySession.LoggedIn) {
+                hidden = !spotifySession.hasCurrentTrack
+            }
+        }
     }
 }
