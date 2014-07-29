@@ -40,13 +40,11 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UIConstants.js" as UI
 import QtSpotify 1.0
 
 Rectangle {
     id: player
     width: parent.width
-    color: UI.COLOR_BACKGROUND
     anchors.bottom: parent.bottom;
     anchors.bottomMargin: hidden || showFullControls ? 0 : -100;
 
