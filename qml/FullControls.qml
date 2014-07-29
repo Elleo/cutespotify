@@ -436,9 +436,9 @@ Column {
                     anchors.fill: parent
                     anchors.margins: -15
                     onClicked: {
-                        mainPage.playlistSelection.track = spotifySession.currentTrack;
-                        mainPage.playlistSelection.selectedIndex = -1;
-                        mainPage.playlistSelection.open();
+//                        TODO mainPage.playlistSelection.track = spotifySession.currentTrack;
+//                        mainPage.playlistSelection.selectedIndex = -1;
+//                        mainPage.playlistSelection.open();
                     }
                 }
             }
