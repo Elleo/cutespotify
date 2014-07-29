@@ -53,4 +53,5 @@ OTHER_FILES += \
     rpm/cutespotify.yaml \
     rpm/cutespotify.spec \
     qml/LastFMDialog.qml \
-    qml/LogoutDialog.qml
+    qml/LogoutDialog.qml \
+    qml/CoverPage.qml

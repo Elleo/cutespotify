@@ -44,72 +44,10 @@ import QtSpotify 1.0
 
 ApplicationWindow {
     id: appWindow
-    property string themeColor
 
     bottomMargin: player.hidden || player.showFullControls ? 0 : 100
 
-    cover: CoverBackground {
-
-        SpotifyImage {
-            id: coverImage
-            anchors.top: parent.top
-            width: parent.width
-            height: width
-            visible: spotifySession.currentTrack ? true : false
-            spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
-        }
-
-        Image {
-            anchors.centerIn: parent
-            source: "qrc:/qml/images/cutespotify.png"
-            visible: spotifySession.currentTrack ? false : true
-            opacity: 0.5
-        }
-
-        Column {
-            anchors.top: coverImage.bottom
-            anchors.topMargin: 5
-            anchors.leftMargin: 5
-            anchors.rightMargin: 5
-            visible: spotifySession.currentTrack ? true : false
-            width: parent.width
-
-            Label {
-                elide: Text.ElideRight
-                width: parent.width - 20
-                font.pixelSize: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
-            }
-
-            Label {
-                elide: Text.ElideRight
-                width: parent.width - 20
-                font.pixelSize: 14
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
-            }
-        }
-
-        CoverActionList {
-            id: coverAction
-
-            CoverAction {
-                iconSource: spotifySession.currentTrack ? (spotifySession.isPlaying ? "image://theme/icon-cover-pause" : "image://theme/icon-cover-play") : ""
-                onTriggered: {
-                    spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
-                }
-            }
-
-            CoverAction {
-                iconSource: spotifySession.currentTrack ? "image://theme/icon-cover-next-song" : ""
-                onTriggered: {
-                    spotifySession.playNext()
-                }
-            }
-
-        }
-    }
+    cover: Qt.resolvedUrl("CoverPage.qml")
 
     Rectangle {
         id: errorRect
@@ -174,7 +112,6 @@ ApplicationWindow {
 
     Component.onCompleted: {
         spotifySession.isLoggedIn ? pageStack.push(mainPage) : pageStack.push(loginPage)
-        themeColor = "color2"
         if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
             openConnection();
     }

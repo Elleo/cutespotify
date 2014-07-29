@@ -79,5 +79,6 @@
         <file>qml/images/cutespotify.png</file>
         <file>qml/LastFMDialog.qml</file>
         <file>qml/LogoutDialog.qml</file>
+        <file>qml/CoverPage.qml</file>
     </qresource>
 </RCC>
