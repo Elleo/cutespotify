@@ -51,6 +51,8 @@ Page {
 
         contentHeight: settingsContainer.height
 
+        VerticalScrollDecorator {}
+
         PullDownMenu {
             MenuItem {
                 id: button
