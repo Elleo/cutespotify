@@ -95,6 +95,13 @@ Page {
                 onClicked: spotifySession.repeat = checked
             }
 
+            TextSwitch {
+                id: volumeNormalizeSwitch
+                checked: spotifySession.volumeNormalize
+                text: qsTr("Normalize Volume")
+                onClicked: spotifySession.volumeNormalize = checked
+            }
+
             SectionHeader {
                 text: qsTr("Stream")
             }
