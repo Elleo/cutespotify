@@ -44,6 +44,7 @@ CoverBackground {
         }
         truncationMode: TruncationMode.Fade
         font.pixelSize: Theme.fontSizeTiny
+        color: Theme.secondaryColor
         text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
     }
 
