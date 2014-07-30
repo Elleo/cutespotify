@@ -46,7 +46,9 @@ Rectangle {
     id: player
     width: parent.width
     anchors.bottom: parent.bottom;
-    anchors.bottomMargin: hidden || showFullControls ? 0 : -100;
+    anchors.bottomMargin: -quickControlHeight;
+
+    property alias quickControlHeight: quickControls.visibleSize
 
     property bool hidden
     visible: !hidden

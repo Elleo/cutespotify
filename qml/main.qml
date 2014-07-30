@@ -45,7 +45,7 @@ import QtSpotify 1.0
 ApplicationWindow {
     id: appWindow
 
-    bottomMargin: player.hidden || player.showFullControls ? 0 : 100
+    bottomMargin: player.hidden || player.showFullControls ? 0 : player.quickControlHeight
 
     cover: Qt.resolvedUrl("CoverPage.qml")
 
