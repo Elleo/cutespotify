@@ -41,18 +41,15 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
 
 Page {
     id: folderPage
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
 
     property variant folder
     property bool folderDeleted: false
 
     function folderNotDeleted(page) {
-        if (page.folderDeleted == undefined) {
+        if (page.folderDeleted === undefined) {
             return true;
         }
         return !page.folderDeleted;
@@ -61,31 +58,32 @@ Page {
     Connections {
         target: folder
         onPlaylistDestroyed: {
+            // Search for the first page which is not deleted, and pop
+            // everything above.
             folderPage.folderDeleted = true
             var foundPage = pageStack.find(folderNotDeleted);
             if (foundPage !== pageStack.currentPage)
-                pageStack.pop(foundPage, true);
+                pageStack.pop(foundPage, PageStackAction.Immediate);
         }
     }
 
     SilicaListView {
         id: playlists
         anchors.fill: parent
-        anchors.topMargin: 75
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
 
         cacheBuffer: 3000
         model: folder.playlists
 
         Component.onCompleted: positionViewAtBeginning()
 
+        VerticalScrollDecorator { }
+
         delegate: PlaylistDelegate {
             id: playlistDelegate
             title: (modelData.type === SpotifyPlaylist.Playlist || modelData.type === SpotifyPlaylist.Folder ? modelData.name
                                                                                                            : (modelData.type === SpotifyPlaylist.Starred ? "Starred"
                                                                                                                                                         : "Inbox"))
-            subtitle: if (modelData.type == SpotifyPlaylist.Folder) {
+            subtitle: if (modelData.type === SpotifyPlaylist.Folder) {
                           modelData.playlistCount + " playlist" + (modelData.playlistCount > 1 ? "s" : "")
                       } else {
                           modelData.trackCount + " song" + (modelData.trackCount > 1 ? "s" : "")
@@ -101,24 +99,16 @@ Page {
 
             onClicked: {
                 if (modelData.trackCount > 0) {
-                    var component = Qt.createComponent("TracklistPage.qml");
-                    if (component.status === Component.Ready) {
-                        var playlistPage = component.createObject(pageStack, { playlist: modelData });
-                        pageStack.push(playlistPage);
-                    }
+                    pageStack.push("TracklistPage.qml", {"playlist": modelData })
                 } else if (modelData.type === SpotifyPlaylist.Folder) {
-                    var component2 = Qt.createComponent("FolderPage.qml");
-                    if (component2.status === Component.Ready) {
-                        var folderPage = component2.createObject(pageStack, { folder: modelData });
-                        pageStack.push(folderPage);
-                    }
+                    pageStack.push("FolderPage.qml", {"folder": modelData})
                 }
             }
             onPressAndHold: { menu.playlist = modelData; menu.open(); }
         }
 
-        header: ViewHeader {
-                text: folder.name
+        header: PageHeader {
+                title: folder.name
         }
     }
 
