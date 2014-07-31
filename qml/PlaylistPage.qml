@@ -49,7 +49,8 @@ Page {
     Connections {
         target: spotifySession
         onConnectionStatusChanged: {
-            if (spotifySession.connectionStatus != SpotifySession.LoggedIn) {
+            if (spotifySession.connectionStatus == SpotifySession.LoggedOut ||
+                    spotifySession.connectionStatus == SpotifySession.Undefined) {
                 pageStack.clear();
                 pageStack.push(loginPage);
             }
