@@ -345,19 +345,23 @@ Page {
                     enabled: spotifySession.currentTrack ? true : false
 
                     handleVisible: false
-                    valueText: spotifySession.formatDuration(slider.value)
+                    valueText: value > 3599 ? Format.formatDuration(value, Formatter.DurationLong) :
+                                              Format.formatDuration(value, Formatter.DurationShort)
 
                     label: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
 
                     minimumValue: 0
-                    maximumValue: spotifySession.currentTrack ? spotifySession.currentTrack.durationMs : 0
-                    onReleased: spotifySession.seek(slider.value)
+                    onReleased: spotifySession.seek(slider.value * 1000)
 
                     Connections {
                         target: spotifySession
                         onCurrentTrackPositionChanged: {
                             if (!slider.pressed)
-                                slider.value = spotifySession.currentTrackPosition;
+                                slider.value = spotifySession.currentTrackPosition / 1000;
+                        }
+                        onCurrentTrackChanged: {
+                            if(spotifySession.currentTrack)
+                                slider.maximumValue = spotifySession.currentTrack.durationMs / 1000
                         }
                     }
                 }
