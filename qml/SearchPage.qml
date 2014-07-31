@@ -212,6 +212,9 @@ Page {
         Component {
             id: playlistComponent
             PlaylistDelegate {
+                // TODO probably a diffrent delegate would be nice as the model
+                // item is different.
+
                 title: modelData.name
                 iconSource: "image://theme/icon-m-sounds"
 

@@ -120,7 +120,6 @@ Page {
                           }
                       }
             extraText: modelData.type === SpotifyPlaylist.Folder || !modelData.isLoaded ? "" : spotifySession.formatDuration(modelData.totalDuration)
-            iconSource: modelData.collaborative ? "image://theme/icon-m-music" : staticIcon
             offlineStatus: modelData.offlineStatus
             availableOffline: modelData.availableOffline
             downloadProgress: modelData.offlineDownloadProgress
@@ -135,21 +134,6 @@ Page {
                     pageStack.push(Qt.resolvedUrl("FolderPage.qml"), {"folder": modelData })
             }
             onPressAndHold: { menu.playlist = modelData; menu.open(); }
-
-            property string staticIcon
-
-            function updateIcon() {
-                if (modelData.type === SpotifyPlaylist.Playlist)
-                    staticIcon = "image://theme/icon-m-sounds";
-                else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-favorite-selected";
-                else if (modelData.type === SpotifyPlaylist.Inbox)
-                    staticIcon = "image://theme/icon-m-mail";
-                else if (modelData.type === SpotifyPlaylist.Folder)
-                    staticIcon = "image://theme/icon-m-folder";
-            }
-
-            Component.onCompleted: updateIcon()
         }
 
         //            footer: Item {

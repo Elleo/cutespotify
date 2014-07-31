@@ -92,7 +92,6 @@ Page {
                                   + ((spotifySession.user ? spotifySession.user.ownsPlaylist(modelData) : false) ? "" : " | by " + modelData.owner)
                       }
             extraText: modelData.type === SpotifyPlaylist.Folder ? "" : spotifySession.formatDuration(modelData.totalDuration)
-            iconSource: modelData.collaborative ? "images/icon-m-collaborative-playlist.png" : staticIcon
             offlineStatus: modelData.offlineStatus
             availableOffline: modelData.availableOffline
             downloadProgress: modelData.offlineDownloadProgress
@@ -116,21 +115,6 @@ Page {
                 }
             }
             onPressAndHold: { menu.playlist = modelData; menu.open(); }
-
-            property string staticIcon
-
-            function updateIcon() {
-                if (modelData.type === SpotifyPlaylist.Playlist)
-                    staticIcon = "images/icon-m-music-video-all-songs-white.png";
-                else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-favorite-selected";
-                else if (modelData.type === SpotifyPlaylist.Inbox)
-                    staticIcon = "images/icon-m-toolbar-directory-move-to-white.png";
-                else if (modelData.type === SpotifyPlaylist.Folder)
-                    staticIcon = "images/icon-m-toolbar-directory-white.png";
-            }
-
-            Component.onCompleted: updateIcon()
         }
 
         header: ViewHeader {

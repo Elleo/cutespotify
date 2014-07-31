@@ -49,7 +49,7 @@ BackgroundItem {
     property alias title: mainText.text
     property alias subtitle: subText.text
     property alias extraText: timing.text
-    property string iconSource
+    property string iconSource: modelData.collaborative ? "image://theme/icon-m-music" : staticIcon
     property int offlineStatus: 0
     property bool availableOffline: false
     property int downloadProgress: 0
@@ -210,4 +210,19 @@ BackgroundItem {
             }
         }
     }
+
+    property string staticIcon
+
+    function updateIcon() {
+        if (modelData.type === SpotifyPlaylist.Playlist)
+            staticIcon = "image://theme/icon-m-sounds";
+        else if (modelData.type === SpotifyPlaylist.Starred)
+            staticIcon = "image://theme/icon-m-favorite-selected";
+        else if (modelData.type === SpotifyPlaylist.Inbox)
+            staticIcon = "image://theme/icon-m-mail";
+        else if (modelData.type === SpotifyPlaylist.Folder)
+            staticIcon = "image://theme/icon-m-folder";
+    }
+
+    Component.onCompleted: updateIcon()
 }
