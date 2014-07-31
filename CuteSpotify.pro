@@ -19,7 +19,6 @@ OTHER_FILES += \
     qml/FullControls.qml \
     qml/NotificationBanner.qml \
     qml/SettingsPage.qml \
-    qml/ViewHeader.qml \
     qml/Selector.qml \
     qml/SearchPage.qml \
     qml/SpotifyImage.qml \

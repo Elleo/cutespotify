@@ -113,8 +113,8 @@ Page {
         anchors.top: parent.top
         anchors.topMargin: 60
 
-        ViewHeader {
-            text: "New releases"
+        PageHeader {
+            title: "New releases"
         }
 
         SpotifySearch {

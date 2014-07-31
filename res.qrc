@@ -14,7 +14,6 @@
         <file>qml/FullControls.qml</file>
         <file>qml/NotificationBanner.qml</file>
         <file>qml/SettingsPage.qml</file>
-        <file>qml/ViewHeader.qml</file>
         <file>qml/Selector.qml</file>
         <file>qml/SearchPage.qml</file>
         <file>qml/images/meegotouch-slider-handle-background-horizontal.png</file>
