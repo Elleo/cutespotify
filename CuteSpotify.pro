@@ -39,7 +39,7 @@ OTHER_FILES += \
     qml/ArtistHeader.qml \
     qml/AlbumDelegate.qml \
     qml/ArtistDelegate.qml \
-    qml/AboutDialog.qml \
+    qml/AboutPage.qml \
     qml/MyMenuItemStyle.qml \
     qml/MySheet.qml \
     qml/InboxTrackDelegate.qml \
@@ -48,9 +48,9 @@ OTHER_FILES += \
     qml/MyCommonDialog.qml \
     qml/Scrollbar.qml \
     qml/FolderPage.qml \
-    qml/LicenseDialog.qml \
     rpm/cutespotify.yaml \
     rpm/cutespotify.spec \
     qml/LastFMDialog.qml \
     qml/LogoutDialog.qml \
-    qml/CoverPage.qml
+    qml/CoverPage.qml \
+    qml/LicensePage.qml
