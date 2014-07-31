@@ -137,18 +137,12 @@ Page {
                 text: qsTr("Connectivity")
             }
 
-            // TODO enabling offline mode currently lands to a weird loging page.
-//            TextSwitch {
-//                id: offlineSwitch
-//                checked: spotifySession.offlineMode
-//                text: qsTr("Offline mode")
-//                onClicked: spotifySession.setOfflineMode(checked)
-
-//                Connections {
-//                    target: spotifySession
-//                    onOfflineModeChanged: offlineSwitch.checked = spotifySession.offlineMode
-//                }
-//            }
+            TextSwitch {
+                id: offlineSwitch
+                checked: spotifySession.offlineMode
+                text: qsTr("Offline mode")
+                onClicked: spotifySession.setOfflineMode(checked)
+            }
 
             TextSwitch {
                 id: syncSwitch
