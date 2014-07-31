@@ -180,7 +180,7 @@ Page {
                 name: trackName
                 artistAndAlbum: artists + " | " + album
                 duration: trackDuration
-                highlighted: isCurrentPlayingTrack
+                isPlaying: isCurrentPlayingTrack
                 starred: isStarred
                 available: isAvailable
                 // TODO onClicked: model.play()

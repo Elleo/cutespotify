@@ -281,7 +281,7 @@ Page {
                         //subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
                         artistAndAlbum: artists + " | " + album
                         duration: duration
-                        highlighted: isCurrentPlayingTrack
+                        isPlaying: isCurrentPlayingTrack
                         onClicked: {
                             if (!isCurrentPlayingTrack)
                                 spotifySession.playQueue.selectTrack(index)

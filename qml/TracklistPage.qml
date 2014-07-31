@@ -64,7 +64,7 @@ Page {
                             + " | "
                             + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
             duration: trackDuration
-            highlighted: isCurrentPlayingTrack
+            isPlaying: isCurrentPlayingTrack
             starred: isStarred
             available: isAvailable
             enabled: !spotifySession.offlineMode || available

@@ -51,12 +51,8 @@ BackgroundItem {
     property bool starred: false
     property bool available: true
     property bool showIndex: false
-
-    property color titleColor: Theme.primaryColor
-
-    property color subtitleColor: Theme.secondaryColor
-
     property real backgroundOpacity: 0.0
+    property bool isPlaying: false
 
 
     height: Theme.itemSizeSmall
@@ -121,7 +117,7 @@ BackgroundItem {
                 anchors.left: parent.left
                 anchors.right: iconItem.left
                 anchors.rightMargin: iconItem.visible ? Theme.paddingLarge : 0
-                color: highlighted ? Theme.highlightColor : Theme.primaryColor
+                color: (highlighted || isPlaying) ? Theme.highlightColor : Theme.primaryColor
                 elide: Text.ElideRight
                 clip: true
             }
@@ -150,7 +146,7 @@ BackgroundItem {
                 anchors.rightMargin: Theme.paddingLarge
                 font.pixelSize: Theme.fontSizeSmall
                 font.weight: Font.Light
-                color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 elide: Text.ElideRight
                 clip: true
                 visible: text != ""
@@ -159,7 +155,7 @@ BackgroundItem {
                 id: timing
                 font.weight: Font.Light
                 font.pixelSize: Theme.fontSizeSmall
-                color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 anchors.right: parent.right
                 visible: text != ""
             }

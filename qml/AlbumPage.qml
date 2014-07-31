@@ -127,7 +127,7 @@ Page {
             name: modelData.name
             artistAndAlbum: modelData.artists
             duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
+            isPlaying: modelData.isCurrentPlayingTrack
             starred: modelData.isStarred
             available: modelData.isAvailable
             onClicked: modelData.play()
