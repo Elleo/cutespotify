@@ -6,6 +6,8 @@ QT += \
     qml \
     quick
 
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
 SOURCES += \
     main.cpp
 

@@ -72,7 +72,7 @@ Page {
 
             Label {
                 width: parent.width
-                text: qsTr("Version 1.4.9-1")
+                text: qsTr("Version %1".arg(APP_VERSION))
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
             }

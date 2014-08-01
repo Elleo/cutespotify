@@ -86,6 +86,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     registerQmlTypes();
     view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
+    view->rootContext()->setContextProperty("APP_VERSION", APP_VERSION);
     view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
 
     view->setSource(QUrl("qrc:/qml/main.qml"));
