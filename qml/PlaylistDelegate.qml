@@ -64,13 +64,14 @@ BackgroundItem {
         anchors.rightMargin: Theme.paddingLarge
         spacing: Theme.paddingMedium
 
-        Image {
+        SpotifyImage {
             id: iconImage
             anchors.verticalCenter: parent.verticalCenter
             visible: iconSource !== "" ? true : false
             width: Theme.iconSizeMedium
             height: Theme.iconSizeMedium
-            source: iconSource + (listItem.highlighted ? ("?" + Theme.highlightColor) : "")
+            spotifyId: modelData.hasImageId ? modelData.imageId : ""
+            defaultImage: iconSource + (listItem.highlighted ? ("?" + Theme.highlightColor) : "")
         }
 
         Column {
