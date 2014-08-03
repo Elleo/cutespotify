@@ -69,7 +69,11 @@ Page {
             available: isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
+                if(isCurrentPlayingTrack) {
+                    if(!spotifySession.isPlaying)
+                        spotifySession.resume()
+                } else
+                    tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
             //            onPressAndHold: { menu.track = modelData; menu.open(); }
         }
