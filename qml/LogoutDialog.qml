@@ -5,12 +5,10 @@ import Sailfish.Silica 1.0
 Dialog {
     id: logoutDialog
 
-    onAccepted: {
-        spotifySession.logout(false);
-    }
+    property string userName
 
     DialogHeader {
-        acceptText: qsTr("Log out ") + (spotifySession.user ? spotifySession.user.canonicalName : "")
+        acceptText: qsTr("Log out ") + userName
     }
 
 
@@ -18,6 +16,6 @@ Dialog {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         font.pixelSize: Theme.fontSizeExtraLarge
-        text: qsTr("Log out ") + (spotifySession.user ? spotifySession.user.canonicalName : "") + "?"
+        text: qsTr("Log out ") + userName + "?"
     }
 }

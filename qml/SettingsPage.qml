@@ -60,7 +60,12 @@ Page {
                 text: qsTr("Log out ") + (spotifySession.user ? spotifySession.user.canonicalName : "")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("LogoutDialog.qml"))
+                    var logoutDialog = pageStack.push(
+                                Qt.resolvedUrl("LogoutDialog.qml"),
+                                {"userName": (spotifySession.user ? spotifySession.user.canonicalName : "")})
+                    logoutDialog.accepted.connect(function() {
+                        spotifySession.logout(false)
+                    })
                 }
             }
 
