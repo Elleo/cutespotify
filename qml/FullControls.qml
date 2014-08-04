@@ -51,6 +51,12 @@ Page {
         width: parent.width
         height: parent.height
 
+        opacity: status === PageStatus.Active ? 1 : 0
+
+        Behavior on opacity {
+            FadeAnimation { duration: 500 }
+        }
+
         property bool albumRequested: false
         property bool artistRequested: false
 
