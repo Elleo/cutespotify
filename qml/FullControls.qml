@@ -309,6 +309,8 @@ Page {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.topMargin: Theme.paddingLarge
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: Theme.paddingLarge
                 spacing: Theme.paddingLarge
 
                 Row {
@@ -422,7 +424,7 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         icon.source: "image://theme/icon-m-down"
                         onClicked: {
-                            player.showFullControls = !player.showFullControls
+                            appWindow.showFullControls = !appWindow.showFullControls
                         }
                     }
                 }

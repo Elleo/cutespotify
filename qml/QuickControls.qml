@@ -46,99 +46,94 @@ DockedPanel {
 
     width: parent.width
     height: 150
-    open: !player.hidden
 
     contentHeight: height
     flickableDirection: Flickable.VerticalFlick
 
-    MouseArea {
-        id: opener
-        anchors.fill: parent
-        onClicked: player.showFullControls = !player.showFullControls
-    }
-
-    SpotifyImage {
-        id: cover
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
-        width: controlsFlickable.height
-        height: width
+    onOpenChanged: {
+        if(!open && spotifySession.isPlaying && !appWindow.showFullControls)
+            spotifySession.pause()
     }
 
     Item {
-        id: quickControls
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: cover.right
-        anchors.right: parent.right
-        anchors.rightMargin: Theme.paddingMedium
+        anchors.fill: parent
 
-        Column {
-            id: trackInfo
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge
-            Label {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                truncationMode: TruncationMode.Fade
-                text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
-            }
-            Label {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: Theme.fontSizeSmall
-                truncationMode: TruncationMode.Fade
-                color: Theme.secondaryColor
-                text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
-            }
+        MouseArea {
+            id: opener
+            anchors.fill: parent
+            onClicked: appWindow.showFullControls = !appWindow.showFullControls
         }
 
         Row {
-            id: controls
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge
-            anchors.top: trackInfo.bottom
-            anchors.bottom: parent.bottom
+            id: quickControlsItem
+            width: parent.width
             anchors.right: parent.right
-            spacing: Theme.paddingMedium
+            anchors.rightMargin: Theme.paddingMedium
+            height: parent.height
+            spacing: Theme.paddingLarge
 
-            IconButton {
-                height: quickControls.height * 0.5
-                width: height
-                anchors.verticalCenter: parent.verticalCenter
-                icon.source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("image://theme/icon-m-favorite-selected")
-                                                                                                  : ("image://theme/icon-m-favorite"))
-                                                         : ""
-                enabled: !spotifySession.offlineMode
-                onClicked: spotifySession.currentTrack.isStarred = !spotifySession.currentTrack.isStarred
+            SpotifyImage {
+                id: cover
+                width: controlsFlickable.height
+                height: width
+                spotifyId: spotifySession.currentTrack ? spotifySession.currentTrack.albumCoverId : ""
             }
 
-            IconButton {
-                height: quickControls.height * 0.5
-                width: height
-                anchors.verticalCenter: parent.verticalCenter
-                icon.source: "image://theme/icon-m-previous-song"
-                onClicked: spotifySession.playPrevious()
-            }
+            Column {
+                id: trackInfo
+                width: parent.width - cover.width - Theme.paddingLarge
+                height: parent.height
+                spacing: -Theme.paddingSmall
+                Label {
+                    width: parent.width
+                    truncationMode: TruncationMode.Fade
+                    text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
+                }
+                Label {
+                    width: parent.width
+                    font.pixelSize: Theme.fontSizeSmall
+                    truncationMode: TruncationMode.Fade
+                    color: Theme.secondaryColor
+                    text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
+                }
 
-            IconButton {
-                height: quickControls.height * 0.5
-                width: height
-                anchors.verticalCenter: parent.verticalCenter
-                icon.source: spotifySession.isPlaying ? "image://theme/icon-m-pause"
-                                                      : "image://theme/icon-m-play"
-                onClicked: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
-            }
+                Row {
+                    id: controls
+                    width: parent.width
+                    property real itemWidth: width / 4
 
-            IconButton {
-                height: quickControls.height * 0.5
-                width: height
-                anchors.verticalCenter: parent.verticalCenter
-                icon.source: "image://theme/icon-m-next-song"
-                onClicked: spotifySession.playNext()
+                    IconButton {
+                        width: controls.itemWidth
+                        anchors.verticalCenter: parent.verticalCenter
+                        icon.source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("image://theme/icon-m-favorite-selected")
+                                                                                                          : ("image://theme/icon-m-favorite"))
+                                                                 : ""
+                        enabled: !spotifySession.offlineMode
+                        onClicked: spotifySession.currentTrack.isStarred = !spotifySession.currentTrack.isStarred
+                    }
+
+                    IconButton {
+                        width: controls.itemWidth
+                        anchors.verticalCenter: parent.verticalCenter
+                        icon.source: "image://theme/icon-m-previous-song"
+                        onClicked: spotifySession.playPrevious()
+                    }
+
+                    IconButton {
+                        width: controls.itemWidth
+                        anchors.verticalCenter: parent.verticalCenter
+                        icon.source: spotifySession.isPlaying ? "image://theme/icon-m-pause"
+                                                              : "image://theme/icon-m-play"
+                        onClicked: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
+                    }
+
+                    IconButton {
+                        width: controls.itemWidth
+                        anchors.verticalCenter: parent.verticalCenter
+                        icon.source: "image://theme/icon-m-next-song"
+                        onClicked: spotifySession.playNext()
+                    }
+                }
             }
         }
     }

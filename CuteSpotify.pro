@@ -14,7 +14,6 @@ OTHER_FILES += \
     qml/TracklistPage.qml \
     qml/PlaylistDelegate.qml \
     qml/TrackDelegate.qml \
-    qml/Player.qml \
     qml/QuickControls.qml \
     qml/FullControls.qml \
     qml/NotificationBanner.qml \

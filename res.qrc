@@ -7,7 +7,6 @@
         <file>qml/TracklistPage.qml</file>
         <file>qml/PlaylistDelegate.qml</file>
         <file>qml/TrackDelegate.qml</file>
-        <file>qml/Player.qml</file>
         <file>qml/QuickControls.qml</file>
         <file>qml/images/player-quickcontrols-back-open.png</file>
         <file>qml/images/player-quickcontrols-back-closed.png</file>

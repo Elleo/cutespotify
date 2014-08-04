@@ -45,9 +45,21 @@ import QtSpotify 1.0
 ApplicationWindow {
     id: appWindow
 
-    bottomMargin: player.hidden || player.showFullControls ? 0 : player.quickControlHeight
+    bottomMargin: quickControls.visibleSize
 
     cover: Qt.resolvedUrl("CoverPage.qml")
+
+    property bool showFullControls: false
+    onShowFullControlsChanged: {
+        if(showFullControls) {
+            quickControls.open = false
+            pageStack.push(fullControls, undefined, PageStackAction.Immediate)
+        } else {
+            pageStack.pop(undefined, PageStackAction.Immediate)
+            if(spotifySession.currentTrack && !quickControls.open)
+                quickControls.open = true
+        }
+    }
 
     Rectangle {
         id: errorRect
@@ -95,9 +107,20 @@ ApplicationWindow {
         }
     }
 
-    Player {
-        id: player
-        hidden: spotifySession.currentTrack ? false : true
+    Connections {
+        target: spotifySession
+        onIsPlayingChanged: {
+            if(spotifySession.isPlaying && !quickControls.open && !showFullControls)
+                quickControls.open = true;
+        }
+    }
+
+    QuickControls {
+        id: quickControls
+    }
+
+    FullControls {
+        id: fullControls
     }
 
     Component {
