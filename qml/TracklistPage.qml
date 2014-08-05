@@ -157,9 +157,6 @@ Page {
         id: tracks
         anchors.fill: parent
 
-        property bool showSearchField: atYBeginning
-        property bool _movementFromBeginning: false
-
         Component.onCompleted: tracks.positionViewAtBeginning();
 
         VerticalScrollDecorator {}
