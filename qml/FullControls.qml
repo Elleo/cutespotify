@@ -181,7 +181,7 @@ Page {
                     anchors.bottom: parent.bottom
                     width: parent.width
                     height: detailsColumn.height + Theme.paddingLarge
-                    color: Theme.secondaryHighlightColor
+                    color: Qt.darker(Theme.secondaryHighlightColor, 2)
                     opacity: moreMouseArea.pressed ? Theme.highlightBackgroundOpacity : 0.9
 
                     Column {
