@@ -82,19 +82,23 @@ Page {
     Component {
         id: inboxDelegate
         InboxTrackDelegate {
-            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
             name: searchField.text.length > 0 ? Theme.highlightText(tackName, searchField.text, Theme.highlightColor) : trackName
+            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
                                                 + " | "
                                                 + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
             creatorAndDate: (searchField.text.length > 0 ? Theme.highlightText(creator, searchField.text, Theme.highlightColor) : creator)
                             + " | " + Qt.formatDateTime(creationDate)
             duration: tackDuration
-            highlighted: isCurrentPlayingTrack
+            isPlaying: isCurrentPlayingTrack
             starred: isStarred
             available: isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
+                if(isCurrentPlayingTrack) {
+                    if(!spotifySession.isPlaying)
+                        spotifySession.resume()
+                } else
+                    tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
             seen: model.seen
             //            onPressAndHold: { menu.track = modelData; menu.open(); }

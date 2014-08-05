@@ -43,130 +43,62 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "UIConstants.js" as UI
 
-Item {
+BackgroundItem {
     id: listItem
 
-    signal clicked
-    signal pressAndHold
-    property alias pressed: mouseArea.pressed
     property alias name: mainText.text
     property alias artistAndAlbum: subText.text
     property alias creatorAndDate: thirdText.text
     property alias duration: timing.text
-    property bool highlighted: false
     property bool starred: false
     property bool available: true
     property bool seen: true
-    property bool pressAndHoldEnabled: true
+    property bool isPlaying: false
 
-    property color highlightColor: UI.SPOTIFY_COLOR
-
-    property int titleSize: UI.LIST_TILE_SIZE
-    property string titleFont: UI.FONT_FAMILY_BOLD
-    property color titleColor: Theme.primaryColor
-
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
-    property string subtitleFont: UI.FONT_FAMILY_LIGHT
-    property color subtitleColor: Theme.secondaryColor
-
-    property real backgroundOpacity: 0.0
-
-    property real defaultHeight: UI.LIST_ITEM_HEIGHT + thirdText.height
-
-    height: defaultHeight
+    height: Theme.itemSizeMedium
     width: parent.width
-
-    SequentialAnimation {
-        id: backAnimation
-        property bool animEnded: false
-        running: mouseArea.pressed && listItem.pressAndHoldEnabled
-
-        ScriptAction { script: backAnimation.animEnded = false }
-        PauseAnimation { duration: 200 }
-        ParallelAnimation {
-            NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: subText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: thirdText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: seenMarker; property: "color"; to: "black"; duration: 300 }
-            NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
-        }
-        PauseAnimation { duration: 100 }
-        ScriptAction { script: { backAnimation.animEnded = true; listItem.pressAndHold(); } }
-        onRunningChanged: {
-            if (!running) {
-                iconItem.opacity = 1.0
-                mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
-                subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-                thirdText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-                timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-                seenMarker.color = UI.SPOTIFY_COLOR
-            }
-        }
-    }
-
-    onHighlightedChanged: {
-        mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
-        subText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-        timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-        thirdText.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-    }
-
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        opacity: mouseArea.pressed ? 1.0 : backgroundOpacity
-        color: "#15000000"
-    }
 
     Rectangle {
         id: seenMarker
         visible: !listItem.seen
         anchors.verticalCenter: parent.verticalCenter
-        height: listItem.height - UI.MARGIN_XLARGE - 8
-        width: 6
-        color: UI.SPOTIFY_COLOR
+        height: listItem.height
+        width: Theme.paddingMedium
+        color: Theme.highlightColor
         anchors.left: parent.left
-        anchors.leftMargin: -UI.MARGIN_XLARGE / 2 - width / 2 - 1
     }
 
     Column {
         anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
+        spacing: -Theme.paddingSmall
         opacity: listItem.available ? 1.0 : 0.3
 
         Item {
             height: mainText.height
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.rightMargin: Theme.paddingLarge
+
             Label {
                 id: mainText
-                height: 34
                 anchors.left: parent.left
                 anchors.right: iconItem.left
-                anchors.rightMargin: UI.MARGIN_XLARGE
-                font.family: listItem.titleFont
-                font.weight: Font.Bold
-                font.pixelSize: listItem.titleSize
-                color: highlighted ? listItem.highlightColor : listItem.titleColor
+                anchors.rightMargin: iconItem.visible ? Theme.paddinLarge : 0
+                color: (highlighted || isPlaying) ? Theme.highlightColor : Theme.primaryColor
                 elide: Text.ElideRight
                 clip: true
-                Behavior on color { ColorAnimation { duration: 200 } }
             }
             Image {
                 id: iconItem
                 anchors.right: parent.right
                 anchors.bottom: mainText.bottom
                 anchors.bottomMargin: 2
-                width: 34; height: width
+                width: Theme.iconSizeSmall; height: width
                 smooth: true
                 visible: listItem.starred
-                source: "image://theme/icon-m-favorite-selected"
+                source: "image://theme/icon-m-favorite-selected" + (highlighted ? "?" + Theme.highlightColor : "")
             }
         }
 
@@ -176,28 +108,23 @@ Item {
             anchors.right: parent.right
             Label {
                 id: subText
-                height: 29
                 anchors.left: parent.left
                 anchors.right: timing.left
-                anchors.rightMargin: UI.MARGIN_XLARGE
-                font.family: listItem.subtitleFont
-                font.pixelSize: listItem.subtitleSize
+                anchors.rightMargin: Theme.paddinLarge
+                font.pixelSize: Theme.fontSizeSmall
                 font.weight: Font.Light
-                color: highlighted ? listItem.highlightColor : listItem.subtitleColor
+                color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 elide: Text.ElideRight
                 clip: true
                 visible: text != ""
-                Behavior on color { ColorAnimation { duration: 200 } }
             }
             Label {
                 id: timing
-                font.family: listItem.subtitleFont
                 font.weight: Font.Light
-                font.pixelSize: listItem.subtitleSize
-                color: highlighted ? listItem.highlightColor : listItem.subtitleColor
+                font.pixelSize: Theme.fontSizeSmall
+                color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 anchors.right: parent.right
                 visible: text != ""
-                Behavior on color { ColorAnimation { duration: 200 } }
             }
         }
 
@@ -205,23 +132,11 @@ Item {
             id: thirdText
             anchors.left: parent.left
             anchors.right: parent.right
-            height: 30
             verticalAlignment: Text.AlignBottom
-            font.family: listItem.subtitleFont
-            font.pixelSize: UI.FONT_SMALL
+            font.pixelSize: Theme.fontSizeSmall
             font.weight: Font.Light
-            color: highlighted ? listItem.highlightColor : listItem.subtitleColor
+            color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
             elide: Text.ElideRight
-            Behavior on color { ColorAnimation { duration: 200 } }
-        }
-    }
-
-    MouseArea {
-        id: mouseArea;
-        anchors.fill: parent
-        onClicked: {
-            if (!backAnimation.animEnded)
-                listItem.clicked();
         }
     }
 }
