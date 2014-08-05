@@ -181,8 +181,8 @@ Page {
                     anchors.bottom: parent.bottom
                     width: parent.width
                     height: detailsColumn.height + Theme.paddingLarge
-                    color: (moreMouseArea.pressed ? Theme.highlightColor: Theme.secondaryHighlightColor)
-                    opacity: 0.6
+                    color: Theme.secondaryHighlightColor
+                    opacity: moreMouseArea.pressed ? Theme.highlightBackgroundOpacity : 0.9
 
                     Column {
                         id: detailsColumn
@@ -191,11 +191,11 @@ Page {
                         anchors.right: parent.right
                         anchors.rightMargin: Theme.paddingLarge
                         anchors.verticalCenter: parent.verticalCenter
-                        spacing: 8
+                        spacing: Theme.paddingSmall
 
                         Label {
                             width: parent.width
-                            elide: Text.ElideRight
+                            truncationMode: TruncationMode.Fade
                             opacity: details.opacity
                             text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
                         }
@@ -204,7 +204,7 @@ Page {
                             id: details
                             width: parent.width
                             height: column.height
-                            opacity: moreMouseArea.pressed ? 0.4 : 1.0
+                            opacity: moreMouseArea.pressed ? Theme.highlightBackgroundOpacity : 1.0
                             Column {
                                 id: column
                                 anchors.verticalCenter: parent.verticalCenter
@@ -229,6 +229,7 @@ Page {
                                     text: spotifySession.currentTrack ? spotifySession.currentTrack.album : ""
                                 }
                             }
+
                             Image {
                                 id: moreIcon
                                 anchors.right: parent.right
@@ -236,14 +237,15 @@ Page {
                                 source: "image://theme/icon-m-about"
                                 visible: !spotifySession.offlineMode
                             }
-                            MouseArea {
-                                // TODO
-                                id: moreMouseArea
-                                anchors.fill: parent
-                                onClicked: { infoDialog.selectedIndex = -1; infoDialog.open(); }
-                                enabled: moreIcon.visible
-                            }
                         }
+                    }
+
+                    MouseArea {
+                        // TODO
+                        id: moreMouseArea
+                        anchors.fill: parent
+                        onClicked: { infoDialog.selectedIndex = -1; infoDialog.open(); }
+                        enabled: moreIcon.visible
                     }
                 }
             }
@@ -333,8 +335,8 @@ Page {
                     IconButton {
                         width: controls.itemWidth
                         anchors.verticalCenter: parent.verticalCenter
-                        icon.source: spotifySession.isPlaying ? "image://theme/icon-m-pause"
-                                                              : "image://theme/icon-m-play"
+                        icon.source: spotifySession.isPlaying ? "image://theme/icon-l-pause"
+                                                              : "image://theme/icon-l-play"
                         onClicked: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
                     }
 
