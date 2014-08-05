@@ -129,6 +129,7 @@ Page {
                     playlist.availableOffline = !playlist.availableOffline;
                 }
             }
+            busy: playlist.offlineStatus === SpotifyPlaylist.Downloading
             checked: playlist.availableOffline
             Component.onCompleted: {
                 completed = true;
