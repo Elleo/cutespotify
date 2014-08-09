@@ -55,7 +55,7 @@ ApplicationWindow {
             quickControls.open = false
             pageStack.push(fullControls, undefined, PageStackAction.Immediate)
         } else {
-            pageStack.pop(undefined, PageStackAction.Immediate)
+            pageStack.pop()
             if(spotifySession.currentTrack && !quickControls.open)
                 quickControls.open = true
         }
