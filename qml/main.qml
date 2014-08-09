@@ -84,43 +84,6 @@ ApplicationWindow {
         }
     }
 
-    Connections {
-        target: spotifySession
-        onConnectionErrorChanged: {
-            if (spotifySession.connectionError != SpotifySession.Ok) {
-                errorBanner.text = spotifySession.connectionErrorMessage;
-                errorRect.visible = true;
-                errorRectFadeOut.stop();
-                errorRectFadeOut.start();
-                console.log(spotifySession.connectionErrorMessage);
-            }
-        }
-    }
-
-    Connections {
-        target: spotifySession
-        onLfmLoginError: {
-            errorBanner.text = "Last.fm login failed, please check username and password";
-            errorRect.visible = true;
-            errorRectFadeOut.stop();
-            errorRectFadeOut.start();
-        }
-    }
-
-    Connections {
-        target: spotifySession
-        onIsPlayingChanged: {
-            if(spotifySession.isPlaying && !quickControls.open && !showFullControls)
-                quickControls.open = true;
-        }
-        onCurrentTrackChanged: {
-            if(!spotifySession.currentTrack) {
-                showFullControls = false;
-                quickControls.open = false;
-            }
-        }
-    }
-
     QuickControls {
         id: quickControls
     }
@@ -168,6 +131,31 @@ ApplicationWindow {
             } else if (spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
                 pageStack.clear()
                 pageStack.push(loginPage)
+            }
+        }
+        onConnectionErrorChanged: {
+            if (spotifySession.connectionError != SpotifySession.Ok) {
+                errorBanner.text = spotifySession.connectionErrorMessage;
+                errorRect.visible = true;
+                errorRectFadeOut.stop();
+                errorRectFadeOut.start();
+                console.log(spotifySession.connectionErrorMessage);
+            }
+        }
+        onLfmLoginError: {
+            errorBanner.text = "Last.fm login failed, please check username and password";
+            errorRect.visible = true;
+            errorRectFadeOut.stop();
+            errorRectFadeOut.start();
+        }
+        onIsPlayingChanged: {
+            if(spotifySession.isPlaying && !quickControls.open && !showFullControls)
+                quickControls.open = true;
+        }
+        onCurrentTrackChanged: {
+            if(!spotifySession.currentTrack) {
+                showFullControls = false;
+                quickControls.open = false;
             }
         }
     }
