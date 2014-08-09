@@ -78,5 +78,6 @@
         <file>qml/LastFMDialog.qml</file>
         <file>qml/LogoutDialog.qml</file>
         <file>qml/CoverPage.qml</file>
+        <file>qml/images/icon-m-repeat-once.png</file>
     </qresource>
 </RCC>

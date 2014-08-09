@@ -51,6 +51,8 @@
 #include "../libQtSpotify/QtSpotify"
 #include "../libQtSpotify/qspotify_qmlplugin.h"
 
+#include "customiconprovider.h"
+
 using namespace std;
 
 void silentDebug(QtMsgType type, const QMessageLogContext& context, const QString &msg)
@@ -88,6 +90,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
     view->rootContext()->setContextProperty("APP_VERSION", APP_VERSION);
     view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
+    view->engine()->addImageProvider(QLatin1String("icon"), new CustomIconProvider);
 
     view->setSource(QUrl("qrc:/qml/main.qml"));
     view->setResizeMode(QQuickView::SizeRootObjectToView);

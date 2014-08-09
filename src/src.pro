@@ -9,7 +9,8 @@ QT += \
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    customiconprovider.cpp
 
 RESOURCES += \
     ../res.qrc
@@ -37,3 +38,6 @@ target.path = $$PREFIX/bin
 INSTALLS += target desktop lib icon qtpulse
 
 include(../libQtSpotify/libQtSpotify.pri)
+
+HEADERS += \
+    customiconprovider.h

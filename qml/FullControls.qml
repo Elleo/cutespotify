@@ -414,11 +414,11 @@ Page {
                         width: moreControls.itemWidth
                         anchors.verticalCenter: parent.verticalCenter
                         icon.source: spotifySession.repeat ? "image://theme/icon-m-repeat?" + Theme.highlightColor
-                                                             /* TODO : spotifySession.repeatOne ? "images/icon-m-toolbar-repeat-one-white-selected.png" */: ("image://theme/icon-m-repeat")
+                                                              : spotifySession.repeatOne ? "image://icon/icon-m-repeat-once?" + Theme.highlightColor : ("image://theme/icon-m-repeat")
                         onClicked: {
                             if (spotifySession.repeat) {
                                 spotifySession.repeat = false;
-                                // TODO spotifySession.repeatOne = true;
+                                spotifySession.repeatOne = true;
                             } else if (spotifySession.repeatOne) {
                                 spotifySession.repeatOne = false;
                             } else {
