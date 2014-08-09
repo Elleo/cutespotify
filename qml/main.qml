@@ -113,6 +113,12 @@ ApplicationWindow {
             if(spotifySession.isPlaying && !quickControls.open && !showFullControls)
                 quickControls.open = true;
         }
+        onCurrentTrackChanged: {
+            if(!spotifySession.currentTrack) {
+                showFullControls = false;
+                quickControls.open = false;
+            }
+        }
     }
 
     QuickControls {
