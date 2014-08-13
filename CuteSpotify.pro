@@ -52,4 +52,5 @@ OTHER_FILES += \
     qml/LastFMDialog.qml \
     qml/LogoutDialog.qml \
     qml/CoverPage.qml \
-    qml/LicensePage.qml
+    qml/LicensePage.qml \
+    qml/SeeMoreItem.qml
