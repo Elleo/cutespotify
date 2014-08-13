@@ -80,5 +80,6 @@
         <file>qml/CoverPage.qml</file>
         <file>qml/images/icon-m-repeat-once.png</file>
         <file>qml/SeeMoreItem.qml</file>
+        <file>qml/SearchListPage.qml</file>
     </qresource>
 </RCC>

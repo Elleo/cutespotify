@@ -53,4 +53,5 @@ OTHER_FILES += \
     qml/LogoutDialog.qml \
     qml/CoverPage.qml \
     qml/LicensePage.qml \
-    qml/SeeMoreItem.qml
+    qml/SeeMoreItem.qml \
+    qml/SearchListPage.qml
