@@ -47,17 +47,11 @@ import "UIConstants.js" as UI
 Page {
     id: artistPage
 
-    property variant artist
+    property string artistName
+    property string artistPicId
+    property variant browse
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
-
-    Component.onCompleted: {
-        browse.artist = artist
-    }
-
-    SpotifyArtistBrowse {
-        id: browse
-    }
 
 /*    TrackMenu {
         id: menu
@@ -86,7 +80,7 @@ Page {
             font.weight: Font.Bold
             font.pixelSize: UI.LIST_TILE_SIZE
             color: Theme.primaryColor
-            text: artist ? artist.name : ""
+            text: artistName
         }
 
         ComboBox {
@@ -189,7 +183,7 @@ Page {
                     singleCount: browse.singleCount > 0 ? (browse.singleCount + (browse.singleCount > 1 ? " singles" : " single")) : ""
                     compilationCount: browse.compilationCount > 0 ? (browse.compilationCount + (browse.compilationCount > 1 ? " compilations" : " compilation")) : ""
                     appearsOnCount: browse.appearsOnCount > 0 ? ("Appears on " + browse.appearsOnCount + (browse.appearsOnCount > 1 ? " other albums" : " other album")) : ""
-                    artistPictureId: artist.pictureId.length > 0 ? artist.pictureId : browse.pictureId
+                    artistPictureId: artistPicId.length > 0 ? artistPicId : browse.pictureId
                     busy: browse.busy
                 }
             }

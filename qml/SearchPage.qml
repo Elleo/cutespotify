@@ -44,6 +44,7 @@ Page {
 
             Repeater {
                 id: tracksView
+                width: parent.width
                 model: search.trackResultsPreview()
                 delegate: TrackDelegate {
                     name: trackName
@@ -69,11 +70,18 @@ Page {
 
             Repeater {
                 id: artistsView
-                model: search.artistsPreview
+                width: parent.width
+                property variant modelVar: search.artistsPreview()
+                model: modelVar
                 delegate: ArtistDelegate {
-                    name: modelData.name
-                    portrait: modelData.pictureId
-                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    name: model.name
+                    portrait: model.pictureId
+                    onClicked: {
+                        pageStack.push(Qt.resolvedUrl("ArtistPage.qml"),
+                                       { "browse": artistsView.modelVar.artistBrowse(index),
+                                           "artistName": model.name,
+                                           "artistPicId": model.pictureId})
+                    }
                 }
             }
 
@@ -89,12 +97,17 @@ Page {
 
             Repeater {
                 id: albumsView
-                model: search.albumsPreview
+                property variant modelVar: search.albumsPreview()
+                width: parent.width
+                model: modelVar
                 delegate: AlbumDelegate {
-                    name: modelData.name
-                    artist: modelData.artist
-                    albumCover: modelData.coverId
-                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                    name: model.name
+                    artist: model.artist
+                    albumCover: model.coverId
+                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"),
+                                                { "browse": albumsView.modelVar.albumBrowse(index),
+                                                    "name": name, "coverId": model.coverId,
+                                                    "artist": artist, "albumYear": model.year}) }
                     onPressAndHold: {
 //                        menuAlbumBrowse.album = modelData;
 //                        if (menuAlbumBrowse.totalDuration > 0)
@@ -115,17 +128,18 @@ Page {
 
             Repeater {
                 id: playlistsView
-                model: search.playlistsPreview
+                width: parent.width
+                model: search.playlistsPreview()
                 delegate: PlaylistDelegate {
                     // TODO probably a diffrent delegate would be nice as the model
                     // item is different.
 
-                    title: modelData.name
+                    title: model.name
                     iconSource: "image://theme/icon-m-sounds"
 
                     onClicked: {
                         console.log("qml: Loading playlist")
-                        pageStack.push(Qt.resolvedUrl("TracklistPage.qml"), { playlist: modelData.playlist });
+                        // TODO either adapt tracklist page or make a new page pageStack.push(Qt.resolvedUrl("TracklistPage.qml"), { playlist: modelData.playlist });
                     }
                 }
             }

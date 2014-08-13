@@ -47,19 +47,15 @@ import "UIConstants.js" as UI
 Page {
     id: albumPage
 
-    property variant album
+    property string name
+    property string coverId
+    property string artist
+    property string albumYear
+    property variant browse
+    property int trackCount: browse ? browse.tracks.length : 0
+
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
-
-    Component.onCompleted: {
-        browse.album = album
-    }
-
-    SpotifyAlbumBrowse {
-        id: browse
-
-        property int trackCount: browse.tracks.length;
-    }
 
 /*    TrackMenu {
         id: menu
@@ -85,7 +81,7 @@ Page {
             font.weight: Font.Bold
             font.pixelSize: UI.LIST_TILE_SIZE
             color: Theme.primaryColor
-            text: album ? album.name : ""
+            text: name
         }
 
 
@@ -165,11 +161,11 @@ Page {
             cacheBuffer: 3000
             model: browse.tracks
             header: AlbumHeader {
-                artistName: album ? album.artist : ""
-                trackCount: browse.trackCount > 0 ? (browse.trackCount + (browse.trackCount > 1 ? " songs" : " song")) : ""
+                artistName: artist
+                trackCount: albumPage.trackCount > 0 ? (albumPage.trackCount + (albumPage.trackCount > 1 ? " songs" : " song")) : ""
                 timing: browse.totalDuration > 0 ? spotifySession.formatDuration(browse.totalDuration) : ""
-                year: browse.trackCount > 0 && album.year > 0 ? album.year : ""
-                coverId: album.coverId
+                year: albumPage.trackCount > 0 && albumYear > 0 ? albumYear : ""
+                coverId: albumPage.coverId
                 onMoreClicked: { albumMenu.albumBrowse = browse; albumMenu.open() }
             }
 
