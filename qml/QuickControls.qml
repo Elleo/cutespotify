@@ -45,10 +45,13 @@ DockedPanel {
     id: controlsFlickable
 
     width: parent.width
-    height: 150
+    height: width * 0.3
 
     contentHeight: height
     flickableDirection: Flickable.VerticalFlick
+
+    opacity: Qt.inputMethod.visible ? 0.0 : 1.0
+    Behavior on opacity { FadeAnimation {}}
 
     onOpenChanged: {
         if(!open && spotifySession.isPlaying && !appWindow.showFullControls)
