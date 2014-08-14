@@ -81,5 +81,6 @@
         <file>qml/images/icon-m-repeat-once.png</file>
         <file>qml/SeeMoreItem.qml</file>
         <file>qml/SearchListPage.qml</file>
+        <file>qml/PlaylistSearchDelegate.qml</file>
     </qresource>
 </RCC>

@@ -138,7 +138,7 @@ Page {
                 id: playlistsView
                 width: parent.width
                 model: search.playlistsPreview()
-                delegate: playlistDelegate
+                delegate: PlaylistSearchDelegate { listModel: search.playlistsPreview() }
             }
 
             SeeMoreItem {
@@ -151,21 +151,12 @@ Page {
                                        "listModel": search.playlists(),
                                        "listDelegate": playlistDelegate})
                 }
-            }
-        }
 
-        Component {
-            id: playlistDelegate
-            PlaylistDelegate {
-                // TODO probably a diffrent delegate would be nice as the model
-                // item is different.
-
-                title: model.name
-                iconSource: "image://theme/icon-m-sounds"
-
-                onClicked: {
-                    console.log("qml: Loading playlist")
-                    // TODO either adapt tracklist page or make a new page pageStack.push(Qt.resolvedUrl("TracklistPage.qml"), { playlist: modelData.playlist });
+                Component {
+                    id: playlistDelegate
+                    PlaylistSearchDelegate {
+                        listModel: search.playlists()
+                    }
                 }
             }
         }

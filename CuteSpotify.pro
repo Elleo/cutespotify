@@ -54,4 +54,5 @@ OTHER_FILES += \
     qml/CoverPage.qml \
     qml/LicensePage.qml \
     qml/SeeMoreItem.qml \
-    qml/SearchListPage.qml
+    qml/SearchListPage.qml \
+    qml/PlaylistSearchDelegate.qml
