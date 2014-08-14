@@ -41,9 +41,8 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UIConstants.js" as UI
 
-Column {
+Row {
     id: albumHeader
     property alias albumCount: albumCountText.text
     property alias singleCount: singleCountText.text
@@ -53,74 +52,53 @@ Column {
 
     property bool busy: false
 
-    width: parent ? parent.width : 0
-    spacing: UI.MARGIN_XLARGE
+    width: parent.width
+    height: width * 0.3
+    spacing: Theme.paddingLarge
+    anchors.left: parent.left
+    anchors.leftMargin: Theme.paddingLarge
 
-    Item {
-        id: descContainer
-        width: parent.width
-        height: 160
-
-        Rectangle {
-            id: cover
-            height: parent.height
-            width: height
-            anchors.left: parent.left
-            color: "#C9C9C9"
-            visible: albumCount.length > 0 || singleCount.length > 0 || compilationCount.length > 0
-            SpotifyImage {
-                id: coverImage
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectCrop
-                defaultImage: "images/icon-l-contact-avatar-placeholder-black-big.png"
-                clip: true
-            }
-        }
-
-        Column {
-            id: desc
-            anchors.left: cover.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            anchors.right: parent.right
-
-            Label {
-                id: albumCountText
-                width: parent.width
-                font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
-                elide: Text.ElideRight
-                visible: text.length > 0
-            }
-            Label {
-                id: singleCountText
-                width: parent.width
-                font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
-                elide: Text.ElideRight
-                visible: text.length > 0
-            }
-            Label {
-                id: compilationsText
-                width: parent.width
-                font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
-                elide: Text.ElideRight
-                visible: text.length > 0
-            }
-            Label {
-                id: appearsOnText
-                width: parent.width
-                font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
-                elide: Text.ElideRight
-                visible: text.length > 0
-            }
-        }
+    SpotifyImage {
+        id: coverImage
+        height: parent.height - 2 * Theme.paddingLarge
+        width: height
+        fillMode: Image.PreserveAspectCrop
+        defaultImage: "image://theme/icon-m-person"
+        clip: true
+        visible: albumCount.length > 0 || singleCount.length > 0 || compilationCount.length > 0
     }
 
-    Item {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 1
+    Column {
+        id: desc
+        width: parent.width - coverImage.width - Theme.paddingLarge
+
+        Label {
+            id: albumCountText
+            width: parent.width
+            font.pixelSize: Theme.fontSizeSmall
+            truncationMode: TruncationMode.Fade
+            visible: text.length > 0
+        }
+        Label {
+            id: singleCountText
+            width: parent.width
+            font.pixelSize: Theme.fontSizeSmall
+            truncationMode: TruncationMode.Fade
+            visible: text.length > 0
+        }
+        Label {
+            id: compilationsText
+            width: parent.width
+            font.pixelSize: Theme.fontSizeSmall
+            truncationMode: TruncationMode.Fade
+            visible: text.length > 0
+        }
+        Label {
+            id: appearsOnText
+            width: parent.width
+            font.pixelSize: Theme.fontSizeSmall
+            truncationMode: TruncationMode.Fade
+            visible: text.length > 0
+        }
     }
 }
