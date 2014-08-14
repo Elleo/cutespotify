@@ -47,7 +47,7 @@ Page {
                 id: tracksView
                 width: parent.width
                 model: search.trackResultsPreview()
-                delegate: trackDelegate
+                delegate: TrackDelegate { listModel: search.trackResultsPreview()}
             }
 
             SeeMoreItem {
@@ -59,6 +59,13 @@ Page {
                                    {"pageTitle": qsTr("Tracks for \"") + search.query + ("\""),
                                        "listModel": search.trackResults(),
                                        "listDelegate": trackDelegate})
+                }
+
+                Component {
+                    id: trackDelegate
+                    TrackDelegate {
+                        listModel: search.trackResults()
+                    }
                 }
             }
 
@@ -144,27 +151,6 @@ Page {
                                        "listModel": search.playlists(),
                                        "listDelegate": playlistDelegate})
                 }
-            }
-        }
-
-        Component {
-            id: trackDelegate
-            TrackDelegate {
-                id: trackDel
-                name: trackName
-                artistAndAlbum: artists + " | " + album
-                duration: trackDuration
-                isPlaying: isCurrentPlayingTrack
-                starred: isStarred
-                available: isAvailable
-                onClicked: {
-                    if(isCurrentPlayingTrack) {
-                        if(!spotifySession.isPlaying)
-                            spotifySession.resume()
-                    } else
-                        trackDel.Repeater.view.model.playTrack(index)
-                }
-                //                onPressAndHold: { menu.track = modelData; menu.open(); }
             }
         }
 

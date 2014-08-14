@@ -40,67 +40,66 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import QtSpotify 1.0
 
 BackgroundItem {
     id: listItem
 
-    property alias name: mainText.text
-    property alias artistAndAlbum: subText.text
-    property alias duration: timing.text
+    property variant listModel
+    property string name: model.trackName
+    property string artistAndAlbum: model.artists + " | " + model.album
+    property string duration: model.trackDuration
     property string coverId: ""
-    property bool starred: false
-    property bool available: true
+    property bool starred: model.isStarred
+    property bool available: model.isAvailable
     property bool showIndex: false
-    property real backgroundOpacity: 0.0
-    property bool isPlaying: false
+    property bool isPlaying: model.isCurrentPlayingTrack
+
+    onClicked: {
+        if(isPlaying) {
+            if(!spotifySession.isPlaying)
+                spotifySession.resume()
+        } else
+            listModel.playTrack(index)
+    }
 
 
     height: Theme.itemSizeSmall
     width: parent.width
 
-    Loader {
+    Label {
         id: indexText
         anchors.left: parent.left
+        anchors.leftMargin: visible ? Theme.paddingSmall : 0
         anchors.verticalCenter: parent.verticalCenter
-        width: listItem.showIndex ? 48 : 0
-        sourceComponent: listItem.showIndex ? indexTextComponent : null
+        width: listItem.showIndex ? Theme.iconSizeMedium * 0.75 : 0
+        text: (index + 1) + "."
+        font.pixelSize: Theme.fontSizeSmall
+        horizontalAlignment: Text.AlignRight
+        color: isPlaying ? Theme.highlightColor : Theme.primaryColor
+        visible: listItem.showIndex
     }
 
-    Component {
-        id: indexTextComponent
-        Label {
-            text: (index + 1) + ". "
-            font.pixelSize: Theme.fontSizeSmall
-            horizontalAlignment: Text.AlignRight
-            visible: listItem.showIndex
-        }
-    }
-
-    Loader {
+    Rectangle {
         id: coverContainer
-        width: listItem.coverId.length > 0 ? 64 : 0; height: width
+        width: listItem.coverId.length > 0 ? Theme.iconSizeMedium : 0; height: width
         anchors.left: indexText.right
+        anchors.leftMargin: indexText.visible ? Theme.paddingSmall : (visible ? Theme.paddingLarge : 0)
         anchors.verticalCenter: parent.verticalCenter
-        sourceComponent: listItem.coverId.length > 0 ? coverContainerComponent : null
-    }
+        color: Theme.secondaryColor
+        opacity: listItem.available ? 1.0 : 0.3
+        visible: listItem.coverId.length > 0
 
-    Component {
-        id: coverContainerComponent
-        Rectangle {
-            color: Theme.secondaryColor //"#C9C9C9"
-            opacity: listItem.available ? 1.0 : 0.2
-
-            SpotifyImage {
-                id: coverImage
-                anchors.fill: parent
-                spotifyId: listItem.coverId
-            }
+        SpotifyImage {
+            id: coverImage
+            anchors.fill: parent
+            spotifyId: listItem.coverId
         }
     }
 
     Column {
         anchors.left: coverContainer.right
-        anchors.leftMargin: listItem.coverId.length > 0 ? Theme.paddingLarge : 0
+        anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         opacity: listItem.available ? 1.0 : 0.3
@@ -109,16 +108,16 @@ BackgroundItem {
             height: mainText.height
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: listItem.coverId.length > 0 ? 0 : Theme.paddingLarge
             anchors.rightMargin: Theme.paddingLarge
 
             Label {
                 id: mainText
+                text: listItem.name
                 anchors.left: parent.left
                 anchors.right: iconItem.left
                 anchors.rightMargin: iconItem.visible ? Theme.paddingLarge : 0
                 color: (highlighted || isPlaying) ? Theme.highlightColor : Theme.primaryColor
-                elide: Text.ElideRight
+                truncationMode: TruncationMode.Fade
                 clip: true
             }
             Image {
@@ -137,23 +136,22 @@ BackgroundItem {
             height: subText.height
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: listItem.coverId.length > 0 ? 0 : Theme.paddingLarge
             anchors.rightMargin: Theme.paddingLarge
             Label {
                 id: subText
+                text: listItem.artistAndAlbum
                 anchors.left: parent.left
                 anchors.right: timing.left
                 anchors.rightMargin: Theme.paddingLarge
                 font.pixelSize: Theme.fontSizeSmall
-                font.weight: Font.Light
                 color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
-                elide: Text.ElideRight
+                truncationMode: TruncationMode.Fade
                 clip: true
                 visible: text != ""
             }
             Label {
                 id: timing
-                font.weight: Font.Light
+                text: listItem.duration
                 font.pixelSize: Theme.fontSizeSmall
                 color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 anchors.right: parent.right

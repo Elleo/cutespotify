@@ -59,23 +59,12 @@ Page {
     Component {
         id: trackDelegate
         TrackDelegate {
+            listModel: tracksModel.trackList
             name: searchField.text.length > 0 ? Theme.highlightText(trackName, searchField.text, Theme.highlightColor) : trackName
             artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
                             + " | "
                             + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
-            duration: trackDuration
-            isPlaying: isCurrentPlayingTrack
-            starred: isStarred
-            available: isAvailable
             enabled: !spotifySession.offlineMode || available
-            onClicked: {
-                if(isCurrentPlayingTrack) {
-                    if(!spotifySession.isPlaying)
-                        spotifySession.resume()
-                } else
-                    tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
-            }
-            //            onPressAndHold: { menu.track = modelData; menu.open(); }
         }
     }
 
