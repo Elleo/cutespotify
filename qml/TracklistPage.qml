@@ -47,6 +47,10 @@ Page {
     id: tracklistPage
     property variant playlist
 
+    // TODO this property should once come from the model and shouldn't need
+    // to be set manually
+    property bool offlineSwitchVisible: true
+
     Component.onCompleted: tracksModel.filter = ""
 
     /*    TrackMenu {
@@ -127,6 +131,8 @@ Page {
             Component.onCompleted: {
                 completed = true;
             }
+            visible: tracklistPage.offlineSwitchVisible
+            enabled: visible
         }
 
         SearchField {

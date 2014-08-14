@@ -14,8 +14,9 @@ BackgroundItem {
     width: parent.width
 
     onClicked: {
-        // TODO either adapt tracklist page or make a new page
-        pageStack.push(Qt.resolvedUrl("TracklistPage.qml"), { "playlist": listModel.playlist(index) });
+        pageStack.push(Qt.resolvedUrl("TracklistPage.qml"),
+                       { "playlist": listModel.playlist(index),
+                           "offlineSwitchVisible": false});
     }
 
     Row {
