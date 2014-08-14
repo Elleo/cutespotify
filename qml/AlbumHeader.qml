@@ -41,94 +41,62 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UIConstants.js" as UI
 
-Column {
+Row {
     id: albumHeader
-    signal moreClicked
     property alias artistName: artistText.text
     property alias trackCount: trackCountText.text
     property alias timing: timingText.text
     property alias year: yearText.text
     property alias coverId: cover.spotifyId
 
-    width: parent ? parent.width : 0
-    spacing: UI.MARGIN_XLARGE
+    height: desc.height + 2 * Theme.paddingLarge
+    width: parent.width
+    spacing: Theme.paddingLarge
+    anchors.left: parent.left
+    anchors.leftMargin: Theme.paddingLarge
 
-    Item {
-        width: parent.width
-        height: 160
-
-        SpotifyImage {
-            id: cover
-            height: parent.height
-            width: height
-            anchors.left: parent.left
-        }
-
-        Column {
-            id: desc
-            anchors.left: cover.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            anchors.right: parent.right
-
-            Label {
-                id: artistText
-                height: 35
-                width: parent.width
-                font.family: UI.FONT_FAMILY_BOLD
-                font.weight: Font.Bold
-                font.pixelSize: UI.FONT_LSMALL
-                elide: Text.ElideRight
-                verticalAlignment: Text.AlignTop
-            }
-
-            Label {
-                id: trackCountText
-                width: parent.width
-                font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
-                elide: Text.ElideRight
-            }
-            Label {
-                id: timingText
-                width: parent.width
-                font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
-                elide: Text.ElideRight
-            }
-            Label {
-                id: yearText
-                width: parent.width
-                font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
-                elide: Text.ElideRight
-            }
-        }
-
-        Image {
-            id: moreIcon
-            source: "image://theme/icon-s-music-video-description"
-            opacity: moreButton.pressed ? 0.4 : 1.0
-            visible: trackCount.length > 0
-            anchors.left: cover.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            anchors.bottom: cover.bottom
-            anchors.bottomMargin: 4
-
-            MouseArea {
-                id: moreButton
-                anchors.fill: parent
-                anchors.margins: -15
-                onClicked: { albumHeader.moreClicked(); }
-            }
-        }
+    SpotifyImage {
+        id: cover
+        anchors.verticalCenter: parent.verticalCenter
+        height: parent.height - 2 * Theme.paddingLarge
+        width: height
     }
 
-    Separator {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 2
-        color: Theme.primaryColor
+    Column {
+        id: desc
+        width: parent.width - cover.width - Theme.paddingLarge
+        anchors.verticalCenter: parent.verticalCenter
+
+        Label {
+            id: artistText
+            width: parent.width
+            truncationMode: TruncationMode.Fade
+            verticalAlignment: Text.AlignTop
+        }
+
+        Label {
+            id: trackCountText
+            width: parent.width
+            font.pixelSize: Theme.fontSizeSmall
+            truncationMode: TruncationMode.Fade
+            color: Theme.secondaryColor
+        }
+
+        Label {
+            id: timingText
+            width: parent.width
+            font.pixelSize: Theme.fontSizeSmall
+            truncationMode: TruncationMode.Fade
+            color: Theme.secondaryColor
+        }
+
+        Label {
+            id: yearText
+            width: parent.width
+            font.pixelSize: Theme.fontSizeSmall
+            truncationMode: TruncationMode.Fade
+            color: Theme.secondaryColor
+        }
     }
 }

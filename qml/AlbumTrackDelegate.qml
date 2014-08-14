@@ -41,71 +41,27 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UIConstants.js" as UI
 
-Item {
+BackgroundItem {
     id: listItem
 
-    signal clicked
-    signal pressAndHold
-    property alias pressed: mouseArea.pressed
-    property alias name: mainText.text
-    property alias duration: timing.text
-    property bool highlighted: false
-    property bool starred: false
-    property bool available: true
+    property variant listModel
+    property string name: model.trackName
+    property string duration: model.trackDuration
+    property bool starred: model.isStarred
+    property bool available: model.isAvailable
+    property bool isPlaying: model.isCurrentPlayingTrack
 
-    property color highlightColor: UI.SPOTIFY_COLOR
+    onClicked: {
+        if(isPlaying) {
+            if(!spotifySession.isPlaying)
+                spotifySession.resume()
+        } else
+            listModel.playTrack(index)
+    }
 
-    property int titleSize: UI.LIST_TILE_SIZE
-    property string titleFont: UI.FONT_FAMILY_BOLD
-    property color titleColor: Theme.primaryColor
-
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
-    property string subtitleFont: UI.FONT_FAMILY_LIGHT
-    property color subtitleColor: Theme.secondaryColor
-
-    height: UI.LIST_ITEM_HEIGHT_SMALL
+    height: Theme.itemSizeSmall
     width: parent.width
-
-    SequentialAnimation {
-        id: backAnimation
-        property bool animEnded: false
-        running: mouseArea.pressed
-
-        ScriptAction { script: backAnimation.animEnded = false }
-        PauseAnimation { duration: 200 }
-        ParallelAnimation {
-            NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: timing; property: "color"; to: "#DDDDDD"; duration: 300 }
-            NumberAnimation { target: iconItem; property: "opacity"; to: 0.2; duration: 300 }
-        }
-        PauseAnimation { duration: 100 }
-        ScriptAction { script: { backAnimation.animEnded = true; listItem.pressAndHold(); } }
-        onRunningChanged: {
-            if (!running) {
-                iconItem.opacity = 1.0
-                mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
-                timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-            }
-        }
-    }
-
-    onHighlightedChanged: {
-        mainText.color = highlighted ? listItem.highlightColor : listItem.titleColor
-        timing.color = highlighted ? listItem.highlightColor : listItem.subtitleColor
-    }
-
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: "#15000000"
-    }
 
     Item {
         anchors.left: parent.left
@@ -115,49 +71,37 @@ Item {
 
         Label {
             id: mainText
+            text: listItem.name
             anchors.left: parent.left
+            anchors.leftMargin: Theme.paddingLarge
             anchors.right: iconItem.left
-            anchors.rightMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: Theme.paddingLarge
             anchors.verticalCenter: parent.verticalCenter
-            font.family: listItem.titleFont
-            font.weight: Font.Bold
-            font.pixelSize: listItem.titleSize
-            color: highlighted ? listItem.highlightColor : listItem.titleColor
-            elide: Text.ElideRight
-            Behavior on color { ColorAnimation { duration: 200 } }
+            color: (highlighted || isPlaying) ? Theme.highlightColor : Theme.primaryColor
+            truncationMode: TruncationMode.Fade
         }
 
         Image {
             id: iconItem
             anchors.right: timing.left
-            anchors.rightMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: Theme.paddingLarge
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: -2
-            width: 34; height: width
+            width: Theme.iconSizeSmall; height: width
             smooth: true
             visible: listItem.starred
-            source: "image://theme/icon-m-favorite-selected"
+            source: "image://theme/icon-m-favorite-selected" + (highlighted ? "?" + Theme.highlightColor : "")
         }
 
         Label {
             id: timing
+            text: listItem.duration
             anchors.verticalCenter: parent.verticalCenter
-            font.family: listItem.subtitleFont
-            font.weight: Font.Light
-            font.pixelSize: listItem.subtitleSize
-            color: highlighted ? listItem.highlightColor : listItem.subtitleColor
+            font.pixelSize: Theme.fontSizeSmall
+            color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
             anchors.right: parent.right
+            anchors.rightMargin: Theme.paddingLarge
             visible: text != ""
-            Behavior on color { ColorAnimation { duration: 200 } }
-        }
-    }
-
-    MouseArea {
-        id: mouseArea;
-        anchors.fill: parent
-        onClicked: {
-            if (!backAnimation.animEnded)
-                listItem.clicked();
         }
     }
 }

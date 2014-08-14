@@ -76,7 +76,7 @@ BackgroundItem {
         text: (index + 1) + "."
         font.pixelSize: Theme.fontSizeSmall
         horizontalAlignment: Text.AlignRight
-        color: isPlaying ? Theme.highlightColor : Theme.primaryColor
+        color: (highlighted || isPlaying) ? Theme.highlightColor : Theme.primaryColor
         visible: listItem.showIndex
     }
 

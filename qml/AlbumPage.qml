@@ -52,156 +52,100 @@ Page {
     property string artist
     property string albumYear
     property variant browse
-    property int trackCount: browse ? browse.tracks.length : 0
+    property int trackCount: browse ? browse.trackCount : 0
 
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    SilicaListView {
+        id: tracks
+        anchors.fill: parent
 
-/*    TrackMenu {
-        id: menu
-        deleteVisible: false
-        albumVisible: false
-    }
-
-    AlbumMenu {
-        id: albumMenu
-        playVisible: false
-        artistVisible: !browse.hasMultipleArtists
-    }
-*/
-    Column {
-        id: header
-        width: parent.width
-        anchors.top: parent.top
-        anchors.topMargin: 80
-
-        Label {
-            height: UI.LIST_TILE_SIZE * 1.5
-            font.family: UI.FONT_FAMILY_BOLD
-            font.weight: Font.Bold
-            font.pixelSize: UI.LIST_TILE_SIZE
-            color: Theme.primaryColor
-            text: name
-        }
-
-
-        ComboBox {
-            id: selector
-            currentIndex: 0
-            menu: ContextMenu {
-                MenuItem { text: "Tracks"; }
-                MenuItem { text: "Review"; }
+        PullDownMenu {
+            id: pullMenu
+            property int _state : 0 // 0 for tracks // 1 for review
+            MenuItem {
+                text: qsTr("Tracks")
+                onClicked: {
+                    pullMenu._state = 0
+                    tracks.model = browse.tracks()
+                    tracks.delegate = browse.hasMultipleArtists ? compilationDelegate : albumDelegate
+                }
+                visible: pullMenu._state == 1
             }
-            onCurrentIndexChanged: {
-                tracks.updateResults();
+            MenuItem {
+                text: qsTr("Review")
+                onClicked: {
+                    pullMenu._state = 1
+                    tracks.delegate = reviewComponent
+                    tracks.model = browse.review
+                }
+                visible: pullMenu._state == 0
             }
         }
 
-        Separator {
+        VerticalScrollDecorator { }
+
+        ViewPlaceholder {
+            enabled: browse.busy
+            BusyIndicator {
+                id: busy
+                running: browse.busy
+                visible: running
+                anchors.centerIn: parent
+            }
+        }
+
+        cacheBuffer: 3000
+        model: browse.tracks()
+        header: Column {
             width: parent.width
-            height: 2
-            color: Theme.primaryColor
-        }
-    }
+            PageHeader {
+                title: name
+            }
 
-    Component {
-        id: albumDelegate
-        AlbumTrackDelegate {
-            name: modelData.name
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
-            onClicked: modelData.play()
-            onPressAndHold: { menu.track = modelData; menu.open(); }
-        }
-    }
-
-    Component {
-        id: compilationDelegate
-        TrackDelegate {
-            name: modelData.name
-            artistAndAlbum: modelData.artists
-            duration: modelData.duration
-            isPlaying: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
-            onClicked: modelData.play()
-            onPressAndHold: { menu.track = modelData; menu.open(); }
-        }
-    }
-
-    Component {
-        id: reviewComponent
-        Label {
-            width: parent ? parent.width : 0
-            height: paintedHeight + UI.MARGIN_XLARGE * 2
-            text: modelData
-            textFormat: Text.RichText
-            wrapMode: Text.WordWrap
-            font.pixelSize: UI.FONT_LSMALL
-            verticalAlignment: Text.AlignVCenter
-        }
-    }
-
-    Item {
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-        clip: true
-
-        SilicaListView {
-            id: tracks
-            anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
-
-            cacheBuffer: 3000
-            model: browse.tracks
-            header: AlbumHeader {
+            AlbumHeader {
                 artistName: artist
                 trackCount: albumPage.trackCount > 0 ? (albumPage.trackCount + (albumPage.trackCount > 1 ? " songs" : " song")) : ""
                 timing: browse.totalDuration > 0 ? spotifySession.formatDuration(browse.totalDuration) : ""
                 year: albumPage.trackCount > 0 && albumYear > 0 ? albumYear : ""
                 coverId: albumPage.coverId
-                onMoreClicked: { albumMenu.albumBrowse = browse; albumMenu.open() }
             }
-
-            Component.onCompleted: positionViewAtBeginning()
-
-            Connections {
-                target: browse
-                onTracksChanged: tracks.updateResults()
-            }
-
-            function updateResults() {
-                tracks.model = 0
-                tracks.delegate = null
-                if (selector.currentIndex === 0) {
-                    tracks.model = browse.tracks
-                    tracks.delegate = browse.hasMultipleArtists ? compilationDelegate : albumDelegate
-                } else if (selector.currentIndex == 1) {
-                    tracks.delegate = reviewComponent
-                    tracks.model = browse.review
-                }
-                tracks.positionViewAtBeginning()
-            }
-
-            footer: Item {
-                width: parent.width
-                height: 100
-            }
-
         }
 
-    }
+        Component.onCompleted: {
+            tracks.model = browse.tracks()
+            tracks.delegate = browse.hasMultipleArtists ? compilationDelegate : albumDelegate
+            positionViewAtBeginning()
+        }
 
-    BusyIndicator {
-        id: busy
-        running: browse.busy
-        visible: running
-        anchors.centerIn: parent
+        Component {
+            id: albumDelegate
+            AlbumTrackDelegate {
+                listModel: browse.tracks()
+            }
+        }
+
+        Component {
+            id: compilationDelegate
+            TrackDelegate {
+                listModel: browse.tracks()
+                artistAndAlbum: model.artists
+            }
+        }
+
+        Component {
+            id: reviewComponent
+            Label {
+                width: parent ? parent.width : 0
+                height: paintedHeight + Theme.paddingLarge * 2
+                anchors.left: parent.left
+                anchors.leftMargin: Theme.paddingLarge
+                anchors.right:  parent.right
+                anchors.rightMargin: Theme.paddingLarge
+                text: parent ? modelData : ""
+                textFormat: Text.RichText
+                wrapMode: Text.WordWrap
+                font.pixelSize: Theme.fontSizeSmall
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
     }
 }
