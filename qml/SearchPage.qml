@@ -72,7 +72,7 @@ Page {
                 width: parent.width
                 property variant modelVar: search.artistsPreview()
                 model: modelVar
-                delegate: artistDelegate
+                delegate: ArtistDelegate { listModel: artistsView.modelVar }
             }
 
             SeeMoreItem {
@@ -84,6 +84,11 @@ Page {
                                    {"pageTitle": qsTr("Artists for \"") + search.query + ("\""),
                                        "listModel": search.artists(),
                                        "listDelegate": artistDelegate})
+                }
+
+                Component {
+                    id: artistDelegate
+                    ArtistDelegate { listModel: search.artists()}
                 }
             }
 
@@ -97,7 +102,7 @@ Page {
                 property variant modelVar: search.albumsPreview()
                 width: parent.width
                 model: modelVar
-                delegate: albumDelegate
+                delegate: AlbumDelegate { listModel: albumsView.modelVar }
             }
 
             SeeMoreItem {
@@ -109,6 +114,11 @@ Page {
                                    {"pageTitle": qsTr("Albums for \"") + search.query + ("\""),
                                        "listModel": search.albums(),
                                        "listDelegate": albumDelegate})
+                }
+
+                Component {
+                    id: albumDelegate
+                    AlbumDelegate { listModel: search.albums() }
                 }
             }
 
@@ -140,46 +150,21 @@ Page {
         Component {
             id: trackDelegate
             TrackDelegate {
+                id: trackDel
                 name: trackName
                 artistAndAlbum: artists + " | " + album
                 duration: trackDuration
                 isPlaying: isCurrentPlayingTrack
                 starred: isStarred
                 available: isAvailable
-                // TODO onClicked: model.play()
-                //                onPressAndHold: { menu.track = modelData; menu.open(); }
-            }
-        }
-
-        Component {
-            id: artistDelegate
-            ArtistDelegate {
-                name: model.name
-                portrait: model.pictureId
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("ArtistPage.qml"),
-                                   { "browse": artistsView.modelVar.artistBrowse(index),
-                                       "artistName": model.name,
-                                       "artistPicId": model.pictureId})
+                    if(isCurrentPlayingTrack) {
+                        if(!spotifySession.isPlaying)
+                            spotifySession.resume()
+                    } else
+                        trackDel.Repeater.view.model.playTrack(index)
                 }
-            }
-        }
-
-        Component {
-            id: albumDelegate
-            AlbumDelegate {
-                name: model.name
-                artist: model.artist
-                albumCover: model.coverId
-                onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"),
-                                            { "browse": albumsView.modelVar.albumBrowse(index),
-                                                "name": name, "coverId": model.coverId,
-                                                "artist": artist, "albumYear": model.year}) }
-                onPressAndHold: {
-                    //                        menuAlbumBrowse.album = modelData;
-                    //                        if (menuAlbumBrowse.totalDuration > 0)
-                    //                            albumMenu.open()
-                }
+                //                onPressAndHold: { menu.track = modelData; menu.open(); }
             }
         }
 
