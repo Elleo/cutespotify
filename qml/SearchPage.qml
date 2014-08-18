@@ -19,7 +19,6 @@ Page {
         Column {
             id: contentColumn
             width: parent.width
-            spacing: Theme.paddingMedium
 
             PageHeader {
                 title: qsTr("Search")
