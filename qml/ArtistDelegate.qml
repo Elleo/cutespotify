@@ -84,6 +84,7 @@ BackgroundItem {
         SpotifyImage {
             id: portraitImage
             anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
             spotifyId: portrait
             defaultImage: "image://theme/icon-m-person"
         }
