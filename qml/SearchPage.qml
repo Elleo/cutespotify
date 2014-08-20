@@ -4,10 +4,7 @@ import QtSpotify 1.0
 
 Page {
     enabled: !spotifySession.offlineMode
-
-    SpotifySearch {
-        id: search
-    }
+    property variant search
 
     SilicaFlickable {
         width: parent.width
@@ -35,6 +32,11 @@ Page {
                 }
                 EnterKey.iconSource: "image://theme/icon-m-enter-close"
                 EnterKey.onClicked: {searchField.focus = false;}
+
+                Component.onCompleted: {
+                        search.query = "";
+                        search.search(true)
+                }
             }
 
             SectionHeader {
@@ -44,9 +46,12 @@ Page {
 
             Repeater {
                 id: tracksView
+                property variant modelVar: search.trackResultsPreview()
                 width: parent.width
-                model: search.trackResultsPreview()
-                delegate: TrackDelegate { listModel: search.trackResultsPreview()}
+                model: modelVar
+                delegate: TrackDelegate { listModel: tracksView.modelVar}
+
+                Component.onCompleted: modelVar = search.trackResultsPreview()
             }
 
             SeeMoreItem {

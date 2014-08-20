@@ -67,6 +67,13 @@ Page {
         onAccepted: { spotifySession.user.createPlaylist(newPlaylistSheet.playlistName); }
     }
 */
+    SpotifySearch {
+        id: search
+    }
+
+    SpotifyToplist {
+        id: toplist
+    }
 
     SilicaListView {
         id: playlists
@@ -84,11 +91,11 @@ Page {
             }
             MenuItem {
                 text: "Top"
-                onClicked: pageStack.push(Qt.resolvedUrl("ToplistPage.qml"))
+                onClicked: pageStack.push(Qt.resolvedUrl("ToplistPage.qml"), {"toplist": toplist})
             }
             MenuItem {
                 text: "Search"
-                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
+                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"), {"search": search})
             }
         }
 

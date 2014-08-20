@@ -44,7 +44,10 @@ import Sailfish.Silica 1.0
 import QtSpotify 1.0
 
 Page {
+    id: toplistPage
     enabled: !spotifySession.offlineMode
+
+    property variant toplist
 
     Component.onCompleted: {
         toplist.updateResults()
@@ -58,14 +61,10 @@ Page {
         }
     }
 
-    SpotifyToplist {
-        id: toplist
-    }
-
     SilicaListView {
         id: results
         anchors.fill: parent
-        cacheBuffer: 8000
+        cacheBuffer: 3000
 
         property int _state: 0
         property string _stateString: qsTr("tracks")
@@ -140,7 +139,8 @@ Page {
 
         Connections {
             target: toplist
-            onResultsChanged: results.updateResults()
+            onResultsChanged: if(toplistPage.status === PageStatus.Active)
+                                  results.updateResults()
         }
     }
 
