@@ -118,6 +118,15 @@ Page {
                 }
             }
 
+            Button {
+                width: parent.width * 0.5
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Donate")
+                onClicked: {
+                    Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NDUQLWV667B5Q")
+                }
+            }
+
             Item {
                 id: contentField
                 width: parent.width
