@@ -130,14 +130,6 @@ Page {
         }
     }
 
-    Connections {
-        target: lastfm
-        onErrorChanged: {
-            errorBanner.text = "Last.fm: " + lastfm.error;
-            errorBanner.show();
-        }
-    }
-
     Tabs {
         id: tabGroup
 
