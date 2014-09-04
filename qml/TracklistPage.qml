@@ -70,10 +70,9 @@ Page {
                             + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                if(isCurrentPlayingTrack) {
-                    if(!spotifySession.isPlaying)
+                if(isCurrentPlayingTrack && !spotifySession.isPlaying)
                         spotifySession.resume()
-                } else
+                else
                     tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
         }

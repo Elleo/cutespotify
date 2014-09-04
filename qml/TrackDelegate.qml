@@ -56,10 +56,9 @@ BackgroundItem {
     property bool isPlaying: model.isCurrentPlayingTrack
 
     onClicked: {
-        if(isPlaying) {
-            if(!spotifySession.isPlaying)
+        if(isPlaying && !spotifySession.isPlaying)
                 spotifySession.resume()
-        } else
+        else
             listModel.playTrack(index)
     }
 
