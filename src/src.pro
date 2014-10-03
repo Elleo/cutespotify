@@ -27,7 +27,12 @@ PKGCONFIG += sailfishapp
 INCLUDEPATH += /usr/include/sailfishapp
 
 lib.path = $$PREFIX/share/harbour-cutespotify/lib/
+ARCH = $$QMAKE_HOST.arch
+equals(ARCH, armv7l) {
 lib.files = ../libspotify/lib/lib*
+} else {
+lib.files = ../libspotify_emu/lib/lib*
+}
 qtpulse.path = $$PREFIX/share/harbour-cutespotify/lib/audio/
 qtpulse.files = ../libspotify/lib/audio/*
 desktop.path = $$PREFIX/share/applications/
