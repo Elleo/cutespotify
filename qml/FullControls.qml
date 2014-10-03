@@ -106,7 +106,7 @@ Page {
         Flipable {
             id: flipable
             width: parent.width
-            height: width
+            height: Math.min(width, parent.height * 0.563) // Selected such that on Jolla no border is shown
 
             property bool flipped: false
 
@@ -128,12 +128,11 @@ Page {
                 NumberAnimation { target: rotation; property: "angle"; duration: 350 }
             }
 
-            front: Rectangle {
+            front: Item {
                 anchors.fill: parent
-                color: "#C9C9C9"
                 z: flipable.flipped ? -1 : 1
 
-                ListView {
+                SilicaListView {
                     id: coverList
                     anchors.fill: parent
                     boundsBehavior: Flickable.StopAtBounds
@@ -161,18 +160,23 @@ Page {
                     }
 
                     model: spotifySession.playQueue.tracks()
-                    delegate: SpotifyImage {
+                    delegate: Item {
                         width: coverList.width
-                        height: width
-                        spotifyId: albumCoverId + (imageMouseArea.pressed ? "?" + Theme.highlightColor : "")
-                        fillMode: Image.PreserveAspectCrop
-                        clip: true
-                        smooth: true
+                        height: coverList.height
+                        SpotifyImage {
+                            width: Math.min(coverList.width, coverList.height)
+                            height: width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            spotifyId: albumCoverId + (imageMouseArea.pressed ? "?" + Theme.highlightColor : "")
+                            fillMode: Image.PreserveAspectCrop
+                            clip: true
+                            smooth: true
 
-                        MouseArea {
-                            id: imageMouseArea
-                            anchors.fill: parent
-                            onClicked: flipable.flipped = true
+                            MouseArea {
+                                id: imageMouseArea
+                                anchors.fill: parent
+                                onClicked: flipable.flipped = true
+                            }
                         }
                     }
                 }
