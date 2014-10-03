@@ -55,6 +55,10 @@ Page {
                 pageStack.push(loginPage);
             }
         }
+        onLoggingOut: {
+            pageStack.clear();
+            pageStack.push(loginPage);
+        }
     }
 
     /*    PlaylistMenu {
