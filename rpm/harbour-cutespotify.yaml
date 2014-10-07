@@ -25,7 +25,6 @@ PkgConfigBR:
 Requires:
 - sailfish-version >= 1.0.8
 - sailfishsilica-qt5
-- qt5-qtmultimedia-plugin-audio-pulseaudio
 Files:
 - /usr/share/icons/hicolor/86x86/apps
 - /usr/share/applications
