@@ -127,16 +127,16 @@ Item {
             Behavior on color { ColorAnimation { duration: 200 } }
         }
 
-        Image {
+        Icon {
             id: iconItem
             anchors.right: timing.left
             anchors.rightMargin: UI.MARGIN_XLARGE
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: -2
             width: 34; height: width
-            smooth: true
+            color: "black"
             visible: listItem.starred
-            source: "qrc:/qml/images/star.png"
+            name: "starred"
         }
 
         Label {

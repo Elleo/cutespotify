@@ -57,7 +57,7 @@ var SPOTIFY_ORANGE = "#EC5810";
 
 var COLOR_FOREGROUND = "#191919"; // Text color
 var COLOR_SECONDARY_FOREGROUND = "#8c8c8c"; // Secondary text
-var COLOR_BACKGROUND = "#E0E1E2"; // Background
+var COLOR_BACKGROUND = "transparent"; // Background
 var COLOR_SELECT = "#4591ff"; //Selected item background
 
 var COLOR_INVERTED_FOREGROUND = "#ffffff"; // Text color

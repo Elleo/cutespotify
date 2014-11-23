@@ -55,13 +55,6 @@ Rectangle {
     }
 
     Image {
-        id: background
-        anchors.fill: parent
-        source: player.openRequested ? "images/player-quickcontrols-back-open.png" : "images/player-quickcontrols-back-closed.png"
-        opacity: opener.pressed ? 0.5 : 1.0
-    }
-
-    Image {
         id: arrowIcon
         anchors.centerIn: parent
         source: player.openRequested ? "image://theme/icon-m-toolbar-up-selected" : "image://theme/icon-m-toolbar-down-selected"
@@ -131,13 +124,16 @@ Rectangle {
             Item {
                 width: units.gu(5); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
-                Image {
+                Icon {
                     id: favIcon
                     anchors.centerIn: parent
+                    color: "white"
+                    width: units.gu(3)
+                    height: width
                     opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
-                    source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("qrc:/qml/images/star.png")
-                                                                                                 : ("qrc:/qml/images/emptystar.png"))
-                                                        : ("qrc:/qml/images/emptystar.png")
+                    name: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("starred")
+                                                                                               : ("non-starred"))
+                                                      : ("non-starred")
                     enabled: !spotifySession.offlineMode
                 }
 
@@ -152,9 +148,12 @@ Rectangle {
             Item {
                 width: units.gu(5); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
-                Image {
+                Icon {
                     anchors.centerIn: parent
-                    source: "qrc:/qml/images/previous.png"
+                    color: "white"
+                    width: units.gu(3)
+                    height: width
+                    name: "media-skip-backward"
                     opacity: previous.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
@@ -167,10 +166,13 @@ Rectangle {
             Item {
                 width: units.gu(5); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
-                Image {
+                Icon {
                     anchors.centerIn: parent
-                    source: spotifySession.isPlaying ? "qrc:/qml/images/pause.png"
-                                                     : "qrc:/qml/images/play.png"
+                    color: "white"
+                    width: units.gu(3)
+                    height: width
+                    name: spotifySession.isPlaying ? "media-playback-pause"
+                                                   : "media-playback-start"
                     opacity: play.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
@@ -183,9 +185,12 @@ Rectangle {
             Item {
                 width: units.gu(5); height: units.gu(7)
                 anchors.verticalCenter: parent.verticalCenter
-                Image {
+                Icon {
                     anchors.centerIn: parent
-                    source: "qrc:/qml/images/next.png"
+                    color: "white"
+                    width: units.gu(3)
+                    height: width
+                    name: "media-skip-forward"
                     opacity: next.pressed ? 0.4 : 1.0
                 }
                 MouseArea {
