@@ -5,7 +5,6 @@ SUBDIRS = \
     src
 
 OTHER_FILES += \
-    qml/MainPage.qml \
     qml/main.qml \
     cutespotify.desktop \
     CuteSpotify.png \
