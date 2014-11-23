@@ -63,27 +63,23 @@ Dialog {
         }
 
         Label {
-            text: "Version 1.3.1"
+            text: "Version 1.4"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Label {
             text: "Based on MeeSpot by Yoann Lopes"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Label {
-            text: "Copyright \u00a9 2011-2013 Yoann Lopes, Michael Sheldon"
+            text: "Copyright \u00a9 2011-2014 Yoann Lopes, Michael Sheldon"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Label {
             text: "Contact: mike@mikeasoft.com"
             font.pixelSize: UI.FONT_LSMALL
-            color: UI.COLOR_INVERTED_FOREGROUND
         }
 
         Item {
@@ -111,7 +107,6 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
                 font.family: UI.FONT_FAMILY
                 font.pixelSize: UI.FONT_XSMALL
-                color: UI.LIST_SUBTITLE_COLOR_INVERTED
                 text: "This product uses SPOTIFY CORE but is not endorsed, certified or otherwise approved in any way by Spotify. Spotify is the registered trade mark of the Spotify Group."
             }
         }
@@ -128,23 +123,19 @@ Dialog {
 
             Row { 
                 width: parent.width
-                spacing: units.gu(1)
-
-                Button {
-                    id: donateButton
-                    text: "Donate!"
-                    onClicked: Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=8CK2DHNJDGBJJ&lc=GB&item_name=Michael%20Sheldon&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted")
-		}
+                spacing: units.gu(2)
 
                 Button {
                     id: licenseButton
                     text: "License"
+                    width: (parent.width - units.gu(1)) / 2.0
                     onClicked: PopupUtils.open(licenseC);
                 }
 
                 Button {
                     id: acceptButton
                     text: "Close"
+                    width: (parent.width - units.gu(1)) / 2.0
                     onClicked: PopupUtils.close(genericDialog);
                 }
             }

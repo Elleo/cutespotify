@@ -49,18 +49,6 @@ Page {
     anchors.leftMargin: UI.MARGIN_XLARGE
     enabled: !spotifySession.offlineMode
 
-    Connections {
-        target: spotifySession
-        onOfflineModeChanged: {
-            if (spotifySession.offlineMode)
-                pageStack.pop(null);
-        }
-        onConnectionStatusChanged: {
-            if (spotifySession.connectionStatus != SpotifySession.LoggedIn)
-                pageStack.pop(null);
-        }
-    }
-
     Rectangle {
         anchors.fill: parent
         visible: spotifySession.offlineMode

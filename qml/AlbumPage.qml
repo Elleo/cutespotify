@@ -51,6 +51,8 @@ Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
+    title: album ? album.name : "Album"
+
     Component.onCompleted: {
         browse.album = album
     }
@@ -77,16 +79,7 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
-
-        Label {
-            height: UI.LIST_TILE_SIZE * 1.5
-            font.family: UI.FONT_FAMILY_BOLD
-            font.weight: Font.Bold
-            font.pixelSize: UI.LIST_TILE_SIZE
-            color: UI.LIST_TITLE_COLOR
-            text: album ? album.name : ""
-        }
-
+        anchors.topMargin: UI.MARGIN_XLARGE
 
         OptionSelector {
             id: selector

@@ -45,6 +45,8 @@ import "UIConstants.js" as UI
 
 Page {
 
+    title: "CuteSpotify"
+
     NotificationBanner {
         id: errorBanner
     }
@@ -64,7 +66,6 @@ Page {
         source: "qrc:/qml/images/cutespotify-logo.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: username.activeFocus || password.activeFocus ? -25 : 100
     }
 
     Column {
@@ -76,6 +77,7 @@ Page {
         anchors.leftMargin: UI.PADDING_XXLARGE
         anchors.rightMargin: UI.PADDING_XXLARGE
         anchors.top: logo.bottom
+        anchors.topMargin: UI.PADDING_XXLARGE
 
         TextField {
             id: username

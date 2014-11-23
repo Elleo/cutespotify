@@ -51,6 +51,9 @@ Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
+    title: artist ? artist.name : "Artist"
+
+
     Component.onCompleted: {
         browse.artist = artist
     }
@@ -79,15 +82,6 @@ Page {
         width: parent.width
         anchors.top: parent.top
         anchors.topMargin: UI.MARGIN_XLARGE
-
-        Label {
-            height: UI.LIST_TILE_SIZE * 1.5
-            font.family: UI.FONT_FAMILY_BOLD
-            font.weight: Font.Bold
-            font.pixelSize: UI.LIST_TILE_SIZE
-            color: UI.LIST_TITLE_COLOR
-            text: artist ? artist.name : ""
-        }
 
         OptionSelector {
             id: selector

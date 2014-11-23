@@ -40,7 +40,7 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
+import Ubuntu.Components 1.1;
 import QtSpotify 1.0
 
 MainView {
@@ -50,9 +50,136 @@ MainView {
     property string themeColor
     applicationName: "CuteSpotify"
 
+    useDeprecatedToolbar: false
+
+    property alias tabs: tabGroup
+    property alias searchTabAlias: searchTab
+    property alias playlistSelection: playlistSelectionDialog
+
+
+    Component {
+        id: loginPage
+        LoginPage { }
+    }
+
+    NotificationBanner {
+        id: errorBanner
+    }
+
+    MySelectionDialog {
+        id: playlistSelectionDialog
+
+        property variant track: null
+
+        titleText: "Playlists"
+
+        Button {
+
+            text: "Add"
+
+            onClicked: {
+                var playlistItem = model.get(playlistSelectionDialog.selectedIndex);
+                if (playlistItem.object) {
+                    errorBanner.text = "Track added to " + playlistItem.name;
+                    playlistItem.object.add(track);
+                } else {
+                    if (spotifySession.user.createPlaylistFromTrack(track)) {
+                         errorBanner.text = "Track added to new playlist";
+                    } else {
+                        errorBanner.text = "Could not add track to new playlist";
+                    }
+                }
+                errorBanner.show();
+            }
+        }
+    }
+
+    property variant playlists: spotifySession.user ? spotifySession.user.playlistsFlat : null
+
+    onPlaylistsChanged: updatePlaylistDialog()
+
+    function updatePlaylistDialog() {
+        playlistSelectionDialog.model.clear();
+
+        if (playlists === null)
+            return;
+
+        playlistSelectionDialog.model.append({"name": "New playlist" });
+
+        for (var i in playlists) {
+            if (playlists[i].type === SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(playlists[i]))
+                playlistSelectionDialog.model.append({"name": playlists[i].name, "object": playlists[i] })
+        }
+    }
+
+    Connections {
+        target: spotifySession
+        onConnectionErrorChanged: {
+            if (spotifySession.connectionError !== SpotifySession.Ok) {
+                errorBanner.text = spotifySession.connectionErrorMessage;
+                errorBanner.show();
+            }
+        }
+        onOfflineErrorMessageChanged: {
+            errorBanner.text = spotifySession.offlineErrorMessage;
+            errorBanner.show();
+        }
+        onPlayTokenLost: {
+            if (spotifySession.isPlaying) {
+                errorBanner.text = "Playback has been paused because your account is used somewhere else";
+                errorBanner.show();
+            }
+        }
+        onPlaylistsNameChanged: {
+            updatePlaylistDialog()
+        }
+        onIsOnlineChanged: {
+            if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
+                openConnection();
+        }
+        onOfflineModeChanged: {
+            if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
+                openConnection();
+        }
+        onIsLoggedInChanged: {
+            if(spotifySession.isLoggedIn) {
+                pageStack.clear();
+                pageStack.push(tabGroup);
+                player.visible = true;
+            } else {
+                pageStack.clear();
+                pageStack.push(loginPage)
+            }
+        }
+    }
+
     PageStack {
-        id: pageStack;
-        Component.onCompleted: spotifySession.isLoggedIn ? push(mainPage) : push(loginPage)
+        id: pageStack
+        Component.onCompleted: spotifySession.isLoggedIn ? push(tabGroup) : push(loginPage)
+        Tabs {
+            id: tabGroup
+            Tab {
+                id: playlistsTab
+                title: "Playlists"
+                page: PlaylistPage { }
+            }
+            Tab {
+                id: searchTab
+                title: "Search"
+                page: SearchPage { }
+            }
+            Tab {
+                id: toplistTab
+                title: "Top"
+                page: ToplistPage { }
+            }
+            Tab {
+                title: "Settings"
+                id: settingsTab
+                page: SettingsPage { }
+            }
+
+        }
     }
 
     Player {
@@ -60,17 +187,8 @@ MainView {
         visible: false
     }
 
-    Component {
-        id: mainPage
-        MainPage {
-            id: mainPageItem
-            onToolsChanged: appWindow.pageStack.toolBar.setTools(mainPageItem.tools, "replace")
-        }
-    }
-
-    Component {
-        id: loginPage
-        LoginPage { }
+    function checkSearchPage() {
+        if (searchTab.depth === 0) searchTab.push(Qt.resolvedUrl("SearchPage.qml"))
     }
 
     Component.onCompleted: {
@@ -83,25 +201,5 @@ MainView {
         var xhr = new XMLHttpRequest;
         xhr.open("GET", "http://m.google.com"); //force opening a connection
         xhr.send();
-    }
-
-    Connections {
-        target: spotifySession
-        onIsOnlineChanged: {
-            if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
-                openConnection();
-        }
-        onOfflineModeChanged: {
-            if (!spotifySession.isOnline && (!spotifySession.user || !spotifySession.offlineMode))
-                openConnection();
-        }
-        onPendingConnectionRequestChanged: {
-            if (!spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
-                pageStack.pop() // Remove login page from stack
-                pageStack.push(mainPage)
-            } else if (spotifySession.pendingConnectionRequest && spotifySession.isLoggedIn) {
-                pageStack.push(loginPage)
-            }
-        }
     }
 }

@@ -60,10 +60,10 @@ void silentDebug(QtMsgType type, const QMessageLogContext& context, const QStrin
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QApplication::setOrganizationName("CuteSpotify");
+    QApplication::setOrganizationName("com.mikeasoft.cutespotify");
     QApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
     QApplication::setApplicationName("CuteSpotify");
-    QApplication::setApplicationVersion("1.3.2");
+    QApplication::setApplicationVersion("1.4");
 
     QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/com.mikeasoft.cutespotify/";
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);

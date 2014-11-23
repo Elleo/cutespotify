@@ -49,18 +49,6 @@ Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
-    Connections {
-        target: spotifySession
-        onOfflineModeChanged: {
-            if (spotifySession.offlineMode)
-                pageStack.pop(null);
-        }
-        onConnectionStatusChanged: {
-            if (spotifySession.connectionStatus != SpotifySession.LoggedIn)
-                pageStack.pop(null);
-        }
-    }
-
 /*    PlaylistMenu {
         id: menu
     }
@@ -78,7 +66,9 @@ Page {
         cacheBuffer: 3000
         model: spotifySession.user ? spotifySession.user.playlists : 0
 
-        Component.onCompleted: positionViewAtBeginning()
+        Component.onCompleted: {
+            positionViewAtBeginning()
+        }
 
         delegate: PlaylistDelegate {
             id: playlistDelegate
@@ -201,11 +191,11 @@ Page {
                     newPlaylistSheet.open();
                 }
             }
-            Item {
+/*            Item {
                 anchors.top: newPlaylistLabel.bottom
                 width: parent.width
                 height: units.gu(10)
-            }
+            }*/
         }
 
         section.criteria: ViewSection.FirstCharacter

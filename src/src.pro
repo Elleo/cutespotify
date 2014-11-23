@@ -7,7 +7,6 @@ QT += \
     multimedia \
     qml \
     quick \
-    systeminfo \
     widgets
 
 SOURCES += \

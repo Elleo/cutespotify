@@ -57,14 +57,8 @@ Page {
     Connections {
         target: spotifySession
         onOfflineModeChanged: {
-            if (spotifySession.offlineMode)
-                pageStack.pop(null);
-            else
+            if (!spotifySession.offlineMode)
                 toplist.updateResults()
-        }
-        onConnectionStatusChanged: {
-            if (spotifySession.connectionStatus != SpotifySession.LoggedIn)
-                pageStack.pop(null);
         }
     }
 

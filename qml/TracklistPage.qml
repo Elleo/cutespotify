@@ -51,6 +51,10 @@ Page {
     anchors.rightMargin: UI.MARGIN_XLARGE
     anchors.leftMargin: UI.MARGIN_XLARGE
 
+    title: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
+                                                      : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
+                                                                                                  : "Inbox"))
+
     Component.onCompleted: playlist.trackFilter = ""
 
 /*    TrackMenu {
@@ -124,23 +128,12 @@ Page {
         anchors.top: searchFieldContainer.bottom
         anchors.bottom: parent.bottom
 
-        cacheBuffer: 3000
+        clip: true
         highlightMoveDuration: 1
         model: playlist.tracks
         header: Item {
             width: parent.width
             height: units.gu(10)
-            Label {
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                font.family: UI.FONT_FAMILY_BOLD
-                font.weight: Font.Bold
-                font.pixelSize: UI.LIST_TILE_SIZE
-                color: UI.LIST_TITLE_COLOR
-                text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
-                                                             : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
-                                                                                                         : "Inbox"))
-            }
             Row {
                 spacing: units.gu(2)
                 anchors.right: parent.right
