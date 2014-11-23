@@ -42,6 +42,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
+#include <QtCore/QDir>
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QQuickView>
@@ -65,7 +66,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setApplicationName("CuteSpotify");
     QApplication::setApplicationVersion("1.4");
 
-    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/com.mikeasoft.cutespotify/";
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QDir::separator() + "com.mikeasoft.cutespotify";
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);
     QSettings settings;
     if(!settings.contains("dataPath")) {
