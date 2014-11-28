@@ -1,8 +1,4 @@
 {
-	"policy_groups": [
-		"networking",
-		"audio",
-		"connectivity"
-	],
+    "template": "unconfined",
 	"policy_version": 1.2
 }

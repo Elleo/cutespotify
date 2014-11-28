@@ -118,13 +118,9 @@ Item {
     x:8; y:8
     scale: 0
 
-    BorderImage {
-        source: "image://theme/meegotouch-notification-system-background"
-        anchors.fill: root
-        horizontalTileMode: BorderImage.Stretch
-        verticalTileMode: BorderImage.Stretch
-        border { left: 10; top: 10; right: 10; bottom: 10 }
-        opacity: 1
+    Rectangle {
+        anchors.fill: parent
+        color: "black"
     }
 
     Image {
@@ -142,9 +138,8 @@ Item {
         color: "white"
         wrapMode: Text.Wrap
         verticalAlignment: Text.AlignHCenter
-        font.pixelSize: 24
+        font.pixelSize: units.gu(2)
         font.family: "Nokia Pure Text"
-        font.letterSpacing: -1.2
         maximumLineCount: 3
         elide: Text.ElideRight
     }
