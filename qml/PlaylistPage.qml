@@ -46,8 +46,8 @@ import "UIConstants.js" as UI
 
 Page {
     id: playlistPage
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
 
 /*    PlaylistMenu {
         id: menu
@@ -128,7 +128,7 @@ Page {
         }
 
         footer: Item {
-            height: visible ? (UI.LIST_ITEM_HEIGHT + separator.height) : 0
+            height: visible ? (units.gu(UI.LIST_ITEM_HEIGHT) + separator.height) : 0
             width: parent.width
             visible: !spotifySession.offlineMode
 
@@ -143,8 +143,8 @@ Page {
                 id: background
                 anchors.fill: row
                 // Fill page porders
-                anchors.leftMargin: -UI.MARGIN_XLARGE
-                anchors.rightMargin: -UI.MARGIN_XLARGE
+                anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
+                anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
                 opacity: mouseArea.pressed ? 1.0 : 0.0
                 color: "#15000000"
             }
@@ -154,7 +154,7 @@ Page {
                 width: parent.width
                 anchors.top: separator.bottom
                 anchors.bottom: parent.bottom
-                spacing: UI.LIST_ITEM_SPACING
+                spacing: units.gu(UI.LIST_ITEM_SPACING)
 
                 Item {
                     id: iconItem
@@ -176,7 +176,7 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     font.family: UI.FONT_FAMILY_BOLD
                     font.weight: Font.Bold
-                    font.pixelSize: UI.LIST_TILE_SIZE
+                    font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
                     color: UI.LIST_TITLE_COLOR
                     opacity: 0.4
                     text: "New playlist"

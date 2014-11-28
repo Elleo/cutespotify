@@ -71,13 +71,13 @@ Page {
     Column {
         id: fields
         visible: !spotifySession.pendingConnectionRequest && spotifySession.connectionStatus == SpotifySession.LoggedOut
-        spacing: UI.DEFAULT_MARGIN
+        spacing: units.gu(UI.DEFAULT_MARGIN)
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: UI.PADDING_XXLARGE
-        anchors.rightMargin: UI.PADDING_XXLARGE
+        anchors.leftMargin: units.gu(UI.PADDING_XXLARGE)
+        anchors.rightMargin: units.gu(UI.PADDING_XXLARGE)
         anchors.top: logo.bottom
-        anchors.topMargin: UI.PADDING_XXLARGE
+        anchors.topMargin: units.gu(UI.PADDING_XXLARGE)
 
         TextField {
             id: username
@@ -133,13 +133,13 @@ Page {
                 anchors.right: parent.right
                 text: "I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
                 wrapMode: Text.WordWrap
-                font.pixelSize: UI.FONT_LSMALL
+                font.pixelSize: units.gu(UI.FONT_LSMALL)
                 onLinkActivated: Qt.openUrlExternally(link)
             }
         }
 
         Item {
-            height: UI.DEFAULT_MARGIN
+            height: units.gu(UI.DEFAULT_MARGIN)
             width: 1
         }
         Button {
@@ -148,8 +148,8 @@ Page {
 
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: UI.PADDING_XXLARGE
-            anchors.rightMargin: UI.PADDING_XXLARGE
+            anchors.leftMargin: units.gu(UI.PADDING_XXLARGE)
+            anchors.rightMargin: units.gu(UI.PADDING_XXLARGE)
             enabled: username.text.length > 0 && password.text.length > 0 && termsCheck.checked
 
             onClicked: {
@@ -158,14 +158,14 @@ Page {
         }
 
         Item {
-            height: UI.DEFAULT_MARGIN * 3
+            height: units.gu(UI.DEFAULT_MARGIN) * 3
             width: 1
         }
 
         Label {
             width: parent.width
             wrapMode: Text.WordWrap
-            font.pixelSize: UI.FONT_LSMALL
+            font.pixelSize: units.gu(UI.FONT_LSMALL)
             onLinkActivated: Qt.openUrlExternally(link)
             horizontalAlignment: Text.AlignHCenter
             text: "Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
@@ -179,9 +179,9 @@ Page {
 
     Column {
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: UI.DEFAULT_MARGIN * 2
+        anchors.verticalCenterOffset: units.gu(UI.DEFAULT_MARGIN) * 2
         visible: !fields.visible
-        spacing: UI.DEFAULT_MARGIN * 2
+        spacing: units.gu(UI.DEFAULT_MARGIN) * 2
 
         Label {
             id: loggingText

@@ -46,7 +46,7 @@ Style {
     id: root
     // Font
     property string fontFamily: UI.FONT_FAMILY
-    property int fontPixelSize: 26 // UI.FONT_DEFAULT_SIZE
+    property int fontPixelSize: units.gu(UI.FONT_DEFAULT_SIZE)
     property int fontCapitalization: Font.MixedCase
     property int fontWeight: Font.Bold
     property int height: 80

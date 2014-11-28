@@ -60,17 +60,17 @@ Item {
 
     property color highlightColor: UI.SPOTIFY_COLOR
 
-    property int titleSize: UI.LIST_TILE_SIZE
+    property int titleSize: units.gu(UI.LIST_TILE_SIZE)
     property string titleFont: UI.FONT_FAMILY_BOLD
     property color titleColor: UI.LIST_TITLE_COLOR
 
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
+    property int subtitleSize: units.gu(UI.LIST_SUBTILE_SIZE)
     property string subtitleFont: UI.FONT_FAMILY_LIGHT
     property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
     property real backgroundOpacity: 0.0
 
-    property real defaultHeight: UI.LIST_ITEM_HEIGHT
+    property real defaultHeight: units.gu(UI.LIST_ITEM_HEIGHT)
 
     height: defaultHeight
     width: parent.width
@@ -113,8 +113,8 @@ Item {
         id: background
         anchors.fill: parent
         // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
         opacity: mouseArea.pressed ? 1.0 : backgroundOpacity
         color: "#15000000"
     }
@@ -132,7 +132,7 @@ Item {
         Label {
             text: (index + 1) + ".   "
             font.family: UI.FONT_FAMILY_LIGHT
-            font.pixelSize: UI.FONT_SMALL
+            font.pixelSize: units.gu(UI.FONT_SMALL)
             horizontalAlignment: Text.AlignRight
             visible: listItem.showIndex
         }
@@ -162,7 +162,7 @@ Item {
 
     Column {
         anchors.left: coverContainer.right
-        anchors.leftMargin: listItem.coverId.length > 0 ? UI.MARGIN_XLARGE : 0
+        anchors.leftMargin: listItem.coverId.length > 0 ? units.gu(UI.MARGIN_XLARGE) : 0
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         opacity: listItem.available ? 1.0 : 0.3
@@ -176,7 +176,7 @@ Item {
                 height: 34
                 anchors.left: parent.left
                 anchors.right: iconItem.left
-                anchors.rightMargin: UI.MARGIN_XLARGE
+                anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                 font.family: listItem.titleFont
                 font.weight: Font.Bold
                 font.pixelSize: listItem.titleSize
@@ -206,7 +206,7 @@ Item {
                 height: 29
                 anchors.left: parent.left
                 anchors.right: timing.left
-                anchors.rightMargin: UI.MARGIN_XLARGE
+                anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                 font.family: listItem.subtitleFont
                 font.pixelSize: listItem.subtitleSize
                 font.weight: Font.Light

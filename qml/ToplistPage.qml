@@ -46,8 +46,8 @@ import "UIConstants.js" as UI
 import "Utilities.js" as Utilities
 
 Page {
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
     enabled: !spotifySession.offlineMode
 
     Component.onCompleted: {
@@ -65,8 +65,8 @@ Page {
     Rectangle {
         anchors.fill: parent
         visible: spotifySession.offlineMode
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
         color: "#DDFFFFFF"
         z: 500
 
@@ -74,11 +74,11 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Not available in offline mode"
-            font.pixelSize: UI.FONT_XLARGE
+            font.pixelSize: units.gu(UI.FONT_XLARGE)
             font.family: UI.FONT_FAMILY_LIGHT
             font.weight: Font.Light
             wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
+            width: parent.width - units.gu(UI.MARGIN_XLARGE) * 2
             horizontalAlignment: Text.AlignHCenter
         }
     }
@@ -105,7 +105,7 @@ Page {
     Column {
         id: whatsNew
         width: parent.width
-        spacing: UI.MARGIN_XLARGE
+        spacing: units.gu(UI.MARGIN_XLARGE)
 
         ViewHeader {
             text: "New releases"
@@ -153,14 +153,14 @@ Page {
                         spacing: -3
                         Label {
                             text: modelData.name
-                            font.pixelSize: UI.FONT_XSMALL
+                            font.pixelSize: units.gu(UI.FONT_XSMALL)
                             width: parent.width
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
                         }
                         Label {
                             text: modelData.artist
-                            font.pixelSize: UI.FONT_XXSMALL
+                            font.pixelSize: units.gu(UI.FONT_XXSMALL)
                             width: parent.width
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
@@ -186,17 +186,17 @@ Page {
         id: header
         width: parent.width
         anchors.top: whatsNew.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
 
         Separator {
             width: parent.width
         }
 
         Label {
-            height: UI.LIST_TILE_SIZE * 1.5
+            height: units.gu(UI.LIST_TILE_SIZE) * 1.5
             font.family: UI.FONT_FAMILY_BOLD
             font.weight: Font.Bold
-            font.pixelSize: UI.LIST_TILE_SIZE
+            font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
             color: UI.LIST_TITLE_COLOR
             text: "Top lists"
         }
@@ -222,16 +222,16 @@ Page {
         anchors.left: parent.left
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
         clip: true
 
         ListView {
             id: results
             anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             cacheBuffer: 8000
 
             Component {

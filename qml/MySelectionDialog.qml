@@ -77,7 +77,7 @@ MyCommonDialog {
                 BorderImage {
                     id: background
                     anchors.fill: parent
-                    border { left: UI.CORNER_MARGINS; top: UI.CORNER_MARGINS; right: UI.CORNER_MARGINS; bottom: UI.CORNER_MARGINS }
+                    border { left: units.gu(UI.CORNER_MARGINS); top: units.gu(UI.CORNER_MARGINS); right: units.gu(UI.CORNER_MARGINS); bottom: units.gu(UI.CORNER_MARGINS) }
                 }
 
                 Text {

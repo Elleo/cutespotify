@@ -53,7 +53,7 @@ Column {
     property alias coverId: cover.spotifyId
 
     width: parent ? parent.width : 0
-    spacing: UI.MARGIN_XLARGE
+    spacing: units.gu(UI.MARGIN_XLARGE)
 
     Item {
         width: parent.width
@@ -69,7 +69,7 @@ Column {
         Column {
             id: desc
             anchors.left: cover.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             anchors.right: parent.right
 
             Label {
@@ -78,7 +78,7 @@ Column {
                 width: parent.width
                 font.family: UI.FONT_FAMILY_BOLD
                 font.weight: Font.Bold
-                font.pixelSize: UI.FONT_LSMALL
+                font.pixelSize: units.gu(UI.FONT_LSMALL)
                 elide: Text.ElideRight
                 verticalAlignment: Text.AlignTop
             }
@@ -87,21 +87,21 @@ Column {
                 id: trackCountText
                 width: parent.width
                 font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
+                font.pixelSize: units.gu(UI.FONT_SMALL)
                 elide: Text.ElideRight
             }
             Label {
                 id: timingText
                 width: parent.width
                 font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
+                font.pixelSize: units.gu(UI.FONT_SMALL)
                 elide: Text.ElideRight
             }
             Label {
                 id: yearText
                 width: parent.width
                 font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
+                font.pixelSize: units.gu(UI.FONT_SMALL)
                 elide: Text.ElideRight
             }
         }
@@ -112,7 +112,7 @@ Column {
             opacity: moreButton.pressed ? 0.4 : 1.0
             visible: trackCount.length > 0
             anchors.left: cover.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             anchors.bottom: cover.bottom
             anchors.bottomMargin: 4
 

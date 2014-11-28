@@ -54,7 +54,7 @@ Column {
     property bool busy: false
 
     width: parent ? parent.width : 0
-    spacing: UI.MARGIN_XLARGE
+    spacing: units.gu(UI.MARGIN_XLARGE)
 
     Item {
         id: descContainer
@@ -80,14 +80,14 @@ Column {
         Column {
             id: desc
             anchors.left: cover.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             anchors.right: parent.right
 
             Label {
                 id: albumCountText
                 width: parent.width
                 font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
+                font.pixelSize: units.gu(UI.FONT_SMALL)
                 elide: Text.ElideRight
                 visible: text.length > 0
             }
@@ -95,7 +95,7 @@ Column {
                 id: singleCountText
                 width: parent.width
                 font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
+                font.pixelSize: units.gu(UI.FONT_SMALL)
                 elide: Text.ElideRight
                 visible: text.length > 0
             }
@@ -103,7 +103,7 @@ Column {
                 id: compilationsText
                 width: parent.width
                 font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
+                font.pixelSize: units.gu(UI.FONT_SMALL)
                 elide: Text.ElideRight
                 visible: text.length > 0
             }
@@ -111,7 +111,7 @@ Column {
                 id: appearsOnText
                 width: parent.width
                 font.family: UI.FONT_FAMILY
-                font.pixelSize: UI.FONT_SMALL
+                font.pixelSize: units.gu(UI.FONT_SMALL)
                 elide: Text.ElideRight
                 visible: text.length > 0
             }

@@ -64,7 +64,7 @@ Rectangle {
     Item {
         id: quickControls
         anchors.fill: parent
-        anchors.rightMargin: UI.MARGIN_XLARGE
+        anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
         opacity: player.openRequested ? 0.0 : 1.0
 
         SpotifyImage {
@@ -81,11 +81,11 @@ Rectangle {
             anchors.verticalCenterOffset: 1
             anchors.right: controls.left
             anchors.left: cover.right
-            anchors.leftMargin: UI.MARGIN_XLARGE - 1
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE) - 1
             Label {
                 font.family: UI.FONT_FAMILY
                 font.weight: Font.Bold
-                font.pixelSize: UI.FONT_DEFAULT
+                font.pixelSize: units.gu(UI.FONT_DEFAULT)
                 anchors.left: parent.left
                 anchors.right: parent.right
                 color: UI.COLOR_INVERTED_FOREGROUND
@@ -95,7 +95,7 @@ Rectangle {
             Label {
                 font.family: UI.FONT_FAMILY_LIGHT
                 font.weight: Font.Light
-                font.pixelSize: UI.FONT_LSMALL
+                font.pixelSize: units.gu(UI.FONT_LSMALL)
                 anchors.left: parent.left
                 anchors.right: parent.right
                 color: UI.COLOR_INVERTED_FOREGROUND
@@ -105,7 +105,7 @@ Rectangle {
             Label {
                 font.family: UI.FONT_FAMILY_LIGHT
                 font.weight: Font.Light
-                font.pixelSize: UI.FONT_LSMALL
+                font.pixelSize: units.gu(UI.FONT_LSMALL)
                 anchors.left: parent.left
                 anchors.right: parent.right
                 color: UI.COLOR_INVERTED_FOREGROUND
@@ -118,7 +118,7 @@ Rectangle {
             id: controls
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            anchors.rightMargin: -UI.MARGIN_XLARGE
+            anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
             spacing: -10
 
             Item {

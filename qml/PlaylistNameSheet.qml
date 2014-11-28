@@ -66,17 +66,17 @@ MySheet {
             id: label
             anchors.left: parent.left
             anchors.right:  parent.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            font.pixelSize: UI.FONT_LARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+            font.pixelSize: units.gu(UI.FONT_LARGE)
         }
 
         TextField {
             id: field
             anchors.left: parent.left
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             anchors.right: parent.right
-            anchors.rightMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
             inputMethodHints: Qt.ImhNoPredictiveText
 /*            platformStyle: TextFieldStyle {
                 backgroundSelected: "image://theme/" + appWindow.themeColor + "-meegotouch-textedit-background-selected"

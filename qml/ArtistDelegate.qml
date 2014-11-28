@@ -51,23 +51,23 @@ Item {
     property alias portrait: portraitImage.spotifyId
     property bool showIndex: false
 
-    property int titleSize: UI.LIST_TILE_SIZE
+    property int titleSize: units.gu(UI.LIST_TILE_SIZE)
     property string titleFont: UI.FONT_FAMILY_BOLD
     property color titleColor: UI.LIST_TITLE_COLOR
 
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
+    property int subtitleSize: units.gu(UI.LIST_SUBTILE_SIZE)
     property string subtitleFont: UI.FONT_FAMILY_LIGHT
     property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
-    height: UI.LIST_ITEM_HEIGHT
+    height: units.gu(UI.LIST_ITEM_HEIGHT)
     width: parent.width
 
     Rectangle {
         id: background
         anchors.fill: parent
         // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
         opacity: mouseArea.pressed ? 1.0 : 0.0
         color: "#15000000"
     }
@@ -79,7 +79,7 @@ Item {
         width: listItem.showIndex ? 48 : 0
         text: (index + 1) + ".   "
         font.family: UI.FONT_FAMILY_LIGHT
-        font.pixelSize: UI.FONT_SMALL
+        font.pixelSize: units.gu(UI.FONT_SMALL)
         horizontalAlignment: Text.AlignRight
         visible: listItem.showIndex
     }
@@ -101,7 +101,7 @@ Item {
     Label {
         id: mainText
         anchors.left: portraitContainer.right
-        anchors.leftMargin: UI.MARGIN_XLARGE
+        anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         font.family: listItem.titleFont

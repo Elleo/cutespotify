@@ -62,18 +62,18 @@ MySheet {
             id: label
             anchors.left: parent.left
             anchors.right:  parent.right
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            font.pixelSize: UI.FONT_LARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+            font.pixelSize: units.gu(UI.FONT_LARGE)
         }
 
         TextField {
             id: username
             placeholderText: "Username"
             anchors.left: parent.left
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             anchors.right: parent.right
-            anchors.rightMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             Keys.onReturnPressed: {
                 if (username.text.length > 0 && password.text.length > 0)
@@ -94,9 +94,9 @@ MySheet {
             placeholderText: "Password"
             echoMode: TextInput.Password
             anchors.left: parent.left
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             anchors.right: parent.right
-            anchors.rightMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             Keys.onReturnPressed: {
                 if (username.text.length > 0 && password.text.length > 0)

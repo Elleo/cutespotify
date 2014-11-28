@@ -46,8 +46,8 @@ import "UIConstants.js" as UI
 
 Page {
     id: settingsPage
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
 
     ListView {
         id: settingsFlickable
@@ -57,7 +57,7 @@ Page {
         delegate: Column {
             id: settingsContainer
             width: settingsPage.width
-            spacing: UI.MARGIN_XLARGE
+            spacing: units.gu(UI.MARGIN_XLARGE)
 
             Column {
                 anchors.left: parent.left
@@ -68,14 +68,14 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT * 1.5
+                        height: units.gu(UI.LIST_ITEM_HEIGHT) * 1.5
 
                         Label {
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
                             font.family: UI.FONT_FAMILY_BOLD
                             font.weight: Font.Bold
-                            font.pixelSize: UI.LIST_TILE_SIZE
+                            font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
                             color: UI.LIST_TITLE_COLOR
                             text: "Shuffle"
                         }
@@ -91,14 +91,14 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT * 1.5
+                        height: units.gu(UI.LIST_ITEM_HEIGHT) * 1.5
 
                         Label {
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
                             font.family: UI.FONT_FAMILY_BOLD
                             font.weight: Font.Bold
-                            font.pixelSize: UI.LIST_TILE_SIZE
+                            font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
                             color: UI.LIST_TITLE_COLOR
                             text: "Repeat songs"
                         }
@@ -116,14 +116,14 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT * 1.5
+                        height: units.gu(UI.LIST_ITEM_HEIGHT) * 1.5
 
                         Label {
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
                             font.family: UI.FONT_FAMILY_BOLD
                             font.weight: Font.Bold
-                            font.pixelSize: UI.LIST_TILE_SIZE
+                            font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
                             color: UI.LIST_TITLE_COLOR
                             text: "Offline mode"
                         }
@@ -147,7 +147,7 @@ Page {
                         width: parent.width
                         wrapMode: Text.WordWrap
                         font.family: UI.FONT_FAMILY_LIGHT
-                        font.pixelSize: UI.LIST_SUBTILE_SIZE
+                        font.pixelSize: units.gu(UI.LIST_SUBTILE_SIZE)
                         font.weight: Font.Light
                         color: UI.LIST_SUBTITLE_COLOR
                         text: "When offline, only the playlists you've made available for offline listening will be playable."
@@ -155,7 +155,7 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.MARGIN_XLARGE * 2
+                        height: units.gu(UI.MARGIN_XLARGE) * 2
                     }
                 }
 
@@ -163,10 +163,10 @@ Page {
                     width: parent.width
 
                     Label {
-                        height: UI.LIST_TILE_SIZE * 1.5
+                        height: units.gu(UI.LIST_TILE_SIZE) * 1.5
                         font.family: UI.FONT_FAMILY_BOLD
                         font.weight: Font.Bold
-                        font.pixelSize: UI.LIST_TILE_SIZE
+                        font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
                         color: UI.LIST_TITLE_COLOR
                         text: "Stream"
                     }
@@ -185,7 +185,7 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.MARGIN_XLARGE * 2
+                        height: units.gu(UI.MARGIN_XLARGE) * 2
                     }
 
                 }
@@ -194,10 +194,10 @@ Page {
                     width: parent.width
 
                     Label {
-                        height: UI.LIST_TILE_SIZE * 1.5
+                        height: units.gu(UI.LIST_TILE_SIZE) * 1.5
                         font.family: UI.FONT_FAMILY_BOLD
                         font.weight: Font.Bold
-                        font.pixelSize: UI.LIST_TILE_SIZE
+                        font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
                         color: UI.LIST_TITLE_COLOR
                         text: "Offline Sync"
                     }
@@ -216,20 +216,20 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: UI.MARGIN_XLARGE * 2
+                        height: units.gu(UI.MARGIN_XLARGE) * 2
                     }
                 }
 
                 Item {
                     width: parent.width
-                    height: UI.LIST_ITEM_HEIGHT * 1.5
+                    height: units.gu(UI.LIST_ITEM_HEIGHT) * 1.5
 
                     Label {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         font.family: UI.FONT_FAMILY_BOLD
                         font.weight: Font.Bold
-                        font.pixelSize: UI.LIST_TILE_SIZE
+                        font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
                         color: UI.LIST_TITLE_COLOR
                         text: "Sync over 2G/3G"
                     }
@@ -244,7 +244,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
+                    height: units.gu(UI.MARGIN_XLARGE) * 2
 
                     Separator {
                         anchors.verticalCenter: parent.verticalCenter
@@ -254,7 +254,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
+                    height: units.gu(UI.MARGIN_XLARGE) * 2
 
                     Separator {
                         anchors.verticalCenter: parent.verticalCenter
@@ -264,7 +264,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
+                    height: units.gu(UI.MARGIN_XLARGE) * 2
 
                     Separator {
                         anchors.verticalCenter: parent.verticalCenter
@@ -274,7 +274,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.MARGIN_XLARGE
+                    height: units.gu(UI.MARGIN_XLARGE)
                 }
 
                 Button {
@@ -282,8 +282,8 @@ Page {
                     text: "About"
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    anchors.leftMargin: UI.PADDING_XXLARGE
-                    anchors.rightMargin: UI.PADDING_XXLARGE
+                    anchors.leftMargin: units.gu(UI.PADDING_XXLARGE)
+                    anchors.rightMargin: units.gu(UI.PADDING_XXLARGE)
 
                     onClicked: {
                         PopupUtils.open(aboutDialogC)
@@ -292,7 +292,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.MARGIN_XLARGE
+                    height: units.gu(UI.MARGIN_XLARGE)
                 }
 
                 Button {
@@ -300,8 +300,8 @@ Page {
                     text: "Log out " + (spotifySession.user ? spotifySession.user.canonicalName : "")
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    anchors.leftMargin: UI.PADDING_XXLARGE
-                    anchors.rightMargin: UI.PADDING_XXLARGE
+                    anchors.leftMargin: units.gu(UI.PADDING_XXLARGE)
+                    anchors.rightMargin: units.gu(UI.PADDING_XXLARGE)
 
                     onClicked: {
                         spotifySession.logout(false);
@@ -311,7 +311,7 @@ Page {
 
                 Item {
                     width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
+                    height: units.gu(UI.MARGIN_XLARGE) * 2
                 }
             }
             Item {

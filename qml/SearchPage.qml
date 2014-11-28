@@ -45,15 +45,15 @@ import "UIConstants.js" as UI
 import "Utilities.js" as Utilities
 
 Page {
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
     enabled: !spotifySession.offlineMode
 
     Rectangle {
         anchors.fill: parent
         visible: spotifySession.offlineMode
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
         color: "#DDFFFFFF"
         z: 500
 
@@ -61,11 +61,11 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Search is not available in offline mode"
-            font.pixelSize: UI.FONT_XLARGE
+            font.pixelSize: units.gu(UI.FONT_XLARGE)
             font.family: UI.FONT_FAMILY_LIGHT
             font.weight: Font.Light
             wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
+            width: parent.width - units.gu(UI.MARGIN_XLARGE) * 2
             horizontalAlignment: Text.AlignHCenter
         }
     }
@@ -93,8 +93,8 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
-        anchors.topMargin: UI.MARGIN_XLARGE
-        spacing: UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
+        spacing: units.gu(UI.MARGIN_XLARGE)
 
         Column {
             width: parent.width
@@ -136,16 +136,16 @@ Page {
         anchors.left: parent.left
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
         clip: true
 
         ListView {
             id: results
             anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             onMovementStarted: results.focus = true
             cacheBuffer: 8000
 
@@ -242,11 +242,11 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 80
             visible: results.count === 0 && search.query.length > 0 && !search.busy
-            font.pixelSize: UI.FONT_LARGE
+            font.pixelSize: units.gu(UI.FONT_LARGE)
             font.family: UI.FONT_FAMILY_LIGHT
             font.weight: Font.Light
             wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
+            width: parent.width - units.gu(UI.MARGIN_XLARGE) * 2
             horizontalAlignment: Text.AlignHCenter
 
             text: search.didYouMean.length > 0 ? "Did you mean"
@@ -258,11 +258,11 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: errorMessage.bottom
             visible: results.count === 0 && search.query.length > 0 && !search.busy && search.didYouMean.length > 0
-            font.pixelSize: UI.FONT_LARGE
+            font.pixelSize: units.gu(UI.FONT_LARGE)
             font.family: UI.FONT_FAMILY_LIGHT
             font.weight: Font.Light
             wrapMode: Text.WordWrap
-            width: parent.width - UI.MARGIN_XLARGE * 2
+            width: parent.width - units.gu(UI.MARGIN_XLARGE) * 2
             horizontalAlignment: Text.AlignHCenter
 
             text: "<a href='didyoumean'>" + search.didYouMean + "</a>?"

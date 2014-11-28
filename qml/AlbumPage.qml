@@ -48,8 +48,8 @@ Page {
     id: albumPage
 
     property variant album
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
 
     title: album ? album.name : "Album"
 
@@ -79,7 +79,7 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
-        anchors.topMargin: UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
 
         OptionSelector {
             id: selector
@@ -127,11 +127,11 @@ Page {
         id: reviewComponent
         Label {
             width: parent ? parent.width : 0
-            height: paintedHeight + UI.MARGIN_XLARGE * 2
+            height: paintedHeight + units.gu(UI.MARGIN_XLARGE) * 2
             text: modelData
             textFormat: Text.RichText
             wrapMode: Text.WordWrap
-            font.pixelSize: UI.FONT_LSMALL
+            font.pixelSize: units.gu(UI.FONT_LSMALL)
             verticalAlignment: Text.AlignVCenter
         }
     }
@@ -141,16 +141,16 @@ Page {
         anchors.left: parent.left
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
         clip: true
 
         ListView {
             id: tracks
             anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
 
             cacheBuffer: 3000
             model: browse.tracks

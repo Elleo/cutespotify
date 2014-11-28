@@ -48,8 +48,8 @@ import "Utilities.js" as Util
 Page {
     id: tracklistPage
     property variant playlist
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
 
     title: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
                                                       : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
@@ -186,9 +186,9 @@ Page {
 
         Column {
             id: searchColumn
-            y: UI.MARGIN_XLARGE
+            y: units.gu(UI.MARGIN_XLARGE)
             width: parent.width
-            spacing: UI.MARGIN_XLARGE
+            spacing: units.gu(UI.MARGIN_XLARGE)
             opacity: 0
 
             AdvancedTextField {
@@ -216,7 +216,7 @@ Page {
             when: searchField.text.length > 0 || searchField.activeFocus || tracks.showSearchField
             PropertyChanges {
                 target: searchFieldContainer
-                height: searchColumn.height + UI.MARGIN_XLARGE
+                height: searchColumn.height + units.gu(UI.MARGIN_XLARGE)
             }
             PropertyChanges {
                 target: searchColumn

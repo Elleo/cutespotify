@@ -58,7 +58,7 @@ Item {
     property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
     width: parent.width
-    height: UI.LIST_ITEM_HEIGHT
+    height: units.gu(UI.LIST_ITEM_HEIGHT)
 
     MySelectionDialog {
         id: dialog
@@ -69,8 +69,8 @@ Item {
         id: background
         anchors.fill: parent
         // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
         opacity: mouseArea.pressed ? 1.0 : 0.0
         color: "#15000000"
         Behavior on opacity { NumberAnimation { duration: 50 } }
@@ -86,7 +86,7 @@ Item {
             width: parent.width
             font.family: UI.FONT_FAMILY_BOLD
             font.weight: Font.Bold
-            font.pixelSize: UI.LIST_TILE_SIZE
+            font.pixelSize: units.gu(UI.LIST_TILE_SIZE)
             elide: Text.ElideRight
             color: titleColor
         }
@@ -94,7 +94,7 @@ Item {
             id: selectedValue
             width: parent.width
             font.family: UI.FONT_FAMILY_LIGHT
-            font.pixelSize: UI.LIST_SUBTILE_SIZE
+            font.pixelSize: units.gu(UI.LIST_SUBTILE_SIZE)
             font.weight: Font.Light
             elide: Text.ElideRight
             color: subtitleColor

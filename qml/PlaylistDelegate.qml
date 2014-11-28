@@ -58,15 +58,15 @@ Item {
     property int downloadProgress: 0
     property int unseens: 0
 
-    property int titleSize: UI.LIST_TILE_SIZE
+    property int titleSize: units.gu(UI.LIST_TILE_SIZE)
     property string titleFont: UI.FONT_FAMILY_BOLD
     property color titleColor: UI.LIST_TITLE_COLOR
 
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
+    property int subtitleSize: units.gu(UI.LIST_SUBTILE_SIZE)
     property string subtitleFont: UI.FONT_FAMILY_LIGHT
     property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
-    height: UI.LIST_ITEM_HEIGHT
+    height: units.gu(UI.LIST_ITEM_HEIGHT)
     width: parent.width
 
     SequentialAnimation {
@@ -105,15 +105,15 @@ Item {
         id: background
         anchors.fill: parent
         // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
         opacity: mouseArea.pressed ? 1.0 : 0.0
         color: "#15000000"
     }
 
     Row {
         anchors.fill: parent
-        spacing: UI.LIST_ITEM_SPACING
+        spacing: units.gu(UI.LIST_ITEM_SPACING)
 
         Item {
             id: iconItem
@@ -130,7 +130,7 @@ Item {
 
         Column {
             anchors.verticalCenter: parent.verticalCenter
-            width: parent.width - (iconItem.visible ? iconItem.width + UI.LIST_ITEM_SPACING : 0)
+            width: parent.width - (iconItem.visible ? iconItem.width + units.gu(UI.LIST_ITEM_SPACING) : 0)
 
             Item {
                 anchors.left: parent.left
@@ -151,7 +151,7 @@ Item {
                 Loader {
                     id: unseenBox
                     anchors.verticalCenter: parent.verticalCenter
-                    x: mainText.paintedWidth + UI.MARGIN_XLARGE
+                    x: mainText.paintedWidth + units.gu(UI.MARGIN_XLARGE)
                     sourceComponent: listItem.unseens > 0  ? unseensComponent : null
                 }
 
@@ -213,7 +213,7 @@ Item {
                         color: listItem.subtitleColor
                         anchors.left: parent.left
                         anchors.right: timing.left
-                        anchors.rightMargin: UI.MARGIN_XLARGE
+                        anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                         elide: Text.ElideRight
                         visible: text != ""
                     }
@@ -233,7 +233,7 @@ Item {
                     id: downloadBar
                     anchors.left: offlineStatusIcon.right
                     anchors.right: parent.right
-                    anchors.rightMargin: UI.MARGIN_XLARGE
+                    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 3
                     sourceComponent: listItem.offlineStatus == SpotifyPlaylist.Downloading ? downloadBarComponent : null

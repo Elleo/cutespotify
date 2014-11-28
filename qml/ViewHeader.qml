@@ -49,7 +49,7 @@ Rectangle {
     property int contentMargins: 0
 
     width: parent ? parent.width : 0
-    height: UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
+    height: units.gu(UI.HEADER_DEFAULT_HEIGHT_PORTRAIT)
     anchors.horizontalCenter: parent.horizontalCenter
     color: "transparent"
 
@@ -66,7 +66,7 @@ Rectangle {
             id: title
             verticalAlignment: Text.AlignVCenter
             color: UI.COLOR_FOREGROUND
-            font.pixelSize: UI.FONT_LARGE
+            font.pixelSize: units.gu(UI.FONT_LARGE)
             font.family: UI.FONT_FAMILY_LIGHT
             elide: Text.ElideRight
             opacity: contentOpacity
@@ -77,7 +77,7 @@ Rectangle {
             anchors.right: text.length > 0 ? parent.right : undefined
             verticalAlignment: Text.AlignVCenter
             color: UI.LIST_SUBTITLE_COLOR
-            font.pixelSize: UI.FONT_SMALL
+            font.pixelSize: units.gu(UI.FONT_SMALL)
             elide: Text.ElideRight
             opacity: contentOpacity
         }

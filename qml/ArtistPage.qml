@@ -48,8 +48,8 @@ Page {
     id: artistPage
 
     property variant artist
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
 
     title: artist ? artist.name : "Artist"
 
@@ -81,7 +81,7 @@ Page {
         id: header
         width: parent.width
         anchors.top: parent.top
-        anchors.topMargin: UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
 
         OptionSelector {
             id: selector
@@ -105,17 +105,17 @@ Page {
         anchors.left: parent.left
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        anchors.leftMargin: -UI.MARGIN_XLARGE
+        anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
+        anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
+        anchors.leftMargin: -units.gu(UI.MARGIN_XLARGE)
         clip: true
         visible: !browse.busy
 
         ListView {
             id: artistView
             anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
+            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+            anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
             cacheBuffer: 3000
 
             Component.onCompleted: positionViewAtBeginning()
@@ -166,11 +166,11 @@ Page {
                 id: bioComponent
                 Label {
                     width: parent ? parent.width : 0
-                    height: paintedHeight + UI.MARGIN_XLARGE
+                    height: paintedHeight + units.gu(UI.MARGIN_XLARGE)
                     text: "<style type=text/css> a { text-decoration: none; color:" + color + "} </style>" + modelData
                     textFormat: Text.RichText
                     wrapMode: Text.WordWrap
-                    font.pixelSize: UI.FONT_LSMALL
+                    font.pixelSize: units.gu(UI.FONT_LSMALL)
                 }
             }
 
@@ -195,17 +195,17 @@ Page {
                     Separator {
                         anchors.left: parent.left
                         anchors.right: sectionText.left
-                        anchors.rightMargin: UI.MARGIN_XLARGE * 2
+                        anchors.rightMargin: units.gu(UI.MARGIN_XLARGE) * 2
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
                     Label {
                         id: sectionText
                         anchors.right: parent.right
-                        anchors.rightMargin: UI.MARGIN_XLARGE
+                        anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                         anchors.verticalCenter: parent.verticalCenter
                         font.family: UI.FONT_FAMILY_BOLD
-                        font.pixelSize: UI.FONT_SMALL
+                        font.pixelSize: units.gu(UI.FONT_SMALL)
                         font.weight: Font.Bold
                         color: "#808080"
                         text: section
@@ -259,7 +259,7 @@ Page {
             y: 100
             visible: selector.selectedIndex == 2 && artistView.count === 0 && !browse.busy
             text: "No biography available"
-            font.pixelSize: UI.FONT_LARGE
+            font.pixelSize: units.gu(UI.FONT_LARGE)
             font.family: UI.FONT_FAMILY_LIGHT
             font.weight: Font.Light
         }

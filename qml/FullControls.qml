@@ -46,7 +46,7 @@ import QtSpotify 1.0
 Column {
     id: fullControls
     width: parent.width
-    spacing: UI.MARGIN_XLARGE
+    spacing: units.gu(UI.MARGIN_XLARGE)
 
     property bool albumRequested: false
     property bool artistRequested: false
@@ -161,15 +161,15 @@ Column {
             Rectangle {
                 anchors.bottom: parent.bottom
                 width: parent.width
-                height: detailsColumn.height + UI.MARGIN_XLARGE
+                height: detailsColumn.height + units.gu(UI.MARGIN_XLARGE)
                 color: (moreMouseArea.pressed ? "#DD" : "#BA") + ("#D7D7D7")
 
                 Column {
                     id: detailsColumn
                     anchors.left: parent.left
-                    anchors.leftMargin: UI.MARGIN_XLARGE
+                    anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
                     anchors.right: parent.right
-                    anchors.rightMargin: UI.MARGIN_XLARGE
+                    anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 8
 
@@ -177,7 +177,7 @@ Column {
                         width: parent.width
                         font.family: UI.FONT_FAMILY
                         font.weight: Font.Bold
-                        font.pixelSize: UI.FONT_DEFAULT
+                        font.pixelSize: units.gu(UI.FONT_DEFAULT)
                         color: UI.COLOR_FOREGROUND
                         elide: Text.ElideRight
                         opacity: details.opacity
@@ -194,11 +194,11 @@ Column {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
                             anchors.right: moreIcon.left
-                            anchors.rightMargin: UI.MARGIN_XLARGE
+                            anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                             Label {
                                 width: parent.width
                                 font.family: UI.FONT_FAMILY
-                                font.pixelSize: UI.FONT_LSMALL
+                                font.pixelSize: units.gu(UI.FONT_LSMALL)
                                 color: UI.LIST_SUBTITLE_COLOR
                                 elide: Text.ElideRight
                                 anchors.left: parent.left
@@ -208,7 +208,7 @@ Column {
                             Label {
                                 width: parent.width
                                 font.family: UI.FONT_FAMILY
-                                font.pixelSize: UI.FONT_LSMALL
+                                font.pixelSize: units.gu(UI.FONT_LSMALL)
                                 color: UI.LIST_SUBTITLE_COLOR
                                 elide: Text.ElideRight
                                 anchors.left: parent.left
@@ -242,7 +242,7 @@ Column {
                 id: queueHeader
                 anchors.left: parent.left
                 anchors.right: parent.right
-                contentMargins: UI.MARGIN_XLARGE
+                contentMargins: units.gu(UI.MARGIN_XLARGE)
                 text: "Play queue"
                 color: UI.COLOR_BACKGROUND
                 contentOpacity: queueHeaderMouse.pressed ? 0.4 : 1.0
@@ -258,13 +258,13 @@ Column {
             ListView {
                 id: queueList
                 anchors.top: queueHeader.bottom
-                anchors.topMargin: UI.MARGIN_XLARGE
+                anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
                 anchors.left: parent.left
-                anchors.leftMargin: UI.MARGIN_XLARGE
+                anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
                 anchors.right: parent.right
-                anchors.rightMargin: UI.MARGIN_XLARGE
+                anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                 anchors.bottom: parent.bottom
-                cacheBuffer: UI.LIST_ITEM_HEIGHT
+                cacheBuffer: units.gu(UI.LIST_ITEM_HEIGHT)
                 model: spotifySession.playQueue.tracks
                 delegate: TrackDelegate {
                     property bool isExplicit: spotifySession.playQueue.isExplicitTrack(index)
@@ -286,8 +286,8 @@ Column {
             }
 
             Scrollbar {
-                anchors.topMargin: -UI.MARGIN_XLARGE
-                anchors.rightMargin: -UI.MARGIN_XLARGE
+                anchors.topMargin: -units.gu(UI.MARGIN_XLARGE)
+                anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
                 flickableItem: queueList
             }
         }
@@ -295,10 +295,10 @@ Column {
 
     Column {
         anchors.left: parent.left
-        anchors.leftMargin: UI.MARGIN_XLARGE
+        anchors.leftMargin: units.gu(UI.MARGIN_XLARGE)
         anchors.right: parent.right
-        anchors.rightMargin: UI.MARGIN_XLARGE
-        spacing: UI.MARGIN_XLARGE
+        anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
+        spacing: units.gu(UI.MARGIN_XLARGE)
 
         Item {
             id: controls
@@ -388,7 +388,7 @@ Column {
                 Label {
                     id: trackPos
                     font.family: UI.FONT_FAMILY
-                    font.pixelSize: UI.FONT_LSMALL
+                    font.pixelSize: units.gu(UI.FONT_LSMALL)
                     color: UI.LIST_SUBTITLE_COLOR
                     anchors.left: parent.left
                     anchors.leftMargin: 5
@@ -398,7 +398,7 @@ Column {
                 }
                 Label {
                     font.family: UI.FONT_FAMILY
-                    font.pixelSize: UI.FONT_LSMALL
+                    font.pixelSize: units.gu(UI.FONT_LSMALL)
                     color: UI.LIST_SUBTITLE_COLOR
                     anchors.right: parent.right
                     anchors.rightMargin: 5

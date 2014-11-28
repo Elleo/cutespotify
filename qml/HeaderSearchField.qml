@@ -69,7 +69,7 @@ Item {
         id: searchField
         placeholderText: "Search"
         width: parent.width
-        y: UI.MARGIN_XLARGE
+        y: units.gu(UI.MARGIN_XLARGE)
         inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
         platformSipAttributes: SipAttributes {
             actionKeyLabel: "Close"
@@ -121,7 +121,7 @@ Item {
             }
             PropertyChanges {
                 target: root
-                height: searchField.height + UI.MARGIN_XLARGE * 2 + separator.height
+                height: searchField.height + units.gu(UI.MARGIN_XLARGE) * 2 + separator.height
             }
         }
 

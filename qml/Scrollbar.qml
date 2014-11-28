@@ -49,7 +49,7 @@ Item {
     property int scrollDecoratorRightMargin: 0
 
     anchors.right: listView.right
-    anchors.rightMargin: -UI.MARGIN_XLARGE
+    anchors.rightMargin: -units.gu(UI.MARGIN_XLARGE)
     anchors.top: listView.top
     anchors.bottom: listView.bottom
     width: 72
