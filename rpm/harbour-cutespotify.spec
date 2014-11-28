@@ -17,12 +17,11 @@ Name:       harbour-cutespotify
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    CuteSpotify
 Version:    1.5.1
-Release:    3
+Release:    4
 Group:      Qt/Qt
 License:    BSD
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-cutespotify.yaml
-Requires:   sailfish-version >= 1.0.8
 Requires:   sailfishsilica-qt5
 BuildRequires:  pkgconfig(Qt5Concurrent)
 BuildRequires:  pkgconfig(Qt5Core)
@@ -71,12 +70,9 @@ desktop-file-install --delete-original       \
 
 %files
 %defattr(-,root,root,-)
-/usr/share/icons/hicolor/86x86/apps
-/usr/share/applications
-/usr/share/%{name}
-/usr/bin
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/%{name}
 %{_bindir}
 # >> files
 # << files

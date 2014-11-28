@@ -47,7 +47,6 @@ OTHER_FILES += \
     qml/MyCommonDialog.qml \
     qml/Scrollbar.qml \
     qml/FolderPage.qml \
-    rpm/cutespotify.yaml \
     rpm/cutespotify.spec \
     qml/LastFMDialog.qml \
     qml/LogoutDialog.qml \
