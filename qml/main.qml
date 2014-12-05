@@ -41,11 +41,15 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
+import Sailfish.Media 1.0
+import org.nemomobile.policy 1.0
 
 ApplicationWindow {
     id: appWindow
 
     bottomMargin: quickControls.visibleSize
+
+    property bool grabKeys: keysResource.acquired && spotifySession.btKeysEnabled
 
     cover: Qt.resolvedUrl("CoverPage.qml")
 
@@ -157,6 +161,80 @@ ApplicationWindow {
                 showFullControls = false;
                 quickControls.open = false;
             }
+        }
+    }
+
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_AudioRepeat
+        onPressed: {
+            spotifySession.repeat = !spotifySession.repeat;
+        }
+    }
+
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_AudioRandomPlay
+        onPressed: spotifySession.shuffle = !spotifySession.shuffle
+    }
+
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_MediaTogglePlayPause
+        onPressed: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
+    }
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_MediaPlay
+        onPressed: spotifySession.resume()
+    }
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_MediaPause
+        onPressed: spotifySession.pause()
+    }
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_MediaStop
+        onPressed: spotifySession.stop();
+    }
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_MediaNext
+        onPressed: spotifySession.playNext()
+    }
+    MediaKey {
+        enabled: true
+        key: Qt.Key_MediaPrevious
+        onPressed: spotifySession.playPrevious()
+    }
+
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_AudioForward
+        onPressed: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition - 500) / 1000))
+        onRepeat: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition - 1000) / 1000))
+        onReleased: nextTimer.stop()
+    }
+    Timer { id: nextTimer; interval: 500; onTriggered: spotifySession.playNext() }
+
+    MediaKey {
+        enabled: grabKeys
+        key: Qt.Key_AudioRewind
+        onPressed: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition + 500) / 1000))
+        onRepeat: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition + 1000) / 1000))
+        onReleased: previousTimer.stop()
+    }
+    Timer { id: previousTimer; interval: 500; onTriggered: spotifySession.playPrevious() }
+
+    Permissions {
+        enabled: spotifySession.btKeysEnabled
+        applicationClass: "player"
+
+        Resource {
+            id: keysResource
+            type: Resource.HeadsetButtons
+            optional: true
         }
     }
 }

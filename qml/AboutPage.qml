@@ -93,7 +93,7 @@ Page {
 
             Label {
                 width: parent.width
-                text: qsTr("Thanks to:\nInitial Developer Yoann Lopes\nInitial Porter to Sailfish Michael Sheldon\nMorpog for the Icon\nAll helping persons on #sailfishos irc, coderus, Sfiet_Konstantin, Basil_s and everyone else.")
+                text: qsTr("Thanks to:\nInitial Developer Yoann Lopes\nInitial Porter to Sailfish Michael Sheldon\nMorpog for the Icon\njunnuvi for bluuetooth key handling\nAll helping persons on #sailfishos irc, coderus, Sfiet_Konstantin, Basil_s and everyone else.")
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.Wrap
             }
