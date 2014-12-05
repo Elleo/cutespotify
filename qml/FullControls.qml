@@ -54,7 +54,7 @@ Page {
         opacity: status === PageStatus.Active ? 1 : 0
 
         Behavior on opacity {
-            FadeAnimation { duration: 500 }
+            FadeAnimation { duration: 200 }
         }
 
         property bool albumRequested: false
