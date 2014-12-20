@@ -90,20 +90,6 @@ Page {
             }
 
             TextSwitch {
-                id: shuffleSwitch
-                checked: spotifySession.shuffle
-                text: qsTr("Shuffle")
-                onClicked: spotifySession.shuffle = checked
-            }
-
-            TextSwitch {
-                id: repeatSwitch
-                checked: spotifySession.repeat
-                text: qsTr("Repeat songs")
-                onClicked: spotifySession.repeat = checked
-            }
-
-            TextSwitch {
                 id: volumeNormalizeSwitch
                 checked: spotifySession.volumeNormalize
                 text: qsTr("Normalize Volume")

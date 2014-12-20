@@ -62,19 +62,12 @@ Page {
             spacing: Theme.paddingLarge
 
             PageHeader {
-                title: qsTr("About")
+                title: qsTr("CuteSpotify %1").arg(APP_VERSION)
             }
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: "qrc:/qml/images/cutespotify-logo.png"
-            }
-
-            Label {
-                width: parent.width
-                text: qsTr("Version %1".arg(APP_VERSION))
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.WordWrap
             }
 
             Label {
