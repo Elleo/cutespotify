@@ -59,7 +59,6 @@
         <file>qml/ToplistPage.qml</file>
         <file>qml/MySelectionDialog.qml</file>
         <file>qml/MyCommonDialog.qml</file>
-        <file>qml/Scrollbar.qml</file>
         <file>qml/FolderPage.qml</file>
         <file>qml/images/icon-l-contact-avatar-placeholder-black.png</file>
         <file>qml/images/icon-l-contact-avatar-placeholder.png</file>
