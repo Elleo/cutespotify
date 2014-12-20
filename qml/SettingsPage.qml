@@ -173,16 +173,6 @@ Page {
                     lastFMContextMenu.show(scrobbleSwitch)
                 }
             }
-
-            TextSwitch {
-                id: btSwitch
-
-                checked: spotifySession.btKeysEnabled
-                text: qsTr("Enable controlling with bluetooth player")
-                onClicked: {
-                    spotifySession.btKeysEnabled = checked
-                }
-            }
         }
 
         ContextMenu {

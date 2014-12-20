@@ -49,7 +49,7 @@ ApplicationWindow {
 
     bottomMargin: quickControls.visibleSize
 
-    property bool grabKeys: keysResource.acquired && spotifySession.btKeysEnabled
+    property bool grabKeys: keysResource.acquired
 
     cover: Qt.resolvedUrl("CoverPage.qml")
 
