@@ -101,6 +101,9 @@ Page {
 */
     Flipable {
         id: flipable
+        anchors.left: parent.left
+        anchors.top: parent.top
+
         property bool flipped: false
 
         transform: Rotation {
@@ -309,7 +312,6 @@ Page {
     PanelBackground {
 
         anchors.bottom: parent.bottom
-        anchors.left: fcPage.isPortrait ? parent.left : flipable.right
         anchors.right: parent.right
         height: fcPage.isPortrait ? parent.height - flipable.height : parent.height
         width: fcPage.isPortrait ? parent.width : parent.width - flipable.width
