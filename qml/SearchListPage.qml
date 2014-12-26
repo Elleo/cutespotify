@@ -4,9 +4,11 @@ import QtSpotify 1.0
 
 Page {
     id: searchlistPage
+    allowedOrientations: Orientation.All
     property var listModel
     property var listDelegate
     property var pageTitle
+
 
     SilicaListView {
         anchors.fill: parent

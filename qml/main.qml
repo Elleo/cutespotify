@@ -47,6 +47,8 @@ import org.nemomobile.policy 1.0
 ApplicationWindow {
     id: appWindow
 
+    allowedOrientations: Orientation.All
+
     bottomMargin: quickControls.visibleSize
 
     property bool grabKeys: keysResource.acquired
@@ -98,7 +100,7 @@ ApplicationWindow {
 
     Component {
         id: mainPage
-        PlaylistPage { }
+        PlaylistPage {  }
     }
 
     Component {

@@ -45,6 +45,8 @@ import QtSpotify 1.0
 
 Page {
     id: artistPage
+    allowedOrientations: Orientation.All
+
 
     property string artistName
     property string artistPicId

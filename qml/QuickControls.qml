@@ -45,7 +45,7 @@ DockedPanel {
     id: controlsFlickable
 
     width: parent.width
-    height: width * 0.3
+    height: 150
 
     contentHeight: height
     flickableDirection: Flickable.VerticalFlick

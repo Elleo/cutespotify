@@ -45,6 +45,7 @@ import QtSpotify 1.0
 
 Page {
     id: toplistPage
+    allowedOrientations: Orientation.All
     enabled: !spotifySession.offlineMode
 
     property variant toplist

@@ -46,6 +46,7 @@ import "UIConstants.js" as UI
 
 Page {
     id: albumPage
+    allowedOrientations: Orientation.All
 
     property string name
     property string coverId

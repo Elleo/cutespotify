@@ -44,6 +44,8 @@ import "UIConstants.js" as UI
 
 MyCommonDialog {
     id: root
+    allowedOrientations: Orientation.All
+
 
     // Common API
     property ListModel model: ListModel{}
