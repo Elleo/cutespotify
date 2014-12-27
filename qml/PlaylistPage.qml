@@ -45,6 +45,7 @@ import QtSpotify 1.0
 
 Page {
     id: playlistPage
+    allowedOrientations: Orientation.All
 
     Connections {
         target: spotifySession

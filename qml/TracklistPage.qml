@@ -45,6 +45,7 @@ import QtSpotify 1.0
 
 Page {
     id: tracklistPage
+    allowedOrientations: Orientation.All
     property variant playlist
 
     // TODO this property should once come from the model and shouldn't need

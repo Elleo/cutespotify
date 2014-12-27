@@ -44,6 +44,8 @@ import QtSpotify 1.0
 
 Page {
     id: folderPage
+    allowedOrientations: Orientation.All
+
 
     property variant folder
     property bool folderDeleted: false

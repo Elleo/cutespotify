@@ -47,6 +47,8 @@ import org.nemomobile.policy 1.0
 ApplicationWindow {
     id: appWindow
 
+    allowedOrientations: Orientation.All
+
     bottomMargin: quickControls.visibleSize
 
     property bool grabKeys: keysResource.acquired
@@ -98,7 +100,7 @@ ApplicationWindow {
 
     Component {
         id: mainPage
-        PlaylistPage { }
+        PlaylistPage {  }
     }
 
     Component {
@@ -212,8 +214,8 @@ ApplicationWindow {
     MediaKey {
         enabled: grabKeys
         key: Qt.Key_AudioForward
-        onPressed: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition - 500) / 1000))
-        onRepeat: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition - 1000) / 1000))
+        onPressed: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition + 500))
+        onRepeat: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition + 1000))
         onReleased: nextTimer.stop()
     }
     Timer { id: nextTimer; interval: 500; onTriggered: spotifySession.playNext() }
@@ -221,14 +223,14 @@ ApplicationWindow {
     MediaKey {
         enabled: grabKeys
         key: Qt.Key_AudioRewind
-        onPressed: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition + 500) / 1000))
-        onRepeat: spotifySession.seek(Math.max(0, (spotifySession.currentTrackPosition + 1000) / 1000))
+        onPressed: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition - 500))
+        onRepeat: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition - 1000))
         onReleased: previousTimer.stop()
     }
     Timer { id: previousTimer; interval: 500; onTriggered: spotifySession.playPrevious() }
 
     Permissions {
-        enabled: spotifySession.btKeysEnabled
+        enabled: true
         applicationClass: "player"
 
         Resource {
