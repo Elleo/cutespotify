@@ -142,7 +142,7 @@ Page {
                     text: "Available offline"
                 }
                 Switch {
-                    onCheckedChanged: playlist.availableOffline = !playlist.availableOffline
+                    onCheckedChanged: playlist.availableOffline = checked
                     Component.onCompleted: {
                         checked = playlist.availableOffline
                     }
