@@ -190,8 +190,7 @@ MainView {
     Connections {
         target: UriHandler
         onOpened: {
-            spotifySession.handleUri(uri[0]);
-            console.log("qml: uris: " + uris);
+            spotifySession.handleUri(uris[0]);
         }
     }
 
