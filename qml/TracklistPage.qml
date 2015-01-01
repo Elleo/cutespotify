@@ -143,7 +143,9 @@ Page {
                 }
                 Switch {
                     onCheckedChanged: playlist.availableOffline = !playlist.availableOffline
-                    checked: playlist.availableOffline
+                    Component.onCompleted: {
+                        checked = playlist.availableOffline
+                    }
                 }
             }
         }

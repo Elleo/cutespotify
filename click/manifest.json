@@ -5,7 +5,8 @@
 	"hooks": {
 		"cutespotify": {
 			"apparmor": "cutespotify.json",
-			"desktop": "cutespotify.desktop"
+			"desktop": "cutespotify.desktop",
+            "urls": "cutespotify.url-dispatcher"
 		}
 	},
 	"maintainer": "Michael Sheldon <mike@mikeasoft.com>",

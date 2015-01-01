@@ -187,6 +187,14 @@ MainView {
         visible: false
     }
 
+    Connections {
+        target: UriHandler
+        onOpened: {
+            spotifySession.handleUri(uri[0]);
+            console.log("qml: uris: " + uris);
+        }
+    }
+
     function checkSearchPage() {
         if (searchTab.depth === 0) searchTab.push(Qt.resolvedUrl("SearchPage.qml"))
     }

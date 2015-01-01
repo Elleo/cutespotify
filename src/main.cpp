@@ -47,6 +47,7 @@
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QQuickView>
 #include <QtWidgets/QApplication>
+#include <iostream>
 
 //#include "src/hardwarekeyshandler.h"
 #include <QtSpotify>
@@ -54,9 +55,12 @@
 
 void silentDebug(QtMsgType type, const QMessageLogContext& context, const QString &msg)
 {
-    Q_UNUSED(type);
     Q_UNUSED(context);
-    Q_UNUSED(msg);
+    if (type == QtMsgType::QtDebugMsg) {
+        return;
+    } else {
+        std::cerr << msg.toStdString() << std::endl;
+    }
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
@@ -64,9 +68,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setOrganizationName("com.mikeasoft.cutespotify");
     QApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
     QApplication::setApplicationName("CuteSpotify");
-    QApplication::setApplicationVersion("1.4");
 
-    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QDir::separator() + "com.mikeasoft.cutespotify";
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);
     QSettings settings;
     if(!settings.contains("dataPath")) {
