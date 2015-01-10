@@ -137,6 +137,13 @@ Page {
             }
 
             TextSwitch {
+                id: privateSwitch
+                checked: spotifySession.privateSession
+                text: qsTr("Private session")
+                onClicked: spotifySession.setPrivateSession(checked)
+            }
+
+            TextSwitch {
                 id: syncSwitch
                 checked: spotifySession.syncOverMobile
                 text: qsTr("Sync over 2G/3G")
