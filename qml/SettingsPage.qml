@@ -138,9 +138,13 @@ Page {
 
             TextSwitch {
                 id: privateSwitch
+                automaticCheck: false
                 checked: spotifySession.privateSession
                 text: qsTr("Private session")
-                onClicked: spotifySession.setPrivateSession(checked)
+                onClicked: {
+                    spotifySession.setPrivateSession(checked ? false : true)
+                    checked = spotifySession.privateSession
+                }
             }
 
             TextSwitch {
