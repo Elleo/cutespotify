@@ -50,13 +50,16 @@ DockedPanel {
     contentHeight: height
     flickableDirection: Flickable.VerticalFlick
 
-    opacity: Qt.inputMethod.visible ? 0.0 : 1.0
-    Behavior on opacity { FadeAnimation {}}
+    opacity: Qt.inputMethod.visible || !open ? 0.0 : 1.0
+    Behavior on opacity { FadeAnimation {duration: 300}}
 
     onOpenChanged: {
         if(!open && spotifySession.isPlaying && !appWindow.showFullControls)
             spotifySession.pause()
     }
+
+    // overwrite default behavior to prevent weird behaviour when rotating.
+    Behavior on y { }
 
     Item {
         anchors.fill: parent
