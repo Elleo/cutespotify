@@ -43,8 +43,6 @@ import QtQuick 2.0
 import Ubuntu.Components 0.1
 import Ubuntu.Components.Popups 0.1
 import QtSpotify 1.0
-import "UIConstants.js" as UI
-import "Utilities.js" as Utilities
 
 MyMenu {
     id: playlistMenu

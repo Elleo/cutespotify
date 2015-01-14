@@ -2,35 +2,19 @@
     <qresource prefix="/">
         <file>qml/main.qml</file>
         <file>qml/LoginPage.qml</file>
-        <file>qml/UIConstants.js</file>
         <file>qml/PlaylistPage.qml</file>
         <file>qml/TracklistPage.qml</file>
         <file>qml/PlaylistDelegate.qml</file>
         <file>qml/TrackDelegate.qml</file>
         <file>qml/QuickControls.qml</file>
-        <file>qml/images/player-quickcontrols-back-open.png</file>
-        <file>qml/images/player-quickcontrols-back-closed.png</file>
         <file>qml/FullControls.qml</file>
         <file>qml/NotificationBanner.qml</file>
         <file>qml/SettingsPage.qml</file>
-        <file>qml/Selector.qml</file>
         <file>qml/SearchPage.qml</file>
-        <file>qml/images/meegotouch-slider-handle-background-horizontal.png</file>
-        <file>qml/images/meegotouch-slider-handle-background-pressed-horizontal.png</file>
         <file>qml/SpotifyImage.qml</file>
-        <file>qml/Utilities.js</file>
-        <file>qml/images/icon-m-toolbar-repeat-white-selected.png</file>
-        <file>qml/images/icon-m-toolbar-shuffle-white-selected.png</file>
         <file>qml/TrackMenu.qml</file>
-        <file>qml/images/icon-m-collaborative-playlist.png</file>
         <file>qml/PlaylistMenu.qml</file>
-        <file>qml/MyMenuLayout.qml</file>
-        <file>qml/MyMenuItem.qml</file>
-        <file>qml/images/meegotouch-sheet-header-inverted-background.png</file>
-        <file>qml/MyMenu.qml</file>
-        <file>qml/MyPopup.qml</file>
         <file>qml/MyFader.qml</file>
-        <file>qml/PlaylistNameSheet.qml</file>
         <file>qml/AlbumPage.qml</file>
         <file>qml/AlbumHeader.qml</file>
         <file>qml/AlbumTrackDelegate.qml</file>
@@ -40,38 +24,15 @@
         <file>qml/AlbumDelegate.qml</file>
         <file>qml/ArtistDelegate.qml</file>
         <file>qml/images/spotify-core-logo-128x128.png</file>
-        <file>qml/images/meegotouch-progressindicator-bar-known-texture.png</file>
         <file>qml/AboutPage.qml</file>
         <file>qml/LicensePage.qml</file>
         <file>qml/images/meespot-logo.png</file>
-        <file>qml/MyMenuItemStyle.qml</file>
-        <file>qml/images/meegotouch-list-inverted-background-vertical-top.png</file>
-        <file>qml/images/meegotouch-list-inverted-background-pressed-vertical-bottom.png</file>
-        <file>qml/images/meegotouch-list-inverted-background-pressed-vertical-center.png</file>
-        <file>qml/images/meegotouch-list-inverted-background-pressed-vertical-top.png</file>
-        <file>qml/images/meegotouch-list-inverted-background-vertical-bottom.png</file>
-        <file>qml/images/meegotouch-list-inverted-background-vertical-center.png</file>
-        <file>qml/images/meegotouch-menu-background-inverted.png</file>
         <file>qml/MySheet.qml</file>
-        <file>qml/images/meegotouch-list-inverted-background.png</file>
         <file>qml/images/icon-m-common-green.png</file>
         <file>qml/InboxTrackDelegate.qml</file>
         <file>qml/ToplistPage.qml</file>
-        <file>qml/MySelectionDialog.qml</file>
         <file>qml/MyCommonDialog.qml</file>
         <file>qml/FolderPage.qml</file>
-        <file>qml/images/icon-l-contact-avatar-placeholder-black.png</file>
-        <file>qml/images/icon-l-contact-avatar-placeholder.png</file>
-        <file>qml/images/icon-l-contact-avatar-placeholder-big.png</file>
-        <file>qml/images/icon-l-contact-avatar-placeholder-black-big.png</file>
-        <file>qml/images/icon-m-toolbar-directory-black.png</file>
-        <file>qml/images/icon-m-toolbar-directory-white.png</file>
-        <file>qml/images/icon-m-music-video-all-songs-black.png</file>
-        <file>qml/images/icon-m-music-video-all-songs-white.png</file>
-        <file>qml/images/icon-m-toolbar-directory-move-to-black.png</file>
-        <file>qml/images/icon-m-toolbar-directory-move-to-white.png</file>
-        <file>qml/images/icon-m-toolbar-shuffle-selected.png</file>
-        <file>qml/images/icon-m-toolbar-repeat-one-white-selected.png</file>
         <file>qml/images/cutespotify-logo.png</file>
         <file>qml/images/cutespotify.png</file>
         <file>qml/LastFMDialog.qml</file>

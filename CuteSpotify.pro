@@ -7,9 +7,7 @@ SUBDIRS = \
 OTHER_FILES += \
     qml/main.qml \
     cutespotify.desktop \
-    CuteSpotify.conf \
     qml/LoginPage.qml \
-    qml/UIConstants.js \
     qml/PlaylistPage.qml \
     qml/TracklistPage.qml \
     qml/PlaylistDelegate.qml \
@@ -21,7 +19,6 @@ OTHER_FILES += \
     qml/Selector.qml \
     qml/SearchPage.qml \
     qml/SpotifyImage.qml \
-    qml/Utilities.js \
     qml/TrackMenu.qml \
     qml/PlaylistMenu.qml \
     qml/MyMenuLayout.qml \
@@ -46,11 +43,11 @@ OTHER_FILES += \
     qml/MySelectionDialog.qml \
     qml/MyCommonDialog.qml \
     qml/FolderPage.qml \
-    rpm/cutespotify.spec \
     qml/LastFMDialog.qml \
     qml/LogoutDialog.qml \
     qml/CoverPage.qml \
     qml/LicensePage.qml \
     qml/SeeMoreItem.qml \
     qml/SearchListPage.qml \
-    qml/PlaylistSearchDelegate.qml
+    qml/PlaylistSearchDelegate.qml \
+    rpm/cutespotify.spec
