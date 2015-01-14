@@ -93,7 +93,7 @@ BackgroundItem {
                 Loader {
                     id: unseenBox
                     anchors.verticalCenter: parent.verticalCenter
-                    x: mainText.paintedWidth + UI.MARGIN_XLARGE
+                    x: mainText.paintedWidth + Theme.paddingLarge
                     sourceComponent: listItem.unseens > 0  ? unseensComponent : null
                 }
 
@@ -153,7 +153,7 @@ BackgroundItem {
                         color: listItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         anchors.left: parent.left
                         anchors.right: timing.left
-                        anchors.rightMargin: UI.MARGIN_XLARGE
+                        anchors.rightMargin: Theme.paddingLarge
                         elide: Text.ElideRight
                         visible: text != ""
                     }
@@ -172,7 +172,7 @@ BackgroundItem {
                     id: downloadBar
                     anchors.left: offlineStatusIcon.right
                     anchors.right: parent.right
-                    anchors.rightMargin: UI.MARGIN_XLARGE
+                    anchors.rightMargin: Theme.paddingLarge
                     anchors.leftMargin: -65
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: -25
