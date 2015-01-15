@@ -17,7 +17,7 @@ Name:       harbour-cutespotify
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    CuteSpotify
 Version:    1.5.1
-Release:    95
+Release:    96
 Group:      Qt/Qt
 License:    BSD
 Source0:    %{name}-%{version}.tar.bz2
