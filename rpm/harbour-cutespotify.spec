@@ -16,8 +16,8 @@ Name:       harbour-cutespotify
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    CuteSpotify
-Version:    1.5.1
-Release:    96
+Version:    1.5.2
+Release:    1
 Group:      Qt/Qt
 License:    BSD
 Source0:    %{name}-%{version}.tar.bz2
@@ -30,6 +30,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(sailfishapp)
 BuildRequires:  desktop-file-utils
+BuildRequires:  qt5-qtmultimedia-plugin-audio-pulseaudio
 
 %description
 CuteSpotify allows you to make use of Spotify on Sailfish devices.

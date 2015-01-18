@@ -1,4 +1,8 @@
-# Cute Spotify 
+# Cute Spotify
+## Note about versioning
+Starting from 1.5.2-*: Release 0 is always the harbour version, Release > 0 is always non-harbour compliant version.
+The harbour version is a limited version with all *.harbour.patch patches applied. This is due to API limitations in harbour.
+
 ## Build Requirements
 ### Prerequisites
 You need some libraries to build CuteSpotify, also you need QtCreator if you want to open the .pro file.
