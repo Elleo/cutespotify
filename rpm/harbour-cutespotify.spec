@@ -17,12 +17,13 @@ Name:       harbour-cutespotify
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    CuteSpotify
 Version:    1.5.2
-Release:    1
+Release:    2
 Group:      Qt/Qt
 License:    BSD
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-cutespotify.yaml
 Requires:   sailfishsilica-qt5
+Requires:   qt5-qtmultimedia-plugin-audio-pulseaudio
 BuildRequires:  pkgconfig(Qt5Concurrent)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
