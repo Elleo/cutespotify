@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 X-Nemo-Application-Type=silica-qt5
-Name=CuteSpotify
-Icon=harbour-cutespotify
-Exec=harbour-cutespotify
+Name=CuteSpot
+Icon=harbour-cutespot
+Exec=harbour-cutespot
 
 X-Desktop-File-Install-Version=0.20

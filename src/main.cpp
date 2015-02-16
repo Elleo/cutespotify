@@ -64,13 +64,13 @@ void silentDebug(QtMsgType type, const QMessageLogContext& context, const QStrin
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QCoreApplication::setOrganizationName("CuteSpotify");
-    QCoreApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
-    QCoreApplication::setApplicationName("CuteSpotify");
+    QCoreApplication::setOrganizationName("CuteSpot");
+    QCoreApplication::setOrganizationDomain("com.mikeasoft.cutespot");
+    QCoreApplication::setApplicationName("CuteSpot");
     QCoreApplication::setApplicationVersion("1.3.0");
-    QCoreApplication::addLibraryPath("/usr/share/harbour-cutespotify/lib/");
+    QCoreApplication::addLibraryPath("/usr/share/harbour-cutespot/lib/");
 
-    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-cutespotify/";
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-cutespot/";
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);
     QSettings settings;
     if(!settings.contains("dataPath")) {

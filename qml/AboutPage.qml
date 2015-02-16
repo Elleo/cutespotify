@@ -64,12 +64,12 @@ Page {
             spacing: Theme.paddingLarge
 
             PageHeader {
-                title: qsTr("CuteSpotify %1").arg(APP_VERSION)
+                title: qsTr("CuteSpot %1").arg(APP_VERSION)
             }
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
-                source: "qrc:/qml/images/cutespotify-logo.png"
+                source: "qrc:/qml/images/cutespot-logo.png"
             }
 
             Label {
@@ -109,7 +109,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("e-Mail developer")
                 onClicked: {
-                    Qt.openUrlExternally("mailto:lukedirtwalkerdev@gmail.com?subject=[CuteSpotify]")
+                    Qt.openUrlExternally("mailto:lukedirtwalkerdev@gmail.com?subject=[CuteSpot]")
                 }
             }
 

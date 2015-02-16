@@ -33,8 +33,8 @@
         <file>qml/ToplistPage.qml</file>
         <file>qml/MyCommonDialog.qml</file>
         <file>qml/FolderPage.qml</file>
-        <file>qml/images/cutespotify-logo.png</file>
-        <file>qml/images/cutespotify.png</file>
+        <file>qml/images/cutespot-logo.png</file>
+        <file>qml/images/cutespot.png</file>
         <file>qml/LastFMDialog.qml</file>
         <file>qml/LogoutDialog.qml</file>
         <file>qml/CoverPage.qml</file>

@@ -6,7 +6,7 @@ SUBDIRS = \
 
 OTHER_FILES += \
     qml/main.qml \
-    cutespotify.desktop \
+    cutespot.desktop \
     qml/LoginPage.qml \
     qml/PlaylistPage.qml \
     qml/TracklistPage.qml \
@@ -50,4 +50,4 @@ OTHER_FILES += \
     qml/SeeMoreItem.qml \
     qml/SearchListPage.qml \
     qml/PlaylistSearchDelegate.qml \
-    rpm/cutespotify.spec
+    rpm/cutespot.spec

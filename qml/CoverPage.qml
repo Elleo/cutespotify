@@ -14,7 +14,7 @@ CoverBackground {
 
     Image {
         anchors.centerIn: parent
-        source: "qrc:/qml/images/cutespotify.png"
+        source: "qrc:/qml/images/cutespot.png"
         visible: spotifySession.currentTrack ? false : true
         opacity: 0.5
     }

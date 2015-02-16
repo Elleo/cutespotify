@@ -80,7 +80,7 @@ Page {
 
             Image {
                 id: logo
-                source: "qrc:/qml/images/cutespotify-logo.png"
+                source: "qrc:/qml/images/cutespot-logo.png"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
