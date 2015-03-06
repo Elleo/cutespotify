@@ -110,6 +110,8 @@ Page {
         tracks.positionViewAtBeginning();
     }
 
+    RemorsePopup {id: offlineRemorse}
+
     Column {
         id: headerContainer
         width: tracks.width
@@ -123,15 +125,20 @@ Page {
 
         TextSwitch {
             id: offlineSwitch
-            width: parent.width
 
             text: qsTr("Available offline")
             property bool completed: false;
             onCheckedChanged: {
                 if(completed) {
                     console.log("Offline changed");
-                    playlist.availableOffline = !playlist.availableOffline;
+                    offlineRemorse.execute(playlist.availableOffline ? "Remove from offline cache" : "Store offline", function()
+                    {
+                        playlist.availableOffline = !playlist.availableOffline;
+                        offlineSwitch.checked = playlist.availableOffline
+                    } )
+
                 }
+                checked = playlist.availableOffline
             }
             busy: playlist.offlineStatus === SpotifyPlaylist.Downloading
             checked: playlist.availableOffline
