@@ -50,4 +50,5 @@ OTHER_FILES += \
     qml/SeeMoreItem.qml \
     qml/SearchListPage.qml \
     qml/PlaylistSearchDelegate.qml \
-    rpm/cutespot.spec
+    rpm/cutespot.spec \
+    qml/PlaylistNameDialog.qml

@@ -42,7 +42,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
 
-BackgroundItem {
+ListItem {
     id: listItem
 
     property alias title: mainText.text
@@ -54,8 +54,37 @@ BackgroundItem {
     property int downloadProgress: 0
     property int unseens: 0
 
-    height: Theme.itemSizeMedium
+    contentHeight: Theme.itemSizeMedium
     width: parent.width
+
+    menu: contextMenuComponent
+
+    function toggleOffline() {
+        var text = (availableOffline ? qsTr("Unset") : qsTr("Set")) + qsTr(" offline mode")
+        remorseAction(text, function() {modelData.availableOffline = !modelData.availableOffline})
+    }
+
+    function unsetOfflineContent() {
+        remorseAction(qsTr("Unset offline mode for content"), function() {modelData.availableOffline = false})
+    }
+
+    function setOfflineContent() {
+        remorseAction(qsTr("Set offline mode for content"), function() {modelData.availableOffline = true})
+    }
+
+    function remove() {
+        var text = ""
+        if (modelData.type === SpotifyPlaylist.Folder) text = qsTr("Remove Folder")
+        else {
+            if (spotifySession.user && spotifySession.user.ownsPlaylist(modelData)) text = qsTr("Remove playlist")
+            else text = qsTr("Unsubscribe from playlist")
+        }
+        remorseAction(text, function() {modelData.removeFromContainer()})
+    }
+
+    function removeFolderContent() {
+        remorseAction(qsTr("Remove folder and content"), function() {modelData.deleteFolderContent()})
+    }
 
     Row {
         anchors.fill: parent
@@ -225,4 +254,11 @@ BackgroundItem {
     }
 
     Component.onCompleted: updateIcon()
+
+    Component {
+        id: contextMenuComponent
+        PlaylistMenu {
+            playlist: modelData
+        }
+    }
 }

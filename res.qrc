@@ -42,5 +42,6 @@
         <file>qml/SeeMoreItem.qml</file>
         <file>qml/SearchListPage.qml</file>
         <file>qml/PlaylistSearchDelegate.qml</file>
+        <file>qml/PlaylistNameDialog.qml</file>
     </qresource>
 </RCC>

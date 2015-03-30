@@ -141,9 +141,9 @@ Page {
                 else if (modelData.type === SpotifyPlaylist.Folder)
                     pageStack.push(Qt.resolvedUrl("FolderPage.qml"), {"folder": modelData })
             }
-            onPressAndHold: { menu.playlist = modelData; menu.open(); }
-        }
 
+
+        }
         // TODO add a way to create a new playlist
     }
 }
