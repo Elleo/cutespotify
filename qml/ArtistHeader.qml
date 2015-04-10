@@ -42,63 +42,94 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Row {
+Item {
     id: albumHeader
+    width: parent.width
+    height: Theme.itemSizeLarge * 3
+
+    property alias title: header.title
     property alias albumCount: albumCountText.text
     property alias singleCount: singleCountText.text
     property alias compilationCount: compilationsText.text
     property alias appearsOnCount: appearsOnText.text
     property alias artistPictureId: coverImage.spotifyId
-
     property bool busy: false
 
-    width: parent.width
-    height: width * 0.3
-    spacing: Theme.paddingLarge
-    anchors.left: parent.left
-    anchors.leftMargin: Theme.paddingLarge
-
-    SpotifyImage {
-        id: coverImage
-        height: parent.height - 2 * Theme.paddingLarge
-        width: height
-        fillMode: Image.PreserveAspectCrop
-        defaultImage: "image://theme/icon-m-person"
-        clip: true
-        visible: albumCount.length > 0 || singleCount.length > 0 || compilationCount.length > 0
+    Rectangle {
+        width: parent.width
+        height: parent.height
+        color: Theme.highlightBackgroundColor
+        opacity: 0.1
+        visible: !backgroundImage.visible
     }
 
-    Column {
-        id: desc
-        width: parent.width - coverImage.width - Theme.paddingLarge
+    SpotifyImage {
+        id: backgroundImage
+        width: parent.width
+        height: parent.height
+        fillMode: Image.PreserveAspectCrop
+        spotifyId: artistPictureId
+        visible: spotifyId != ''
+        opacity: status == Image.Ready ? 0.4 : 0.0
+    }
 
-        Label {
-            id: albumCountText
-            width: parent.width
-            font.pixelSize: Theme.fontSizeSmall
-            truncationMode: TruncationMode.Fade
-            visible: text.length > 0
+    PageHeader {
+        id: header
+    }
+
+    Row {
+        spacing: Theme.paddingMedium
+        anchors.top: header.bottom
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingLarge
+        height: parent.height - header.height
+
+        SpotifyImage {
+            id: coverImage
+            height: parent.height - Theme.paddingLarge - Theme.paddingMedium
+            width: height
+            fillMode: Image.PreserveAspectCrop
+            defaultImage: "image://theme/icon-m-person"
+            clip: true
+            visible: albumCount.length > 0 || singleCount.length > 0 || compilationCount.length > 0
         }
-        Label {
-            id: singleCountText
-            width: parent.width
-            font.pixelSize: Theme.fontSizeSmall
-            truncationMode: TruncationMode.Fade
-            visible: text.length > 0
-        }
-        Label {
-            id: compilationsText
-            width: parent.width
-            font.pixelSize: Theme.fontSizeSmall
-            truncationMode: TruncationMode.Fade
-            visible: text.length > 0
-        }
-        Label {
-            id: appearsOnText
-            width: parent.width
-            font.pixelSize: Theme.fontSizeSmall
-            truncationMode: TruncationMode.Fade
-            visible: text.length > 0
+
+        Column {
+            id: desc
+            width: parent.width - coverImage.width - Theme.paddingMedium
+
+            Label {
+                id: albumCountText
+                width: parent.width
+                font.pixelSize: Theme.fontSizeSmall
+                truncationMode: TruncationMode.Fade
+                visible: text.length > 0
+                color: Theme.highlightColor
+            }
+            Label {
+                id: singleCountText
+                width: parent.width
+                font.pixelSize: Theme.fontSizeSmall
+                truncationMode: TruncationMode.Fade
+                visible: text.length > 0
+                color: Theme.highlightColor
+            }
+            Label {
+                id: compilationsText
+                width: parent.width
+                font.pixelSize: Theme.fontSizeSmall
+                truncationMode: TruncationMode.Fade
+                visible: text.length > 0
+                color: Theme.highlightColor
+            }
+            Label {
+                id: appearsOnText
+                width: parent.width
+                font.pixelSize: Theme.fontSizeSmall
+                truncationMode: TruncationMode.Fade
+                visible: text.length > 0
+                color: Theme.highlightColor
+            }
         }
     }
 }

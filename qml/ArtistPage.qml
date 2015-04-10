@@ -151,9 +151,11 @@ Page {
             width: parent.width
             PageHeader {
                 title: artistName + ": " + titleString
+                visible: artistView._state != 1
             }
 
             ArtistHeader {
+                title: artistName
                 albumCount: browse.albumCount > 0 ? (browse.albumCount + (browse.albumCount > 1 ? " albums" : " album")) : ""
                 singleCount: browse.singleCount > 0 ? (browse.singleCount + (browse.singleCount > 1 ? " singles" : " single")) : ""
                 compilationCount: browse.compilationCount > 0 ? (browse.compilationCount + (browse.compilationCount > 1 ? " compilations" : " compilation")) : ""
