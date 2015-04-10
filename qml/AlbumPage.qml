@@ -47,11 +47,12 @@ Page {
     id: albumPage
     allowedOrientations: Orientation.All
 
-    property string name
-    property string coverId
-    property string artist
-    property string albumYear
-    property variant browse
+    property variant album: null
+    property string name: album ? album.name : ""
+    property string coverId: album ? album.coverId : ""
+    property string artist: album ? album.artist: ""
+    property string albumYear: album ? album.year : 0
+    property variant browse: album ? album.browse() : null
     property int trackCount: browse ? browse.trackCount : 0
 
     SilicaListView {

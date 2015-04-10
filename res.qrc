@@ -43,5 +43,6 @@
         <file>qml/SearchListPage.qml</file>
         <file>qml/PlaylistSearchDelegate.qml</file>
         <file>qml/PlaylistNameDialog.qml</file>
+        <file>qml/PlaylistSelectionDialog.qml</file>
     </qresource>
 </RCC>

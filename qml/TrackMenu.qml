@@ -39,87 +39,64 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
-import Ubuntu.Components.Popups 0.1;
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
 
-MyMenu {
+ContextMenu {
     id: trackMenu
-
 
     property variant track: null
     property bool deleteVisible: false
     property bool albumVisible: true
     property bool markSeenVisible: false
 
-    layoutContentHeight: layout.height
-/*
-    Dialog {
-        id: confirmDeleteDialog
-        parent: trackMenu.parent
-        title: "Delete track?"
-        text: track ? track.name : ""
-        Button {
-            text: "Yes"
-            onClicked: { track.removeFromPlaylist() }
-        }
-
-        Button {
-            text: "No"
+    MenuItem {
+        id: seenItem
+        onClicked: { track.seen = !track.seen }
+        visible: trackMenu.markSeenVisible && !spotifySession.offlineMode;
+    }
+    // TODO implement QUEUEING
+//    MenuItem {
+//        text: qsTr("Add to queue");
+//        onClicked: { track.enqueue() }
+//    }
+    MenuItem {
+        id: starItem
+        onClicked: { track.isStarred = !track.isStarred }
+        visible: !spotifySession.offlineMode
+    }
+    MenuItem {
+        text: qsTr("Album");
+        visible: trackMenu.albumVisible && !spotifySession.offlineMode
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { "album": track.albumObject })
         }
     }
-*/
-    MyMenuLayout {
-        id:layout
-
-        MyMenuItem {
-            id: seenItem
-            onClicked: { track.seen = !track.seen }
-            visible: trackMenu.markSeenVisible && !spotifySession.offlineMode;
+    MenuItem {
+        text: qsTr("Artist");
+        visible: !spotifySession.offlineMode
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { "artist": track.artistObject })
         }
-        MyMenuItem {
-            text: "Add to queue";
-            onClicked: { track.enqueue() }
+    }
+    MenuItem {
+        text: qsTr("Add to playlist");
+        visible: !spotifySession.offlineMode
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("PlaylistSelectionDialog.qml"), {"track": trackMenu.track})
         }
-        MyMenuItem {
-            id: starItem
-            onClicked: { track.isStarred = !track.isStarred }
-            visible: !spotifySession.offlineMode
-        }
-        MyMenuItem {
-            text: "Album";
-            visible: trackMenu.albumVisible && !spotifySession.offlineMode
-            onClicked: {
-                pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: track.albumObject })
-            }
-        }
-        MyMenuItem {
-            text: "Artist";
-            visible: !spotifySession.offlineMode
-            onClicked: {
-                pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: track.artistObject })
-            }
-        }
-        MyMenuItem {
-            text: "Add to playlist";
-            visible: !spotifySession.offlineMode
-            onClicked: {
-                mainPage.playlistSelection.track = trackMenu.track;
-                mainPage.playlistSelection.selectedIndex = -1;
-                mainPage.playlistSelection.open();
-            }
-        }
-/*        MyMenuItem {
-            text: "Delete";
-            visible: trackMenu.deleteVisible && !spotifySession.offlineMode;
-            onClicked: { confirmDeleteDialog.open(); }
-        }*/
+    }
+    MenuItem {
+        text: qsTr("Delete");
+        visible: trackMenu.deleteVisible && !spotifySession.offlineMode;
+        onClicked: deleteTrack()
     }
 
-    onStatusChanged: {
-        if (status == DialogStatus.Opening && track) {
-            starItem.text = track.isStarred ? "Unstar" : "Star";
-            seenItem.text = "Mark as " + (track.seen ? "unseen" : "seen");
+
+    onActiveChanged: {
+        if (active && track) {
+            starItem.text = track.isStarred ? qsTr("Unstar") : qsTr("Star");
+            seenItem.text = qsTr("Mark as ") + (track.seen ? qsTr("unseen") : qsTr("seen"));
         }
     }
 }

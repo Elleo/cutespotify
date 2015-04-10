@@ -17,11 +17,10 @@ Name:       harbour-cutespot
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    CuteSpot
 Version:    1.5.3
-Release:    1
+Release:    90
 Group:      Qt/Qt
 License:    BSD
 Source0:    %{name}-%{version}.tar.bz2
-Source100:  harbour-cutespotify.yaml
 Requires:   sailfishsilica-qt5
 Requires:   qt5-qtmultimedia-plugin-audio-pulseaudio
 BuildRequires:  pkgconfig(Qt5Concurrent)
@@ -33,7 +32,7 @@ BuildRequires:  pkgconfig(sailfishapp)
 BuildRequires:  desktop-file-utils
 
 %description
-CuteSpotify allows you to make use of Spotify on Sailfish devices.
+CuteSpot allows you to make use of Spotify on Sailfish devices.
 
 A Spotify premium account is required to make use of this application.
 

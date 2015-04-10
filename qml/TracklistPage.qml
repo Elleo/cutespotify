@@ -76,6 +76,12 @@ Page {
                 else
                     tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
+
+            function deleteTrack() {
+                remorseAction(qsTr("Delete"), function() {playlist.remove(model.rawPtr)})
+            }
+
+            canDelete: playlist && spotifySession.user ? (playlist.type !== SpotifyPlaylist.Starred && spotifySession.user.canModifyPlaylist(playlist)) : false
         }
     }
 
@@ -101,7 +107,19 @@ Page {
                     tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
             seen: model.seen
-            //            onPressAndHold: { menu.track = modelData; menu.open(); }
+
+            function deleteTrack() {
+                remorseAction(qsTr("Delete"), function() {playlist.remove(model.rawPtr)})
+            }
+
+            menu: Component {
+                id: trackMenuComponent
+                TrackMenu {
+                    track: model.rawPtr
+                    deleteVisible: playlist && spotifySession.user ? (playlist.type !== SpotifyPlaylist.Starred && spotifySession.user.canModifyPlaylist(playlist)) : false
+                    markSeenVisible: playlist
+                }
+            }
         }
     }
 

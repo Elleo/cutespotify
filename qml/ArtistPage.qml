@@ -48,9 +48,10 @@ Page {
     allowedOrientations: Orientation.All
 
 
-    property string artistName
-    property string artistPicId
-    property variant browse
+    property variant artist
+    property string artistName: artist ? artist.name : ""
+    property string artistPicId: artist ? artist.pictureId : ""
+    property variant browse: artist ? artist.browse() : null
 
     property string titleString: qsTr("Music")
 

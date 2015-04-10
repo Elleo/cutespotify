@@ -42,7 +42,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-BackgroundItem {
+ListItem {
     id: listItem
 
     property variant listModel
@@ -60,8 +60,16 @@ BackgroundItem {
             listModel.playTrack(index)
     }
 
-    height: Theme.itemSizeSmall
+    contentHeight: Theme.itemSizeSmall
     width: parent.width
+
+    menu: Component {
+        id: trackMenuComponent
+        TrackMenu {
+            track: model.rawPtr
+            albumVisible: false
+        }
+    }
 
     Item {
         anchors.left: parent.left

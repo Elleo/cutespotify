@@ -42,7 +42,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-BackgroundItem {
+ListItem {
     id: listItem
 
     property alias name: mainText.text
@@ -54,7 +54,7 @@ BackgroundItem {
     property bool seen: true
     property bool isPlaying: false
 
-    height: Theme.itemSizeMedium
+    contentHeight: Theme.itemSizeMedium
     width: parent.width
 
     Rectangle {

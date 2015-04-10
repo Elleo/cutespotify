@@ -42,7 +42,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
 
-BackgroundItem {
+ListItem {
     id: listItem
 
     property variant listModel
@@ -55,16 +55,27 @@ BackgroundItem {
     property bool showIndex: false
     property bool isPlaying: model.isCurrentPlayingTrack
 
+    property bool canDelete: false
+    property bool canSeeAlbum: true
+
     onClicked: {
         if(isPlaying && !spotifySession.isPlaying)
-                spotifySession.resume()
+            spotifySession.resume()
         else
             listModel.playTrack(index)
     }
 
-
-    height: Theme.itemSizeSmall
+    contentHeight: Theme.itemSizeSmall
     width: parent.width
+
+    menu: Component {
+        id: trackMenuComponent
+        TrackMenu {
+            track: model.rawPtr
+            deleteVisible: listItem.canDelete
+            albumVisible: listItem.canSeeAlbum
+        }
+    }
 
     Label {
         id: indexText

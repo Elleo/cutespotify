@@ -247,7 +247,7 @@ Page {
                     id: moreMouseArea
                     anchors.fill: parent
                     onClicked: { infoDialog.selectedIndex = -1; infoDialog.open(); }
-                    enabled: moreIcon.visible
+                    enabled: false //moreIcon.visible
                 }
             }
         }
@@ -421,9 +421,7 @@ Page {
                     icon.source: "image://theme/icon-m-add"
                     enabled: !spotifySession.offlineMode
                     onClicked: {
-                        //                        TODO mainPage.playlistSelection.track = spotifySession.currentTrack;
-                        //                        mainPage.playlistSelection.selectedIndex = -1;
-                        //                        mainPage.playlistSelection.open();
+                        pageStack.push(Qt.resolvedUrl("PlaylistSelectionDialog.qml"))
                     }
                 }
 
