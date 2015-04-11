@@ -1,3 +1,4 @@
+[![Join the chat at https://gitter.im/lukedirtwalker/cutespotify](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lukedirtwalker/cutespotify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 # Cute Spotify
 ## Note about versioning
 Starting from 1.5.2-*: Release 0 is always the harbour version, Release > 0 is always non-harbour compliant version.
