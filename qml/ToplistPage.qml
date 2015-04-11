@@ -48,7 +48,9 @@ Page {
     allowedOrientations: Orientation.All
     enabled: !spotifySession.offlineMode
 
-    property variant toplist
+    SpotifyToplist {
+        id: toplist
+    }
 
     Component.onCompleted: {
         toplist.updateResults()

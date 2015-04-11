@@ -5,7 +5,10 @@ import QtSpotify 1.0
 Page {
     enabled: !spotifySession.offlineMode
     allowedOrientations: Orientation.All
-    property variant search
+
+    SpotifySearch {
+        id: search
+    }
 
     SilicaFlickable {
         width: parent.width
