@@ -92,6 +92,15 @@ Page {
                 }
                 visible: results._state != 1
             }
+            MenuItem {
+                text: qsTr("Artists")
+                onClicked: {
+                    results._state = 2;
+                    results._stateString = qsTr("artists")
+                    results.updateResults();
+                }
+                visible: results._state != 2
+            }
         }
 
         VerticalScrollDecorator {}
