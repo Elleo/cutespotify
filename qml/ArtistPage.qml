@@ -121,6 +121,7 @@ Page {
             AlbumDelegate {
                 listModel: browse.albums()
                 artist: sectionType === "Appears on" ? model.artist : (model.year > 0 ? model.year : "")
+                enableArtistMenu: sectionType === "Appears on"
             }
         }
 

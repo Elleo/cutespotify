@@ -77,7 +77,7 @@ ContextMenu {
     MenuItem {
         text: qsTr("Artist")
         onClicked: {
-            pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: albumBrowse.tracks[0].rawPtr.artistObject })
+            pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { "artist": albumBrowse.artistObject })
         }
         visible: artistVisible
     }

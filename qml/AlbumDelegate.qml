@@ -53,6 +53,7 @@ ListItem {
     property int year: model.year
     property bool available: model.isAvailable
     property bool showIndex: false
+    property bool enableArtistMenu: true
 
     contentHeight: Theme.itemSizeSmall
     width: parent.width
@@ -66,6 +67,7 @@ ListItem {
         id: albumMenu
         AlbumMenu {
             albumBrowse: listModel.albumBrowse(index)
+            artistVisible: listItem.enableArtistMenu
         }
     }
 
