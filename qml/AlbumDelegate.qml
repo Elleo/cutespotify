@@ -43,7 +43,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
 
-BackgroundItem {
+ListItem {
     id: listItem
 
     property variant listModel
@@ -54,13 +54,20 @@ BackgroundItem {
     property bool available: model.isAvailable
     property bool showIndex: false
 
-    height: Theme.itemSizeSmall
+    contentHeight: Theme.itemSizeSmall
     width: parent.width
 
     onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"),
                                 { "browse": listModel.albumBrowse(index),
                                     "name": name, "coverId": albumCover,
                                     "artist": artist, "albumYear": year}) }
+
+    menu: Component {
+        id: albumMenu
+        AlbumMenu {
+            albumBrowse: listModel.albumBrowse(index)
+        }
+    }
 
     Label {
         id: indexText

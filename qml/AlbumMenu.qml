@@ -40,101 +40,57 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1;
+import Sailfish.Silica 1.0;
 import QtSpotify 1.0
 
-MyMenu {
-    id: trackMenu
+ContextMenu {
+    id: albumMenu
 
     property variant albumBrowse: null
     property bool playVisible: true
     property bool artistVisible: true
-    property variant playlists: spotifySession.user ? spotifySession.user.playlists : null
 
-    layoutContentHeight: layout.height
-
-    NotificationBanner {
-        id: banner
+    MenuItem {
+        text: qsTr("Play")
+        visible: playVisible
+        onClicked: { albumBrowse.play() }
     }
+    // TODO enable once we have proper queue
+//    MenuItem {
+//        text:qsTr("Add to queue")
+//        onClicked: { albumBrowse.enqueue() }
+//    }
 
-    MySelectionDialog {
-        id: selectionDialog
-
-        titleText: "Playlists"
-        parent: trackMenu.parent
-        model: ListModel { }
-        Button {
-            text: "Add"
-            onClicked: {
-                var playlistItem = model.get(selectionDialog.selectedIndex);
-                if (playlistItem.object) {
-                    banner.text = "Album added to " + playlistItem.name;
-                    playlistItem.object.addAlbum(albumBrowse);
-                } else {
-                    if (spotifySession.user.createPlaylistFromAlbum(albumBrowse)) {
-                        banner.text = "Album added to new playlist";
-                    } else {
-                        banner.text = "Could not add album to new playlist";
-                    }
-                }
-                banner.show();
-            }
+    // TODO starring doesn't work reliable figure out why
+//    MenuItem {
+//        id: starItem
+//        onClicked: {
+//            var newstar = !albumBrowse.isStarred ;
+//            albumBrowse.isStarred = newstar;
+//            if (newstar)
+//                banner.text = qsTr("Album starred");
+//            else
+//                banner.text = qsTr("Album unstarred");
+//            banner.show();
+//        }
+//    }
+    MenuItem {
+        text: qsTr("Artist")
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: albumBrowse.tracks[0].rawPtr.artistObject })
         }
+        visible: artistVisible
     }
-
-    MyMenuLayout {
-        id:layout
-
-        MyMenuItem {
-            text: "Play";
-            visible: playVisible
-            onClicked: { albumBrowse.play() }
-        }
-        MyMenuItem {
-            text: "Add to queue";
-            onClicked: { albumBrowse.enqueue() }
-        }
-        MyMenuItem {
-            id: starItem
-            onClicked: {
-                var newstar = !albumBrowse.isStarred ;
-                albumBrowse.isStarred = newstar;
-                if (newstar)
-                    banner.text = "Album starred";
-                else
-                    banner.text = "Album unstarred";
-                banner.show();
-            }
-        }
-        MyMenuItem {
-            text: "Artist";
-            onClicked: {
-                pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: albumBrowse.tracks[0].artistObject })
-            }
-            visible: artistVisible
-        }
-        MyMenuItem {
-            text: "Add to playlist";
-            onClicked: { selectionDialog.selectedIndex = -1; selectionDialog.open(); }
+    MenuItem {
+        text: qsTr("Add to playlist");
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("PlaylistSelectionDialog.qml"), {"album": albumMenu.albumBrowse})
         }
     }
 
-    onPlaylistsChanged: {
-        selectionDialog.model.clear();
-
-        if (playlists === null)
-            return;
-
-        for (var i in trackMenu.playlists) {
-            if (trackMenu.playlists[i].type == SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(trackMenu.playlists[i]))
-                selectionDialog.model.append({"name": trackMenu.playlists[i].name, "object": trackMenu.playlists[i] })
-        }
-        selectionDialog.model.append({"name": "New playlist" });
-    }
-
-    onStatusChanged: {
-        if (status == DialogStatus.Opening && albumBrowse) {
-            starItem.text = albumBrowse.isStarred ? "Unstar" : "Star";
-        }
-    }
+//    onActiveChanged: {
+//        if (active && albumBrowse) {
+//            starItem.text = albumBrowse.isStarred ? qsTr("Unstar") : qsTr("Star");
+//        }
+//    }
 }
