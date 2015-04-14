@@ -116,7 +116,7 @@ ListItem {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    elide: Text.ElideRight
+                    truncationMode: TruncationMode.Fade
                 }
 
                 Loader {
@@ -183,7 +183,7 @@ ListItem {
                         anchors.left: parent.left
                         anchors.right: timing.left
                         anchors.rightMargin: Theme.paddingLarge
-                        elide: Text.ElideRight
+                        truncationMode: TruncationMode.Fade
                         visible: text != ""
                     }
 

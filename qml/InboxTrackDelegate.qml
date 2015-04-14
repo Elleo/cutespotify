@@ -86,7 +86,7 @@ ListItem {
                 anchors.right: iconItem.left
                 anchors.rightMargin: iconItem.visible ? Theme.paddinLarge : 0
                 color: (highlighted || isPlaying) ? Theme.highlightColor : Theme.primaryColor
-                elide: Text.ElideRight
+                truncationMode: TruncationMode.Fade
                 clip: true
             }
             Image {
@@ -113,7 +113,7 @@ ListItem {
                 font.pixelSize: Theme.fontSizeSmall
                 font.weight: Font.Light
                 color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
-                elide: Text.ElideRight
+                truncationMode: TruncationMode.Fade
                 clip: true
                 visible: text != ""
             }
@@ -135,7 +135,7 @@ ListItem {
             font.pixelSize: Theme.fontSizeSmall
             font.weight: Font.Light
             color: (highlighted || isPlaying) ? Theme.secondaryHighlightColor : Theme.secondaryColor
-            elide: Text.ElideRight
+            truncationMode: TruncationMode.Fade
         }
     }
 }
