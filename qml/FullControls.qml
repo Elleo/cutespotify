@@ -421,7 +421,7 @@ Page {
                     icon.source: "image://theme/icon-m-add"
                     enabled: !spotifySession.offlineMode
                     onClicked: {
-                        pageStack.push(Qt.resolvedUrl("PlaylistSelectionDialog.qml"))
+                        pageStack.push(Qt.resolvedUrl("PlaylistSelectionDialog.qml"), {"track": spotifySession.currentTrack})
                     }
                 }
 

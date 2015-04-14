@@ -5,7 +5,8 @@ import QtSpotify 1.0
 Dialog {
     id: playlistSelectionDialog
 
-    property variant track: spotifySession.currentTrack
+    property var track: null
+    property var album: null
     property Component delegate: defaultDelegate
 
     canAccept: false
@@ -45,15 +46,24 @@ Dialog {
                 }
                 text: name
                 color: defaultDelegateItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                elide: Text.ElideRight
+                truncationMode: TruncationMode.Fade
             }
 
             onClicked: {
-                if (object) {
-                    object.add(playlistSelectionDialog.track)
-                } else {
-                    // TODO check return value.
-                    spotifySession.user.createPlaylistFromTrack(playlistSelectionDialog.track);
+                if (playlistSelectionDialog.track) {
+                    if (object) {
+                        object.add(playlistSelectionDialog.track)
+                    } else {
+                        // TODO check return value.
+                        spotifySession.user.createPlaylistFromTrack(playlistSelectionDialog.track);
+                    }
+                } else if (playlistSelectionDialog.album) {
+                    if (object) {
+                        object.addAlbum(playlistSelectionDialog.album);
+                    } else {
+                        // TODO check return value.
+                        spotifySession.user.createPlaylistFromAlbum(playlistSelectionDialog.album)
+                    }
                 }
                 playlistSelectionDialog.canAccept = true;
                 playlistSelectionDialog.accept()

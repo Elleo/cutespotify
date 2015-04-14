@@ -45,7 +45,7 @@ import QtSpotify 1.0
 ContextMenu {
     id: trackMenu
 
-    property variant track: null
+    property var track: null
     property bool deleteVisible: false
     property bool albumVisible: true
     property bool markSeenVisible: false
@@ -91,7 +91,6 @@ ContextMenu {
         visible: trackMenu.deleteVisible && !spotifySession.offlineMode;
         onClicked: deleteTrack()
     }
-
 
     onActiveChanged: {
         if (active && track) {
