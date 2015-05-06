@@ -73,7 +73,7 @@ Dialog {
 
     function populatePlaylists() {
         if (spotifySession.user) {
-            var userPlaylists = spotifySession.user.playlists
+            var userPlaylists = spotifySession.user.playlistsFlat
             for (var i in userPlaylists) {
                 if (userPlaylists[i].type === SpotifyPlaylist.Playlist && spotifySession.user.canModifyPlaylist(userPlaylists[i]))
                     playlistsModel.append({"name": userPlaylists[i].name, "object": userPlaylists[i] })
