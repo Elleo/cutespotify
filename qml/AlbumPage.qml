@@ -96,19 +96,13 @@ Page {
 
         cacheBuffer: 3000
         model: browse.tracks()
-        header: Column {
-            width: parent.width
-            PageHeader {
-                title: name
-            }
-
-            AlbumHeader {
-                artistName: artist
-                trackCount: albumPage.trackCount > 0 ? (albumPage.trackCount + (albumPage.trackCount > 1 ? " songs" : " song")) : ""
-                timing: browse.totalDuration > 0 ? spotifySession.formatDuration(browse.totalDuration) : ""
-                year: albumPage.trackCount > 0 && albumYear > 0 ? albumYear : ""
-                coverId: albumPage.coverId
-            }
+        header: AlbumHeader {
+            albumName: name
+            artistName: artist
+            trackCount: albumPage.trackCount > 0 ? (albumPage.trackCount + (albumPage.trackCount > 1 ? " songs" : " song")) : ""
+            timing: browse.totalDuration > 0 ? spotifySession.formatDuration(browse.totalDuration) : ""
+            year: albumPage.trackCount > 0 && albumYear > 0 ? albumYear : ""
+            coverId: albumPage.coverId
         }
 
         Component.onCompleted: {
