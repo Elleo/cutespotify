@@ -29,6 +29,8 @@ The resulting hierarchy should be:
     * libspotify.so
     * libspotify.so.9
 
+When building for the emulator, create a 'libspotify_emu' folder at the root of the project and extract the linux-libc6 x86 version of libspotify in there.
+
 ### Spotify API Key
 You also need your own libspotify API key to be able to compile and run the program
 (see https://developer.spotify.com/technologies/libspotify/keys/)
