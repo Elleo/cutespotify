@@ -27,6 +27,7 @@ Page {
 
             SearchField {
                 id: searchField
+                focus: true
                 placeholderText: qsTr("Search")
                 width: parent.width
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
