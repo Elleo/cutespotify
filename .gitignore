@@ -4,6 +4,7 @@
 # MeeSpot specific stuff
 libspotify/*/*
 libspotify/*
+libspotify_emu/*
 MeeSpot
 *.deb
 *.changes
