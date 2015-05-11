@@ -46,3 +46,9 @@ const size_t g_appkey_size = sizeof(g_appkey);
 
 #endif // SPOTIFY_KEY_H
 ```
+
+## Running from the SDK
+
+In order to run the project in the emulator you need to ensure `nemo-qml-plugin-policy-qt5` is installed in the emulator.
+
+While developing you can add '--debug' as run argument to show debug output
