@@ -171,6 +171,17 @@ Page {
                     lastFMContextMenu.show(scrobbleSwitch)
                 }
             }
+
+            SectionHeader {
+                text: qsTr("Appearance")
+            }
+
+            TextSwitch {
+                id: offlineSwitchSwitch
+                checked: spotifySession.showOfflineSwitch
+                text: qsTr("Show \"Available offline\" switch in playlist")
+                onClicked: spotifySession.showOfflineSwitch = checked
+            }
         }
 
         ContextMenu {

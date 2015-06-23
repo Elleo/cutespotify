@@ -50,7 +50,7 @@ Page {
 
     // TODO this property should once come from the model and shouldn't need
     // to be set manually
-    property bool offlineSwitchVisible: true
+    property bool offlineSwitchVisible: spotifySession.showOfflineSwitch
 
     Component.onCompleted: tracksModel.filter = ""
 
