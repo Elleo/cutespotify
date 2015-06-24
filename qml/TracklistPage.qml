@@ -208,7 +208,7 @@ Page {
     Connections {
         target: playlist
         onPlaylistDestroyed: {
-            playlistsTab.pop(null);
+            pageStack.pop(null);
         }
     }
 
