@@ -38,91 +38,37 @@
 **
 ****************************************************************************/
 
-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Item {
-    id: albumHeader
-    width: parent.width
-    height: Theme.itemSizeLarge * 3
+Page {
+    id: licPage
+    allowedOrientations: Orientation.All
 
-    property alias albumName: header.title
-    property alias artistName: artistText.text
-    property alias trackCount: trackCountText.text
-    property alias timing: timingText.text
-    property alias year: yearText.text
-    property alias coverId: coverImage.spotifyId
 
-    Rectangle {
-        width: parent.width
-        height: parent.height
-        color: Theme.highlightBackgroundColor
-        opacity: 0.1
-        visible: !backgroundImage.visible
-    }
+    SilicaFlickable {
+        anchors.fill: parent
+        contentHeight: content.height
 
-    SpotifyImage {
-        id: backgroundImage
-        width: parent.width
-        height: parent.height
-        fillMode: Image.PreserveAspectCrop
-        spotifyId: coverId
-        visible: spotifyId != ''
-        opacity: status == Image.Ready ? 0.4 : 0.0
-    }
-
-    PageHeader {
-        id: header
-    }
-
-    Row {
-        spacing: Theme.paddingMedium
-        anchors.top: header.bottom
-        anchors.left: parent.left
-        anchors.leftMargin: Theme.paddingLarge
-        height: parent.height - header.height
-
-        SpotifyImage {
-            id: coverImage
-            height: parent.height - Theme.paddingLarge - Theme.paddingMedium
-            width: height
-        }
+        VerticalScrollDecorator {}
 
         Column {
-            id: desc
-            width: parent.width - coverImage.width - Theme.paddingLarge
+            id: content
+            anchors {
+                left: parent.left
+                right: parent.right
+                margins: Theme.paddingLarge
+            }
 
-            Label {
-                id: artistText
-                width: parent.width
-                truncationMode: TruncationMode.Fade
-                verticalAlignment: Text.AlignTop
-                color: Theme.highlightColor
+            PageHeader {
+                title: qsTr("License")
             }
 
             Label {
-                id: trackCountText
                 width: parent.width
+                wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeSmall
-                truncationMode: TruncationMode.Fade
-                color: Theme.highlightColor
-            }
-
-            Label {
-                id: timingText
-                width: parent.width
-                font.pixelSize: Theme.fontSizeSmall
-                truncationMode: TruncationMode.Fade
-                color: Theme.highlightColor
-            }
-
-            Label {
-                id: yearText
-                width: parent.width
-                font.pixelSize: Theme.fontSizeSmall
-                truncationMode: TruncationMode.Fade
-                color: Theme.highlightColor
+                text: qsTr("Copyright (c) 2011-2014 Nokia Corporation and/or its subsidiary(-ies), Yoann Lopes, Michael Sheldon, Lukas Vogel\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n Neither the name of Nokia Corporation and its Subsidiary(-ies) nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\n THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.")
             }
         }
     }

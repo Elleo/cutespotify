@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-if [ "$1" = "remove" ]; then
-  rm -R /home/user/MyDocs/.meespot
-  rm -R /home/user/MyDocs/.meespotconf
-fi

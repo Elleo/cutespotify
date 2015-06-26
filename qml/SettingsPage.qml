@@ -41,318 +41,163 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
 
 Page {
     id: settingsPage
+    allowedOrientations: Orientation.All
 
-    SilicaListView {
+    SilicaFlickable {
         id: settingsFlickable
+
         anchors.fill: parent
-        anchors.topMargin: 50
-        anchors.rightMargin: UI.MARGIN_XLARGE
-        anchors.leftMargin: UI.MARGIN_XLARGE
 
-        model: 1
-        delegate: Column {
+        contentHeight: settingsContainer.height
+
+        VerticalScrollDecorator {}
+
+        PullDownMenu {
+            MenuItem {
+                id: button
+                text: qsTr("Log out ") + (spotifySession.user ? spotifySession.user.canonicalName : "")
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    var logoutDialog = pageStack.push(
+                                Qt.resolvedUrl("LogoutDialog.qml"),
+                                {"userName": (spotifySession.user ? spotifySession.user.canonicalName : "")})
+                    logoutDialog.accepted.connect(function() {
+                        spotifySession.logout(false)
+                    })
+                }
+            }
+
+            MenuItem {
+                text: qsTr("About")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+                }
+            }
+        }
+
+        Column {
             id: settingsContainer
-            width: settingsPage.width
+            width: parent.width
 
-            Column {
-                width: parent.width
+            PageHeader {
+                title: qsTr("Settings")
+            }
 
-                Column {
-                    width: parent.width
+            SectionHeader {
+                text: qsTr("Playback")
+            }
 
-                    Item {
-                        width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT * 1.5
+            TextSwitch {
+                id: volumeNormalizeSwitch
+                checked: spotifySession.volumeNormalize
+                text: qsTr("Normalize Volume")
+                onClicked: spotifySession.volumeNormalize = checked
+            }
 
-                        Label {
-                            anchors.left: parent.left
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.family: UI.FONT_FAMILY_BOLD
-                            font.weight: Font.Bold
-                            font.pixelSize: UI.LIST_TILE_SIZE
-                            color: Theme.primaryColor
-                            text: "Shuffle"
-                        }
+            SectionHeader {
+                text: qsTr("Stream")
+            }
 
-                        Switch {
-                            id: shuffleSwitch
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            onCheckedChanged: spotifySession.shuffle = checked
-                            Component.onCompleted: checked = spotifySession.shuffle;
-                        }
-                    }
-
-                    Item {
-                        width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT
-
-                        Label {
-                            anchors.left: parent.left
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.family: UI.FONT_FAMILY_BOLD
-                            font.weight: Font.Bold
-                            font.pixelSize: UI.LIST_TILE_SIZE
-                            color: Theme.primaryColor
-                            text: "Repeat songs"
-                        }
-
-                        Switch {
-                            id: repeatSwitch
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            onCheckedChanged: spotifySession.repeat = checked
-                            Component.onCompleted: checked = spotifySession.repeat;
-                        }   
-                    }
-
-
-
- /*                   Item {
-                        width: parent.width
-                        height: UI.LIST_ITEM_HEIGHT
-
-                        Label {
-                            anchors.left: parent.left
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.family: UI.FONT_FAMILY_BOLD
-                            font.weight: Font.Bold
-                            font.pixelSize: UI.LIST_TILE_SIZE
-                            color: Theme.primaryColor
-                            text: "Offline mode"
-                        }
-
-                        Switch {
-                            id: offlineSwitch
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            onCheckedChanged: spotifySession.setOfflineMode(checked)
-
-                            Component.onCompleted: checked = spotifySession.offlineMode;
-
-                            Connections {
-                                target: spotifySession
-                                onOfflineModeChanged: offlineSwitch.checked = spotifySession.offlineMode
-                            }
-                        }
-                    }
-
-                    Label {
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        font.family: UI.FONT_FAMILY_LIGHT
-                        font.pixelSize: UI.LIST_SUBTILE_SIZE
-                        font.weight: Font.Light
-                        color: Theme.secondaryColor
-                        text: "When offline, only the playlists you've made available for offline listening will be playable."
-                    }
-*/
-                    Item {
-                        width: parent.width
-                        height: UI.MARGIN_XLARGE * 2
-                    }
+            ComboBox {
+                menu: ContextMenu {
+                    MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.LowQuality }
+                    MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.HighQuality }
+                    MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.UltraQuality }
                 }
+                currentIndex: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
+                                                                                            : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
+            }
 
-                Column {
-                    width: parent.width
+            SectionHeader {
+                text: qsTr("Offline Sync")
+            }
 
-                    Label {
-                        height: UI.LIST_TILE_SIZE
-                        font.family: UI.FONT_FAMILY_BOLD
-                        font.weight: Font.Bold
-                        font.pixelSize: UI.LIST_TILE_SIZE
-                        color: Theme.primaryColor
-                        text: "Stream"
-                    }
-
-
-                    ComboBox {
-                        menu: ContextMenu {
-                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.LowQuality }
-                            MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.HighQuality }
-                            MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.streamingQuality = SpotifySession.UltraQuality }
-                        }
-                        currentIndex: spotifySession.streamingQuality === SpotifySession.LowQuality ? 0
-                                                                                                   : spotifySession.streamingQuality === SpotifySession.HighQuality ? 1 : 2
-                    }
-
-                    Item {
-                        width: parent.width
-                        height: UI.MARGIN_XLARGE * 2
-                    }
-
+            ComboBox {
+                menu: ContextMenu {
+                    MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.LowQuality }
+                    MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.HighQuality }
+                    MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.UltraQuality }
                 }
+                currentIndex: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
+                                                                                       : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
+            }
 
-                Column {
-                    width: parent.width
+            SectionHeader {
+                text: qsTr("Connectivity")
+            }
 
-                    Label {
-                        height: UI.LIST_TILE_SIZE
-                        font.family: UI.FONT_FAMILY_BOLD
-                        font.weight: Font.Bold
-                        font.pixelSize: UI.LIST_TILE_SIZE
-                        color: Theme.primaryColor
-                        text: "Offline Sync"
-                    }
+            TextSwitch {
+                id: offlineSwitch
+                checked: spotifySession.offlineMode
+                text: qsTr("Offline mode")
+                onClicked: spotifySession.setOfflineMode(checked)
+            }
 
-                    ComboBox {
-                        menu: ContextMenu {
-                            MenuItem { text: "Low quality (96kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.LowQuality }
-                            MenuItem { text: "Normal quality (160kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.HighQuality }
-                            MenuItem { text: "High quality (320kbps)"; onClicked: spotifySession.syncQuality = SpotifySession.UltraQuality }
-                        }
-                        currentIndex: spotifySession.syncQuality === SpotifySession.LowQuality ? 0
-                                                                                              : spotifySession.syncQuality === SpotifySession.HighQuality ? 1 : 2
-                    }
-
-                    Item {
-                        width: parent.width
-                        height: UI.MARGIN_XLARGE * 2
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.LIST_ITEM_HEIGHT
-
-                    Label {
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.family: UI.FONT_FAMILY_BOLD
-                        font.weight: Font.Bold
-                        font.pixelSize: UI.LIST_TILE_SIZE
-                        color: Theme.primaryColor
-                        text: "Sync over 2G/3G"
-                    }
-
-                    Switch {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        checked: spotifySession.syncOverMobile
-                        onCheckedChanged: spotifySession.setSyncOverMobile(checked)
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.LIST_ITEM_HEIGHT
-
-                    Label {
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.family: UI.FONT_FAMILY_BOLD
-                        font.weight: Font.Bold
-                        font.pixelSize: UI.LIST_TILE_SIZE
-                        color: Theme.primaryColor
-                        text: "Scrobble to Last.fm"
-                    }
-
-                    Switch {
-                        id: scrobbleSwitch
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        checked: spotifySession.scrobble
-                        onCheckedChanged: spotifySession.scrobble = checked
-                    }
-                }
-
-                Column {
-                    width: parent.width
-                    visible: scrobbleSwitch.checked
-
-                    Item {
-                        width: parent.width
-                        height: UI.MARGIN_XLARGE * 2
-                    }
-
-                    TextField {
-                        id: lfmUser
-                        visible: !spotifySession.lfmLoggedIn
-                        placeholderText: "Last.fm Username"
-                        width: parent.width
-                        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                        Keys.onReturnPressed: {
-                            lfmPass.forceActiveFocus();
-                        }
-                    }
-
-                    TextField {
-                        id: lfmPass
-                        visible: !spotifySession.lfmLoggedIn
-                        placeholderText: "Last.fm Password"
-                        echoMode: TextInput.Password
-                        width: parent.width
-                        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                    }
-
-                    Button {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: spotifySession.lfmLoggedIn ? "Log out of Last.fm" : "Log in to Last.fm";
-                        onClicked: {
-                            if(spotifySession.lfmLoggedIn) {
-                                spotifySession.lfmLogin("", "");
-                            } else {
-                                spotifySession.lfmLogin(lfmUser.text, lfmPass.text);
-                            }
-                        }
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
-                }
-
-                Button {
-                    id: buttonAbout
-                    text: "About"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked: {
-                        pageStack.push(aboutDialogC)
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.MARGIN_XLARGE
-                }
-
-                Button {
-                    id: button
-                    text: "Log out " + (spotifySession.user ? spotifySession.user.canonicalName : "")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked: {
-                        spotifySession.logout(false);
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: UI.MARGIN_XLARGE * 2
+            TextSwitch {
+                id: privateSwitch
+                automaticCheck: false
+                checked: spotifySession.privateSession
+                text: qsTr("Private session")
+                onClicked: {
+                    spotifySession.setPrivateSession(checked ? false : true)
+                    checked = spotifySession.privateSession
                 }
             }
-            Item {
-                width: parent.width
-                height: 100
+
+            TextSwitch {
+                id: syncSwitch
+                checked: spotifySession.syncOverMobile
+                text: qsTr("Sync over 2G/3G")
+                onClicked: spotifySession.setSyncOverMobile(checked)
+            }
+
+            TextSwitch {
+                id: scrobbleSwitch
+
+                height: implicitHeight + (lastFMContextMenu._open ? lastFMContextMenu.height : 0)
+
+                checked: spotifySession.scrobble
+                text: qsTr("Scrobble to Last.fm")
+                onClicked: {
+                    if(checked && !spotifySession.lfmLoggedIn) {
+                        pageStack.push(Qt.resolvedUrl("LastFMDialog.qml"))
+                    }
+                    spotifySession.scrobble = checked
+                }
+                onPressAndHold: {
+                    lastFMContextMenu.show(scrobbleSwitch)
+                }
+            }
+
+            SectionHeader {
+                text: qsTr("Appearance")
+            }
+
+            TextSwitch {
+                id: offlineSwitchSwitch
+                checked: spotifySession.showOfflineSwitch
+                text: qsTr("Show \"Available offline\" switch in playlist")
+                onClicked: spotifySession.showOfflineSwitch = checked
             }
         }
 
-    }
-
-    Component {
-        id: aboutDialogC
-        AboutDialog {
-            id: aboutDialog
+        ContextMenu {
+            id: lastFMContextMenu
+            MenuItem {
+                text: spotifySession.lfmLoggedIn ?
+                          qsTr("Log out of Last.fm") :
+                          qsTr("Log in to Last.fm")
+                onClicked: {
+                    if(spotifySession.lfmLoggedIn) {
+                        spotifySession.lfmLogin("", "");
+                    } else {
+                        pageStack.push(Qt.resolvedUrl("LastFMDialog.qml"))
+                    }
+                }
+            }
         }
     }
-
 }

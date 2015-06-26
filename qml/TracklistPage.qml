@@ -42,18 +42,19 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
-import "Utilities.js" as Util
 
 Page {
     id: tracklistPage
+    allowedOrientations: Orientation.All
     property variant playlist
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
 
-    Component.onCompleted: playlist.trackFilter = ""
+    // TODO this property should once come from the model and shouldn't need
+    // to be set manually
+    property bool offlineSwitchVisible: spotifySession.showOfflineSwitch
 
-/*    TrackMenu {
+    Component.onCompleted: tracksModel.filter = ""
+
+    /*    TrackMenu {
         id: menu
         deleteVisible: playlist && spotifySession.user ? (playlist.type != SpotifyPlaylist.Starred && spotifySession.user.canModifyPlaylist(playlist))
                                                        : false
@@ -63,41 +64,62 @@ Page {
     Component {
         id: trackDelegate
         TrackDelegate {
-            name: searchField.text.length > 0 ? Util.highlightWord(modelData.name, searchField.text) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists)
+            listModel: tracksModel.trackList
+            name: searchField.text.length > 0 ? Theme.highlightText(trackName, searchField.text, Theme.highlightColor) : trackName
+            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
                             + " | "
-                            + (searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album)
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
+                            + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                modelData.play()
+                if(isCurrentPlayingTrack && !spotifySession.isPlaying)
+                        spotifySession.resume()
+                else
+                    tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
-            onPressAndHold: { menu.track = modelData; menu.open(); }
+
+            function deleteTrack() {
+                remorseAction(qsTr("Delete"), function() {playlist.remove(model.rawPtr)})
+            }
+
+            canDelete: playlist && spotifySession.user ? (playlist.type !== SpotifyPlaylist.Starred && spotifySession.user.canModifyPlaylist(playlist)) : false
         }
     }
 
     Component {
         id: inboxDelegate
         InboxTrackDelegate {
-            name: searchField.text.length > 0 ? Util.highlightWord(modelData.name, searchField.text) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists)
-                            + " | "
-                            + (searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album)
-            creatorAndDate: (searchField.text.length > 0 ? Util.highlightWord(modelData.creator, searchField.text) : modelData.creator)
-                            + " | " + Qt.formatDateTime(modelData.creationDate)
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
+            name: searchField.text.length > 0 ? Theme.highlightText(tackName, searchField.text, Theme.highlightColor) : trackName
+            artistAndAlbum: (searchField.text.length > 0 ? Theme.highlightText(artists, searchField.text, Theme.secondaryHighlightColor) : artists)
+                                                + " | "
+                                                + (searchField.text.length > 0 ? Theme.highlightText(album, searchField.text, Theme.secondaryHighlightColor) : album)
+            creatorAndDate: (searchField.text.length > 0 ? Theme.highlightText(creator, searchField.text, Theme.highlightColor) : creator)
+                            + " | " + Qt.formatDateTime(creationDate)
+            duration: tackDuration
+            isPlaying: isCurrentPlayingTrack
+            starred: isStarred
+            available: isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                modelData.play()
+                if(isCurrentPlayingTrack) {
+                    if(!spotifySession.isPlaying)
+                        spotifySession.resume()
+                } else
+                    tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
-            seen: modelData.seen
-            onPressAndHold: { menu.track = modelData; menu.open(); }
+            seen: model.seen
+
+            function deleteTrack() {
+                remorseAction(qsTr("Delete"), function() {playlist.remove(model.rawPtr)})
+            }
+
+            menu: Component {
+                id: trackMenuComponent
+                TrackMenu {
+                    track: model.rawPtr
+                    deleteVisible: playlist && spotifySession.user ? (playlist.type !== SpotifyPlaylist.Starred && spotifySession.user.canModifyPlaylist(playlist)) : false
+                    markSeenVisible: playlist
+                }
+            }
         }
     }
 
@@ -106,170 +128,96 @@ Page {
         tracks.positionViewAtBeginning();
     }
 
+    RemorsePopup {id: offlineRemorse}
+
+    Column {
+        id: headerContainer
+        width: tracks.width
+
+        PageHeader {
+            id: header
+            title: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
+                                                              : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
+                                                                                                          : "Inbox"))
+        }
+
+        TextSwitch {
+            id: offlineSwitch
+
+            text: qsTr("Available offline")
+            property bool completed: false;
+            onCheckedChanged: {
+                if(completed) {
+                    console.log("Offline changed");
+                    offlineRemorse.execute(playlist.availableOffline ? "Remove from offline cache" : "Store offline", function()
+                    {
+                        playlist.availableOffline = !playlist.availableOffline;
+                        offlineSwitch.checked = playlist.availableOffline
+                    } )
+
+                }
+                checked = playlist.availableOffline
+            }
+            busy: playlist.offlineStatus === SpotifyPlaylist.Downloading
+            checked: playlist.availableOffline
+            Component.onCompleted: {
+                completed = true;
+            }
+            visible: tracklistPage.offlineSwitchVisible
+            enabled: visible
+        }
+
+        SearchField {
+            id: searchField
+            width: parent.width
+
+            placeholderText: qsTr("Search tracks")
+            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+            onTextChanged: tracksModel.filter = text.trim()
+
+            EnterKey.iconSource: "image://theme/icon-m-enter-close"
+            EnterKey.onClicked: {focus = false}
+        }
+    }
+
     SilicaListView {
         id: tracks
-
-        property bool showSearchField: false
-        property bool _movementFromBeginning: false
+        anchors.fill: parent
 
         Component.onCompleted: tracks.positionViewAtBeginning();
 
-        Timer {
-            id: searchFieldTimer
-            onTriggered: tracks.showSearchField = false
-            interval: 5000
-        }
+        VerticalScrollDecorator {}
 
-        width: parent.width
-        anchors.top: searchFieldContainer.bottom
-        anchors.bottom: parent.bottom
-
+        clip: true
+        pressDelay: 0
         cacheBuffer: 3000
         highlightMoveDuration: 1
-        model: playlist.tracks
+
+        currentIndex: -1
+
+        model: tracksModel
+
         header: Item {
-            width: parent.width
-            height: 100
-            anchors.topMargin: 100
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-
-            Label {
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: 10
-                font.family: UI.FONT_FAMILY_BOLD
-                font.weight: Font.Bold
-                font.pixelSize: UI.LIST_TILE_SIZE
-                wrapMode: Text.WordWrap
-                width: parent.width - offlineSwitch.width - 10
-                color: Theme.primaryColor
-                text: (playlist.type == SpotifyPlaylist.Playlist ? playlist.name
-                                                             : (playlist.type == SpotifyPlaylist.Starred ? "Starred"
-                                                                                                         : "Inbox"))
-            }
-            TextSwitch {
-                id: offlineSwitch
-                anchors.right: parent.right
-                width: 220
-                text: "Available offline"
-                property bool completed: false;
-                onCheckedChanged: {
-                    if(completed) {
-                        console.log("Offline changed");
-                        playlist.availableOffline = !playlist.availableOffline;
-                    }
-                }
-                checked: playlist.availableOffline
-                Component.onCompleted: {
-                    completed = true;
-                }
-            }
-        }
-
-        onMovementStarted: {
-            tracks.focus = true;
-            if (atYBeginning)
-                _movementFromBeginning = true;
-        }
-
-        onContentYChanged: {
-            if (contentY < 0 && _movementFromBeginning) {
-                showSearchField = true;
-                searchFieldTimer.start()
-            } else {
-                _movementFromBeginning = false;
-            }
-        }
-
-        footer: Item {
-            width: parent.width
-            height: 100
+            id: headerItemPlace
+            width: headerContainer.width
+            height: headerContainer.height
+            Component.onCompleted: headerContainer.parent = headerItemPlace
         }
     }
 
     Connections {
         target: playlist
         onPlaylistDestroyed: {
-            playlistsTab.pop(null);
+            pageStack.pop(null);
         }
     }
 
-    Item {
-        id: searchFieldContainer
-        anchors.topMargin: 60
-        anchors.top: parent.top
-        width: parent.width
-        height: 0
-        clip: true
+    TrackListFilterModel {
+        id: tracksModel
+        trackList: playlist.tracks()
 
-        Column {
-            id: searchColumn
-            y: UI.MARGIN_XLARGE
-            width: parent.width
-            spacing: UI.MARGIN_XLARGE
-            opacity: 0
-
-            AdvancedTextField {
-                id: searchField
-                placeholderText: "Search"
-                width: parent.width
-                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                Keys.onReturnPressed: { tracks.focus = true }
-
-                onTextChanged: playlist.trackFilter = Util.trim(text)
-
-                onActiveFocusChanged: {
-                    if (activeFocus)
-                        searchFieldTimer.stop();
-                    else if (text.length === 0)
-                        searchFieldTimer.start();
-                }
-            }
+        Component.onCompleted: {
+            init()
         }
-
-        states: State {
-            name: "visible"
-            when: searchField.text.length > 0 || searchField.activeFocus || tracks.showSearchField
-            PropertyChanges {
-                target: searchFieldContainer
-                height: searchColumn.height + UI.MARGIN_XLARGE + 40
-            }
-            PropertyChanges {
-                target: searchColumn
-                opacity: 1
-            }
-        }
-
-        transitions: [
-            Transition {
-                from: "visible"; to: ""
-                SequentialAnimation {
-                    NumberAnimation {
-                        properties: "opacity"
-                        duration: 250
-                    }
-                    NumberAnimation {
-                        properties: "height"
-                        duration: 350
-                    }
-                }
-            },
-            Transition {
-                from: ""; to: "visible"
-                SequentialAnimation {
-                    NumberAnimation {
-                        properties: "height"
-                        duration: 100
-                    }
-                    NumberAnimation {
-                        properties: "opacity"
-                        duration: 200
-                    }
-                }
-            }
-        ]
     }
-
-    //Scrollbar { flickableItem: tracks }
 }

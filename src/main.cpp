@@ -48,10 +48,11 @@
 #include <QGuiApplication>
 #include <sailfishapp.h>
 
-#include <QtSpotify>
-#include <qspotify_qmlplugin.h>
+#include "../libQtSpotify/QtSpotify"
+#include "../libQtSpotify/qspotify_qmlplugin.h"
 
-#include <iostream>
+#include "customiconprovider.h"
+
 using namespace std;
 
 void silentDebug(QtMsgType type, const QMessageLogContext& context, const QString &msg)
@@ -63,13 +64,13 @@ void silentDebug(QtMsgType type, const QMessageLogContext& context, const QStrin
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QCoreApplication::setOrganizationName("CuteSpotify");
-    QCoreApplication::setOrganizationDomain("com.mikeasoft.cutespotify");
-    QCoreApplication::setApplicationName("CuteSpotify");
+    QCoreApplication::setOrganizationName("CuteSpot");
+    QCoreApplication::setOrganizationDomain("com.mikeasoft.cutespot");
+    QCoreApplication::setApplicationName("CuteSpot");
     QCoreApplication::setApplicationVersion("1.3.0");
-    QCoreApplication::addLibraryPath("/usr/share/harbour-cutespotify/lib/");
+    QCoreApplication::addLibraryPath("/usr/share/harbour-cutespot/lib/");
 
-    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-cutespotify/";
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-cutespot/";
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, settingsPath);
     QSettings settings;
     if(!settings.contains("dataPath")) {
@@ -87,7 +88,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     registerQmlTypes();
     view->rootContext()->setContextProperty(QLatin1String("spotifySession"), QSpotifySession::instance());
+    view->rootContext()->setContextProperty("APP_VERSION", APP_VERSION);
     view->engine()->addImageProvider(QLatin1String("spotify"), new QSpotifyImageProvider);
+    view->engine()->addImageProvider(QLatin1String("icon"), new CustomIconProvider);
 
     view->setSource(QUrl("qrc:/qml/main.qml"));
     view->setResizeMode(QQuickView::SizeRootObjectToView);
@@ -99,7 +102,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         auto errors = view->errors();
 
         for(auto error: errors) {
-            cerr << error.toString().toStdString() << endl;
+            qDebug() << error.toString();
         }
     }
 

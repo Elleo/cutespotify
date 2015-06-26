@@ -40,80 +40,65 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UIConstants.js" as UI
+import QtSpotify 1.0
 
-Item {
+BackgroundItem {
     id: listItem
 
-    signal clicked
-    property alias pressed: mouseArea.pressed
-    property alias name: mainText.text
-    property alias portrait: portraitImage.spotifyId
+    property variant listModel
+    property string name: model.name
+    property string portrait: model.pictureId
     property bool showIndex: false
 
-    property int titleSize: UI.LIST_TILE_SIZE
-    property string titleFont: UI.FONT_FAMILY_BOLD
-    property color titleColor: Theme.primaryColor
-
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
-    property string subtitleFont: UI.FONT_FAMILY_LIGHT
-    property color subtitleColor: Theme.secondaryColor
-
-    height: UI.LIST_ITEM_HEIGHT
+    height: Theme.itemSizeSmall
     width: parent.width
 
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: "#15000000"
+    onClicked: {
+        pageStack.push(Qt.resolvedUrl("ArtistPage.qml"),
+                       { "browse": listModel.artistBrowse(index),
+                           "artistName": name,
+                           "artistPicId": portrait})
     }
 
     Label {
         id: indexText
         anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingSmall
         anchors.verticalCenter: parent.verticalCenter
-        width: listItem.showIndex ? 48 : 0
-        text: (index + 1) + ".   "
-        font.family: UI.FONT_FAMILY_LIGHT
-        font.pixelSize: UI.FONT_SMALL
+        width: listItem.showIndex ? Theme.iconSizeMedium * 0.75 : 0
+        text: (index + 1) + "."
+        font.pixelSize: Theme.fontSizeSmall
         horizontalAlignment: Text.AlignRight
+        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
         visible: listItem.showIndex
     }
 
     Rectangle {
         id: portraitContainer
-        width: 64; height: width
+        width: Theme.iconSizeMedium; height: width
         anchors.left: indexText.right
+        anchors.leftMargin: indexText.visible ? Theme.paddingSmall : Theme.paddingLarge
         anchors.verticalCenter: parent.verticalCenter
-        color: "#C9C9C9"
+        color: Theme.secondaryHighlightColor
 
         SpotifyImage {
             id: portraitImage
             anchors.fill: parent
-            defaultImage: "images/icon-l-contact-avatar-placeholder-black.png"
+            fillMode: Image.PreserveAspectCrop
+            spotifyId: portrait
+            defaultImage: "image://theme/icon-m-person"
         }
     }
 
     Label {
         id: mainText
+        text: name
         anchors.left: portraitContainer.right
-        anchors.leftMargin: UI.MARGIN_XLARGE
-        anchors.right: parent.right
+        anchors.leftMargin: Theme.paddingLarge
         anchors.verticalCenter: parent.verticalCenter
-        font.family: listItem.titleFont
-        font.weight: Font.Bold
-        font.pixelSize: listItem.titleSize
-        color: listItem.titleColor
-        elide: Text.ElideRight
-    }
-
-    MouseArea {
-        id: mouseArea;
-        anchors.fill: parent
-        onClicked: listItem.clicked()
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingLarge
+        truncationMode: TruncationMode.Fade
+        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
     }
 }

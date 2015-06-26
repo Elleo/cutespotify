@@ -42,83 +42,65 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
 
 Page {
     id: playlistPage
-
-    Component {
-        id: searchPage
-        SearchPage { }
-    }
-
-    Component {
-        id: settingsPage
-        SettingsPage { }
-    }
-
-    Component {
-        id: topPage
-        ToplistPage { }
-    }
+    allowedOrientations: Orientation.All
 
     Connections {
         target: spotifySession
         onConnectionStatusChanged: {
-            if (spotifySession.connectionStatus != SpotifySession.LoggedIn) {
+            if (spotifySession.connectionStatus == SpotifySession.LoggedOut ||
+                    spotifySession.connectionStatus == SpotifySession.Undefined) {
                 pageStack.clear();
                 pageStack.push(loginPage);
             }
         }
+        onLoggingOut: {
+            pageStack.clear();
+            pageStack.push(loginPage);
+        }
     }
 
-/*    PlaylistMenu {
-        id: menu
-    }
-
-    PlaylistNameSheet {
-        id: newPlaylistSheet
-        title: "Playlist name"
-        onAccepted: { spotifySession.user.createPlaylist(newPlaylistSheet.playlistName); }
-    }
-*/
     SilicaListView {
         id: playlists
         anchors.fill: parent
-        anchors.bottomMargin: 100
+        clip: true
+        pressDelay: 0
 
         cacheBuffer: 3000
         model: spotifySession.user ? spotifySession.user.playlists : 0
 
-        Component.onCompleted: positionViewAtBeginning()
-
         PullDownMenu {
             MenuItem {
                 text: "Settings"
-                onClicked: pageStack.push(settingsPage)
+                onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
             }
             MenuItem {
                 text: "Top"
-                onClicked: pageStack.push(topPage)
+                onClicked: pageStack.push(Qt.resolvedUrl("ToplistPage.qml"))
             }
             MenuItem {
                 text: "Search"
-                onClicked: pageStack.push(searchPage)
+                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
             }
         }
 
-        header: Item {
-            height: 20
-            width: parent.width
+        header: PageHeader {
+            id: header
+            title: qsTr("Playlists")
         }
+
+
+        VerticalScrollDecorator {}
 
         delegate: PlaylistDelegate {
             id: playlistDelegate
             title: !modelData.isLoaded ? "Loading..." : (modelData.type === SpotifyPlaylist.Playlist || modelData.type === SpotifyPlaylist.Folder ? modelData.name
-                                                                                                                                                 : (modelData.type === SpotifyPlaylist.Starred ? "Starred"
-                                                                                                                                                                                               : "Inbox"))
+                                                                                                                                                  : (modelData.type === SpotifyPlaylist.Starred ? "Starred"
+                                                                                                                                                                                                : "Inbox"))
             subtitle: if (!modelData.isLoaded) {
-                         "";
+                          "";
                       } else {
                           if (modelData.type === SpotifyPlaylist.Folder) {
                               modelData.playlistCount + " playlist" + (modelData.playlistCount > 1 ? "s" : "")
@@ -128,7 +110,6 @@ Page {
                           }
                       }
             extraText: modelData.type === SpotifyPlaylist.Folder || !modelData.isLoaded ? "" : spotifySession.formatDuration(modelData.totalDuration)
-            icon: modelData.collaborative ? "images/icon-m-collaborative-playlist.png" : staticIcon
             offlineStatus: modelData.offlineStatus
             availableOffline: modelData.availableOffline
             downloadProgress: modelData.offlineDownloadProgress
@@ -137,117 +118,14 @@ Page {
             opacity: (!spotifySession.offlineMode || modelData.availableOffline || modelData.type === SpotifyPlaylist.Folder) && modelData.isLoaded ? 1.0 : 0.3
 
             onClicked: {
-                if (modelData.trackCount > 0) {
-                    var component = Qt.createComponent("TracklistPage.qml");
-                    if (component.status === Component.Ready) {
-                        var playlistPage = component.createObject(pageStack, { playlist: modelData });
-                        pageStack.push(playlistPage);
-                    }
-                } else if (modelData.type === SpotifyPlaylist.Folder) {
-                    var component2 = Qt.createComponent("FolderPage.qml");
-                    if (component2.status === Component.Ready) {
-                        var folderPage = component2.createObject(pageStack, { folder: modelData });
-                        pageStack.push(folderPage);
-                    }
-                }
-            }
-            onPressAndHold: { menu.playlist = modelData; menu.open(); }
-
-            property string staticIcon
-
-            function updateIcon() {
-                if (modelData.type === SpotifyPlaylist.Playlist)
-                    staticIcon = "images/icon-m-music-video-all-songs-white.png";
-                else if (modelData.type === SpotifyPlaylist.Starred)
-                    staticIcon = "image://theme/icon-m-favorite-selected";
-                else if (modelData.type === SpotifyPlaylist.Inbox)
-                    staticIcon = "images/icon-m-toolbar-directory-move-to-white.png";
+                if (modelData.trackCount > 0)
+                    pageStack.push(Qt.resolvedUrl("TracklistPage.qml"), {"playlist": modelData })
                 else if (modelData.type === SpotifyPlaylist.Folder)
-                    staticIcon = "images/icon-m-toolbar-directory-white.png";
+                    pageStack.push(Qt.resolvedUrl("FolderPage.qml"), {"folder": modelData })
             }
 
-            Component.onCompleted: updateIcon()
+
         }
-
-        footer: Item {
-            height: visible ? (UI.LIST_ITEM_HEIGHT + separator.height) : 0
-            width: parent.width
-            visible: !spotifySession.offlineMode
-
-            Separator {
-                id: separator
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-            }
-
-            Rectangle {
-                id: background
-                anchors.fill: row
-                // Fill page porders
-                anchors.leftMargin: -UI.MARGIN_XLARGE
-                anchors.rightMargin: -UI.MARGIN_XLARGE
-                opacity: mouseArea.pressed ? 1.0 : 0.0
-                color: "#15000000"
-            }
-
-            Row {
-                id: row
-                width: parent.width
-                anchors.top: separator.bottom
-                anchors.bottom: parent.bottom
-                spacing: UI.LIST_ITEM_SPACING
-
-                Item {
-                    id: iconItem
-                    anchors.verticalCenter: parent.verticalCenter
-                    visible: iconImage.source !== "" ? true : false
-                    width: 40
-                    height: 40
-
-                    Image {
-                        id: iconImage
-                        anchors.centerIn: parent
-                        source: "image://theme/icon-m-common-add"
-                        opacity: 0.4
-                    }
-                }
-
-/*                Label {
-                    id: newPlaylistLabel
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.family: UI.FONT_FAMILY_BOLD
-                    font.weight: Font.Bold
-                    font.pixelSize: UI.LIST_TILE_SIZE
-                    color: UI.LIST_TITLE_COLOR
-                    opacity: 0.4
-                    text: "New playlist"
-                }*/
-            }
-
-            MouseArea {
-                id: mouseArea;
-                anchors.fill: parent
-                onClicked: {
-                    newPlaylistSheet.playlistName = "";
-                    newPlaylistSheet.open();
-                }
-            }
-            /*Item {
-                anchors.top: newPlaylistLabel.bottom
-                width: parent.width
-                height: 80
-            }*/
-        }
-
-        section.criteria: ViewSection.FirstCharacter
-        section.property: "listSection"
-        section.delegate: Separator {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            visible: section === "p"
-        }
+        // TODO add a way to create a new playlist
     }
-
-    //Scrollbar { flickableItem: playlists }
 }

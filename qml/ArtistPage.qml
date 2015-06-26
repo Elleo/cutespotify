@@ -42,235 +42,169 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
 
 Page {
     id: artistPage
+    allowedOrientations: Orientation.All
+
 
     property variant artist
-    anchors.rightMargin: UI.MARGIN_XLARGE
-    anchors.leftMargin: UI.MARGIN_XLARGE
+    property string artistName: artist ? artist.name : ""
+    property string artistPicId: artist ? artist.pictureId : ""
+    property variant browse: artist ? artist.browse() : null
 
-    Component.onCompleted: {
-        browse.artist = artist
-    }
+    property string titleString: qsTr("Music")
 
-    SpotifyArtistBrowse {
-        id: browse
-    }
+    SilicaListView {
+        id: artistView
+        property int _state: 1
+        anchors.fill: parent
+        cacheBuffer: 3000
 
-/*    TrackMenu {
-        id: menu
-        deleteVisible: false
-    }
-
-    AlbumMenu {
-        id: albumMenu
-        playVisible: true
-        artistVisible: false
-        albumBrowse: SpotifyAlbumBrowse {
-            id: menuAlbumBrowse
-            onTracksChanged: albumMenu.open()
-        }
-    }
-*/
-    Column {
-        id: header
-        width: parent.width
-        anchors.top: parent.top
-        anchors.topMargin: 80
-
-        Label {
-            height: UI.LIST_TILE_SIZE * 1.5
-            font.family: UI.FONT_FAMILY_BOLD
-            font.weight: Font.Bold
-            font.pixelSize: UI.LIST_TILE_SIZE
-            color: Theme.primaryColor
-            text: artist ? artist.name : ""
-        }
-
-        ComboBox {
-            id: selector
-            currentIndex: 1
-            menu: ContextMenu {
-                MenuItem { text: "Top hits"; }
-                MenuItem { text: "Music"; }
-                MenuItem { text: "Biography"; }
-                MenuItem { text: "Related artists"; }
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Top hits");
+                onClicked: {
+                    artistView._state = 0
+                    artistView.updateResults()
+                    titleString = text
+                }
+                visible: artistView._state != 0;
             }
-            onCurrentIndexChanged: {
-                artistView.updateResults();
+            MenuItem {
+                text: qsTr("Music");
+                onClicked: {
+                    artistView._state = 1
+                    artistView.updateResults()
+                    titleString = text
+                }
+                visible: artistView._state != 1;
+            }
+            MenuItem {
+                text: qsTr("Biography");
+                onClicked: {
+                    artistView._state = 2
+                    artistView.updateResults()
+                    titleString = text
+                }
+                visible: artistView._state != 2;
+            }
+            MenuItem {
+                text: qsTr("Related artists");
+                onClicked: {
+                    artistView._state = 3
+                    artistView.updateResults()
+                    titleString = text
+                }
+                visible: artistView._state != 3;
             }
         }
 
-        Separator {
+        VerticalScrollDecorator { }
+
+        ViewPlaceholder {
+            enabled: artistView._state == 2 && artistView.count === 0 && !browse.busy
+            text: qsTr("No biography available")
+        }
+
+        Component {
+            id: trackComponent
+            TrackDelegate {
+                listModel: browse.topTracks()
+                coverId: albumCoverId
+                showIndex: true
+            }
+        }
+
+        Component {
+            id: albumComponent
+            AlbumDelegate {
+                listModel: browse.albums()
+                artist: sectionType === "Appears on" ? model.artist : (model.year > 0 ? model.year : "")
+                enableArtistMenu: sectionType === "Appears on"
+            }
+        }
+
+        Component {
+            id: artistComponent
+            ArtistDelegate {
+                listModel: browse.similarArtists()
+            }
+        }
+
+        Component {
+            id: bioComponent
+            Label {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.rightMargin: Theme.paddingLarge
+                anchors.leftMargin: Theme.paddingLarge
+                height: paintedHeight + Theme.paddingLarge
+                text: "<style type=text/css> a { text-decoration: none; color:" + color + "} </style>" + modelData
+                textFormat: Text.RichText
+                wrapMode: Text.WordWrap
+                font.pixelSize: Theme.fontSizeSmall
+            }
+        }
+
+        header: Column {
             width: parent.width
-        }
-    }
-
-    Item {
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
-        anchors.topMargin: UI.MARGIN_XLARGE
-        clip: true
-        visible: !browse.busy
-
-        SilicaListView {
-            id: artistView
-            anchors.fill: parent
-            anchors.rightMargin: UI.MARGIN_XLARGE
-            anchors.leftMargin: UI.MARGIN_XLARGE
-            cacheBuffer: 3000
-
-            Component.onCompleted: positionViewAtBeginning()
-
-            Component {
-                id: trackComponent
-                TrackDelegate {
-                    name: modelData.name
-                    artistAndAlbum: modelData.album
-                    duration: modelData.duration
-                    highlighted: modelData.isCurrentPlayingTrack
-                    starred: modelData.isStarred
-                    coverId: modelData.albumCoverId
-                    showIndex: true
-                    available: modelData.isAvailable
-                    onClicked: modelData.play()
-                    onPressAndHold: { menu.track = modelData; menu.open(); }
-                }
+            PageHeader {
+                title: artistName + ": " + titleString
+                visible: artistView._state != 1
             }
 
-            Component {
-                id: albumComponent
-                AlbumDelegate {
-                    name: modelData.name
-                    artist: modelData.sectionType == "Appears on" ? modelData.artist : (modelData.year > 0 ? modelData.year : "")
-                    albumCover: modelData.coverId
-                    onClicked: {
-                        pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData })
-                    }
-                    onPressAndHold: {
-                        menuAlbumBrowse.album = modelData;
-                        if (menuAlbumBrowse.totalDuration > 0)
-                            albumMenu.open()
-                    }
-                }
-            }
-
-            Component {
-                id: artistComponent
-                ArtistDelegate {
-                    name: modelData.name
-                    portrait: modelData.pictureId
-                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
-                }
-            }
-
-            Component {
-                id: bioComponent
-                Label {
-                    width: parent ? parent.width : 0
-                    height: paintedHeight + UI.MARGIN_XLARGE
-                    text: "<style type=text/css> a { text-decoration: none; color:" + color + "} </style>" + modelData
-                    textFormat: Text.RichText
-                    wrapMode: Text.WordWrap
-                    font.pixelSize: UI.FONT_LSMALL
-                }
-            }
-
-            Component {
-                id: headerComponent
-                ArtistHeader {
-                    albumCount: browse.albumCount > 0 ? (browse.albumCount + (browse.albumCount > 1 ? " albums" : " album")) : ""
-                    singleCount: browse.singleCount > 0 ? (browse.singleCount + (browse.singleCount > 1 ? " singles" : " single")) : ""
-                    compilationCount: browse.compilationCount > 0 ? (browse.compilationCount + (browse.compilationCount > 1 ? " compilations" : " compilation")) : ""
-                    appearsOnCount: browse.appearsOnCount > 0 ? ("Appears on " + browse.appearsOnCount + (browse.appearsOnCount > 1 ? " other albums" : " other album")) : ""
-                    artistPictureId: artist.pictureId.length > 0 ? artist.pictureId : browse.pictureId
-                    busy: browse.busy
-                }
-            }
-
-            Component {
-                id: sectionComponent
-                Item {
-                    width: parent.width
-                    height: sectionText.height
-
-                    Separator {
-                        anchors.left: parent.left
-                        anchors.right: sectionText.left
-                        anchors.rightMargin: UI.MARGIN_XLARGE * 2
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    Label {
-                        id: sectionText
-                        anchors.right: parent.right
-                        anchors.rightMargin: UI.MARGIN_XLARGE
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.family: UI.FONT_FAMILY_BOLD
-                        font.pixelSize: UI.FONT_SMALL
-                        font.weight: Font.Bold
-                        color: "#808080"
-                        text: section
-                    }
-                }
-            }
-
-            section.property: "sectionType"
-
-            Connections {
-                target: browse
-                onDataChanged: artistView.updateResults()
-            }
-
-            function updateResults() {
-                artistView.model = 0
-                artistView.delegate = null
-                artistView.header = null
-                artistView.section.delegate = null
-                if (selector.currentIndex === 0) {
-                    artistView.model = browse.topTracks
-                    artistView.delegate = trackComponent
-                } else if (selector.currentIndex == 1) {
-                    artistView.header = headerComponent
-                    artistView.section.delegate = sectionComponent
-                    artistView.delegate = albumComponent
-                    artistView.model = browse.albums
-                } else if (selector.currentIndex == 2) {
-                    artistView.model = browse.biography
-                    artistView.delegate = bioComponent
-                } else if (selector.currentIndex == 3) {
-                    artistView.model = browse.similarArtists
-                    artistView.delegate = artistComponent
-                }
-                artistView.positionViewAtBeginning()
-            }
-
-            footer: Item {
-                width: parent.width
-                height: 100
+            ArtistHeader {
+                title: artistName
+                albumCount: browse.albumCount > 0 ? (browse.albumCount + (browse.albumCount > 1 ? " albums" : " album")) : ""
+                singleCount: browse.singleCount > 0 ? (browse.singleCount + (browse.singleCount > 1 ? " singles" : " single")) : ""
+                compilationCount: browse.compilationCount > 0 ? (browse.compilationCount + (browse.compilationCount > 1 ? " compilations" : " compilation")) : ""
+                appearsOnCount: browse.appearsOnCount > 0 ? ("Appears on " + browse.appearsOnCount + (browse.appearsOnCount > 1 ? " other albums" : " other album")) : ""
+                artistPictureId: artistPicId.length > 0 ? artistPicId : browse.pictureId
+                busy: browse.busy
+                visible: artistView._state == 1
             }
         }
 
-        Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 100
-            visible: selector.selectedIndex == 2 && artistView.count === 0 && !browse.busy
-            text: "No biography available"
-            font.pixelSize: UI.FONT_LARGE
-            font.family: UI.FONT_FAMILY_LIGHT
-            font.weight: Font.Light
+        section.property: "sectionType"
+
+
+        Component {
+            id: sectionComponent
+
+            SectionHeader {
+                text: section
+            }
         }
 
-    }
+        Connections {
+            target: browse
+            onDataChanged: artistView.updateResults()
+        }
 
-    BusyIndicator {
-        id: busy
-        running: browse.busy
-        visible: running
-        anchors.centerIn: parent
+        function updateResults() {
+            artistView.model = 0
+            artistView.delegate = null
+            artistView.section.delegate = null
+            if (artistView._state == 0) {
+                artistView.model = browse.topTracks()
+                artistView.delegate = trackComponent
+            } else if (artistView._state == 1) {
+                artistView.section.delegate = sectionComponent
+                artistView.delegate = albumComponent
+                artistView.model = browse.albums()
+            } else if (artistView._state == 2) {
+                artistView.model = browse.biography
+                artistView.delegate = bioComponent
+            } else if (artistView._state == 3) {
+                artistView.model = browse.similarArtists()
+                artistView.delegate = artistComponent
+            }
+            artistView.positionViewAtBeginning()
+        }
+        Component.onCompleted: {
+            updateResults()
+            positionViewAtBeginning()
+        }
     }
 }

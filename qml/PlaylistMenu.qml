@@ -40,133 +40,79 @@
 
 
 import QtQuick 2.0
-import Ubuntu.Components 0.1
-import Ubuntu.Components.Popups 0.1
+import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
-import "Utilities.js" as Utilities
 
-MyMenu {
+ContextMenu {
     id: playlistMenu
 
-    property variant playlist: null
+    property variant playlist: modelData
     property bool userOwnsPlaylist: spotifySession.user ? spotifySession.user.ownsPlaylist(playlist) : false
 
-    layoutContentHeight: layout.height
-
-    NotificationBanner {
-        id: banner
+    MenuItem {
+        text: qsTr("Play")
+        onClicked: { playlist.play() }
+        visible: (playlist && playlist.trackCount > 0) ? true : false
+    }
+    // TODO: uncomment once we have a proper queue
+//    MenuItem {
+//        text: qsTr("Add to queue");
+//        onClicked: { playlist.enqueue() }
+//        visible: (playlist && (playlist.trackCount > 0 || playlist.type === SpotifyPlaylist.Folder)) ? true : false
+//    }
+    MenuItem {
+        text: qsTr("Rename")
+        onClicked: {
+            pageStack.push("PlaylistNameDialog.qml", {"playlist": playlist, "acceptText": qsTr("Rename")})
+        }
+        visible: ((playlist && playlist.type === SpotifyPlaylist.Playlist && userOwnsPlaylist) ? true : false)
+                 && !spotifySession.offlineMode
+    }
+    MenuItem {
+        id: collabItem
+        onClicked: { playlist.collaborative = !playlist.collaborative }
+        visible: ((playlist && playlist.type === SpotifyPlaylist.Playlist && userOwnsPlaylist) ? true : false)
+                 && !spotifySession.offlineMode
+    }
+    MenuItem {
+        id: offlineItem
+        visible: (playlist && playlist.type !== SpotifyPlaylist.Folder) ? true : false
+        onClicked: toggleOffline()
+    }
+    MenuItem {
+        id: setFolderOfflineItem
+        visible: ((playlist && playlist.type === SpotifyPlaylist.Folder) ? true : false) && !spotifySession.offlineMode
+        text: qsTr("Set offline mode for content")
+        onClicked: setOfflineContent()
+    }
+    MenuItem {
+        id: unsetFolderOfflineItem
+        visible: (playlist && playlist.type === SpotifyPlaylist.Folder) ? true : false
+        text: qsTr("Unset offline mode for content")
+        onClicked: unsetOfflineContent()
+    }
+    MenuItem {
+        id: deleteItem
+        onClicked: remove()
+        visible: ((playlist && (playlist.type === SpotifyPlaylist.Playlist || playlist.type === SpotifyPlaylist.Folder)) ? true : false)
+                 && !spotifySession.offlineMode
+    }
+    MenuItem {
+        id: deleteFolderContentItem
+        text: qsTr("Remove folder and content")
+        onClicked: removeFolderContent()
+        visible: ((playlist && playlist.type === SpotifyPlaylist.Folder) ? true : false)
+                 && !spotifySession.offlineMode
     }
 
-    PlaylistNameSheet{
-        id: renameSheet
-        title: "Rename playlist"
-        onAccepted: playlist.rename(Utilities.trim(renameSheet.playlistName))
-    }
-/*
-    Component {
-        id: confirmDeleteDialog
-        Dialog {
-            id: deleteInnerDialog;
-            property bool deleteFolderContent: false
-            text: playlist ? playlist.name : ""
-            Button {
-                text: "Yes";
-                onClicked: {
-                    if (deleteFolderContent)
-                        playlist.deleteFolderContent();
-                    else
-                        playlist.removeFromContainer()
-                    deleteFolderContent = false;
-                    PopupUtils.close(deleteInnerDialog)
-                }
-            }
-            Button {
-                text: "No";
-                onClicked: {
-                    deleteFolderContent = false;
-                    PopupUtils.close(deleteInnerDialog)
-                }
-            }
-        }
-    }
-*/
-    MyMenuLayout {
-        id: layout
-
-        MyMenuItem {
-            text: "Play";
-            onClicked: { playlist.play() }
-            visible: (playlist && playlist.trackCount > 0) ? true : false
-        }
-        MyMenuItem {
-            text: "Add to queue";
-            onClicked: { playlist.enqueue() }
-            visible: (playlist && (playlist.trackCount > 0 || playlist.type === SpotifyPlaylist.Folder)) ? true : false
-        }
-        MyMenuItem {
-            text: "Rename"
-            onClicked: { renameSheet.playlistName = playlist.name; renameSheet.open() }
-            visible: ((playlist && playlist.type == SpotifyPlaylist.Playlist && userOwnsPlaylist) ? true : false)
-                     && !spotifySession.offlineMode
-        }
-        MyMenuItem {
-            id: collabItem
-            onClicked: { playlist.collaborative = !playlist.collaborative }
-            visible: ((playlist && playlist.type == SpotifyPlaylist.Playlist && userOwnsPlaylist) ? true : false)
-                     && !spotifySession.offlineMode
-        }
-        MyMenuItem {
-            id: offlineItem
-            visible: (playlist && playlist.type !== SpotifyPlaylist.Folder) ? true : false
-            onClicked: { playlist.availableOffline = !playlist.availableOffline }
-        }
-        MyMenuItem {
-            id: setFolderOfflineItem
-            visible: ((playlist && playlist.type === SpotifyPlaylist.Folder) ? true : false) && !spotifySession.offlineMode
-            text: "Set offline mode for content"
-            onClicked: { playlist.availableOffline = true }
-        }
-        MyMenuItem {
-            id: unsetFolderOfflineItem
-            visible: (playlist && playlist.type === SpotifyPlaylist.Folder) ? true : false
-            text: "Unset offline mode for content"
-            onClicked: { playlist.availableOffline = false }
-        }
-        MyMenuItem {
-            id: deleteItem
-            onClicked: {
-                if (playlist.type === SpotifyPlaylist.Folder) {
-                    confirmDeleteDialog.titleText = "Delete folder?";
-                } else {
-                    confirmDeleteDialog.titleText = userOwnsPlaylist ? "Delete playlist?" : "Unsubscribe from playlist?";
-                }
-                confirmDeleteDialog.open();
-            }
-            visible: ((playlist && (playlist.type == SpotifyPlaylist.Playlist || playlist.type == SpotifyPlaylist.Folder)) ? true : false)
-                     && !spotifySession.offlineMode
-        }
-        MyMenuItem {
-            id: deleteFolderContentItem
-            text: "Delete folder and content"
-            onClicked: {
-                confirmDeleteDialog.deleteFolderContent = true;
-                confirmDeleteDialog.titleText = "Delete folder and its content?";
-                confirmDeleteDialog.open();
-            }
-            visible: ((playlist && playlist.type == SpotifyPlaylist.Folder) ? true : false)
-                     && !spotifySession.offlineMode
-        }
-    }
-
-    onStatusChanged: {
-        if (status == "Opening" && playlist) {
-            collabItem.text = (playlist.collaborative ? "Unset" : "Set") +  " collaborative";
-            offlineItem.text = (playlist.availableOffline ? "Unset" : "Set") + " offline mode"
+    onActiveChanged: {
+        if (active && playlist) {
+            collabItem.text = (playlist.collaborative ? qsTr("Unset") : qsTr("Set")) +  qsTr(" collaborative");
+            offlineItem.text = (playlist.availableOffline ? qsTr("Unset") : qsTr("Set")) + qsTr(" offline mode")
             if (playlist.type === SpotifyPlaylist.Folder) {
-                deleteItem.text = "Delete";
+                deleteItem.text = qsTr("Remove folder");
             } else {
-                deleteItem.text = userOwnsPlaylist ? "Delete" : "Unsubscribe";
+                deleteItem.text = userOwnsPlaylist ? qsTr("Remove playlist") : qsTr("Unsubscribe from playlist");
             }
         }
     }

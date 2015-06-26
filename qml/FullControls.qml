@@ -40,13 +40,18 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UIConstants.js" as UI
 import QtSpotify 1.0
 
-Column {
-    id: fullControls
-    width: parent.width
-    spacing: UI.MARGIN_XLARGE
+Page {
+    id: fcPage
+    showNavigationIndicator: false
+    backNavigation: false
+    allowedOrientations: Orientation.All
+
+    Component.onCompleted: {
+        flipable.width=Math.min(width, height)
+        flipable.height=flipable.width
+    }
 
     property bool albumRequested: false
     property bool artistRequested: false
@@ -54,49 +59,50 @@ Column {
     Connections {
         target: spotifySession
         onCurrentTrackChanged: {
-        //    if (infoDialog.status != DialogStatus.Closed)
-        //        infoDialog.reject()
+            //    if (infoDialog.status != DialogStatus.Closed)
+            //        infoDialog.reject()
         }
     }
 
-    Connections {
-        target: player
-        onInOpenPositionChanged: {
-            if (!player.inOpenPosition) {
-                if (albumRequested) {
-                    albumRequested = false;
-                    mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: spotifySession.currentTrack.albumObject })
-                }
-                if (artistRequested) {
-                    artistRequested = false;
-                    mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: spotifySession.currentTrack.artistObject })
-                }
-            }
+    // TODO
+    //    Connections {
+    //        target: player
+    //        onInOpenPositionChanged: {
+    //            if (!player.inOpenPosition) {
+    //                if (albumRequested) {
+    //                    albumRequested = false;
+    //                    mainPage.tabs.currentTab.push(Qt.resolvedUrl("AlbumPage.qml"), { album: spotifySession.currentTrack.albumObject })
+    //                }
+    //                if (artistRequested) {
+    //                    artistRequested = false;
+    //                    mainPage.tabs.currentTab.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: spotifySession.currentTrack.artistObject })
+    //                }
+    //            }
+    //        }
+    //    }
+
+    /*    SelectionDialog {
+    id: infoDialog
+    parent: player.parent
+    titleText: "Browse"
+    model: ListModel {
+        ListElement { name: "Album" }
+        ListElement { name: "Artist" }
+    }
+    onAccepted: {
+        player.openRequested = false;
+        if (model.get(infoDialog.selectedIndex).name == "Album") {
+            albumRequested = true;
+        } else {
+            artistRequested = true;
         }
     }
 
-/*    SelectionDialog {
-        id: infoDialog
-        parent: player.parent
-        titleText: "Browse"
-        model: ListModel {
-            ListElement { name: "Album" }
-            ListElement { name: "Artist" }
-        }
-        onAccepted: {
-            player.openRequested = false;
-            if (model.get(infoDialog.selectedIndex).name == "Album") {
-                albumRequested = true;
-            } else {
-                artistRequested = true;
-            }
-        }
-    }
 */
     Flipable {
         id: flipable
-        width: parent.width
-        height: width
+        anchors.left: parent.left
+        anchors.top: parent.top
 
         property bool flipped: false
 
@@ -118,11 +124,11 @@ Column {
             NumberAnimation { target: rotation; property: "angle"; duration: 350 }
         }
 
-        front: Rectangle {
+        front: Item {
             anchors.fill: parent
-            color: "#C9C9C9"
+            z: flipable.flipped ? -1 : 1
 
-            ListView {
+            SilicaListView {
                 id: coverList
                 anchors.fill: parent
                 boundsBehavior: Flickable.StopAtBounds
@@ -134,26 +140,39 @@ Column {
                 clip: true
                 pressDelay: 90
 
-                currentIndex: spotifySession.playQueue.currentIndex
+                highlightFollowsCurrentItem: true
+
+                currentIndex: -1
                 onMovingChanged: {
                     if (!moving)
-                        spotifySession.playQueue.selectTrack(model[currentIndex])
+                        spotifySession.playQueue.selectTrack(currentIndex)
                 }
 
-                model: spotifySession.playQueue.tracks
-                delegate: SpotifyImage {
-                    width: coverList.width
-                    height: width
-                    spotifyId: modelData.albumCoverId
-                    fillMode: Image.PreserveAspectCrop
-                    clip: true
-                    smooth: true
-                    opacity: imageMouseArea.pressed ? 0.4 : 1.0
+                Connections {
+                    target: spotifySession.playQueue
+                    onTracksChanged: {
+                        coverList.currentIndex = coverList.model.currentPlayIndex
+                    }
+                }
 
-                    MouseArea {
-                        id: imageMouseArea
-                        anchors.fill: parent
-                        onClicked: flipable.flipped = true
+                model: spotifySession.playQueue.tracks()
+                delegate: Item {
+                    width: coverList.width
+                    height: coverList.height
+                    SpotifyImage {
+                        width: Math.min(coverList.width, coverList.height)
+                        height: width
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spotifyId: albumCoverId + (imageMouseArea.pressed ? "?" + Theme.highlightColor : "")
+                        fillMode: Image.PreserveAspectCrop
+                        clip: true
+                        smooth: true
+
+                        MouseArea {
+                            id: imageMouseArea
+                            anchors.fill: parent
+                            onClicked: flipable.flipped = true
+                        }
                     }
                 }
             }
@@ -161,25 +180,23 @@ Column {
             Rectangle {
                 anchors.bottom: parent.bottom
                 width: parent.width
-                height: detailsColumn.height + UI.MARGIN_XLARGE
-                color: (moreMouseArea.pressed ? "#DD" : "#BA") + ("#D7D7D7")
+                height: detailsColumn.height + Theme.paddingLarge
+                color: Qt.darker(Theme.secondaryHighlightColor, 2)
+                opacity: fcPage.isPortrait ? 0.9 : 0
 
                 Column {
                     id: detailsColumn
                     anchors.left: parent.left
-                    anchors.leftMargin: UI.MARGIN_XLARGE
+                    anchors.leftMargin: Theme.paddingLarge
                     anchors.right: parent.right
-                    anchors.rightMargin: UI.MARGIN_XLARGE
+                    anchors.rightMargin: Theme.paddingLarge
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
+                    spacing: Theme.paddingSmall
+
 
                     Label {
                         width: parent.width
-                        font.family: UI.FONT_FAMILY
-                        font.weight: Font.Bold
-                        font.pixelSize: UI.FONT_DEFAULT
-                        color: UI.COLOR_FOREGROUND
-                        elide: Text.ElideRight
+                        truncationMode: TruncationMode.Fade
                         opacity: details.opacity
                         text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
                     }
@@ -188,48 +205,49 @@ Column {
                         id: details
                         width: parent.width
                         height: column.height
-                        opacity: moreMouseArea.pressed ? 0.4 : 1.0
+                        opacity: moreMouseArea.pressed ? Theme.highlightBackgroundOpacity : 1.0
+
                         Column {
                             id: column
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
                             anchors.right: moreIcon.left
-                            anchors.rightMargin: UI.MARGIN_XLARGE
+                            anchors.rightMargin: Theme.paddingLarge
                             Label {
                                 width: parent.width
-                                font.family: UI.FONT_FAMILY
-                                font.pixelSize: UI.FONT_LSMALL
-                                color: UI.LIST_SUBTITLE_COLOR
-                                elide: Text.ElideRight
+                                font.pixelSize: Theme.fontSizeSmall
+                                truncationMode: TruncationMode.Fade
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
                             }
                             Label {
                                 width: parent.width
-                                font.family: UI.FONT_FAMILY
-                                font.pixelSize: UI.FONT_LSMALL
-                                color: UI.LIST_SUBTITLE_COLOR
-                                elide: Text.ElideRight
+                                font.pixelSize: Theme.fontSizeSmall
+                                color: Theme.secondaryColor
+                                truncationMode: TruncationMode.Fade
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 text: spotifySession.currentTrack ? spotifySession.currentTrack.album : ""
                             }
                         }
+
                         Image {
                             id: moreIcon
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            source: "image://theme/icon-s-description" 
+                            source: "image://theme/icon-m-about"
                             visible: !spotifySession.offlineMode
                         }
-                        MouseArea {
-                            id: moreMouseArea
-                            anchors.fill: parent
-                            onClicked: { infoDialog.selectedIndex = -1; infoDialog.open(); }
-                            enabled: moreIcon.visible
-                        }
                     }
+                }
+
+                MouseArea {
+                    // TODO
+                    id: moreMouseArea
+                    anchors.fill: parent
+                    onClicked: { infoDialog.selectedIndex = -1; infoDialog.open(); }
+                    enabled: false //moreIcon.visible
                 }
             }
         }
@@ -237,16 +255,11 @@ Column {
         back: Item {
             anchors.fill: parent
             clip: true
+            z: flipable.flipped ? 1 : -1
 
-            ViewHeader {
+            PageHeader {
                 id: queueHeader
-                anchors.left: parent.left
-                anchors.right: parent.right
-                contentMargins: UI.MARGIN_XLARGE
-                text: "Play queue"
-                color: UI.COLOR_BACKGROUND
-                contentOpacity: queueHeaderMouse.pressed ? 0.4 : 1.0
-                z: 500
+                title: qsTr("Play queue")
 
                 MouseArea {
                     id: queueHeaderMouse
@@ -255,221 +268,185 @@ Column {
                 }
             }
 
-            ListView {
+            SilicaListView {
                 id: queueList
                 anchors.top: queueHeader.bottom
-                anchors.topMargin: UI.MARGIN_XLARGE
                 anchors.left: parent.left
-                anchors.leftMargin: UI.MARGIN_XLARGE
                 anchors.right: parent.right
-                anchors.rightMargin: UI.MARGIN_XLARGE
                 anchors.bottom: parent.bottom
-                cacheBuffer: UI.LIST_ITEM_HEIGHT
-                model: spotifySession.playQueue.tracks
+                cacheBuffer: 80
+                clip: true
+
+                currentIndex: -1
+
+                VerticalScrollDecorator {}
+
+                model: spotifySession.playQueue.tracks()
                 delegate: TrackDelegate {
                     property bool isExplicit: spotifySession.playQueue.isExplicitTrack(index)
-                    name: modelData.name
-                    backgroundOpacity: isExplicit ? 0.6 : 0.0
-                    titleColor: isExplicit ? ("#c6a83f") : (UI.LIST_TITLE_COLOR)
-                    subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
-                    artistAndAlbum: modelData.artists + " | " + modelData.album
-                    duration: modelData.duration
-                    highlighted: index == spotifySession.playQueue.currentIndex
-                    onClicked: if (!highlighted) spotifySession.playQueue.selectTrack(modelData)
-                    pressAndHoldEnabled: false
+                    name: trackName
+                    //backgroundOpacity: isExplicit ? 0.6 : 0.0
+                    // TODO those colors are no longer used.. / the opacity above neither
+                    //titleColor: isExplicit ? ("#c6a83f") : (UI.LIST_TITLE_COLOR)
+                    //subtitleColor: isExplicit ? ("#a79144") : (UI.LIST_SUBTITLE_COLOR)
+                    artistAndAlbum: artists + " | " + album
+                    duration: duration
+                    isPlaying: isCurrentPlayingTrack
+                    onClicked: {
+                        if (!isCurrentPlayingTrack)
+                            spotifySession.playQueue.selectTrack(index)
+                        else
+                            flipable.flipped = false
+                    }
+
                 }
 
                 Connections {
-                    target: spotifySession.playQueue
-                    onTracksChanged: queueList.positionViewAtIndex(spotifySession.playQueue.currentIndex, ListView.Center)
+                    target: spotifySession
+                    onCurrentTrackChanged: queueList.positionViewAtIndex(queueList.model.currentPlayIndex, ListView.Center)
                 }
             }
-
-/*            Scrollbar {
-                anchors.topMargin: -UI.MARGIN_XLARGE
-                anchors.rightMargin: -UI.MARGIN_XLARGE
-                flickableItem: queueList
-            }*/
         }
     }
 
-    Column {
-        anchors.left: parent.left
-        anchors.leftMargin: UI.MARGIN_XLARGE
+    PanelBackground {
+
+        anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.rightMargin: UI.MARGIN_XLARGE
-        spacing: UI.MARGIN_XLARGE
+        height: fcPage.isPortrait ? parent.height - flipable.height : parent.height
+        width: fcPage.isPortrait ? parent.width : parent.width - flipable.width
 
-        Item {
-            id: controls
+        Column {
+            anchors.left: parent.left
+            anchors.leftMargin: Theme.paddingLarge
+            anchors.right: parent.right
+            anchors.rightMargin: Theme.paddingLarge
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.topMargin: Theme.paddingLarge
             width: parent.width
-            height: 128
+            spacing: Theme.paddingSmall
+            anchors.top: parent.top
+            opacity: fcPage.isPortrait ? 0 : 1
 
-            Image {
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/qml/images/previous.png"
-                opacity: previous.pressed ? 0.4 : 1.0
-
-                MouseArea {
-                    id: previous
-                    anchors.fill: parent
-                    anchors.margins: -15
-                    onClicked: spotifySession.playPrevious()
-                }
+            Label {
+                width: parent.width
+                truncationMode: TruncationMode.Fade
+                text: spotifySession.currentTrack ? spotifySession.currentTrack.name : ""
             }
-            Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                source: spotifySession.isPlaying ? "qrc:/qml/images/pause.png"
-                                                 : "qrc:/qml/images/play.png"
-                opacity: play.pressed ? 0.4 : 1.0
-
-                MouseArea {
-                    id: play
-                    anchors.fill: parent
-                    anchors.margins: -15
-                    onClicked: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
-                }
+            Label {
+                width: parent.width
+                font.pixelSize: Theme.fontSizeSmall
+                truncationMode: TruncationMode.Fade
+                text: spotifySession.currentTrack ? spotifySession.currentTrack.artists : ""
             }
-            Image {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/qml/images/next.png"
-                opacity: next.pressed ? 0.4 : 1.0
-
-                MouseArea {
-                    id: next
-                    anchors.fill: parent
-                    anchors.margins: -15
-                    onClicked: spotifySession.playNext()
-                }
+            Label {
+                width: parent.width
+                font.pixelSize: Theme.fontSizeSmall
+                color: Theme.secondaryColor
+                truncationMode: TruncationMode.Fade
+                text: spotifySession.currentTrack ? spotifySession.currentTrack.album : ""
             }
         }
 
+
         Column {
-            id: seeker
-            width: parent.width
-            spacing: 8
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.topMargin: Theme.paddingLarge
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: Theme.paddingLarge
+            spacing: Theme.paddingLarge
+
+            Row {
+                id: controls
+                width: parent.width
+                property real itemWidth: width / 3
+                IconButton {
+                    width: controls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: "image://theme/icon-m-previous"
+                    onClicked: spotifySession.playPrevious()
+                }
+
+                IconButton {
+                    width: controls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: spotifySession.isPlaying ? "image://theme/icon-l-pause"
+                                                          : "image://theme/icon-l-play"
+                    onClicked: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
+                }
+
+                IconButton {
+                    width: controls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: "image://theme/icon-m-next"
+                    onClicked: spotifySession.playNext()
+                }
+            }
 
             Slider {
                 id: slider
                 width: parent.width
-                minimumValue: 0
-                maximumValue: spotifySession.currentTrack ? spotifySession.currentTrack.durationMs : 0
-                //stepSize: 1000
-                //valueIndicatorVisible: spotifySession.currentTrack ? true : false
-                //valueIndicatorMargin : 40
+
                 enabled: spotifySession.currentTrack ? true : false
 
-                function formatValue(v) {
-                    return spotifySession.formatDuration(v);
-                }
+                handleVisible: false
+                valueText: value > 3599 ? Format.formatDuration(value, Formatter.DurationLong) :
+                                          Format.formatDuration(value, Formatter.DurationShort)
 
-                onPressedChanged:  {
-                    if (!slider.pressed) {
-                        spotifySession.seek(slider.value)
-                    }
-                }
+                minimumValue: 0
+                onReleased: spotifySession.seek(slider.value * 1000)
 
                 Connections {
                     target: spotifySession
                     onCurrentTrackPositionChanged: {
                         if (!slider.pressed)
-                            slider.value = spotifySession.currentTrackPosition;
+                            slider.value = spotifySession.currentTrackPosition / 1000;
+                    }
+                    onCurrentTrackChanged: {
+                        if(spotifySession.currentTrack)
+                            slider.maximumValue = spotifySession.currentTrack.durationMs / 1000
                     }
                 }
             }
 
-            Item {
+            Row {
+                id: moreControls
                 width: parent.width
-                height: trackPos.height + 8
+                property real itemWidth : width / 5
 
-                Label {
-                    id: trackPos
-                    font.family: UI.FONT_FAMILY
-                    font.pixelSize: UI.FONT_LSMALL
-                    color: UI.LIST_SUBTITLE_COLOR
-                    anchors.left: parent.left
-                    anchors.leftMargin: 5
-                    anchors.top: parent.top
-                    //text: slider.valueIndicatorText
-                    visible: spotifySession.currentTrack ? true : false
-                }
-                Label {
-                    font.family: UI.FONT_FAMILY
-                    font.pixelSize: UI.FONT_LSMALL
-                    color: UI.LIST_SUBTITLE_COLOR
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
-                    anchors.top: parent.top
-                    text: spotifySession.currentTrack ? spotifySession.currentTrack.duration : ""
-                }
-            }
-        }
-
-        Item {
-            width: parent.width
-            height: 40
-
-            Image {
-                id: addIcon
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                opacity: enabled ? (addArea.pressed ? 0.4 : 1.0) : 0.2
-                source: "image://theme/icon-m-toolbar-add"
-                enabled: !spotifySession.offlineMode
-
-                MouseArea {
-                    id: addArea
-                    anchors.fill: parent
-                    anchors.margins: -15
+                IconButton {
+                    width: moreControls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: "image://theme/icon-m-add"
+                    enabled: !spotifySession.offlineMode
                     onClicked: {
-                        mainPage.playlistSelection.track = spotifySession.currentTrack;
-                        mainPage.playlistSelection.selectedIndex = -1;
-                        mainPage.playlistSelection.open();
+                        pageStack.push(Qt.resolvedUrl("PlaylistSelectionDialog.qml"), {"track": spotifySession.currentTrack})
                     }
                 }
-            }
-            Image {
-                id: favIcon
-                x: 136
-                anchors.verticalCenter: parent.verticalCenter
-                opacity: enabled ? (starArea.pressed ? 0.4 : 1.0) : 0.2
-                source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("qrc:/qml/images/star.png")
-                                                                                             : ("qrc:/qml/images/emptystar.png"))
-                                                    : ("qrc:/qml/images/emptystar.png")
-                enabled: !spotifySession.offlineMode
 
-                MouseArea {
-                    id: starArea
-                    anchors.fill: parent
-                    anchors.margins: -15
+                IconButton {
+                    width: moreControls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: spotifySession.currentTrack ? (spotifySession.currentTrack.isStarred ? ("image://theme/icon-m-favorite-selected")
+                                                                                                      : ("image://theme/icon-m-favorite"))
+                                                             : ("image://theme/icon-m-favorite-selected")
+                    enabled: !spotifySession.offlineMode
                     onClicked: spotifySession.currentTrack.isStarred = !spotifySession.currentTrack.isStarred
                 }
-            }
-            Image {
-                x: 272
-                anchors.verticalCenter: parent.verticalCenter
-                source: spotifySession.shuffle ? ("images/icon-m-toolbar-shuffle-selected.png") : ("image://theme/icon-m-toolbar-shuffle")
-                opacity: shuffleArea.pressed ? 0.4 : 1.0
-                MouseArea {
-                    id: shuffleArea
-                    anchors.fill: parent
-                    anchors.margins: -15
+
+                IconButton {
+                    width: moreControls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: spotifySession.shuffle ? ("image://theme/icon-m-shuffle?" + Theme.highlightColor) : ("image://theme/icon-m-shuffle")
                     onClicked: spotifySession.shuffle = !spotifySession.shuffle
                 }
-            }
-            Image {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                source: spotifySession.repeat ? "images/icon-m-toolbar-repeat-white-selected.png"
-                                              : spotifySession.repeatOne ? "images/icon-m-toolbar-repeat-one-white-selected.png" : ("image://theme/icon-m-toolbar-repeat")
-                opacity: repeatArea.pressed ? 0.4 : 1.0
-                MouseArea {
-                    id: repeatArea
-                    anchors.fill: parent
-                    anchors.margins: -15
+
+                IconButton {
+                    width: moreControls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: spotifySession.repeat ? "image://theme/icon-m-repeat?" + Theme.highlightColor
+                                                          : spotifySession.repeatOne ? "image://icon/icon-m-repeat-once?" + Theme.highlightColor : ("image://theme/icon-m-repeat")
                     onClicked: {
                         if (spotifySession.repeat) {
                             spotifySession.repeat = false;
@@ -481,12 +458,16 @@ Column {
                         }
                     }
                 }
+
+                IconButton {
+                    width: moreControls.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: "image://theme/icon-m-down"
+                    onClicked: {
+                        appWindow.showFullControls = !appWindow.showFullControls
+                    }
+                }
             }
-        }
-        Rectangle {
-            height: 100
-            anchors.bottom: parent.bottom
-            width: parent.width
         }
     }
 }

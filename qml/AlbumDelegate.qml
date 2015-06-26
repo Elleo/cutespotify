@@ -41,128 +41,91 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UIConstants.js" as UI
+import QtSpotify 1.0
 
-Item {
+ListItem {
     id: listItem
 
-    signal clicked
-    signal pressAndHold
-    property alias pressed: mouseArea.pressed
-    property alias name: mainText.text
-    property alias artist: subText.text
-    property alias albumCover: cover.spotifyId
-    property bool available: true
+    property variant listModel
+    property string name: model.name
+    property string artist: model.artist
+    property string albumCover: model.coverId
+    property int year: model.year
+    property bool available: model.isAvailable
     property bool showIndex: false
+    property bool enableArtistMenu: true
 
-    property int titleSize: UI.LIST_TILE_SIZE
-    property string titleFont: UI.FONT_FAMILY_BOLD
-    property color titleColor: Theme.primaryColor
-
-    property int subtitleSize: UI.LIST_SUBTILE_SIZE
-    property string subtitleFont: UI.FONT_FAMILY_LIGHT
-    property color subtitleColor: Theme.secondaryColor
-
-    height: UI.LIST_ITEM_HEIGHT
+    contentHeight: Theme.itemSizeSmall
     width: parent.width
 
-    SequentialAnimation {
-        id: backAnimation
-        property bool animEnded: false
-        running: mouseArea.pressed
+    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"),
+                                { "browse": listModel.albumBrowse(index),
+                                    "name": name, "coverId": albumCover,
+                                    "artist": artist, "albumYear": year}) }
 
-        ScriptAction { script: backAnimation.animEnded = false }
-        PauseAnimation { duration: 200 }
-        ParallelAnimation {
-            NumberAnimation { target: background; property: "opacity"; to: 0.4; duration: 300 }
-            ColorAnimation { target: mainText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            ColorAnimation { target: subText; property: "color"; to: "#DDDDDD"; duration: 300 }
-            NumberAnimation { target: coverContainer; property: "opacity"; to: 0.2; duration: 300 }
+    menu: Component {
+        id: albumMenu
+        AlbumMenu {
+            albumBrowse: listModel.albumBrowse(index)
+            artistVisible: listItem.enableArtistMenu
         }
-        PauseAnimation { duration: 100 }
-        ScriptAction { script: { backAnimation.animEnded = true; listItem.pressAndHold(); } }
-        onRunningChanged: {
-            if (!running) {
-                coverContainer.opacity = 1.0
-                mainText.color = listItem.titleColor
-                subText.color = listItem.subtitleColor
-            }
-        }
-    }
-
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        // Fill page porders
-        anchors.leftMargin: -UI.MARGIN_XLARGE
-        anchors.rightMargin: -UI.MARGIN_XLARGE
-        opacity: mouseArea.pressed ? 1.0 : 0.0
-        color: "#15000000"
     }
 
     Label {
         id: indexText
         anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingSmall
         anchors.verticalCenter: parent.verticalCenter
-        width: listItem.showIndex ? 48 : 0
-        text: (index + 1) + ".   "
-        font.family: UI.FONT_FAMILY_LIGHT
-        font.pixelSize: UI.FONT_SMALL
+        width: listItem.showIndex ? Theme.iconSizeMedium * 0.75 : 0
+        text: (index + 1) + "."
+        font.pixelSize: Theme.fontSizeSmall
         horizontalAlignment: Text.AlignRight
+        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
         visible: listItem.showIndex
     }
 
     Rectangle {
         id: coverContainer
-        width: 64; height: width
+        width: Theme.iconSizeMedium; height: width
         anchors.left: indexText.right
+        anchors.leftMargin: indexText.visible ? Theme.paddingSmall : Theme.paddingLarge
         anchors.verticalCenter: parent.verticalCenter
-        color: "#C9C9C9"
+        color: Theme.secondaryHighlightColor
         opacity: listItem.available ? 1.0 : 0.3
 
         SpotifyImage {
             id: cover
+            spotifyId: albumCover
             anchors.fill: parent
         }
     }
 
     Column {
         anchors.left: coverContainer.right
-        anchors.leftMargin: UI.MARGIN_XLARGE
+        anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingLarge
         anchors.verticalCenter: parent.verticalCenter
         opacity: listItem.available ? 1.0 : 0.3
 
         Label {
             id: mainText
+            text: name
             anchors.left: parent.left
             anchors.right: parent.right
-            font.family: listItem.titleFont
-            font.weight: Font.Bold
-            font.pixelSize: listItem.titleSize
-            color: listItem.titleColor
-            elide: Text.ElideRight
+            color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+            truncationMode: TruncationMode.Fade
         }
 
         Label {
             id: subText
+            text: artist
             anchors.left: parent.left
             anchors.right: parent.right
-            font.family: listItem.subtitleFont
-            font.pixelSize: listItem.subtitleSize
-            font.weight: Font.Light
-            color: listItem.subtitleColor
-            elide: Text.ElideRight
+            font.pixelSize: Theme.fontSizeSmall
+            color: listItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+            truncationMode: TruncationMode.Fade
             visible: text != ""
-        }
-    }
-
-    MouseArea {
-        id: mouseArea;
-        anchors.fill: parent
-        onClicked: {
-            if (!backAnimation.animEnded)
-                listItem.clicked();
         }
     }
 }

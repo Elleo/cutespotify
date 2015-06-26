@@ -1,0 +1,175 @@
+diff --git a/qml/main.qml b/qml/main.qml
+index 1abcd33..053d73e 100644
+--- a/qml/main.qml
++++ b/qml/main.qml
+@@ -41,8 +41,8 @@
+ import QtQuick 2.0
+ import Sailfish.Silica 1.0
+ import QtSpotify 1.0
+-import Sailfish.Media 1.0
+-import org.nemomobile.policy 1.0
++//import Sailfish.Media 1.0
++//import org.nemomobile.policy 1.0
+ 
+ ApplicationWindow {
+     id: appWindow
+@@ -51,7 +51,7 @@ ApplicationWindow {
+ 
+     bottomMargin: quickControls.visibleSize
+ 
+-    property bool grabKeys: keysResource.acquired
++//    property bool grabKeys: keysResource.acquired
+ 
+     cover: Qt.resolvedUrl("CoverPage.qml")
+ 
+@@ -166,77 +166,77 @@ ApplicationWindow {
+         }
+     }
+ 
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_AudioRepeat
+-        onPressed: {
+-            spotifySession.repeat = !spotifySession.repeat;
+-        }
+-    }
+-
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_AudioRandomPlay
+-        onPressed: spotifySession.shuffle = !spotifySession.shuffle
+-    }
+-
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_MediaTogglePlayPause
+-        onPressed: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
+-    }
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_MediaPlay
+-        onPressed: spotifySession.resume()
+-    }
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_MediaPause
+-        onPressed: spotifySession.pause()
+-    }
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_MediaStop
+-        onPressed: spotifySession.stop();
+-    }
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_MediaNext
+-        onPressed: spotifySession.playNext()
+-    }
+-    MediaKey {
+-        enabled: true
+-        key: Qt.Key_MediaPrevious
+-        onPressed: spotifySession.playPrevious()
+-    }
+-
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_AudioForward
+-        onPressed: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition + 500))
+-        onRepeat: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition + 1000))
+-        onReleased: nextTimer.stop()
+-    }
+-    Timer { id: nextTimer; interval: 500; onTriggered: spotifySession.playNext() }
+-
+-    MediaKey {
+-        enabled: grabKeys
+-        key: Qt.Key_AudioRewind
+-        onPressed: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition - 500))
+-        onRepeat: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition - 1000))
+-        onReleased: previousTimer.stop()
+-    }
+-    Timer { id: previousTimer; interval: 500; onTriggered: spotifySession.playPrevious() }
+-
+-    Permissions {
+-        enabled: true
+-        applicationClass: "player"
+-
+-        Resource {
+-            id: keysResource
+-            type: Resource.HeadsetButtons
+-            optional: true
+-        }
+-    }
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_AudioRepeat
++//        onPressed: {
++//            spotifySession.repeat = !spotifySession.repeat;
++//        }
++//    }
++
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_AudioRandomPlay
++//        onPressed: spotifySession.shuffle = !spotifySession.shuffle
++//    }
++
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_MediaTogglePlayPause
++//        onPressed: spotifySession.isPlaying ? spotifySession.pause() : spotifySession.resume()
++//    }
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_MediaPlay
++//        onPressed: spotifySession.resume()
++//    }
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_MediaPause
++//        onPressed: spotifySession.pause()
++//    }
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_MediaStop
++//        onPressed: spotifySession.stop();
++//    }
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_MediaNext
++//        onPressed: spotifySession.playNext()
++//    }
++//    MediaKey {
++//        enabled: true
++//        key: Qt.Key_MediaPrevious
++//        onPressed: spotifySession.playPrevious()
++//    }
++
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_AudioForward
++//        onPressed: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition + 500))
++//        onRepeat: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition + 1000))
++//        onReleased: nextTimer.stop()
++//    }
++//    Timer { id: nextTimer; interval: 500; onTriggered: spotifySession.playNext() }
++
++//    MediaKey {
++//        enabled: grabKeys
++//        key: Qt.Key_AudioRewind
++//        onPressed: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition - 500))
++//        onRepeat: spotifySession.seek(Math.max(0, spotifySession.currentTrackPosition - 1000))
++//        onReleased: previousTimer.stop()
++//    }
++//    Timer { id: previousTimer; interval: 500; onTriggered: spotifySession.playPrevious() }
++
++//    Permissions {
++//        enabled: true
++//        applicationClass: "player"
++
++//        Resource {
++//            id: keysResource
++//            type: Resource.HeadsetButtons
++//            optional: true
++//        }
++//    }
+ }

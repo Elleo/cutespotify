@@ -41,9 +41,9 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtSpotify 1.0
-import "UIConstants.js" as UI
 
 Page {
+    allowedOrientations: Orientation.All
 
     Connections {
         target: spotifySession
@@ -70,139 +70,130 @@ Page {
             }
         }
 
-        Image {
-            id: logo
-            source: "qrc:/qml/images/cutespotify-logo.png"
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-        }
-
         Column {
-            id: fields
-            visible: !spotifySession.pendingConnectionRequest && spotifySession.connectionStatus == SpotifySession.LoggedOut
-            spacing: UI.DEFAULT_MARGIN
+            id: content
+            spacing: Theme.paddingLarge
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: UI.PADDING_XXLARGE
-            anchors.rightMargin: UI.PADDING_XXLARGE
-            anchors.top: logo.bottom
+            anchors.leftMargin: Theme.paddingLarge
+            anchors.rightMargin: Theme.paddingLarge
 
-            TextField {
-                id: username
-                placeholderText: "Username"
-                width: parent.width
-                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                Keys.onReturnPressed: {
-                    if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
-                        login();
-                    else
-                        password.forceActiveFocus();
-                }
+            Image {
+                id: logo
+                source: "qrc:/qml/images/cutespot-logo.png"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
-            TextField {
-                id: password
-                placeholderText: "Password"
-                echoMode: TextInput.Password
-                width: parent.width
-                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                Keys.onReturnPressed: {
-                    if (username.text.length > 0 && password.text.length > 0 && termsCheck.checked)
-                        login();
-                    else
-                        username.forceActiveFocus();
+
+            Column {
+                id: fields
+                visible: !spotifySession.pendingConnectionRequest && spotifySession.connectionStatus == SpotifySession.LoggedOut
+                spacing: Theme.paddingLarge
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                TextField {
+                    id: username
+                    placeholderText: qsTr("Username")
+                    label: qsTr("Username")
+                    width: parent.width
+                    inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+
+                    EnterKey.enabled: text.length > 0
+                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                    EnterKey.onClicked: password.forceActiveFocus()
+                }
+
+                TextField {
+                    id: password
+                    placeholderText: qsTr("Password")
+                    label: qsTr("Password")
+                    echoMode: TextInput.Password
+                    width: parent.width
+                    inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+
+                    EnterKey.enabled: text.length > 0
+                    EnterKey.iconSource: (username.text.length > 0 && termsCheck.checked) ? "image://theme/icon-m-enter-accept" : "image://theme/icon-m-enter-close"
+                    EnterKey.onClicked: {
+                        if (username.text.length > 0 && termsCheck.checked) {
+                            spotifySession.login(username.text, password.text);
+                            password.text = ""
+                        }
+                        focus = false
+                    }
+                }
+
+                Column {
+                    width: parent.width
+                    TextSwitch {
+                        id: termsCheck
+                        text: qsTr("Accept")
+                    }
+
+                    Label {
+                        anchors {
+                            left: parent.left
+                            leftMargin: Theme.paddingLarge * 2
+                            right: parent.right
+                        }
+                        onLinkActivated: Qt.openUrlExternally(link)
+                        textFormat: Text.RichText
+                        wrapMode: Text.WordWrap
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
+                    }
+                }
+
+                Button {
+                    id: button
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    text: qsTr("Log in")
+                    enabled: username.text.length > 0 && password.text.length > 0 && termsCheck.checked
+
+                    onClicked: {
+                        spotifySession.login(username.text, password.text);
+                        password.text = ""
+                    }
+                }
+
+                Item {
+                    height: Theme.paddingLarge
+                    width: 1
+                }
+
+                Label {
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    onLinkActivated: Qt.openUrlExternally(link)
+                    horizontalAlignment: Text.AlignHCenter
+                    textFormat: Text.RichText
+                    text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
                 }
             }
 
             Column {
-                width: parent.width
-                TextSwitch {
-                    id: termsCheck
-                    text: "Accept"
-                }
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: !fields.visible
+                spacing: Theme.paddingLarge * 3
 
-                Row {
-                    width: parent.width
+                Label {
+                    id: loggingText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr("Logging in")
 
-                    Item {
-                        height: 30
-                        width: 50
-                    }
-
-                    Label {
-                        onLinkActivated: Qt.openUrlExternally(link)
-                        textFormat: Text.RichText
-                        width: parent.width - 50
-                        wrapMode: Text.WordWrap
-                        font.pixelSize: UI.FONT_LSMALL
-                        text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>I have read and accepted the Spotify® <a href='http://www.spotify.com/legal/end-user-agreement/'>Terms and Conditions of Use</a> and <a href='http://www.spotify.com/legal/mobile-terms-and-conditions/'>Mobile Terms of Use</a>."
+                    Connections {
+                        target:  spotifySession
+                        onLoggingIn: loggingText.text = qsTr("Logging in")
+                        onLoggingOut: loggingText.text = qsTr("Logging out")
                     }
                 }
-            }
 
-            Item {
-                height: UI.DEFAULT_MARGIN
-                width: 1
-            }
-
-            Button {
-                id: button
-                text: "Log in"
-
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: UI.PADDING_XXLARGE
-                anchors.rightMargin: UI.PADDING_XXLARGE
-                enabled: username.text.length > 0 && password.text.length > 0 && termsCheck.checked
-
-                onClicked: {
-                    login();
+                BusyIndicator {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    running: parent.visible
                 }
-            }
-
-            Item {
-                height: UI.DEFAULT_MARGIN * 3
-                width: 1
-            }
-
-            Label {
-                width: parent.width
-                wrapMode: Text.WordWrap
-                font.pixelSize: UI.FONT_LSMALL
-                onLinkActivated: Qt.openUrlExternally(link)
-                horizontalAlignment: Text.AlignHCenter
-                textFormat: Text.RichText
-                text: "<style>a:link { color: " + Theme.highlightColor +"; }</style>Need a Spotify® Premium account?<br>Get one at <a href='http://www.spotify.com'>www.spotify.com</a>."
-            }
-        }
-
-        Column {
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: UI.DEFAULT_MARGIN * 2
-            visible: !fields.visible
-            spacing: UI.DEFAULT_MARGIN * 2
-
-            Label {
-                id: loggingText
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "Logging in"
-
-                Connections {
-                    target:  spotifySession
-                    onLoggingIn: loggingText.text = "Logging in"
-                    onLoggingOut: loggingText.text = "Logging out"
-                }
-            }
-
-            BusyIndicator {
-                anchors.horizontalCenter: parent.horizontalCenter
-                running: parent.visible
             }
         }
     }
-
-    function login() {
-        spotifySession.login(username.text, password.text);
-        password.text = ""
-    }
-
 }
