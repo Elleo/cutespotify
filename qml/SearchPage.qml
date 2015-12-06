@@ -96,22 +96,19 @@ Page {
         anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
         spacing: units.gu(UI.MARGIN_XLARGE)
 
-        Column {
+        OptionSelector {
+            id: selector
+            selectedIndex: 0
+            model: ListModel {
+                ListElement { name: "Tracks" }
+                ListElement { name: "Albums" }
+                ListElement { name: "Artists" }
+                ListElement { name: "Playlists" }
+            }
+            delegate: OptionSelectorDelegate { text: name; }
+        }
+        Separator {
             width: parent.width
-            OptionSelector {
-                id: selector
-                selectedIndex: 0
-                model: ListModel {
-                    ListElement { name: "Tracks" }
-                    ListElement { name: "Albums" }
-                    ListElement { name: "Artists" }
-                    ListElement { name: "Playlists" }
-                }
-                delegate: OptionSelectorDelegate { text: name; }
-            }
-            Separator {
-                width: parent.width
-            }
         }
 
         AdvancedTextField {
