@@ -66,7 +66,7 @@ Item {
     property color subtitleColor: UI.LIST_SUBTITLE_COLOR
 
     height: units.gu(UI.LIST_ITEM_HEIGHT_SMALL)
-    width: parent.width
+    width: parent.width - units.gu(UI.MARGIN_XLARGE)
 
     SequentialAnimation {
         id: backAnimation

@@ -73,7 +73,7 @@ Item {
     property real defaultHeight: units.gu(UI.LIST_ITEM_HEIGHT)
 
     height: defaultHeight
-    width: parent.width
+    width: parent.width - units.gu(UI.MARGIN_XLARGE)
 
     SequentialAnimation {
         id: backAnimation

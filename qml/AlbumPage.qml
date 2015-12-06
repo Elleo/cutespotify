@@ -77,7 +77,7 @@ Page {
 */
     Column {
         id: header
-        width: parent.width
+        width: parent.width - units.gu(UI.MARGIN_XLARGE)
         anchors.top: parent.top
         anchors.topMargin: units.gu(UI.MARGIN_XLARGE)
 

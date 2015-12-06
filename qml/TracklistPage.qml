@@ -137,6 +137,7 @@ Page {
             Row {
                 spacing: units.gu(2)
                 anchors.right: parent.right
+                anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
                 anchors.verticalCenter: parent.verticalCenter
                 Label {
                     text: "Available offline"

@@ -52,11 +52,12 @@ Page {
     ListView {
         id: settingsFlickable
         anchors.fill: parent
+        anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
 
         model: 1
         delegate: Column {
             id: settingsContainer
-            width: settingsPage.width
+            width: parent.width
             spacing: units.gu(UI.MARGIN_XLARGE)
 
             Column {
