@@ -128,9 +128,8 @@ Page {
         }
 
         footer: Item {
-            height: visible ? (units.gu(UI.LIST_ITEM_HEIGHT) + separator.height) : 0
+            height: units.gu(8)
             width: parent.width
-            visible: !spotifySession.offlineMode
 
             Separator {
                 id: separator
