@@ -99,27 +99,27 @@ Page {
     Component {
         id: albumDelegate
         AlbumTrackDelegate {
-            name: modelData.name
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
-            onClicked: modelData.play()
-            onPressAndHold: { menu.track = modelData; menu.open(); }
+            name: model.trackName
+            duration: model.duration
+            highlighted: model.isCurrentPlayingTrack
+            starred: model.isStarred
+            available: model.isAvailable
+            onClicked: tracks.model.playTrack(index)
+            onPressAndHold: { menu.track = model; menu.open(); }
         }
     }
 
     Component {
         id: compilationDelegate
         TrackDelegate {
-            name: modelData.name
-            artistAndAlbum: modelData.artists
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
-            onClicked: modelData.play()
-            onPressAndHold: { menu.track = modelData; menu.open(); }
+            name: model.trackName
+            artistAndAlbum: model.artists
+            duration: model.duration
+            highlighted: model.isCurrentPlayingTrack
+            starred: model.isStarred
+            available: model.isAvailable
+            onClicked: tracks.model.playTrack(index)
+            onPressAndHold: { menu.track = model; menu.open(); }
         }
     }
 
@@ -128,7 +128,7 @@ Page {
         Label {
             width: parent ? parent.width : 0
             height: paintedHeight + units.gu(UI.MARGIN_XLARGE) * 2
-            text: modelData
+            text: model
             textFormat: Text.RichText
             wrapMode: Text.WordWrap
             font.pixelSize: units.gu(UI.FONT_LSMALL)

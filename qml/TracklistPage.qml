@@ -67,47 +67,43 @@ Page {
     Component {
         id: trackDelegate
         TrackDelegate {
-            name: searchField.text.length > 0 ? Util.highlightWord(modelData.name, searchField.text) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists)
+            name: searchField.text.length > 0 ? Util.highlightWord(model.trackName, searchField.text) : model.trackName
+            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(model.artists, searchField.text) : model.artists)
                             + " | "
-                            + (searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album)
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
+                            + (searchField.text.length > 0 ? Util.highlightWord(model.album, searchField.text) : model.album)
+            duration: model.duration
+            highlighted: model.isCurrentPlayingTrack
+            starred: model.isStarred
+            available: model.isAvailable
             enabled: !spotifySession.offlineMode || available
             onClicked: {
-                modelData.play()
+                if(isCurrentPlayingTrack && !spotifySession.isPlaying)
+                    spotifySession.resume()
+                else
+                    tracksModel.trackList.playTrack(tracksModel.getSourceIndex(index))
             }
-            onPressAndHold: { menu.track = modelData; menu.open(); }
-        }
-    }
-
-    Component {
-        id: inboxDelegate
-        InboxTrackDelegate {
-            name: searchField.text.length > 0 ? Util.highlightWord(modelData.name, searchField.text) : modelData.name
-            artistAndAlbum: (searchField.text.length > 0 ? Util.highlightWord(modelData.artists, searchField.text) : modelData.artists)
-                            + " | "
-                            + (searchField.text.length > 0 ? Util.highlightWord(modelData.album, searchField.text) : modelData.album)
-            creatorAndDate: (searchField.text.length > 0 ? Util.highlightWord(modelData.creator, searchField.text) : modelData.creator)
-                            + " | " + Qt.formatDateTime(modelData.creationDate)
-            duration: modelData.duration
-            highlighted: modelData.isCurrentPlayingTrack
-            starred: modelData.isStarred
-            available: modelData.isAvailable
-            enabled: !spotifySession.offlineMode || available
-            onClicked: {
-                modelData.play()
-            }
-            seen: modelData.seen
-            onPressAndHold: { menu.track = modelData; menu.open(); }
+            onPressAndHold: { menu.track = model; menu.open(); }
         }
     }
 
     onPlaylistChanged: {
-        tracks.delegate = playlist.type == SpotifyPlaylist.Inbox ? inboxDelegate : trackDelegate
         tracks.positionViewAtBeginning();
+    }
+
+    Connections {
+        target: playlist
+        onPlaylistDestroyed: {
+            pageStack.pop(null);
+        }
+    }
+
+    TrackListFilterModel {
+        id: tracksModel
+        trackList: playlist.tracks()
+
+        Component.onCompleted: {
+            init()
+        }
     }
 
     ListView {
@@ -117,6 +113,8 @@ Page {
         property bool _movementFromBeginning: false
 
         Component.onCompleted: tracks.positionViewAtBeginning();
+
+        delegate: trackDelegate
 
         Timer {
             id: searchFieldTimer
@@ -130,7 +128,7 @@ Page {
 
         clip: true
         highlightMoveDuration: 1
-        model: playlist.tracks
+        model: tracksModel
         header: Item {
             width: parent.width
             height: units.gu(10)
@@ -201,7 +199,7 @@ Page {
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                 Keys.onReturnPressed: { tracks.focus = true }
 
-                onTextChanged: playlist.trackFilter = Util.trim(text)
+                onTextChanged: tracksModel.filter = text.trim()
 
                 onActiveFocusChanged: {
                     if (activeFocus)

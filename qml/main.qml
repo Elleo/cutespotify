@@ -167,11 +167,6 @@ MainView {
                 page: SearchPage { }
             }
             Tab {
-                id: toplistTab
-                title: "Top"
-                page: ToplistPage { }
-            }
-            Tab {
                 title: "Settings"
                 id: settingsTab
                 page: SettingsPage { }

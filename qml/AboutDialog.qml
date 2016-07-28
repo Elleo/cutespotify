@@ -63,7 +63,7 @@ Dialog {
         }
 
         Label {
-            text: "Version 1.4"
+            text: "Version 1.6"
             font.pixelSize: units.gu(UI.FONT_LSMALL)
         }
 
@@ -73,7 +73,7 @@ Dialog {
         }
 
         Label {
-            text: "Copyright \u00a9 2011-2014 Yoann Lopes, Michael Sheldon"
+            text: "Copyright \u00a9 2011-2016 Yoann Lopes, Michael Sheldon"
             font.pixelSize: units.gu(UI.FONT_LSMALL)
         }
 

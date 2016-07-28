@@ -42,7 +42,6 @@ import QtQuick 2.4
 import Ubuntu.Components 1.3;
 import QtSpotify 1.0
 import "UIConstants.js" as UI
-import "Utilities.js" as Utilities
 
 Page {
     anchors.rightMargin: units.gu(UI.MARGIN_XLARGE)
@@ -101,9 +100,6 @@ Page {
             selectedIndex: 0
             model: ListModel {
                 ListElement { name: "Tracks" }
-                ListElement { name: "Albums" }
-                ListElement { name: "Artists" }
-                ListElement { name: "Playlists" }
             }
             delegate: OptionSelectorDelegate { text: name; }
         }
@@ -117,7 +113,7 @@ Page {
             width: parent.width
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
             onTextChanged: {
-                search.query = Utilities.trim(text)
+                search.query = text.trim()
                 search.search()
             }
             Keys.onReturnPressed: { results.focus = true }
@@ -151,25 +147,27 @@ Page {
             Component {
                 id: trackComponent
                 TrackDelegate {
-                    name: modelData.name
-                    artistAndAlbum: modelData.artists + " | " + modelData.album
-                    duration: modelData.duration
-                    highlighted: modelData.isCurrentPlayingTrack
-                    starred: modelData.isStarred
-                    available: modelData.isAvailable
-                    onClicked: modelData.play()
-                    onPressAndHold: { menu.track = modelData; menu.open(); }
+                    name: model.trackName
+                    artistAndAlbum: model.artists + " | " + model.album
+                    duration: model.duration
+                    highlighted: model.isCurrentPlayingTrack
+                    starred: model.isStarred
+                    available: model.isAvailable
+                    onClicked: {
+                        results.model.playTrack(index)
+                    }
+                    onPressAndHold: { menu.track = model; menu.open(); }
                 }
             }
             Component {
                 id: albumComponent
                 AlbumDelegate {
-                    name: modelData.name
-                    artist: modelData.artist
-                    albumCover: modelData.coverId
-                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: modelData }) }
+                    name: model.name
+                    artist: model.artist
+                    albumCover: model.coverId
+                    onClicked: { pageStack.push(Qt.resolvedUrl("AlbumPage.qml"), { album: model }) }
                     onPressAndHold: {
-                        menuAlbumBrowse.album = modelData;
+                        menuAlbumBrowse.album = model;
                         if (menuAlbumBrowse.totalDuration > 0)
                             albumMenu.open()
                     }
@@ -178,21 +176,21 @@ Page {
             Component {
                 id: artistComponent
                 ArtistDelegate {
-                    name: modelData.name
-                    portrait: modelData.pictureId
-                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: modelData }) }
+                    name: model.name
+                    portrait: model.pictureId
+                    onClicked: { pageStack.push(Qt.resolvedUrl("ArtistPage.qml"), { artist: model }) }
                 }
             }
             Component {
                 id: playlistComponent
                 PlaylistDelegate {
-                    title: modelData.name
+                    title: model.name
                     icon: "images/icon-m-music-video-all-songs-white.png"
 
                     onClicked: {
                         var component = Qt.createComponent("TracklistPage.qml");
                         if (component.status === Component.Ready) {
-                            var playlistPage = component.createObject(pageStack, { playlist: modelData.playlist });
+                            var playlistPage = component.createObject(pageStack, { playlist: model.playlist });
                             pageStack.push(playlistPage);
                         }
                     }
@@ -214,16 +212,16 @@ Page {
                 results.delegate = null
                 if (selector.selectedIndex === 0) {
                     results.delegate = trackComponent
-                    results.model = search.tracks
+                    results.model = search.trackResults()
                 } else if (selector.selectedIndex == 1) {
                     results.delegate = albumComponent
-                    results.model = search.albums
+                    results.model = search.albums()
                 } else if (selector.selectedIndex == 2) {
                     results.delegate = artistComponent
-                    results.model = search.artists
+                    results.model = search.artists()
                 } else if (selector.selectedIndex == 3) {
                     results.delegate = playlistComponent
-                    results.model = search.playlists
+                    results.model = search.playlists()
                 }
             }
 

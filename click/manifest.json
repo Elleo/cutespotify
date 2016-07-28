@@ -1,6 +1,6 @@
 {
 	"description": "Spotify client for Ubuntu Touch",
-	"framework": "ubuntu-sdk-14.10-qml",
+	"framework": "ubuntu-sdk-15.04.7-qml",
 	"architecture": "armhf",
 	"hooks": {
 		"cutespotify": {
@@ -12,5 +12,5 @@
 	"maintainer": "Michael Sheldon <mike@mikeasoft.com>",
 	"name": "com.mikeasoft.cutespotify",
 	"title": "CuteSpotify",
-	"version": "1.4.3"
+	"version": "1.6"
 }
